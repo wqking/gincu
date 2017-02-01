@@ -1,0 +1,6 @@
+/build/project_vc15/
+*.exe
+*.ilk
+*.pdb
+*.dll
+
