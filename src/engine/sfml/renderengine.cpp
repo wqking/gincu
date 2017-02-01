@@ -42,7 +42,7 @@ RenderEngine::~RenderEngine()
 void RenderEngine::inititialize()
 {
 	const GameSize viewSize = GameApplication::getInstance()->getViewSize();
-	this->resource->window.reset(new sf::RenderWindow(sf::VideoMode((int)viewSize.width, (int)viewSize.height), "Demo game"));
+	this->resource->window.reset(new sf::RenderWindow(sf::VideoMode((int)viewSize.width, (int)viewSize.height), "Gincu"));
 }
 
 void RenderEngine::render()
