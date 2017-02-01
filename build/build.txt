@@ -1,0 +1,98 @@
+set(TARGET gincu)
+set(ROOT_PATH ${PROJECT_SOURCE_DIR}/..)
+set(BIN_PATH ${ROOT_PATH}/bin)
+set(SRC_PATH ${ROOT_PATH}/src)
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${BIN_PATH})
+
+set(DEMOGAME_COMPILE_FLAGS "-Wall -Wextra -Wundef -O0")
+set(LIBS )
+
+if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+	set(DEMOGAME_COMPILE_FLAGS "-Wall -Wextra -Wundef -O0")
+	if(MINGW)
+		set(DEMOGAME_COMPILE_FLAGS "${DEMOGAME_COMPILE_FLAGS} -std=gnu++0x")
+	else(MINGW)
+		set(DEMOGAME_COMPILE_FLAGS "${DEMOGAME_COMPILE_FLAGS} -std=c++11")
+	endif(MINGW)
+	
+	set(SFML_LIB_PATH ${SFML_PATH}/lib)
+	set(SFML_LIBS
+		${SFML_LIB_PATH}/libfreetype.a
+		${SFML_LIB_PATH}/libvorbis.a
+		optimized ${SFML_LIB_PATH}/libsfml-graphics.a
+		optimized ${SFML_LIB_PATH}/libsfml-system.a
+		optimized ${SFML_LIB_PATH}/libsfml-window.a
+		debug ${SFML_LIB_PATH}/libsfml-graphics-d.a
+		debug ${SFML_LIB_PATH}/libsfml-system-d.a
+		debug ${SFML_LIB_PATH}/libsfml-window-d.a
+	)
+
+else(CMAKE_COMPILER_IS_GNUCC OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+
+if(MSVC)
+	set(DEMOGAME_COMPILE_FLAGS "-W3")
+
+	set(SFML_LIB_PATH ${SFML_PATH}/lib)
+	set(SFML_LIBS
+		${SFML_LIB_PATH}/freetype.lib
+		${SFML_LIB_PATH}/vorbis.lib
+		optimized ${SFML_LIB_PATH}/sfml-graphics.lib
+		optimized ${SFML_LIB_PATH}/sfml-system.lib
+		optimized ${SFML_LIB_PATH}/sfml-window.lib
+		debug ${SFML_LIB_PATH}/sfml-graphics-d.lib
+		debug ${SFML_LIB_PATH}/sfml-system-d.lib
+		debug ${SFML_LIB_PATH}/sfml-window-d.lib
+	)
+endif(MSVC)
+
+endif(CMAKE_COMPILER_IS_GNUCC OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+
+set(LIBS ${SFML_LIBS})
+
+
+macro(globAndAppendFiles fileList)
+	set(globAndAppendFiles_patterns ${ARGN})
+	file(GLOB temp ${globAndAppendFiles_patterns})
+	list(APPEND ${fileList} ${temp})
+endmacro()
+
+set(fileList ${SRC_PATH}/main.cpp)
+
+globAndAppendFiles(fileList
+	${SRC_PATH}/*.cpp
+	${SRC_PATH}/engine/*.cpp
+	${SRC_PATH}/framework/*.cpp
+	${SRC_PATH}/application/*.cpp
+	${SRC_PATH}/application/matchthree/*.cpp
+	${CPGF_PATH}/src/tween/*.cpp
+	${CPGF_PATH}/src/gexception.cpp
+	${CPGF_PATH}/src/glifecycle.cpp
+	${CPGF_PATH}/src/gmemorypool.cpp
+	${SRC_PATH}/engine/sfml/*.cpp
+)
+
+add_executable(
+	${TARGET}
+	${fileList}
+)
+
+set_target_properties(
+	${TARGET}
+	PROPERTIES
+	OUTPUT_NAME ${TARGET}
+	COMPILE_FLAGS ${DEMOGAME_COMPILE_FLAGS}
+	RUNTIME_OUTPUT_DIRECTORY_DEBUG ${BIN_PATH}
+	RUNTIME_OUTPUT_DIRECTORY_RELEASE ${BIN_PATH}
+	RUNTIME_OUTPUT_DIRECTORY_MINSIZEREL ${BIN_PATH}
+	RUNTIME_OUTPUT_DIRECTORY_RELWITHDEBINFO ${BIN_PATH}
+	DEBUGGER_WORKING_DIRECTORY ${BIN_PATH}
+)
+include_directories(
+	${SRC_PATH}
+	${SRC_PATH}/application
+	${CPGF_PATH}/include
+	${SFML_PATH}/include
+)
+target_link_libraries(${TARGET} ${LIBS} )
+
