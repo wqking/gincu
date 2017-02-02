@@ -26,7 +26,7 @@ public:
 	void findTouchHandlers(const GamePoint & position, std::vector<ComponentTouchHandler *> * outputResult);
 	
 private:
-	ComponentListType * doGetComponentList(const int typeId);
+	ComponentListType * doGetComponentList(const unsigned int typeId);
 
 private:
 	std::vector<ComponentListType> componentListBuffer;

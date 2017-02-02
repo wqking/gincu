@@ -1,4 +1,5 @@
 /build/project_vc15/
+/build/temp_cache_*/
 *.exe
 *.ilk
 *.pdb

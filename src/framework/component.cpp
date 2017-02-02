@@ -7,11 +7,11 @@ namespace gincu {
 
 namespace {
 
-int availableComponentId = componentTypeId_User;
+unsigned int availableComponentId = componentTypeId_User;
 
-std::map<std::string, int> * getComponentNameIdMap()
+std::map<std::string, unsigned int> * getComponentNameIdMap()
 {
-	static std::map<std::string, int> componentNameIdMap;
+	static std::map<std::string, unsigned int> componentNameIdMap;
 	return &componentNameIdMap;
 }
 
@@ -28,7 +28,7 @@ void Component::operator delete(void * p)
 	MemoryPool::getInstance()->free(p);
 }
 
-Component::Component(const int typeId)
+Component::Component(const unsigned int typeId)
 	:
 		typeId(typeId),
 		entity(nullptr)
@@ -51,9 +51,9 @@ void Component::doAfterSetEntity()
 }
 
 
-int registerComponentId(const std::string & name)
+unsigned int registerComponentId(const std::string & name)
 {
-	int id = 0;
+	unsigned int id = 0;
 
 	auto componentNameIdMap = getComponentNameIdMap();
 	auto it = componentNameIdMap->find(name);

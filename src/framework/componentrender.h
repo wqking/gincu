@@ -20,7 +20,7 @@ private:
 	typedef Component super;
 
 public:
-	inline static constexpr int getComponentType() {
+	inline static constexpr unsigned int getComponentType() {
 		return componentTypeId_Render;
 	}
 

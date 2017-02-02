@@ -14,7 +14,7 @@ public:
 	void * operator new (const std::size_t size);
 	void operator delete(void * p);
 
-	explicit Component(const int typeId);
+	explicit Component(const unsigned int typeId);
 	virtual ~Component();
 
 	template <typename T>
@@ -23,11 +23,11 @@ public:
 
 	void setEntity(Entity * entity);
 
-	int getTypeId() const { return typeId; }
+	unsigned int getTypeId() const { return typeId; }
 	Entity * getEntity() const { return entity; }
 
 protected:
-	void setTypeId(const int typeId) { this->typeId = typeId; }
+	void setTypeId(const unsigned int typeId) { this->typeId = typeId; }
 
 private:
 	virtual void doAfterSetEntity();
@@ -37,12 +37,12 @@ private:
 	Entity * entity;
 };
 
-constexpr int componentTypeId_Render = 0;
-constexpr int componentTypeId_Transform = 1;
-constexpr int componentTypeId_LocalTransform = 2;
-constexpr int componentTypeId_TouchHandler = 3;
-constexpr int componentTypeId_Anchor = 4;
-constexpr int componentTypeId_PrimaryCount = 5;
+constexpr unsigned int componentTypeId_Render = 0;
+constexpr unsigned int componentTypeId_Transform = 1;
+constexpr unsigned int componentTypeId_LocalTransform = 2;
+constexpr unsigned int componentTypeId_TouchHandler = 3;
+constexpr unsigned int componentTypeId_Anchor = 4;
+constexpr unsigned int componentTypeId_PrimaryCount = 5;
 
 // Usually we should not use componentTypeId_User directly.
 // Use registerComponentId or ComponentIdRegister.
@@ -50,7 +50,7 @@ constexpr int componentTypeId_User = componentTypeId_PrimaryCount;
 
 // Return a unique component id for name.
 // Same name returns the same id.
-int registerComponentId(const std::string & name);
+unsigned int registerComponentId(const std::string & name);
 
 // A utility class to register type id automatically.
 // This should be singleton.
@@ -61,10 +61,10 @@ public:
 		: componentId(registerComponentId(name))
 	{}
 	
-	int getComponentId() const { return this->componentId; }
+	unsigned int getComponentId() const { return this->componentId; }
 	
 private:
-	int componentId;
+	unsigned int componentId;
 };
 
 // In current implementation, component can be created by "new" directly.

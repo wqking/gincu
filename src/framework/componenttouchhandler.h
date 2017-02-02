@@ -17,7 +17,7 @@ public:
 	typedef cpgf::GCallbackList<void (const TouchEvent &)> OnTouchedList;
 
 public:
-	inline static constexpr int getComponentType() {
+	inline static constexpr unsigned int getComponentType() {
 		return componentTypeId_TouchHandler;
 	}
 
