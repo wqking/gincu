@@ -3,6 +3,24 @@ set(SFML_PATH /source/SFML-2.4.1)
 
 
 #[[
+The component storage policy used by Entity.
+If this macro is not defined, default is mixedArray.
+See EntityStoragePolicy in entitypolicy.h for all possible values.
+Uncomment to change it.
+]]
+#add_definitions(-DGINCU_ENTITY_STORAGE_POLICY=mixedArray)
+
+
+#[[
+The component storage initial size used by Entity.
+If this macro is not defined, default is componentTypeId_PrimaryCount.
+See EntityStoragePolicy in entitypolicy.h for all possible values.
+Uncomment to change it.
+]]
+#add_definitions(-DGINCU_ENTITY_STORAGE_POLICY_INITIAL_SIZE=componentTypeId_PrimaryCount)
+
+
+#[[
 The alignment used in memory pool.
 If this macro is not defined, default is 64.
 Uncomment to change it.
@@ -21,7 +39,7 @@ Uncomment to change it.
 #[[
 The purge strategy used in memory pool.
 If this macro is not defined, default is onSceneSwitched.
-See MemoryPoolPurgeStrategy for all possible values.
+See MemoryPoolPurgeStrategy in memorypool.h for all possible values.
 Uncomment to change it.
 ]]
 #add_definitions(-DGINCU_MEMORY_POOL_PURGE_STRATEGY=onSceneSwitched)

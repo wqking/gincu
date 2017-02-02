@@ -54,7 +54,7 @@ void ComponentsBuffer::findTouchHandlers(const GamePoint & position, std::vector
 
 ComponentsBuffer::ComponentListType * ComponentsBuffer::doGetComponentList(const unsigned int typeId)
 {
-	if((int)this->componentListBuffer.size() <= typeId) {
+	if(this->componentListBuffer.size() <= typeId) {
 		this->componentListBuffer.resize(typeId + 1);
 	}
 	

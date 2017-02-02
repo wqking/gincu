@@ -1,6 +1,8 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
+#include "framework/entitypolicy.h"
+
 #include <memory>
 #include <vector>
 
@@ -9,11 +11,8 @@ namespace gincu {
 class Component;
 class ComponentsBuffer;
 
-class Entity
+class Entity : public EntityBase
 {
-private:
-	typedef std::unique_ptr<Component> ComponentPointer;
-
 public:
 	void * operator new (const std::size_t size);
 	void operator delete(void * p);
@@ -26,7 +25,7 @@ public:
 	
 	void setComponentsBuffer(ComponentsBuffer * componentsBuffer);
 
-	Component * getComponentByTypeId(const int typeId) const;
+	Component * getComponentByTypeId(const unsigned int typeId) const;
 	
 	template <typename T>
 	T * getComponentByType() const {
@@ -34,7 +33,6 @@ public:
 	}
 	
 private:
-	std::vector<ComponentPointer> componentList;
 	ComponentsBuffer * componentsBuffer;
 };
 
