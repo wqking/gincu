@@ -1,5 +1,5 @@
 set(TARGET gincu)
-set(ROOT_PATH ${PROJECT_SOURCE_DIR}/..)
+set(ROOT_PATH ${PROJECT_SOURCE_DIR}/../..)
 set(BIN_PATH ${ROOT_PATH}/bin)
 set(SRC_PATH ${ROOT_PATH}/src)
 

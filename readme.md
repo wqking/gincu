@@ -50,7 +50,7 @@ There are several ways to contribute to the project
 
  * Download [latest SFML binary](http://www.sfml-dev.org/) that matches your compiler.
  * Download [cpgf library source code](https://github.com/cpgf/cpgf). You don't need to compile the library.
- * Go to the "build" folder in this project.
+ * Go to the "build/desktop" folder in this project.
  * Edit config.txt to set the proper directories to point to SFML and cpgf.
  * Run "make vc15" to generate VC2015 project file, or "make mingw" to compile using MingW directly, or just "make" to see the help. You can replace "make" with "mingw32-make" or "nmake".
  * If you run "make vc15", open gincu.sln in folder build/project_vc15 in VC IDE and compile the project.
@@ -58,7 +58,7 @@ There are several ways to contribute to the project
 
 ## Run
 
-Go to folder bin, copy SFML graphics, system, and window DLL (or dynamic libraries on Linux) to bin folder, then run the compiled program.
+Go to folder "bin", copy SFML graphics, system, and window DLL (or dynamic libraries on Linux) to bin folder, then run the compiled program.
 
 ## Folder structure
 
