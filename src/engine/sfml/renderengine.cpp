@@ -42,7 +42,6 @@ RenderEngine::~RenderEngine()
 void RenderEngine::inititialize()
 {
 	const GameWindowInfo & windowInfo = GameApplication::getInstance()->getWindowInfo();
-	const GameSize viewSize = GameApplication::getInstance()->getViewSize();
 
 	int flags = 0;
 	if(windowInfo.fullScreenMode) {

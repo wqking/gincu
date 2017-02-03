@@ -4,7 +4,7 @@
 
 namespace gincu {
 
-void handleFatal(const std::string & message)
+void handleFatal(const std::string & /*message*/)
 {
 //	MessageBoxA(NULL, message.c_str(), "Fatal", MB_OK);
 //	exit(1);
