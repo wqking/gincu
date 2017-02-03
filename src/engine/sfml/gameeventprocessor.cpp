@@ -18,7 +18,7 @@ void GameEventProcessor::processEvents()
 {
 	sf::Event e;
 
-	while(this->application->getRenderEngine()->getResource()->window->pollEvent(e)) {
+	while(RenderEngine::getInstance()->getResource()->window->pollEvent(e)) {
 		switch(e.type) {
 		case sf::Event::Closed:
 			this->application->finish();
@@ -29,8 +29,7 @@ void GameEventProcessor::processEvents()
 			TouchEvent touchEvent = TouchEvent();
 			touchEvent.type = (e.type == sf::Event::MouseButtonPressed ? TouchEventType::eventPressed : TouchEventType::eventReleased);
 			touchEvent.down = (e.type == sf::Event::MouseButtonPressed);
-			touchEvent.position.x = (CoordType)e.mouseButton.x;
-			touchEvent.position.y = (CoordType)e.mouseButton.y;
+			touchEvent.position = RenderEngine::getInstance()->mapWindowToView({(CoordType)e.mouseButton.x, (CoordType)e.mouseButton.y});
 			this->application->getSceneManager()->handleTouchEvent(touchEvent);
 			break;
 		}
@@ -39,8 +38,7 @@ void GameEventProcessor::processEvents()
 			TouchEvent touchEvent = TouchEvent();
 			touchEvent.type = TouchEventType::eventMoved;
 			touchEvent.down = sf::Mouse::isButtonPressed(sf::Mouse::Left);
-			touchEvent.position.x = (CoordType)e.mouseMove.x;
-			touchEvent.position.y = (CoordType)e.mouseMove.y;
+			touchEvent.position = RenderEngine::getInstance()->mapWindowToView({(CoordType)e.mouseMove.x, (CoordType)e.mouseMove.y});
 			touchEvent.deltaPosition.x = 0;
 			touchEvent.deltaPosition.y = 0;
 			this->application->getSceneManager()->handleTouchEvent(touchEvent);

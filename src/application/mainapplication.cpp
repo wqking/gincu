@@ -13,8 +13,16 @@ MainApplication * MainApplication::getInstance()
 
 MainApplication::MainApplication()
 {
-	this->setViewSize(GameSize{ (CoordType)gameViewWidth, (CoordType)gameViewHeight });
-	this->setFramesPerSecond(gameFramesPerSecond);
+	this->setWindowInfo(
+		{
+			"Gincu",
+			gameFramesPerSecond,
+			{ (CoordType)gameViewWidth, (CoordType)gameViewHeight },
+			{ (CoordType)gameViewWidth, (CoordType)gameViewHeight },
+			false,
+			true
+		}
+	);
 }
 
 MainApplication::~MainApplication()

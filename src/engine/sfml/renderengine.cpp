@@ -41,8 +41,29 @@ RenderEngine::~RenderEngine()
 
 void RenderEngine::inititialize()
 {
+	const GameWindowInfo & windowInfo = GameApplication::getInstance()->getWindowInfo();
 	const GameSize viewSize = GameApplication::getInstance()->getViewSize();
-	this->resource->window.reset(new sf::RenderWindow(sf::VideoMode((int)viewSize.width, (int)viewSize.height), "Gincu"));
+
+	int flags = 0;
+	if(windowInfo.fullScreenMode) {
+		flags = sf::Style::Fullscreen;
+	}
+	else {
+		flags = sf::Style::Titlebar | sf::Style::Close;
+		if(windowInfo.resizable) {
+			flags |= sf::Style::Resize;
+		}
+	}
+
+	this->resource->window.reset(new sf::RenderWindow(
+		sf::VideoMode((int)windowInfo.windowSize.width, (int)windowInfo.windowSize.height),
+		windowInfo.caption,
+		flags
+	));
+
+	sf::View view;
+	view.reset(sf::FloatRect(0, 0, windowInfo.viewSize.width, windowInfo.viewSize.height));
+	this->resource->window->setView(view);
 }
 
 void RenderEngine::render()
@@ -88,6 +109,12 @@ void RenderEngine::draw(const GameText & text, const GameTransform & transform)
 void RenderEngine::draw(const RectRender & rect, const GameTransform & transform)
 {
 	this->resource->window->draw(rect.getResource()->rectangle, transform.getSfmlTransform());
+}
+
+GamePoint RenderEngine::mapWindowToView(const GamePoint & point) const
+{
+	auto pt = this->resource->window->mapPixelToCoords({(int)point.x, (int)point.y});
+	return {pt.x, pt.y};
 }
 
 

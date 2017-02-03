@@ -26,7 +26,6 @@ GameApplication * GameApplication::getInstance()
 
 GameApplication::GameApplication()
 	:
-		viewSize{ 800, 600 },
 		finished(false)
 {
 	instance = this;
@@ -69,7 +68,7 @@ void GameApplication::finalize()
 
 void GameApplication::processMainLoop()
 {
-	const int millisecondsPerFrame = 1000 / this->framesPerSecond;
+	const int millisecondsPerFrame = 1000 / this->windowInfo.framesPerSecond;
 
 	unsigned int lastTweenTime = getMilliseconds();
 

@@ -40,6 +40,8 @@ public:
 	void draw(const GameText & text, const GameTransform & transform);
 	void draw(const RectRender & rect, const GameTransform & transform);
 
+	GamePoint mapWindowToView(const GamePoint & point) const;
+
 	const std::shared_ptr<RenderEngineResource> & getResource() const { return this->resource; }
 
 private:
