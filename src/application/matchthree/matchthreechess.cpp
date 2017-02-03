@@ -3,6 +3,7 @@
 #include "framework/util.h"
 
 #include <map>
+#include <cmath>
 
 namespace gincu {
 
