@@ -6,7 +6,7 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
-LOCAL_MODULE := sfml-example
+LOCAL_MODULE := gincu
 
 ROOT_PATH := E:\projects\gincu
 #ROOT_PATH := $(LOCAL_PATH)\..\..\..\..

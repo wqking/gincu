@@ -1,5 +1,11 @@
 /build/desktop/project_*/
 /build/desktop/temp_cache_*/
+/build/android/bin/
+/build/android/libs/
+/build/android/obj/
+/build/android/build.xml
+/build/android/*.txt
+/build/android/*.properties
 *.exe
 *.ilk
 *.pdb

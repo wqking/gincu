@@ -12,7 +12,7 @@ Now I open source the project, and I've rewritten the render engine with SFML.
 
 The match-three is the first step. In the future we may add more games as prototypes to the project. Though the match three game is not as cool as Candy Crush Saga, it includes most basic stuff and may be a good kick off.
 
-The project is cross platform. I tested it on Windows with MingW and VC, it should work on Linux (though you need to modify CMake files) but I didn't test.
+The project is cross platform. I tested it on Windows with MingW and VC, and Android as well. It should work on Linux, Mac, and iOS, but I didn't test.
 
 ## Environments and requirements
 
@@ -46,7 +46,7 @@ There are several ways to contribute to the project
  * Improve the features such as GameTransform (I'm not good at algebra).
  * Make some better art work. Current art resource is (mostly) made by me and is very ugly.
 
-## Build
+## Build and run on desktop
 
  * Download [latest SFML binary](http://www.sfml-dev.org/) that matches your compiler.
  * Download [cpgf library source code](https://github.com/cpgf/cpgf). You don't need to compile the library.
@@ -55,10 +55,19 @@ There are several ways to contribute to the project
  * Run "make vc15" to generate VC2015 project file, or "make mingw" to compile using MingW directly, or just "make" to see the help. You can replace "make" with "mingw32-make" or "nmake".
  * If you run "make vc15", open gincu.sln in folder build/project_vc15 in VC IDE and compile the project.
  * The binary file is generated in folder bin.
+ * Go to folder "bin", copy SFML graphics, system, and window DLL (or dynamic libraries on Linux) to bin folder, then run the compiled program.
 
-## Run
+## Build and run on Android
 
-Go to folder "bin", copy SFML graphics, system, and window DLL (or dynamic libraries on Linux) to bin folder, then run the compiled program.
+ * Setup Android SDK and NDK, and Apache ANT.
+ * Download [latest SFML source code](http://www.sfml-dev.org/) then build SFML for Android (search for tutorial).
+ * Download [cpgf library source code](https://github.com/cpgf/cpgf). You don't need to compile the library.
+ * Go to folder "build/android".
+ * Create sub folder "assets", copy the "resources" folder in "bin" there.
+ * Run "android update project --target "android-23" --path . --subprojects --name gincu".
+ * Run "ndk-build".
+ * Then run "ant debug" for debug version or "ant release" for release version.
+ * Now .apk is in "build/android/bin" folder.
 
 ## Folder structure
 
