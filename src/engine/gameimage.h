@@ -18,6 +18,8 @@ class GameImage
 public:
 	GameImage();
 	~GameImage();
+	explicit GameImage(const std::shared_ptr<GameImageResource> & resource);
+	GameImage(const std::shared_ptr<GameImageResource> & resource, const GameRect & rect);
 
 	void load(const std::string & fileName);
 
@@ -25,11 +27,15 @@ public:
 
 	GameSize getSize() const;
 
-	void setResource(const std::shared_ptr<GameImageResource> & resource) { this->resource = resource; }
+	void setResource(const std::shared_ptr<GameImageResource> & resource);
 	const std::shared_ptr<GameImageResource> & getResource() const { return this->resource; }
+
+	void setRect(const GameRect & rect) { this->rect = rect; }
+	const GameRect & getRect() const { return this->rect; }
 
 private:
 	std::shared_ptr<GameImageResource> resource;
+	GameRect rect;
 };
 
 

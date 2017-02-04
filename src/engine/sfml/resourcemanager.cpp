@@ -43,9 +43,7 @@ GameImage ResourceManager::getImage(const std::string & resourceName) const
 		resource = it->second;
 	}
 
-	GameImage image;
-	image.setResource(resource);
-	return image;
+	return GameImage(resource);
 }
 
 const GameFont & ResourceManager::getFont() const

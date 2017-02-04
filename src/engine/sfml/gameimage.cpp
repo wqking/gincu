@@ -7,8 +7,17 @@
 namespace gincu {
 
 GameImage::GameImage()
-	:
-	resource()
+	: resource()
+{
+}
+
+GameImage::GameImage(const std::shared_ptr<GameImageResource> & resource)
+{
+	this->setResource(resource);
+}
+
+GameImage::GameImage(const std::shared_ptr<GameImageResource> & resource, const GameRect & rect)
+	: resource(resource), rect(rect)
 {
 }
 
@@ -31,6 +40,15 @@ GameSize GameImage::getSize() const
 {
 	auto size = this->resource->texture.getSize();
 	return { (CoordType)size.x, (CoordType)size.y };
+}
+
+void GameImage::setResource(const std::shared_ptr<GameImageResource> & resource)
+{
+	this->resource = resource;
+	if(this->resource) {
+		auto size = this->resource->texture.getSize();
+		this->rect = GameRect{ 0, 0, (CoordType)size.x, (CoordType)size.y };
+	}
 }
 
 
