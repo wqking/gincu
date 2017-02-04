@@ -2,6 +2,7 @@
 #define GAMEAPPLICATION_H
 
 #include "engine/geometry.h"
+#include "engine/gameconfiginfo.h"
 #include "cpgf/gcallbacklist.h"
 
 #include <memory>
@@ -16,16 +17,6 @@ class GameEventProcessor;
 class MemoryPool;
 
 typedef cpgf::GCallback<void ()> FrameUpdater;
-
-struct GameWindowInfo
-{
-	std::string caption;
-	int framesPerSecond;
-	GameSize windowSize; // the window size
-	GameSize viewSize; // the virtual view size, no matter how the window resized
-	bool fullScreenMode;
-	bool resizable;
-};
 
 class GameApplication
 {
@@ -43,15 +34,15 @@ public:
 	void addUpdater(const FrameUpdater & updater);
 	void removeUpdater(const FrameUpdater & updater);
 
-	const GameWindowInfo & getWindowInfo() const { return this->windowInfo; }
-	const GameSize & getViewSize() const { return this->windowInfo.viewSize; }
+	const GameConfigInfo & getConfigInfo() const { return this->configInfo; }
+	const GameSize & getViewSize() const { return this->configInfo.viewSize; }
 
 	RenderEngine * getRenderEngine() const { return this->renderEngine.get(); }
 	ResourceManager * getResourceManager() const { return this->resourceManager.get(); }
 	SceneManager * getSceneManager() const { return this->sceneManager.get(); }
 
 protected:
-	void setWindowInfo(const GameWindowInfo & windowInfo) { this->windowInfo = windowInfo; }
+	void setConfigInfo(const GameConfigInfo & configInfo) { this->configInfo = configInfo; }
 
 private:
 	void initialize();
@@ -63,7 +54,7 @@ private:
 	virtual void doFinalize();
 
 private:
-	GameWindowInfo windowInfo;
+	GameConfigInfo configInfo;
 
 	std::unique_ptr<RenderEngine> renderEngine;
 	std::unique_ptr<ResourceManager> resourceManager;

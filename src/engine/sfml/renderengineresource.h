@@ -11,6 +11,7 @@ class RenderEngineResource
 {
 public:
 	std::unique_ptr<sf::RenderWindow> window;
+	sf::View view;
 };
 
 

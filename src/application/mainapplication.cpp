@@ -13,14 +13,16 @@ MainApplication * MainApplication::getInstance()
 
 MainApplication::MainApplication()
 {
-	this->setWindowInfo(
+	this->setConfigInfo(
 		{
 			"Gincu",
 			gameFramesPerSecond,
 			{ (CoordType)gameViewWidth, (CoordType)gameViewHeight },
 			{ (CoordType)gameViewWidth, (CoordType)gameViewHeight },
 			false,
-			true
+			true,
+			ViewFitStrategy::scaleFit,
+			colorWhite
 		}
 	);
 }

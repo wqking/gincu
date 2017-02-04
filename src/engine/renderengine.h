@@ -44,9 +44,16 @@ public:
 
 	const std::shared_ptr<RenderEngineResource> & getResource() const { return this->resource; }
 
+public: // for internal usage
+	void onWindowResized(const GameSize & newSize);
+
+private:
+	void doFitView();
+
 private:
 	std::shared_ptr<RenderEngineResource> resource;
 	std::vector<Renderable *> renderableList;
+	GameSize windowSize;
 };
 
 

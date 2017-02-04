@@ -67,7 +67,7 @@ void GameApplication::finalize()
 
 void GameApplication::processMainLoop()
 {
-	const int millisecondsPerFrame = 1000 / this->windowInfo.framesPerSecond;
+	const int millisecondsPerFrame = 1000 / this->configInfo.framesPerSecond;
 
 	unsigned int lastTweenTime = getMilliseconds();
 

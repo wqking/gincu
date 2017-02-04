@@ -41,33 +41,32 @@ RenderEngine::~RenderEngine()
 
 void RenderEngine::inititialize()
 {
-	const GameWindowInfo & windowInfo = GameApplication::getInstance()->getWindowInfo();
+	const GameConfigInfo & configInfo = GameApplication::getInstance()->getConfigInfo();
 
 	int flags = 0;
-	if(windowInfo.fullScreenMode) {
+	if(configInfo.fullScreenMode) {
 		flags = sf::Style::Fullscreen;
 	}
 	else {
 		flags = sf::Style::Titlebar | sf::Style::Close;
-		if(windowInfo.resizable) {
+		if(configInfo.resizable) {
 			flags |= sf::Style::Resize;
 		}
 	}
 
+	this->windowSize = configInfo.windowSize;
 	this->resource->window.reset(new sf::RenderWindow(
-		sf::VideoMode((int)windowInfo.windowSize.width, (int)windowInfo.windowSize.height),
-		windowInfo.caption,
+		sf::VideoMode((int)this->windowSize.width, (int)this->windowSize.height),
+		configInfo.caption,
 		flags
 	));
 
-	sf::View view;
-	view.reset(sf::FloatRect(0, 0, windowInfo.viewSize.width, windowInfo.viewSize.height));
-	this->resource->window->setView(view);
+	this->doFitView();
 }
 
 void RenderEngine::render()
 {
-	this->resource->window->clear(sf::Color(0xee, 0xee, 0xee, 0xff));
+	this->resource->window->clear(gameColorToSfml(GameApplication::getInstance()->getConfigInfo().backgroundColor));
 	
 	for(auto it = this->renderableList.rbegin(); it != this->renderableList.rend(); ++it) {
 		(*it)->render();
@@ -116,5 +115,45 @@ GamePoint RenderEngine::mapWindowToView(const GamePoint & point) const
 	return {pt.x, pt.y};
 }
 
+void RenderEngine::onWindowResized(const GameSize & newSize)
+{
+	this->windowSize = newSize;
+	this->doFitView();
+}
+
+void RenderEngine::doFitView()
+{
+	const GameConfigInfo & configInfo = GameApplication::getInstance()->getConfigInfo();
+
+	switch(configInfo.viewFitStrategy) {
+	case ViewFitStrategy::scaleFit: {
+		this->resource->view.reset(sf::FloatRect(0, 0, configInfo.viewSize.width, configInfo.viewSize.height));
+		float viewportX = 0;
+		float viewportY = 0;
+		const float xRatio = (float)configInfo.viewSize.width / (float)this->windowSize.width;
+		const float yRatio = (float)configInfo.viewSize.height / (float)this->windowSize.height;
+		if(xRatio > yRatio) {
+			viewportY = (1.0f - yRatio / xRatio) / 2.0f;
+		}
+		else {
+			viewportX = (1.0f - xRatio / yRatio) / 2.0f;
+		}
+		this->resource->view.setViewport(sf::FloatRect(viewportX, viewportY, 1.0f - viewportX * 2.0f, 1.0f - viewportY * 2.0f));
+	}
+		break;
+
+	case ViewFitStrategy::fitWindow:
+		this->resource->view.reset(sf::FloatRect(0, 0, this->windowSize.width, this->windowSize.height));
+		this->resource->view.setViewport(sf::FloatRect(0, 0, 1, 1));
+		break;
+
+	case ViewFitStrategy::stretch:
+		this->resource->view.reset(sf::FloatRect(0, 0, configInfo.viewSize.width, configInfo.viewSize.height));
+		this->resource->view.setViewport(sf::FloatRect(0, 0, 1, 1));
+		break;
+	}
+
+	this->resource->window->setView(this->resource->view);
+}
 
 } //namespace gincu

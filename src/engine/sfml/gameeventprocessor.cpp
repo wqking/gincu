@@ -69,6 +69,11 @@ void GameEventProcessor::processEvents()
 			break;
 		}
 
+		case sf::Event::Resized: {
+			RenderEngine::getInstance()->onWindowResized(GameSize{ (CoordType)e.size.width, (CoordType)e.size.height });
+			break;
+		}
+
 		default:
 			break;
 		}
