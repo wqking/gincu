@@ -35,10 +35,5 @@ int getRand(const int max)
 	return getRand(0, max);
 }
 
-unsigned int getMilliseconds()
-{
-	return clock() * 1000 / CLOCKS_PER_SEC;
-}
-
 
 } //namespace gincu

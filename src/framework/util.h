@@ -12,12 +12,6 @@ inline bool isWithin(const T value, const A a, const B b)
 	return value >= a && value < b;
 }
 
-int getRand();
-int getRand(const int min, const int max);
-int getRand(const int max);
-
-unsigned int getMilliseconds();
-
 template <typename T>
 std::string toString(const T & value)
 {
@@ -25,6 +19,16 @@ std::string toString(const T & value)
 	stream << value;
 	return stream.str();
 }
+
+int getRand();
+int getRand(const int min, const int max);
+int getRand(const int max);
+
+// implemented in engineutil.cpp
+void sleepMilliseconds(const unsigned int milliseconds);
+
+// implemented in engineutil.cpp
+unsigned int getMilliseconds();
 
 
 } //namespace gincu

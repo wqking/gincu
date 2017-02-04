@@ -1,5 +1,3 @@
-#include "engine/engineutil.h"
-
 #include <SFML/System.hpp>
 
 namespace gincu {
@@ -8,6 +6,12 @@ namespace gincu {
 void sleepMilliseconds(const unsigned int milliseconds)
 {
 	sf::sleep(sf::milliseconds(milliseconds));
+}
+
+unsigned int getMilliseconds()
+{
+	static sf::Clock clock;
+	return clock.getElapsedTime().asMilliseconds();
 }
 
 

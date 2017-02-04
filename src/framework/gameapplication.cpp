@@ -2,7 +2,6 @@
 #include "engine/renderengine.h"
 #include "engine/resourcemanager.h"
 #include "engine/gameeventprocessor.h"
-#include "engine/engineutil.h"
 #include "framework/scenemanager.h"
 #include "framework/memorypool.h"
 #include "framework/util.h"

@@ -45,6 +45,30 @@ void GameEventProcessor::processEvents()
 			break;
 		}
 		
+		case sf::Event::TouchBegan:
+		case sf::Event::TouchEnded: {
+			if(e.touch.finger == 0) {
+				TouchEvent touchEvent = TouchEvent();
+				touchEvent.type = (e.type == sf::Event::TouchBegan ? TouchEventType::eventPressed : TouchEventType::eventReleased);
+				touchEvent.down = (e.type == sf::Event::TouchBegan);
+				touchEvent.position = RenderEngine::getInstance()->mapWindowToView({(CoordType)e.touch.x, (CoordType)e.touch.y});
+				this->application->getSceneManager()->handleTouchEvent(touchEvent);
+			}
+
+			break;
+		}
+
+		case sf::Event::TouchMoved: {
+			TouchEvent touchEvent = TouchEvent();
+			touchEvent.type = TouchEventType::eventMoved;
+			touchEvent.down = true;
+			touchEvent.position = RenderEngine::getInstance()->mapWindowToView({(CoordType)e.touch.x, (CoordType)e.touch.y});
+			touchEvent.deltaPosition.x = 0;
+			touchEvent.deltaPosition.y = 0;
+			this->application->getSceneManager()->handleTouchEvent(touchEvent);
+			break;
+		}
+
 		default:
 			break;
 		}
