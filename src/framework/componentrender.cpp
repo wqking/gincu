@@ -69,7 +69,14 @@ void ComponentContainerRender::doAfterSetEntity()
 ComponentImageRender * createAndLoadImageComponent(const std::string & resourceName)
 {
 	ComponentImageRender * component = createComponent<ComponentImageRender >();
-	component->setRender(GameApplication::getInstance()->getResourceManager()->getImage(resourceName));
+	component->setRender(ResourceManager::getInstance()->getImage(resourceName));
+	return component;
+}
+
+ComponentImageRender * createImageComponent(const GameImage & image)
+{
+	ComponentImageRender * component = createComponent<ComponentImageRender >();
+	component->setRender(image);
 	return component;
 }
 

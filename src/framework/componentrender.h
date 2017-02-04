@@ -105,6 +105,7 @@ typedef ComponentRenderImplement<GameText> ComponentTextRender;
 typedef ComponentRenderImplement<RectRender> ComponentRectRender;
 
 ComponentImageRender * createAndLoadImageComponent(const std::string & resourceName);
+ComponentImageRender * createImageComponent(const GameImage & image);
 ComponentTextRender * createAndLoadTextComponent(const std::string & text, const GameColor textColor, const int fontSize);
 ComponentRectRender * createRectRenderComponent(const GameColor color, const GameSize & size);
 

@@ -2,6 +2,7 @@
 #define MATCHTHREECHESS_H
 
 #include "engine/geometry.h"
+#include "engine/gameimage.h"
 
 #include <string>
 
@@ -20,7 +21,7 @@ enum class ChessColor
 	none
 };
 
-std::string getChessResourceName(const ChessColor chessColor);
+GameImage getChessResource(const ChessColor chessColor);
 ChessColor randomChessColor();
 bool areCellsNeighbors(const RowColumn & cellA, const RowColumn & cellB);
 

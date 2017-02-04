@@ -47,11 +47,13 @@ LOCAL_SRC_FILES := \
 	$(SRC_PATH)/application/matchthree/stateswapchesses.cpp \
 	$(SRC_PATH)/engine/errorhandler.cpp \
 	$(SRC_PATH)/engine/gamecolor.cpp \
+	$(SRC_PATH)/engine/gamespritesheet.cpp \
 	$(SRC_PATH)/engine/renderanchor.cpp \
 	$(SRC_PATH)/engine/sfml/engineutil.cpp \
 	$(SRC_PATH)/engine/sfml/gameeventprocessor.cpp \
 	$(SRC_PATH)/engine/sfml/gamefont.cpp \
 	$(SRC_PATH)/engine/sfml/gameimage.cpp \
+	$(SRC_PATH)/engine/sfml/gameinputstream.cpp \
 	$(SRC_PATH)/engine/sfml/gametext.cpp \
 	$(SRC_PATH)/engine/sfml/gametransform.cpp \
 	$(SRC_PATH)/engine/sfml/rectrender.cpp \

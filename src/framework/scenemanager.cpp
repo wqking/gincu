@@ -8,12 +8,12 @@ namespace gincu {
 
 SceneManager::SceneManager()
 {
-	GameApplication::getInstance()->getRenderEngine()->appendRenderable(this);
+	RenderEngine::getInstance()->appendRenderable(this);
 }
 
 SceneManager::~SceneManager()
 {
-	GameApplication::getInstance()->getRenderEngine()->removeRenderable(this);
+	RenderEngine::getInstance()->removeRenderable(this);
 }
 
 void SceneManager::switchScene(Scene * scene)

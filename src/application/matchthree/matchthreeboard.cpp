@@ -50,7 +50,7 @@ Entity * MatchThreeBoard::createChessAt(const RowColumn & cell, const ChessColor
 		(new Entity())
 			->addComponent(createComponent<ComponentTransform>(this->getChessPositionAt(cell), 1.0f))
 			->addComponent(createComponent<ComponentAnchor>(RenderAnchor_Center))
-			->addComponent(createAndLoadImageComponent(getChessResourceName(chessColor)))
+			->addComponent(createImageComponent(getChessResource(chessColor)))
 			->addComponent(createComponent<ComponentRendererTouchHandler>()->addOnTouch(cpgf::makeCallback(scene, &SceneMatchThree::onChessTouched)))
 			->addComponent(createComponent<ComponentChess>(chessColor))
 		);

@@ -1,5 +1,8 @@
 #include "matchthree/matchthreechess.h"
 #include "engine/errorhandler.h"
+#include "engine/resourcemanager.h"
+#include "engine/gamespritesheet.h"
+#include "framework/gameapplication.h"
 #include "framework/util.h"
 
 #include <map>
@@ -10,11 +13,11 @@ namespace gincu {
 namespace {
 
 const std::map<ChessColor, std::string> chessColorResourceMap {
-	{ ChessColor::normal0, "matchthree/1.png" },
-	{ ChessColor::normal1, "matchthree/2.png" },
-	{ ChessColor::normal2, "matchthree/3.png" },
-	{ ChessColor::normal3, "matchthree/4.png" },
-	{ ChessColor::normal4, "matchthree/5.png" },
+	{ ChessColor::normal0, "1" },
+	{ ChessColor::normal1, "2" },
+	{ ChessColor::normal2, "3" },
+	{ ChessColor::normal3, "4" },
+	{ ChessColor::normal4, "5" },
 };
 
 }
@@ -27,6 +30,11 @@ std::string getChessResourceName(const ChessColor chessColor)
 		return std::string();
 	}
 	return it->second;
+}
+
+GameImage getChessResource(const ChessColor chessColor)
+{
+	return ResourceManager::getInstance()->getSpriteSheet("matchthree/chess_spritesheet", SpriteSheetFormat::spritePackText)->getImage(getChessResourceName(chessColor));
 }
 
 ChessColor randomChessColor()

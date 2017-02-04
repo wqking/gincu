@@ -95,9 +95,11 @@ bool RenderEngine::isAlive() const
 
 void RenderEngine::draw(const GameImage & image, const GameTransform & transform)
 {
-	const GameRect & rect = image.getRect();
-	sf::Sprite sprite(image.getResource()->texture, { (int)rect.x, (int)rect.y, (int)rect.width, (int)rect.height });
-	this->resource->window->draw(sprite, transform.getSfmlTransform());
+	if(image.isValid()) {
+		const GameRect & rect = image.getRect();
+		sf::Sprite sprite(image.getResource()->texture, { (int)rect.x, (int)rect.y, (int)rect.width, (int)rect.height });
+		this->resource->window->draw(sprite, transform.getSfmlTransform());
+	}
 }
 
 void RenderEngine::draw(const GameText & text, const GameTransform & transform)

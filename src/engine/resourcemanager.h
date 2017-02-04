@@ -3,6 +3,7 @@
 
 #include "engine/gameimage.h"
 #include "engine/gamefont.h"
+#include "engine/gameinputstream.h"
 
 #include <map>
 #include <string>
@@ -12,6 +13,8 @@ namespace gincu {
 
 class GameImage;
 class GameImageResource;
+class GameSpriteSheet;
+enum class SpriteSheetFormat;
 
 class ResourceManager
 {
@@ -25,10 +28,16 @@ public:
 
 	GameImage getImage(const std::string & resourceName) const;
 
+	std::shared_ptr<GameSpriteSheet> getSpriteSheet(const std::string & resourceName, const SpriteSheetFormat format) const;
+
+	FileInputStream getFileStream(const std::string & resourceName) const;
+
 	const GameFont & getFont() const;
 
 private:
+	std::string resourcePath;
 	mutable std::map<std::string, std::shared_ptr<GameImageResource> > imageResourceMap;
+	mutable std::map<std::string, std::shared_ptr<GameSpriteSheet> > spriteSheetMap;
 	mutable std::unique_ptr<GameFont> font;
 };
 

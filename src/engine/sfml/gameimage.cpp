@@ -38,8 +38,7 @@ void GameImage::draw(const GameTransform & transform)
 
 GameSize GameImage::getSize() const
 {
-	auto size = this->resource->texture.getSize();
-	return { (CoordType)size.x, (CoordType)size.y };
+	return { this->rect.width, this->rect.height };
 }
 
 void GameImage::setResource(const std::shared_ptr<GameImageResource> & resource)

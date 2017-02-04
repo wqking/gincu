@@ -33,6 +33,8 @@ public:
 	void setRect(const GameRect & rect) { this->rect = rect; }
 	const GameRect & getRect() const { return this->rect; }
 
+	bool isValid() const { return this->resource.get() != nullptr; }
+
 private:
 	std::shared_ptr<GameImageResource> resource;
 	GameRect rect;

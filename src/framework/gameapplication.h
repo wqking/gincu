@@ -37,8 +37,6 @@ public:
 	const GameConfigInfo & getConfigInfo() const { return this->configInfo; }
 	const GameSize & getViewSize() const { return this->configInfo.viewSize; }
 
-	RenderEngine * getRenderEngine() const { return this->renderEngine.get(); }
-	ResourceManager * getResourceManager() const { return this->resourceManager.get(); }
 	SceneManager * getSceneManager() const { return this->sceneManager.get(); }
 
 protected:
