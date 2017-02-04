@@ -1,5 +1,9 @@
 # Gincu -- a simple match three game, game engine, and game framework written in C++
 
+## Version
+
+1.0.1
+
 ## Introduction and goals
 
 This is a simple tiny 2D game, game engine, and game framework written in C++. This is not and will not be feature complete because the goals are:
@@ -12,8 +16,14 @@ Now I open source the project, and I've rewritten the render engine with SFML.
 
 The match-three is the first step. In the future we may add more games as prototypes to the project. Though the match three game is not as cool as Candy Crush Saga, it includes most basic stuff and may be a good kick off.
 
-The project is cross platform. I tested it on Windows with MingW and VC, and Android as well. It should work on Linux, Mac, and iOS, but I didn't test.
+## Supported platform
 
+ * Windows. Tested.
+ * Android. Tested.
+ * iOS/iPhone/iPad. Not tested.
+ * Mac. Not tested.
+ * Linux. Not tested.
+ 
 ## Environments and requirements
 
  * C++11 compiler (Visual C++ 2015 or later, or GCC (MingW) 4.8 or later)
