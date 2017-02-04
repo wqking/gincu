@@ -22,6 +22,15 @@ enum class SpriteSheetFormat
 class GameImageResource;
 class GameImage;
 
+class GameSpriteSheetResource
+{
+public:
+	void load(const std::string & resourceName, const SpriteSheetFormat format);
+
+	std::map<std::string, GameRect> imageMap;
+	std::shared_ptr<GameImageResource> imageResource;
+};
+
 class GameSpriteSheet
 {
 private:
@@ -32,15 +41,19 @@ public:
 	static void registerLoader(const SpriteSheetFormat format, const LoaderCallback & loader);
 
 public:
-	void load(const std::string & resourceName, const SpriteSheetFormat format);
+	GameSpriteSheet();
+	explicit GameSpriteSheet(const std::shared_ptr<GameSpriteSheetResource> & resource);
+
 	GameImage getImage(const std::string & name) const;
 
 private:
 	static LoaderMap * getLoaderMap();
 
 private:
-	std::map<std::string, GameRect> imageMap;
-	std::shared_ptr<GameImageResource> imageResource;
+	std::shared_ptr<GameSpriteSheetResource> resource;
+
+private:
+	friend class GameSpriteSheetResource;
 };
 
 } //namespace gincu

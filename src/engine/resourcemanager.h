@@ -2,6 +2,7 @@
 #define RESOURCEMANAGER_H
 
 #include "engine/gameimage.h"
+#include "engine/gamespritesheet.h"
 #include "engine/gamefont.h"
 #include "engine/gameinputstream.h"
 
@@ -13,7 +14,7 @@ namespace gincu {
 
 class GameImage;
 class GameImageResource;
-class GameSpriteSheet;
+class GameSpriteSheetResource;
 enum class SpriteSheetFormat;
 
 class ResourceManager
@@ -28,7 +29,7 @@ public:
 
 	GameImage getImage(const std::string & resourceName) const;
 
-	std::shared_ptr<GameSpriteSheet> getSpriteSheet(const std::string & resourceName, const SpriteSheetFormat format) const;
+	GameSpriteSheet getSpriteSheet(const std::string & resourceName, const SpriteSheetFormat format) const;
 
 	FileInputStream getFileStream(const std::string & resourceName) const;
 
@@ -37,7 +38,7 @@ public:
 private:
 	std::string resourcePath;
 	mutable std::map<std::string, std::shared_ptr<GameImageResource> > imageResourceMap;
-	mutable std::map<std::string, std::shared_ptr<GameSpriteSheet> > spriteSheetMap;
+	mutable std::map<std::string, std::shared_ptr<GameSpriteSheetResource> > spriteSheetResourceMap;
 	mutable std::unique_ptr<GameFont> font;
 };
 

@@ -38,28 +38,30 @@ GameImage ResourceManager::getImage(const std::string & resourceName) const
 		resource = it->second;
 	}
 	else {
-		std::shared_ptr<GameImageResource> imageResource(std::make_shared<GameImageResource>());
-		this->imageResourceMap.insert(std::make_pair(resourceName, imageResource));
+		resource = std::make_shared<GameImageResource>();
+		this->imageResourceMap.insert(std::make_pair(resourceName, resource));
 		const std::string fileName = this->resourcePath + resourceName;
-		imageResource->load(fileName);
-		resource = imageResource;
+		resource->load(fileName);
 	}
 
 	return GameImage(resource);
 }
 
-std::shared_ptr<GameSpriteSheet> ResourceManager::getSpriteSheet(const std::string & resourceName, const SpriteSheetFormat format) const
+GameSpriteSheet ResourceManager::getSpriteSheet(const std::string & resourceName, const SpriteSheetFormat format) const
 {
-	auto it = this->spriteSheetMap.find(resourceName);
-	if(it != this->spriteSheetMap.end()) {
-		return it->second;
+	std::shared_ptr<GameSpriteSheetResource> resource;
+
+	auto it = this->spriteSheetResourceMap.find(resourceName);
+	if(it != this->spriteSheetResourceMap.end()) {
+		resource = it->second;
 	}
 	else {
-		std::shared_ptr<GameSpriteSheet> spriteSheet(std::make_shared<GameSpriteSheet>());
-		spriteSheet->load(resourceName, format);
-		this->spriteSheetMap.insert(std::make_pair(resourceName, spriteSheet));
-		return spriteSheet;
+		resource = std::make_shared<GameSpriteSheetResource>();
+		resource->load(resourceName, format);
+		this->spriteSheetResourceMap.insert(std::make_pair(resourceName, resource));
 	}
+
+	return GameSpriteSheet(resource);
 }
 
 FileInputStream ResourceManager::getFileStream(const std::string & resourceName) const

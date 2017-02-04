@@ -9,6 +9,20 @@
 
 namespace gincu {
 
+void GameSpriteSheetResource::load(const std::string & resourceName, const SpriteSheetFormat format)
+{
+	const GameSpriteSheet::LoaderMap * loaderMap = GameSpriteSheet::getLoaderMap();
+	auto it = loaderMap->find(format);
+	if(it == loaderMap->end()) {
+		handleFatal("Can't find sprite sheet loader.");
+		return;
+	}
+
+	std::string imageFileName;
+	it->second(resourceName, &this->imageMap, &imageFileName);
+	this->imageResource = ResourceManager::getInstance()->getImage(imageFileName).getResource();
+}
+
 GameSpriteSheet::LoaderMap * GameSpriteSheet::getLoaderMap()
 {
 	static LoaderMap loaderMap;
@@ -21,25 +35,20 @@ void GameSpriteSheet::registerLoader(const SpriteSheetFormat format, const Loade
 	getLoaderMap()->insert(std::make_pair(format, loader));
 }
 
-void GameSpriteSheet::load(const std::string & resourceName, const SpriteSheetFormat format)
+GameSpriteSheet::GameSpriteSheet()
 {
-	const LoaderMap * loaderMap = getLoaderMap();
-	auto it = loaderMap->find(format);
-	if(it == loaderMap->end()) {
-		handleFatal("Can't find sprite sheet loader.");
-		return;
-	}
+}
 
-	std::string imageFileName;
-	it->second(resourceName, &this->imageMap, &imageFileName);
-	this->imageResource = ResourceManager::getInstance()->getImage(imageFileName).getResource();
+GameSpriteSheet::GameSpriteSheet(const std::shared_ptr<GameSpriteSheetResource> & resource)
+	: resource(resource)
+{
 }
 
 GameImage GameSpriteSheet::getImage(const std::string & name) const
 {
-	auto it = this->imageMap.find(name);
-	if(it != this->imageMap.end()) {
-		return GameImage(this->imageResource, it->second);
+	auto it = this->resource->imageMap.find(name);
+	if(it != this->resource->imageMap.end()) {
+		return GameImage(this->resource->imageResource, it->second);
 	}
 	else {
 		return GameImage();
