@@ -26,6 +26,7 @@
 			android:name="android.app.NativeActivity"
 			android:label="@string/app_name"
 			android:icon="@drawable/gincu_icon"
+			android:screenOrientation="landscape"
 			android:configChanges="keyboardHidden|orientation|screenSize"
 		>
 

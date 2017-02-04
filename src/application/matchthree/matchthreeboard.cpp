@@ -30,6 +30,13 @@ MatchThreeBoard::~MatchThreeBoard()
 
 Entity * MatchThreeBoard::getChessAt(const RowColumn & cell) const
 {
+	if(cell.column < 0 || cell.column >= this->getColumnCount()) {
+		return nullptr;
+	}
+	if(cell.row < 0 || cell.row >= this->getRowCount()) {
+		return nullptr;
+	}
+
 	return this->doReferenceChessAt(cell);
 }
 

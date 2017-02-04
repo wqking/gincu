@@ -2,6 +2,7 @@
 #define SCENEMATCHTHREE_H
 
 #include "framework/scene.h"
+#include "engine/geometry.h"
 
 #include <memory>
 #include <vector>
@@ -45,6 +46,8 @@ private:
 	std::unique_ptr<MatchThreeBoard> board;
 	std::unique_ptr<MatchThreeInfoView> infoView;
 	std::vector<Entity *> touchedChessList;
+
+	GamePoint previousTouchPosition;
 
 	unsigned int roundStartMilliseconds;
 };

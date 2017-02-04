@@ -25,6 +25,8 @@
 #include "matchthree/stateerasematches.h"
 #include "matchthree/stateresult.h"
 
+#include <cmath>
+
 namespace gincu {
 
 SceneMatchThree::SceneMatchThree()
@@ -73,6 +75,8 @@ void SceneMatchThree::doOnEnter()
 	GameApplication::getInstance()->addUpdater(cpgf::makeCallback(this, &SceneMatchThree::onUpdate));
 
 	this->infoView->setRemainingSeconds(secondsPerRound);
+
+	this->previousTouchPosition.x = -1;
 }
 
 void SceneMatchThree::doOnExit()
@@ -145,10 +149,13 @@ void SceneMatchThree::onChessTouched(const TouchEvent & touchEvent)
 
 			this->touchedChessList.push_back(touchEvent.touchedEntity);
 			this->setTouchCapture(touchEvent.touchedEntity);
+
+			this->previousTouchPosition = touchEvent.position;
 		}
 		break;
 
 	case TouchEventType::eventReleased:
+		this->previousTouchPosition.x = -1;
 		if(touchEvent.touchedEntity == nullptr || touchEvent.touchedEntity->getComponentByType<ComponentChess>() == nullptr) {
 			this->restoreTouchedChessList();
 			this->clearTouchedChessList();
@@ -164,10 +171,41 @@ void SceneMatchThree::onChessTouched(const TouchEvent & touchEvent)
 		break;
 
 	case TouchEventType::eventMoved:
+		if(this->previousTouchPosition.x > 0
+			&& this->touchedChessList.size() == 1
+			&& this->touchedChessList.back() != touchEvent.touchedEntity
+			) {
+			const RowColumn cell = this->board->getChessCell(this->touchedChessList.back());
+			const CoordType deltaX = fabs(touchEvent.position.x - this->previousTouchPosition.x);
+			const CoordType deltaY = fabs(touchEvent.position.y - this->previousTouchPosition.y);
+			RowColumn cellToSwap = cell;
+			if(deltaX > deltaY) {
+				if(touchEvent.position.x > this->previousTouchPosition.x) {
+					++cellToSwap.column;
+				}
+				else {
+					--cellToSwap.column;
+				}
+			}
+			else {
+				if(touchEvent.position.y > this->previousTouchPosition.y) {
+					++cellToSwap.row;
+				}
+				else {
+					--cellToSwap.row;
+				}
+			}
+
+			Entity * chessToSwap = this->board->getChessAt(cellToSwap);
+			if(chessToSwap != nullptr) {
+				this->touchedChessList.push_back(chessToSwap);
+			}
+		}
 		break;
 	}
 
 	if(this->touchedChessList.size() == 2) {
+		this->previousTouchPosition.x = -1;
 		this->setTouchCapture(nullptr);
 		this->restoreTouchedChessList();
 		this->stateMachine->gotoState(stateSwapChesses);
