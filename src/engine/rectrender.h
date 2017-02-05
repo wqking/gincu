@@ -10,7 +10,9 @@
 namespace gincu {
 
 class GameTransform;
+struct RenderInfo;
 class RectRenderResource;
+class GameImageResource;
 
 class RectRender
 {
@@ -18,7 +20,7 @@ public:
 	RectRender();
 	~RectRender();
 
-	void draw(const GameTransform & transform);
+	void draw(const GameTransform & transform, const RenderInfo * renderInfo);
 
 	void setColor(const GameColor color);
 	GameColor getColor() const;
@@ -28,7 +30,7 @@ public:
 
 	const std::shared_ptr<RectRenderResource> & getResource() const { return this->resource; }
 
-	void * getBatchGroup() const { return nullptr; }
+	const GameImageResource * getTexture() const { return nullptr; }
 
 private:
 	std::shared_ptr<RectRenderResource> resource;

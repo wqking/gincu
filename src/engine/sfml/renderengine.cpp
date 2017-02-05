@@ -10,6 +10,7 @@
 #include "engine/sfml/rectrenderresource.h"
 #include "engine/sfml/renderengineresource.h"
 #include "framework/gameapplication.h"
+#include "engine/renderinfo.h"
 
 #include <cassert>
 
@@ -93,51 +94,59 @@ bool RenderEngine::isAlive() const
 	return this->resource->window->isOpen();
 }
 
-void RenderEngine::draw(const GameImage & image, const GameTransform & transform)
+void RenderEngine::draw(const GameImage & image, const GameTransform & transform, const RenderInfo * renderInfo)
 {
 	if(image.isValid()) {
 		const GameRect & rect = image.getRect();
+		const sf::Transform & sfmlTransform = transform.getSfmlTransform();
 		if(! this->resource->inBatchDraw) {
 			sf::Sprite sprite(image.getResource()->texture, { (int)rect.x, (int)rect.y, (int)rect.width, (int)rect.height });
-			this->resource->window->draw(sprite, transform.getSfmlTransform());
+			sf::RenderStates renderStates(sfmlTransform);
+			copyBlendAndShaderToSfml(&renderStates, renderInfo);
+			this->resource->window->draw(sprite, renderStates);
 		}
 		else {
-			this->resource->batchDrawTexture = &image.getResource()->texture;
-			
+			this->resource->batchDrawRenderInfo = *renderInfo;
+			this->resource->batchDrawRenderInfo.texture = image.getResource().get();
+
 			sf::VertexArray & vertexArray = this->resource->batchDrawVertexArray;
 			std::size_t count = vertexArray.getVertexCount();
 			vertexArray.resize(count + 6);
 
-			vertexArray[count].position = transform.getSfmlTransform().transformPoint({ 0, 0 });
+			vertexArray[count].position = sfmlTransform.transformPoint({ 0, 0 });
 			vertexArray[count].texCoords = { rect.x, rect.y };
 			++count;
-			vertexArray[count].position = transform.getSfmlTransform().transformPoint({ rect.width, 0 });
+			vertexArray[count].position = sfmlTransform.transformPoint({ rect.width, 0 });
 			vertexArray[count].texCoords = { rect.x + rect.width, rect.y };
 			++count;
-			vertexArray[count].position = transform.getSfmlTransform().transformPoint({ rect.width, rect.height });
+			vertexArray[count].position = sfmlTransform.transformPoint({ rect.width, rect.height });
 			vertexArray[count].texCoords = { rect.x + rect.width, rect.y + rect.height };
 			++count;
 
-			vertexArray[count].position = transform.getSfmlTransform().transformPoint({ rect.width, rect.height });
+			vertexArray[count].position = sfmlTransform.transformPoint({ rect.width, rect.height });
 			vertexArray[count].texCoords = { rect.x + rect.width, rect.y + rect.height };
 			++count;
-			vertexArray[count].position = transform.getSfmlTransform().transformPoint({ 0, rect.height });
+			vertexArray[count].position = sfmlTransform.transformPoint({ 0, rect.height });
 			vertexArray[count].texCoords = { rect.x, rect.y + rect.height };
 			++count;
-			vertexArray[count].position = transform.getSfmlTransform().transformPoint({ 0, 0 });
+			vertexArray[count].position = sfmlTransform.transformPoint({ 0, 0 });
 			vertexArray[count].texCoords = { rect.x, rect.y };
 		}
 	}
 }
 
-void RenderEngine::draw(const GameText & text, const GameTransform & transform)
+void RenderEngine::draw(const GameText & text, const GameTransform & transform, const RenderInfo * renderInfo)
 {
-	this->resource->window->draw(text.getResource()->text, transform.getSfmlTransform());
+	sf::RenderStates renderStates(transform.getSfmlTransform());
+	copyBlendAndShaderToSfml(&renderStates, renderInfo);
+	this->resource->window->draw(text.getResource()->text, renderStates);
 }
 
-void RenderEngine::draw(const RectRender & rect, const GameTransform & transform)
+void RenderEngine::draw(const RectRender & rect, const GameTransform & transform, const RenderInfo * renderInfo)
 {
-	this->resource->window->draw(rect.getResource()->rectangle, transform.getSfmlTransform());
+	sf::RenderStates renderStates(transform.getSfmlTransform());
+	copyBlendAndShaderToSfml(&renderStates, renderInfo);
+	this->resource->window->draw(rect.getResource()->rectangle, renderStates);
 }
 
 void RenderEngine::beginBatchDraw()
@@ -148,8 +157,10 @@ void RenderEngine::beginBatchDraw()
 
 void RenderEngine::endBatchDraw()
 {
-	if(this->resource->batchDrawTexture != nullptr && this->resource->inBatchDraw) {
-		this->resource->window->draw(this->resource->batchDrawVertexArray, this->resource->batchDrawTexture);
+	if(this->resource->batchDrawRenderInfo.texture != nullptr && this->resource->inBatchDraw) {
+		sf::RenderStates renderStates(&this->resource->batchDrawRenderInfo.texture->texture);
+		copyBlendAndShaderToSfml(&renderStates, &this->resource->batchDrawRenderInfo);
+		this->resource->window->draw(this->resource->batchDrawVertexArray, renderStates);
 	}
 
 	this->resource->clearBatchDrawState();

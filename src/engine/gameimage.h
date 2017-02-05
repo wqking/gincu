@@ -10,7 +10,7 @@
 namespace gincu {
 
 class GameTransform;
-
+struct RenderInfo;
 class GameImageResource;
 
 class GameImage
@@ -23,7 +23,7 @@ public:
 
 	void load(const std::string & fileName);
 
-	void draw(const GameTransform & transform);
+	void draw(const GameTransform & transform, const RenderInfo * renderInfo);
 
 	GameSize getSize() const;
 
@@ -35,7 +35,7 @@ public:
 
 	bool isValid() const { return this->resource.get() != nullptr; }
 
-	void * getBatchGroup() const { return this->resource.get(); }
+	const GameImageResource * getTexture() const { return this->resource.get(); }
 
 private:
 	std::shared_ptr<GameImageResource> resource;

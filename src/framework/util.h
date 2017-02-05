@@ -20,6 +20,31 @@ std::string toString(const T & value)
 	return stream.str();
 }
 
+inline bool isEqual(const int a, const int b)
+{
+	return a == b;
+}
+
+inline bool isEqual(const unsigned int a, const unsigned int b)
+{
+	return a == b;
+}
+
+inline bool isEqual(const long long a, const long long b)
+{
+	return a == b;
+}
+
+inline bool isEqual(const double a, const double b)
+{
+	return fabs(a - b) <= std::numeric_limits<double>::epsilon();
+}
+
+inline bool isEqual(const float a, const float b)
+{
+	return fabs(a - b) <= std::numeric_limits<float>::epsilon();
+}
+
 int getRand();
 int getRand(const int min, const int max);
 int getRand(const int max);

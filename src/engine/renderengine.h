@@ -16,6 +16,7 @@ class GameTransform;
 class GameImage;
 class GameText;
 class RectRender;
+struct RenderInfo;
 
 class RenderEngine
 {
@@ -36,9 +37,9 @@ public:
 	
 	bool isAlive() const;
 
-	void draw(const GameImage & image, const GameTransform & transform);
-	void draw(const GameText & text, const GameTransform & transform);
-	void draw(const RectRender & rect, const GameTransform & transform);
+	void draw(const GameImage & image, const GameTransform & transform, const RenderInfo * renderInfo);
+	void draw(const GameText & text, const GameTransform & transform, const RenderInfo * renderInfo);
+	void draw(const RectRender & rect, const GameTransform & transform, const RenderInfo * renderInfo);
 
 	void beginBatchDraw();
 	void endBatchDraw();

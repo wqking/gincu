@@ -11,7 +11,9 @@
 namespace gincu{
 
 class GameTransform;
+struct RenderInfo;
 class GameTextResource;
+class GameImageResource;
 
 class GameText
 {
@@ -24,13 +26,13 @@ public:
 	void setColor(const GameColor textColor);
 	void setTextAndColor(const std::string & text, const GameColor textColor);
 
-	void draw(const GameTransform & transform);
+	void draw(const GameTransform & transform, const RenderInfo * renderInfo);
 
 	GameSize getSize() const;
 
 	const std::shared_ptr<GameTextResource> & getResource() const { return this->resource; }
 
-	void * getBatchGroup() const { return nullptr; }
+	const GameImageResource * getTexture() const { return nullptr; }
 
 private:
 	std::shared_ptr<GameTextResource> resource;

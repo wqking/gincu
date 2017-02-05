@@ -1,6 +1,8 @@
 #ifndef RENDERENGINERESOURCE_H
 #define RENDERENGINERESOURCE_H
 
+#include "engine/renderinfo.h"
+
 #include <SFML/Graphics.hpp>
 
 #include <memory>
@@ -14,13 +16,13 @@ public:
 		window(),
 		view(),
 		batchDrawVertexArray(sf::Triangles),
-		batchDrawTexture(nullptr),
+		batchDrawRenderInfo(),
 		inBatchDraw(false)
 	{}
 
 	void clearBatchDrawState() {
 		this->batchDrawVertexArray.clear();
-		this->batchDrawTexture = nullptr;
+		this->batchDrawRenderInfo.texture = nullptr;
 		this->inBatchDraw = false;
 	}
 
@@ -28,7 +30,7 @@ public:
 	sf::View view;
 
 	sf::VertexArray batchDrawVertexArray;
-	sf::Texture * batchDrawTexture;
+	RenderInfo batchDrawRenderInfo;
 	bool inBatchDraw;
 };
 

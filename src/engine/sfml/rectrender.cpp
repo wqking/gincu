@@ -17,9 +17,9 @@ RectRender::~RectRender()
 
 }
 
-void RectRender::draw(const GameTransform & transform)
+void RectRender::draw(const GameTransform & transform, const RenderInfo * renderInfo)
 {
-	RenderEngine::getInstance()->draw(*this, transform);
+	RenderEngine::getInstance()->draw(*this, transform, renderInfo);
 }
 
 void RectRender::setColor(const GameColor color)

@@ -2,6 +2,7 @@
 #include "engine/renderengine.h"
 #include "engine/errorhandler.h"
 #include "engine/gametransform.h"
+#include "engine/renderinfo.h"
 #include "engine/sfml/gameimageresource.h"
 
 namespace gincu {
@@ -31,9 +32,9 @@ void GameImage::load(const std::string & fileName)
 	this->resource->load(fileName);
 }
 
-void GameImage::draw(const GameTransform & transform)
+void GameImage::draw(const GameTransform & transform, const RenderInfo * renderInfo)
 {
-	RenderEngine::getInstance()->draw(*this, transform);
+	RenderEngine::getInstance()->draw(*this, transform, renderInfo);
 }
 
 GameSize GameImage::getSize() const

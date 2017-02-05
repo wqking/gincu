@@ -47,9 +47,9 @@ void GameText::setTextAndColor(const std::string & text, const GameColor textCol
 	this->setColor(textColor);
 }
 
-void GameText::draw(const GameTransform & transform)
+void GameText::draw(const GameTransform & transform, const RenderInfo * renderInfo)
 {
-	RenderEngine::getInstance()->draw(*this, transform);
+	RenderEngine::getInstance()->draw(*this, transform, renderInfo);
 }
 
 GameSize GameText::getSize() const

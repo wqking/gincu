@@ -54,9 +54,9 @@ void ComponentsBuffer::render()
 	RenderEngine * renderEngine = RenderEngine::getInstance();
 	bool inBatchDraw = false;
 
-	void * previousGroup;
-	void * currentGroup = nullptr;
-	void * nextGroup = getRenderBatchGroup(nextRender);
+	const RenderInfo * previousGroup;
+	const RenderInfo * currentGroup = nullptr;
+	const RenderInfo * nextGroup = getRenderBatchGroup(nextRender);
 
 	for(int i = 0; i < count; ++i) {
 		previousRender = currentRender;
@@ -68,13 +68,18 @@ void ComponentsBuffer::render()
 		nextGroup = getRenderBatchGroup(nextRender);
 
 		if(! inBatchDraw) {
-			if(currentGroup != nullptr && currentGroup == nextGroup) {
+			if(currentGroup != nullptr
+				&& nextGroup != nullptr
+				&& *currentGroup == *nextGroup
+			) {
 				renderEngine->beginBatchDraw();
 				inBatchDraw = true;
 			}
 		}
 		else {
-			if(currentGroup != previousGroup) {
+			if(currentGroup != nullptr
+				&& previousGroup != nullptr
+				&& *currentGroup != *previousGroup) {
 				renderEngine->endBatchDraw();
 				inBatchDraw = false;
 			}

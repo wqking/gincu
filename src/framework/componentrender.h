@@ -9,10 +9,13 @@
 #include "engine/gameimage.h"
 #include "engine/gametext.h"
 #include "engine/rectrender.h"
+#include "engine/renderinfo.h"
 
 #include <memory>
 
 namespace gincu {
+
+class GameImageResource;
 
 class ComponentRender : public Component
 {
@@ -35,12 +38,26 @@ public:
 		return this->doGetSize();
 	}
 
-	void * getBatchGroup() const { return this->doGetBatchGroup(); }
+	const RenderInfo * getBatchGroup() const {
+		this->renderInfo.texture = this->doGetTexture();
+		return &this->renderInfo;
+	}
+
+	ComponentRender * setBlendMode(const GameBlendMode & blendMode) {
+		this->renderInfo.blendMode = blendMode;
+		return this;
+	}
+
+protected:
+	RenderInfo * getRenderInfo() { return &this->renderInfo; }
 
 private:
 	virtual void doDraw() = 0;
 	virtual GameSize doGetSize() const = 0;
-	virtual void * doGetBatchGroup() const = 0;
+	virtual const GameImageResource * doGetTexture() const = 0;
+
+private:
+	mutable RenderInfo renderInfo;
 };
 
 class ComponentContainerRender : public ComponentRender
@@ -58,7 +75,7 @@ private:
 	virtual void doDraw() override;
 	virtual GameSize doGetSize() const override;
 	virtual void doAfterSetEntity() override;
-	virtual void * doGetBatchGroup() const override { return nullptr; }
+	virtual const GameImageResource * doGetTexture() const override { return nullptr; }
 
 private:
 	mutable GameSize size;
@@ -92,7 +109,7 @@ private:
 	virtual void doDraw() override {
 		ComponentTransform * transform = this->getEntity()->template getComponentByType<ComponentTransform>();
 		if(transform->isVisible()) {
-			this->renderer.draw(computeRenderableTransform(transform, this));
+			this->renderer.draw(computeRenderableTransform(transform, this), this->getRenderInfo());
 		}
 	}
 
@@ -100,8 +117,8 @@ private:
 		return this->renderer.getSize();
 	}
 
-	virtual void * doGetBatchGroup() const override {
-		return this->renderer.getBatchGroup();
+	virtual const GameImageResource * doGetTexture() const override {
+		return this->renderer.getTexture();
 	}
 
 private:
@@ -117,7 +134,7 @@ ComponentImageRender * createImageComponent(const GameImage & image);
 ComponentTextRender * createAndLoadTextComponent(const std::string & text, const GameColor textColor, const int fontSize);
 ComponentRectRender * createRectRenderComponent(const GameColor color, const GameSize & size);
 
-inline void * getRenderBatchGroup(const ComponentRender * render)
+inline const RenderInfo * getRenderBatchGroup(const ComponentRender * render)
 {
 	return render == nullptr ? nullptr : render->getBatchGroup();
 }
