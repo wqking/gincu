@@ -30,7 +30,7 @@ void SceneMenu::doOnEnter()
 
 	this->addEntity(
 		(new Entity())
-			->addComponent(createComponent<ComponentTransform>(GamePoint { -700, -230 }, 2.2f))
+		->addComponent(createComponent<ComponentTransform>(GamePoint { -700, -230 }, GameScale { 2.2f, 2.2f }))
 			->addComponent(createAndLoadImageComponent(menuBackgroundImageName))
 	);
 
@@ -45,7 +45,7 @@ void SceneMenu::doOnEnter()
 		this->addEntity(
 			(new Entity())
 				->addComponent(createComponent<ComponentTransform>())
-				->addComponent(createComponent<ComponentLocalTransform>(GamePoint { x, yStart + (tileSize.height + yDistance) * i }, 1.0f))
+				->addComponent(createComponent<ComponentLocalTransform>(GamePoint { x, yStart + (tileSize.height + yDistance) * i }))
 				->addComponent(createComponent<ComponentAnchor>(RenderAnchor_Center))
 				->addComponent(createComponent<ComponentContainerRender>()
 					->add(createRectRenderComponent(item.backgroundColor, tileSize))

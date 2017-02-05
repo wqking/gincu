@@ -70,7 +70,7 @@ void SceneLogo::doOnEnter()
 
 	this->addEntity(
 		(new Entity())
-			->addComponent(createComponent<ComponentTransform>(GamePoint { 0, 0 }, 3.25f))
+		->addComponent(createComponent<ComponentTransform>(GamePoint { 0, 0 }, GameScale { 3.25f, 3.25f }))
 			->addComponent(createAndLoadImageComponent(backgroundImageName))
 	);
 
@@ -91,7 +91,7 @@ void SceneLogo::doOnEnter()
 
 		Entity * entity = this->addEntity(
 			(new Entity())
-				->addComponent(createComponent<ComponentTransform>(GamePoint { x, -ySize }, 1.0f ))
+				->addComponent(createComponent<ComponentTransform>(GamePoint { x, -ySize } ))
 				->addComponent(createComponent<ComponentAnchor>(RenderAnchor_Center))
 				->addComponent(createImageComponent(getChessResource(item.chessColor)))
 			);
@@ -123,13 +123,13 @@ void SceneLogo::doOnEnter()
 
 		Entity * progressBarEntity = this->addEntity(
 			(new Entity())
-				->addComponent(createComponent<ComponentTransform>(startPosition, 1.0f))
+				->addComponent(createComponent<ComponentTransform>(startPosition))
 				->addComponent(createComponent<ComponentAnchor>(RenderAnchor_Hleft | RenderAnchor_Vcenter))
 				->addComponent(createRectRenderComponent(0x770000aa, GameSize { 0.0f, progressBarHeight }))
 			);
 		Entity * chessEntity = this->addEntity(
 			(new Entity())
-				->addComponent(createComponent<ComponentTransform>(startPosition, 1.0f ))
+				->addComponent(createComponent<ComponentTransform>(startPosition ))
 				->addComponent(createComponent<ComponentAnchor>(RenderAnchor_Center))
 				->addComponent(createImageComponent(getChessResource(ChessColor::normal3)))
 		);

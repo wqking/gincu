@@ -122,7 +122,7 @@ void StateEraseMatches::animateToDisappear()
 			const int row = *it;
 			Entity * chess = board->getChessAt(RowColumn { row, column });
 			ComponentTransform * transform = chess->getComponentByType<ComponentTransform>();
-			tween.target(cpgf::createAccessor(transform, &ComponentTransform::getScale, &ComponentTransform::setScale), 0.1f);
+			tween.target(cpgf::createAccessor(transform, &ComponentTransform::getScale, &ComponentTransform::setScale), GameScale { 0.1f, 0.1f });
 		}
 	}
 }

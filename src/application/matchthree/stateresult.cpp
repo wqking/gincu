@@ -106,7 +106,7 @@ void StateResult::doShowMessage()
 	this->backgroundEntity = this->scene->addEntity(
 		(new Entity())
 		->addComponent(createComponent<ComponentTransform>())
-		->addComponent(createComponent<ComponentLocalTransform>(GamePoint { application->getViewSize().width / 2, application->getViewSize().height / 2 }, 0.1f))
+		->addComponent(createComponent<ComponentLocalTransform>(GamePoint { application->getViewSize().width / 2, application->getViewSize().height / 2 }, GameScale { 0.1f, 0.1f }))
 		->addComponent(createComponent<ComponentAnchor>(RenderAnchor_Center))
 		->addComponent(createRectRenderComponent(gameColorSetAlpha(colorGreen, 127), GameSize { 450, 200}))
 		);
@@ -114,7 +114,7 @@ void StateResult::doShowMessage()
 	this->textEntity = this->scene->addEntity(
 		(new Entity())
 		->addComponent(createComponent<ComponentTransform>())
-		->addComponent(createComponent<ComponentLocalTransform>(GamePoint{ 0, 0 }, 1.0f)->setParent(this->backgroundEntity->getComponentByType<ComponentLocalTransform>()))
+		->addComponent(createComponent<ComponentLocalTransform>(GamePoint{ 0, 0 })->setParent(this->backgroundEntity->getComponentByType<ComponentLocalTransform>()))
 		->addComponent(createComponent<ComponentAnchor>(RenderAnchor_Center))
 		->addComponent(createAndLoadTextComponent("Great! Your score is " + toString(scene->getTotalScore()), colorWhite, normalFontSize))
 		);
@@ -124,7 +124,7 @@ void StateResult::doShowMessage()
 		.duration(1000)
 		.ease(cpgf::ElasticEase::easeOut())
 		.onComplete(cpgf::makeCallback(this, &StateResult::onBackgroundShown))
-		.target(cpgf::createAccessor(transform, &ComponentLocalTransform::getScale, &ComponentLocalTransform::setScale), 1.0f)
+		.target(cpgf::createAccessor(transform, &ComponentLocalTransform::getScale, &ComponentLocalTransform::setScale), GameScale { 1.0f, 1.0f })
 	;
 }
 

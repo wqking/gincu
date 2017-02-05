@@ -94,7 +94,7 @@ void SceneMatchThree::clearTouchedChessList()
 void SceneMatchThree::restoreTouchedChessList()
 {
 	for(auto it = this->touchedChessList.begin(); it != this->touchedChessList.end(); ++it) {
-		(*it)->getComponentByType<ComponentTransform>()->setScale(1.0f);
+		(*it)->getComponentByType<ComponentTransform>()->setScale(GameScale { 1.0f, 1.0f });
 	}
 }
 
@@ -144,7 +144,7 @@ void SceneMatchThree::onChessTouched(const TouchEvent & touchEvent)
 				}
 			}
 			if(this->touchedChessList.empty()) {
-				touchEvent.touchedEntity->getComponentByType<ComponentTransform>()->setScale(1.2f);
+				touchEvent.touchedEntity->getComponentByType<ComponentTransform>()->setScale(GameScale { 1.2f, 1.2f });
 			}
 
 			this->touchedChessList.push_back(touchEvent.touchedEntity);

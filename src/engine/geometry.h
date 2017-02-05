@@ -76,6 +76,21 @@ struct GameScale
 	float y;
 };
 
+inline GameScale operator + (const GameScale & a, const GameScale & b)
+{
+	return GameScale{ a.x + b.x, a.y + b.y };
+}
+
+inline GameScale operator - (const GameScale & a, const GameScale & b)
+{
+	return GameScale{ a.x - b.x, a.y - b.y };
+}
+
+inline GameScale operator * (const GameScale & a, const float b)
+{
+	return GameScale{ a.x * b, a.y * b };
+}
+
 
 struct RowColumn
 {

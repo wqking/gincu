@@ -24,19 +24,19 @@ MatchThreeInfoView::MatchThreeInfoView(SceneMatchThree * scene)
 {
 	this->scoreEntity = this->scene->addEntity(
 		(new Entity())
-		->addComponent(createComponent<ComponentTransform>(GamePoint { 115, 180 }, 1.0f))
+		->addComponent(createComponent<ComponentTransform>(GamePoint { 115, 180 }))
 		->addComponent(createComponent<ComponentAnchor>(RenderAnchor_Center))
 		->addComponent(createAndLoadTextComponent("0", colorWhite, normalFontSize))
 	);
 	this->scoreIncrementEntity = this->scene->addEntity(
 		(new Entity())
-		->addComponent(createComponent<ComponentTransform>(GamePoint(), 0.8f, false))
+		->addComponent(createComponent<ComponentTransform>(GamePoint(), GameScale { 0.8f, 0.8f }, false))
 		->addComponent(createComponent<ComponentAnchor>(RenderAnchor_Center))
 		->addComponent(createAndLoadTextComponent("0", colorGreen, normalFontSize))
 	);
 	this->timerEntity = this->scene->addEntity(
 		(new Entity())
-		->addComponent(createComponent<ComponentTransform>(GamePoint { 115, 220 }, 1.0f))
+		->addComponent(createComponent<ComponentTransform>(GamePoint { 115, 220 }))
 		->addComponent(createComponent<ComponentAnchor>(RenderAnchor_Center))
 		->addComponent(createAndLoadTextComponent("0", colorBlack, normalFontSize))
 		);
@@ -69,7 +69,7 @@ void MatchThreeInfoView::setRemainingSeconds(int seconds)
 	}
 
 	ComponentTransform * transform = this->timerEntity->getComponentByType<ComponentTransform>();
-	transform->setScale(1.0f);
+	transform->setScale(GameScale { 1.0f, 1.0f });
 
 	if(shouldWarn && this->remainingSeconds > 0) {
 		this->timerTimeLine = &cpgf::GTweenList::getInstance()->timeline();
@@ -81,7 +81,7 @@ void MatchThreeInfoView::setRemainingSeconds(int seconds)
 			timerTimeLine->tween()
 				.duration(300.0f)
 				.ease(cpgf::QuadEase::easeIn())
-				.target(cpgf::createAccessor(transform, &ComponentTransform::getScale, &ComponentTransform::setScale), 2.0f)
+				.target(cpgf::createAccessor(transform, &ComponentTransform::getScale, &ComponentTransform::setScale), GameScale { 2.0f, 2.0f })
 		);
 		this->timerTimeLine->append(
 			this->timerTimeLine->tween()
@@ -91,7 +91,7 @@ void MatchThreeInfoView::setRemainingSeconds(int seconds)
 			this->timerTimeLine->tween()
 				.duration(300.0f)
 				.ease(cpgf::QuadEase::easeOut())
-				.target(cpgf::createAccessor(transform, &ComponentTransform::getScale, &ComponentTransform::setScale), 1.0f)
+				.target(cpgf::createAccessor(transform, &ComponentTransform::getScale, &ComponentTransform::setScale), GameScale { 1.0f, 1.0f })
 		);
 	}
 }

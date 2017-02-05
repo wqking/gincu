@@ -12,7 +12,7 @@ class GameTransform
 {
 public:
 	GameTransform();
-	explicit GameTransform(const GamePoint & position, const float scale = 1.0f);
+	explicit GameTransform(const GamePoint & position, const GameScale & scale = {1.0f, 1.0f});
 	explicit GameTransform(const sf::Transform & sfmlTransform);
 
 	GamePoint getPosition() const;
@@ -21,8 +21,8 @@ public:
 	GamePoint getOrigin() const;
 	void setOrigin(const GamePoint & origin);
 
-	float getScale() const;
-	void setScale(const float scale);
+	GameScale getScale() const;
+	void setScale(const GameScale & scale);
 
 	const sf::Transform & getSfmlTransform() const;
 	

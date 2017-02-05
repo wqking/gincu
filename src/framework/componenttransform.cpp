@@ -10,7 +10,7 @@ ComponentTransform::ComponentTransform()
 {
 }
 
-ComponentTransform::ComponentTransform(const GamePoint & position, const float scale, const bool visible)
+ComponentTransform::ComponentTransform(const GamePoint & position, const GameScale & scale, const bool visible)
 	:
 		super(this),
 		transform(position, scale),
@@ -32,7 +32,7 @@ ComponentLocalTransform::ComponentLocalTransform()
 	this->setTypeId(ComponentLocalTransform::getComponentType());
 }
 
-ComponentLocalTransform::ComponentLocalTransform(const GamePoint & position, const float scale, const bool visible)
+ComponentLocalTransform::ComponentLocalTransform(const GamePoint & position, const GameScale & scale, const bool visible)
 	:
 		super(position, scale, visible),
 		parent(nullptr)

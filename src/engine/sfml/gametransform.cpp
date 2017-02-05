@@ -14,11 +14,11 @@ GameTransform::GameTransform()
 {
 }
 
-GameTransform::GameTransform(const GamePoint & position, const float scale)
+GameTransform::GameTransform(const GamePoint & position, const GameScale & scale)
 	:
 		position(position),
 		origin(),
-		scale{scale, scale},
+		scale(scale),
 		rotation(0),
 		needReloadTransform(true)
 {
@@ -59,14 +59,14 @@ void GameTransform::setOrigin(const GamePoint & origin)
 	}
 }
 
-float GameTransform::getScale() const
+GameScale GameTransform::getScale() const
 {
-	return this->scale.x;
+	return this->scale;
 }
 
-void GameTransform::setScale(const float scale)
+void GameTransform::setScale(const GameScale & scale)
 {
-	this->scale = GameScale{ scale, scale };
+	this->scale = scale;
 	this->needReloadTransform = true;
 }
 
