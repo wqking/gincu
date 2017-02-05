@@ -35,6 +35,8 @@ public:
 
 	bool isValid() const { return this->resource.get() != nullptr; }
 
+	void * getBatchGroup() const { return this->resource.get(); }
+
 private:
 	std::shared_ptr<GameImageResource> resource;
 	GameRect rect;

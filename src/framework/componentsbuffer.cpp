@@ -3,6 +3,7 @@
 #include "framework/componenttransform.h"
 #include "framework/componentrender.h"
 #include "framework/componenttouchhandler.h"
+#include "engine/renderengine.h"
 
 #include <algorithm>
 
@@ -37,8 +38,53 @@ void ComponentsBuffer::updateLocalTransforms()
 void ComponentsBuffer::render()
 {
 	ComponentListType * componentList = this->doGetComponentList(ComponentRender::getComponentType());
-	for(Component * component : *componentList) {
-		static_cast<ComponentRender *>(component)->draw();
+	if(componentList->empty()) {
+		return;
+	}
+
+	//for(Component * component : *componentList) {
+	//	static_cast<ComponentRender *>(component)->draw();
+	//}
+	//return;
+
+	const int count = (int)componentList->size();
+	ComponentRender * previousRender;
+	ComponentRender * currentRender = nullptr;
+	ComponentRender * nextRender = static_cast<ComponentRender *>(componentList->at(0));
+	RenderEngine * renderEngine = RenderEngine::getInstance();
+	bool inBatchDraw = false;
+
+	void * previousGroup;
+	void * currentGroup = nullptr;
+	void * nextGroup = getRenderBatchGroup(nextRender);
+
+	for(int i = 0; i < count; ++i) {
+		previousRender = currentRender;
+		currentRender = nextRender;
+		nextRender = (i < count - 1 ? static_cast<ComponentRender *>(componentList->at(i + 1)) : nullptr);
+
+		previousGroup = currentGroup;
+		currentGroup = nextGroup;
+		nextGroup = getRenderBatchGroup(nextRender);
+
+		if(! inBatchDraw) {
+			if(currentGroup != nullptr && currentGroup == nextGroup) {
+				renderEngine->beginBatchDraw();
+				inBatchDraw = true;
+			}
+		}
+		else {
+			if(currentGroup != previousGroup) {
+				renderEngine->endBatchDraw();
+				inBatchDraw = false;
+			}
+		}
+
+		currentRender->draw();
+	}
+
+	if(inBatchDraw) {
+		renderEngine->endBatchDraw();
 	}
 }
 

@@ -30,6 +30,8 @@ public:
 
 	const std::shared_ptr<GameTextResource> & getResource() const { return this->resource; }
 
+	void * getBatchGroup() const { return nullptr; }
+
 private:
 	std::shared_ptr<GameTextResource> resource;
 };

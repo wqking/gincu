@@ -31,6 +31,7 @@ private:
 private:
 	SceneMatchThree * scene;
 	Entity * backgroundEntity;
+	Entity * imageEntity;
 	Entity * textEntity;
 };
 

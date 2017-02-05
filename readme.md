@@ -45,6 +45,7 @@ Apache License, Version 2.0
  * Memory pool and cached entities and components. So CPU cache optimization is considered.
  * Underlying rendering engine agnostic. We can replace SFML with any other engine or even 3D engine simply and easily.
  * Sprite sheet.
+ * Low level automatically batching draw calls.
 
 ## How to contribute
 

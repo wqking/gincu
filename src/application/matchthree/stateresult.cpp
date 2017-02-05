@@ -44,6 +44,7 @@ void StateResult::doOnExit()
 {
 	this->scene->setTouchCapture(nullptr);
 	this->scene->removeEntity(this->backgroundEntity);
+	this->scene->removeEntity(this->imageEntity);
 	this->scene->removeEntity(this->textEntity);
 }
 
@@ -110,6 +111,14 @@ void StateResult::doShowMessage()
 		->addComponent(createComponent<ComponentAnchor>(RenderAnchor_Center))
 		->addComponent(createRectRenderComponent(gameColorSetAlpha(colorGreen, 127), GameSize { 450, 200}))
 		);
+
+	this->imageEntity = this->scene->addEntity(
+		(new Entity())
+		->addComponent(createComponent<ComponentTransform>())
+		->addComponent(createComponent<ComponentLocalTransform>(GamePoint{ 0, 0 }, GameScale{ 0.2f, 0.2f })->setParent(this->backgroundEntity->getComponentByType<ComponentLocalTransform>()))
+		->addComponent(createComponent<ComponentAnchor>(RenderAnchor_Center))
+		->addComponent(createAndLoadImageComponent(backgroundImageName))
+	);
 
 	this->textEntity = this->scene->addEntity(
 		(new Entity())

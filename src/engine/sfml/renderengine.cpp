@@ -97,8 +97,36 @@ void RenderEngine::draw(const GameImage & image, const GameTransform & transform
 {
 	if(image.isValid()) {
 		const GameRect & rect = image.getRect();
-		sf::Sprite sprite(image.getResource()->texture, { (int)rect.x, (int)rect.y, (int)rect.width, (int)rect.height });
-		this->resource->window->draw(sprite, transform.getSfmlTransform());
+		if(! this->resource->inBatchDraw) {
+			sf::Sprite sprite(image.getResource()->texture, { (int)rect.x, (int)rect.y, (int)rect.width, (int)rect.height });
+			this->resource->window->draw(sprite, transform.getSfmlTransform());
+		}
+		else {
+			this->resource->batchDrawTexture = &image.getResource()->texture;
+			
+			sf::VertexArray & vertexArray = this->resource->batchDrawVertexArray;
+			std::size_t count = vertexArray.getVertexCount();
+			vertexArray.resize(count + 6);
+
+			vertexArray[count].position = transform.getSfmlTransform().transformPoint({ 0, 0 });
+			vertexArray[count].texCoords = { rect.x, rect.y };
+			++count;
+			vertexArray[count].position = transform.getSfmlTransform().transformPoint({ rect.width, 0 });
+			vertexArray[count].texCoords = { rect.x + rect.width, rect.y };
+			++count;
+			vertexArray[count].position = transform.getSfmlTransform().transformPoint({ rect.width, rect.height });
+			vertexArray[count].texCoords = { rect.x + rect.width, rect.y + rect.height };
+			++count;
+
+			vertexArray[count].position = transform.getSfmlTransform().transformPoint({ rect.width, rect.height });
+			vertexArray[count].texCoords = { rect.x + rect.width, rect.y + rect.height };
+			++count;
+			vertexArray[count].position = transform.getSfmlTransform().transformPoint({ 0, rect.height });
+			vertexArray[count].texCoords = { rect.x, rect.y + rect.height };
+			++count;
+			vertexArray[count].position = transform.getSfmlTransform().transformPoint({ 0, 0 });
+			vertexArray[count].texCoords = { rect.x, rect.y };
+		}
 	}
 }
 
@@ -110,6 +138,21 @@ void RenderEngine::draw(const GameText & text, const GameTransform & transform)
 void RenderEngine::draw(const RectRender & rect, const GameTransform & transform)
 {
 	this->resource->window->draw(rect.getResource()->rectangle, transform.getSfmlTransform());
+}
+
+void RenderEngine::beginBatchDraw()
+{
+	this->resource->clearBatchDrawState();
+	this->resource->inBatchDraw = true;
+}
+
+void RenderEngine::endBatchDraw()
+{
+	if(this->resource->batchDrawTexture != nullptr && this->resource->inBatchDraw) {
+		this->resource->window->draw(this->resource->batchDrawVertexArray, this->resource->batchDrawTexture);
+	}
+
+	this->resource->clearBatchDrawState();
 }
 
 GamePoint RenderEngine::mapWindowToView(const GamePoint & point) const

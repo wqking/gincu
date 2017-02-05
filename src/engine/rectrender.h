@@ -28,6 +28,8 @@ public:
 
 	const std::shared_ptr<RectRenderResource> & getResource() const { return this->resource; }
 
+	void * getBatchGroup() const { return nullptr; }
+
 private:
 	std::shared_ptr<RectRenderResource> resource;
 };

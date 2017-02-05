@@ -35,9 +35,12 @@ public:
 		return this->doGetSize();
 	}
 
+	void * getBatchGroup() const { return this->doGetBatchGroup(); }
+
 private:
 	virtual void doDraw() = 0;
 	virtual GameSize doGetSize() const = 0;
+	virtual void * doGetBatchGroup() const = 0;
 };
 
 class ComponentContainerRender : public ComponentRender
@@ -55,7 +58,8 @@ private:
 	virtual void doDraw() override;
 	virtual GameSize doGetSize() const override;
 	virtual void doAfterSetEntity() override;
-	
+	virtual void * doGetBatchGroup() const override { return nullptr; }
+
 private:
 	mutable GameSize size;
 	std::vector<ComponentRenderPointer> renderList;
@@ -92,8 +96,12 @@ private:
 		}
 	}
 
-	virtual GameSize doGetSize() const {
+	virtual GameSize doGetSize() const override {
 		return this->renderer.getSize();
+	}
+
+	virtual void * doGetBatchGroup() const override {
+		return this->renderer.getBatchGroup();
 	}
 
 private:
@@ -108,6 +116,11 @@ ComponentImageRender * createAndLoadImageComponent(const std::string & resourceN
 ComponentImageRender * createImageComponent(const GameImage & image);
 ComponentTextRender * createAndLoadTextComponent(const std::string & text, const GameColor textColor, const int fontSize);
 ComponentRectRender * createRectRenderComponent(const GameColor color, const GameSize & size);
+
+inline void * getRenderBatchGroup(const ComponentRender * render)
+{
+	return render == nullptr ? nullptr : render->getBatchGroup();
+}
 
 
 } //namespace gincu
