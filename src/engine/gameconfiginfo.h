@@ -19,6 +19,7 @@ struct GameConfigInfo
 {
 	std::string caption;
 	int framesPerSecond;
+	int renderFramesPerSecond; // -1 will use framesPerSecond
 	GameSize windowSize; // the initial window size
 	GameSize viewSize; // the virtual view size, no matter how the window resized
 	bool fullScreenMode;
@@ -26,6 +27,21 @@ struct GameConfigInfo
 	ViewFitStrategy viewFitStrategy;
 	GameColor backgroundColor;
 };
+
+inline GameConfigInfo createDefaultConfigInfo()
+{
+	return {
+		"",
+		60,
+		-1,
+		{ 800, 600 },
+		{ 800, 600 },
+		false,
+		true,
+		ViewFitStrategy::scaleFit,
+		colorWhite
+	};
+}
 
 
 } //namespace gincu

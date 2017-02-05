@@ -67,12 +67,16 @@ void GameApplication::finalize()
 
 void GameApplication::processMainLoop()
 {
-	const int millisecondsPerFrame = 1000 / this->configInfo.framesPerSecond;
+	const unsigned int millisecondsPerFrame = 1000 / this->configInfo.framesPerSecond;
+	const unsigned int millisecondsPerRenderFrame = 1000 / this->configInfo.renderFramesPerSecond;
 
 	unsigned int lastTweenTime = getMilliseconds();
+	unsigned int lastRenderTime = 0;
 
 //unsigned int lastFpsTime = getMilliseconds();
 //int fps = 0;
+//int renderFps = 0;
+
 	while(! this->finished && this->renderEngine->isAlive()) {
 		const unsigned int frameBeginTime = getMilliseconds();
 
@@ -80,24 +84,31 @@ void GameApplication::processMainLoop()
 
 		this->updaterList();
 
-		this->renderEngine->render();
+		if(this->configInfo.renderFramesPerSecond < 0
+			|| getMilliseconds() - lastRenderTime >= millisecondsPerRenderFrame) {
+			lastRenderTime = getMilliseconds();
+			this->renderEngine->render();
+//++renderFps;
+		}
 
 		const unsigned int milliseconds = getMilliseconds();
 		cpgf::GTweenList::getInstance()->tick((cpgf::GTweenNumber)(milliseconds - lastTweenTime));
 		lastTweenTime = milliseconds;
 
-		while(getMilliseconds() < frameBeginTime + millisecondsPerFrame - 1) {
-			sleepMilliseconds(1);
+		if(millisecondsPerFrame > 0) {
+			while(getMilliseconds() < frameBeginTime + millisecondsPerFrame - 1) {
+				sleepMilliseconds(1);
+			}
 		}
 /*
 ++fps;
 if(getMilliseconds() - lastFpsTime >= 1000) {
-	std::cout << "FPS " << fps << std::endl;
+	std::cout << "FPS " << fps << " Render: " << renderFps << std::endl;
 	lastFpsTime = getMilliseconds();
 	fps = 0;
+	renderFps = 0;
 }
 */
-
 	}
 }
 

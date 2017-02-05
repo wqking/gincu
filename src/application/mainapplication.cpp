@@ -17,6 +17,7 @@ MainApplication::MainApplication()
 		{
 			"Gincu",
 			gameFramesPerSecond,
+			gameRenderFramesPerSecond,
 			{ (CoordType)gameViewWidth, (CoordType)gameViewHeight },
 			{ (CoordType)gameViewWidth, (CoordType)gameViewHeight },
 			false,
