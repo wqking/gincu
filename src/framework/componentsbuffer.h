@@ -1,13 +1,14 @@
 #ifndef COMPONENTSBUFFER_H
 #define COMPONENTSBUFFER_H
 
+#include "engine/geometry.h"
+
 #include <vector>
 
 namespace gincu {
 
 class Component;
 class ComponentTouchHandler;
-struct GamePoint;
 
 // This is NOT for pooled component allocation
 class ComponentsBuffer

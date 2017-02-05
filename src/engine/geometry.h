@@ -5,40 +5,40 @@ namespace gincu {
 
 typedef float CoordType;
 
-struct GamePoint
+struct GameVector2
 {
 	CoordType x;
 	CoordType y;
 };
 
-inline GamePoint operator + (const GamePoint & a, const GamePoint & b)
+inline GameVector2 operator + (const GameVector2 & a, const GameVector2 & b)
 {
-	return GamePoint{ a.x + b.x, a.y + b.y };
+	return GameVector2{ a.x + b.x, a.y + b.y };
 }
 
-inline GamePoint operator - (const GamePoint & a, const GamePoint & b)
+inline GameVector2 operator - (const GameVector2 & a, const GameVector2 & b)
 {
-	return GamePoint{ a.x - b.x, a.y - b.y };
+	return GameVector2{ a.x - b.x, a.y - b.y };
 }
 
-inline GamePoint operator * (const GamePoint & a, const float b)
+inline GameVector2 operator * (const GameVector2 & a, const float b)
 {
-	return GamePoint{ a.x * b, a.y * b };
+	return GameVector2{ a.x * b, a.y * b };
 }
 
-inline bool operator == (const GamePoint & a, const GamePoint & b)
+inline bool operator == (const GameVector2 & a, const GameVector2 & b)
 {
 	return a.x == b.x && a.y == b.y;
 }
 
-inline bool operator != (const GamePoint & a, const GamePoint & b)
+inline bool operator != (const GameVector2 & a, const GameVector2 & b)
 {
 	return !(a == b);
 }
 
-inline GamePoint operator - (const GamePoint & a)
+inline GameVector2 operator - (const GameVector2 & a)
 {
-	return GamePoint{ -a.x, -a.y };
+	return GameVector2{ -a.x, -a.y };
 }
 
 struct GameRect
@@ -70,27 +70,8 @@ inline GameSize operator * (const GameSize & a, const float b)
 	return GameSize{ a.width * b, a.height * b };
 }
 
-struct GameScale
-{
-	float x;
-	float y;
-};
-
-inline GameScale operator + (const GameScale & a, const GameScale & b)
-{
-	return GameScale{ a.x + b.x, a.y + b.y };
-}
-
-inline GameScale operator - (const GameScale & a, const GameScale & b)
-{
-	return GameScale{ a.x - b.x, a.y - b.y };
-}
-
-inline GameScale operator * (const GameScale & a, const float b)
-{
-	return GameScale{ a.x * b, a.y * b };
-}
-
+typedef GameVector2 GamePoint;
+typedef GameVector2 GameScale;
 
 struct RowColumn
 {
