@@ -125,6 +125,7 @@ void StateResult::doShowMessage()
 		.ease(cpgf::ElasticEase::easeOut())
 		.onComplete(cpgf::makeCallback(this, &StateResult::onBackgroundShown))
 		.target(cpgf::createAccessor(transform, &ComponentLocalTransform::getScale, &ComponentLocalTransform::setScale), GameScale { 1.0f, 1.0f })
+		.target(cpgf::createAccessor(transform, &ComponentLocalTransform::getRotation, &ComponentLocalTransform::setRotation), 360)
 	;
 }
 

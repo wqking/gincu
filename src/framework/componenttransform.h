@@ -29,6 +29,9 @@ public:
 	GameScale getScale() const { return this->transform.getScale(); }
 	void setScale(const GameScale & scale) { this->transform.setScale(scale); }
 
+	float getRotation() const { return this->transform.getRotation(); }
+	void setRotation(const float rotation) { this->transform.setRotation(rotation); }
+
 	bool isVisible() const { return this->visible; }
 	void setVisible(const bool visible) { this->visible = visible; }
 	

@@ -24,6 +24,9 @@ public:
 	GameScale getScale() const;
 	void setScale(const GameScale & scale);
 
+	float getRotation() const;
+	void setRotation(const float rotation);
+
 	const sf::Transform & getSfmlTransform() const;
 	
 	GameTransform multiply(const GameTransform & other) const;
@@ -37,7 +40,7 @@ private:
 	GamePoint position;
 	GamePoint origin;
 	GameScale scale;
-	float rotation;
+	float rotation; // degree
 	mutable bool needReloadTransform;
 	mutable sf::Transform sfmlTransform;
 };

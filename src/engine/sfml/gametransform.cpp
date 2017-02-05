@@ -70,6 +70,17 @@ void GameTransform::setScale(const GameScale & scale)
 	this->needReloadTransform = true;
 }
 
+float GameTransform::getRotation() const
+{
+	return this->rotation;
+}
+
+void GameTransform::setRotation(const float rotation)
+{
+	this->rotation = rotation;
+	this->needReloadTransform = true;
+}
+
 void GameTransform::doUpdateTransform() const
 {
 	if(this->needReloadTransform) {
