@@ -9,6 +9,17 @@
 
 namespace gincu {
 
+GameImage GameSpriteSheetResource::getImage(std::string name) const
+{
+	auto it = this->indexMap.find(name);
+	if(it != this->indexMap.end()) {
+		return GameImage(this->imageResource, this->rectList[it->second]);
+	}
+	else {
+		return GameImage();
+	}
+}
+
 void GameSpriteSheetResource::load(const std::string & resourceName, const SpriteSheetFormat format)
 {
 	const GameSpriteSheet::LoaderMap * loaderMap = GameSpriteSheet::getLoaderMap();
@@ -18,9 +29,24 @@ void GameSpriteSheetResource::load(const std::string & resourceName, const Sprit
 		return;
 	}
 
-	std::string imageFileName;
-	it->second(resourceName, &this->imageMap, &imageFileName);
-	this->imageResource = ResourceManager::getInstance()->getImage(imageFileName).getResource();
+	it->second(resourceName,this);
+
+	this->imageResource = ResourceManager::getInstance()->getImage(this->imageName).getResource();
+
+	for(std::size_t i = 0; i < this->nameList.size(); ++i) {
+		this->indexMap.insert(std::make_pair(std::reference_wrapper<std::string>(this->nameList[i]), i));
+	}
+}
+
+void GameSpriteSheetResource::appendSubImage(const std::string & name, const GameRect & rect)
+{
+	this->nameList.push_back(name);
+	this->rectList.push_back(rect);
+}
+
+void GameSpriteSheetResource::setImageName(const std::string & imageName)
+{
+	this->imageName = imageName;
 }
 
 GameSpriteSheet::LoaderMap * GameSpriteSheet::getLoaderMap()
@@ -44,16 +70,6 @@ GameSpriteSheet::GameSpriteSheet(const std::shared_ptr<GameSpriteSheetResource> 
 {
 }
 
-GameImage GameSpriteSheet::getImage(const std::string & name) const
-{
-	auto it = this->resource->imageMap.find(name);
-	if(it != this->resource->imageMap.end()) {
-		return GameImage(this->resource->imageResource, it->second);
-	}
-	else {
-		return GameImage();
-	}
-}
 
 char * skipSpaces(char * p, char * end)
 {
@@ -91,9 +107,9 @@ std::string getNextToken(char * & data, char * end, const char delimiter)
 	return result;
 }
 
-void spriteSheetLoader_spritePackText(const std::string & resourceName, std::map<std::string, GameRect> * imageMap, std::string * imageFileName)
+void spriteSheetLoader_spritePackText(const std::string & resourceName, GameSpriteSheetResource * spriteSheet)
 {
-	*imageFileName = resourceName + ".png";
+	spriteSheet->setImageName(resourceName + ".png");
 	
 	FileInputStream stream = ResourceManager::getInstance()->getFileStream(resourceName + ".txt");
 	
@@ -129,12 +145,12 @@ void spriteSheetLoader_spritePackText(const std::string & resourceName, std::map
 			const std::string height = getNextToken(data, endLine, ' ');
 			if(height.empty()) break;
 
-			imageMap->insert(std::make_pair(resourceName, GameRect{
+			spriteSheet->appendSubImage(resourceName, GameRect{
 				(CoordType)std::stoi(x),
 				(CoordType)std::stoi(y),
 				(CoordType)std::stoi(width),
 				(CoordType)std::stoi(height),
-			}));
+			});
 
 			break;
 		}
