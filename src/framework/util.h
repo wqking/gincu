@@ -46,6 +46,11 @@ inline bool isEqual(const float a, const float b)
 	return fabs(a - b) <= std::numeric_limits<float>::epsilon();
 }
 
+inline float degreeToRadian(const float degree)
+{
+	return degree * 3.141592654f / 180.0f;
+}
+
 int getRand();
 int getRand(const int min, const int max);
 int getRand(const int max);

@@ -25,19 +25,19 @@ MatchThreeInfoView::MatchThreeInfoView(SceneMatchThree * scene)
 	this->scoreEntity = this->scene->addEntity(
 		(new Entity())
 		->addComponent(createComponent<ComponentTransform>(GamePoint { 115, 180 }))
-		->addComponent(createComponent<ComponentAnchor>(RenderAnchor_Center))
+		->addComponent(createComponent<ComponentAnchor>(RenderAnchor::center))
 		->addComponent(createAndLoadTextComponent("0", colorWhite, normalFontSize))
 	);
 	this->scoreIncrementEntity = this->scene->addEntity(
 		(new Entity())
 		->addComponent(createComponent<ComponentTransform>(GamePoint(), GameScale { 0.8f, 0.8f }, false))
-		->addComponent(createComponent<ComponentAnchor>(RenderAnchor_Center))
+		->addComponent(createComponent<ComponentAnchor>(RenderAnchor::center))
 		->addComponent(createAndLoadTextComponent("0", colorGreen, normalFontSize))
 	);
 	this->timerEntity = this->scene->addEntity(
 		(new Entity())
 		->addComponent(createComponent<ComponentTransform>(GamePoint { 115, 220 }))
-		->addComponent(createComponent<ComponentAnchor>(RenderAnchor_Center))
+		->addComponent(createComponent<ComponentAnchor>(RenderAnchor::center))
 		->addComponent(createAndLoadTextComponent("0", colorBlack, normalFontSize))
 		);
 

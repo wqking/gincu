@@ -108,7 +108,7 @@ void StateResult::doShowMessage()
 		(new Entity())
 		->addComponent(createComponent<ComponentTransform>())
 		->addComponent(createComponent<ComponentLocalTransform>(GamePoint { application->getViewSize().width / 2, application->getViewSize().height / 2 }, GameScale { 0.1f, 0.1f }))
-		->addComponent(createComponent<ComponentAnchor>(RenderAnchor_Center))
+		->addComponent(createComponent<ComponentAnchor>(RenderAnchor::center))
 		->addComponent(createRectRenderComponent(gameColorSetAlpha(colorGreen, 127), GameSize { 450, 200}))
 		);
 
@@ -116,7 +116,7 @@ void StateResult::doShowMessage()
 		(new Entity())
 		->addComponent(createComponent<ComponentTransform>())
 		->addComponent(createComponent<ComponentLocalTransform>(GamePoint{ 0, 0 }, GameScale{ 0.2f, 0.2f })->setParent(this->backgroundEntity->getComponentByType<ComponentLocalTransform>()))
-		->addComponent(createComponent<ComponentAnchor>(RenderAnchor_Center))
+		->addComponent(createComponent<ComponentAnchor>(RenderAnchor::center)->setFlipX(true)->setFlipY(true))
 		->addComponent(createAndLoadImageComponent(backgroundImageName))
 	);
 
@@ -124,7 +124,7 @@ void StateResult::doShowMessage()
 		(new Entity())
 		->addComponent(createComponent<ComponentTransform>())
 		->addComponent(createComponent<ComponentLocalTransform>(GamePoint{ 0, 0 })->setParent(this->backgroundEntity->getComponentByType<ComponentLocalTransform>()))
-		->addComponent(createComponent<ComponentAnchor>(RenderAnchor_Center))
+		->addComponent(createComponent<ComponentAnchor>(RenderAnchor::center))
 		->addComponent(createAndLoadTextComponent("Great! Your score is " + toString(scene->getTotalScore()), colorWhite, normalFontSize))
 		);
 

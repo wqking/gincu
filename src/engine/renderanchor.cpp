@@ -2,32 +2,32 @@
 
 namespace gincu {
 
-GamePoint getOriginByRenderAnchor(const int renderAnchor, const GameSize & size)
+GamePoint getOriginByRenderAnchor(const RenderAnchor renderAnchor, const GameSize & size)
 {
 	GamePoint result{ 0, 0 };
 
-	switch(renderAnchor & RenderAnchor_Hmask) {
-	case RenderAnchor_Hleft:
+	switch(renderAnchor & RenderAnchor::hMask) {
+	case RenderAnchor::hLeft:
 		break;
 
-	case RenderAnchor_Hcenter:
+	case RenderAnchor::hCenter:
 		result.x = size.width / 2;
 		break;
 
-	case RenderAnchor_Hright:
+	case RenderAnchor::hRight:
 		result.x = size.width;
 		break;
 	}
 
-	switch(renderAnchor & RenderAnchor_Vmask) {
-	case RenderAnchor_Vtop:
+	switch(renderAnchor & RenderAnchor::vMask) {
+	case RenderAnchor::vTop:
 		break;
 
-	case RenderAnchor_Vcenter:
+	case RenderAnchor::vCenter:
 		result.y = size.height / 2;
 		break;
 
-	case RenderAnchor_Vbottom:
+	case RenderAnchor::vBottom:
 		result.y = size.height;
 		break;
 	}

@@ -92,7 +92,7 @@ void SceneLogo::doOnEnter()
 		Entity * entity = this->addEntity(
 			(new Entity())
 				->addComponent(createComponent<ComponentTransform>(GamePoint { x, -ySize } ))
-				->addComponent(createComponent<ComponentAnchor>(RenderAnchor_Center))
+				->addComponent(createComponent<ComponentAnchor>(RenderAnchor::center))
 				->addComponent(createImageComponent(getChessResource(item.chessColor)))
 			);
 		ComponentTransform * transform = entity->getComponentByType<ComponentTransform>();
@@ -124,13 +124,13 @@ void SceneLogo::doOnEnter()
 		Entity * progressBarEntity = this->addEntity(
 			(new Entity())
 				->addComponent(createComponent<ComponentTransform>(startPosition))
-				->addComponent(createComponent<ComponentAnchor>(RenderAnchor_Hleft | RenderAnchor_Vcenter))
+				->addComponent(createComponent<ComponentAnchor>(RenderAnchor::hLeft | RenderAnchor::vCenter))
 				->addComponent(createRectRenderComponent(0x770000aa, GameSize { 0.0f, progressBarHeight }))
 			);
 		Entity * chessEntity = this->addEntity(
 			(new Entity())
 				->addComponent(createComponent<ComponentTransform>(startPosition ))
-				->addComponent(createComponent<ComponentAnchor>(RenderAnchor_Center))
+				->addComponent(createComponent<ComponentAnchor>(RenderAnchor::center))
 				->addComponent(createImageComponent(getChessResource(ChessColor::normal3)))
 		);
 

@@ -32,6 +32,9 @@ public:
 	GameTransform multiply(const GameTransform & other) const;
 
 	void translate(const GamePoint & offset);
+	void scale(const GameScale & scale);
+
+	GameScale getDecompositedScale() const;
 
 private:
 	void doUpdateTransform() const;
@@ -39,7 +42,7 @@ private:
 private:
 	GamePoint position;
 	GamePoint origin;
-	GameScale scale;
+	GameScale scaleValue;
 	float rotation; // degree
 	mutable bool needReloadTransform;
 	mutable sf::Transform sfmlTransform;

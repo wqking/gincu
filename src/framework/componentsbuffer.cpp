@@ -9,6 +9,27 @@
 
 namespace gincu {
 
+namespace {
+
+const RenderInfo * getRenderBatchGroup(const ComponentRender * render)
+{
+	if(render == nullptr) {
+		return nullptr;
+	}
+	else {
+		const RenderInfo * renderInfo = render->getBatchGroup();
+		if(renderInfo->texture == nullptr) {
+			return nullptr;
+		}
+		else {
+			return renderInfo;
+		}
+	}
+}
+
+
+} //unnamed namespace
+
 ComponentsBuffer::ComponentsBuffer()
 	: componentListBuffer(componentTypeId_PrimaryCount)
 {
@@ -77,7 +98,11 @@ void ComponentsBuffer::render()
 			}
 		}
 		else {
-			if(currentGroup != nullptr
+			if(currentGroup == nullptr) {
+				renderEngine->endBatchDraw();
+				inBatchDraw = false;
+			}
+			else if(currentGroup != nullptr
 				&& previousGroup != nullptr
 				&& *currentGroup != *previousGroup) {
 				renderEngine->endBatchDraw();

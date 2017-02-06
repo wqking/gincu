@@ -5,21 +5,34 @@
 
 namespace gincu {
 
-const int RenderAnchor_Hleft = 0x01;
-const int RenderAnchor_Hcenter = 0x02;
-const int RenderAnchor_Hright = 0x03;
-const int RenderAnchor_Hmask = 0x0f;
+enum class RenderAnchor
+{
+	none = 0,
+	hLeft = 0x01,
+	hCenter = 0x02,
+	hRight = 0x04,
+	hMask = 0x0f,
+	vTop = 0x10,
+	vCenter = 0x20,
+	vBottom = 0x40,
+	vMask = 0xf0,
 
-const int RenderAnchor_Vtop = 0x10;
-const int RenderAnchor_Vcenter = 0x20;
-const int RenderAnchor_Vbottom = 0x30;
-const int RenderAnchor_Vmask = 0xf0;
+	leftTop = hLeft | vTop,
+	center = hCenter | vCenter,
+	rightTop = hRight | vTop,
+};
 
-const int RenderAnchor_LeftTop = RenderAnchor_Hleft | RenderAnchor_Vtop;
-const int RenderAnchor_Center = RenderAnchor_Hcenter | RenderAnchor_Vcenter;
-const int RenderAnchor_None = 0;
+inline RenderAnchor operator & (const RenderAnchor a, const RenderAnchor b)
+{
+	return (RenderAnchor)((int)a & (int)b);
+}
 
-GamePoint getOriginByRenderAnchor(const int renderAnchor, const GameSize & size);
+inline RenderAnchor operator | (const RenderAnchor a, const RenderAnchor b)
+{
+	return (RenderAnchor)((int)a | (int)b);
+}
+
+GamePoint getOriginByRenderAnchor(const RenderAnchor renderAnchor, const GameSize & size);
 
 
 } //namespace gincu

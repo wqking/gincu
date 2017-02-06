@@ -134,11 +134,6 @@ ComponentImageRender * createImageComponent(const GameImage & image);
 ComponentTextRender * createAndLoadTextComponent(const std::string & text, const GameColor textColor, const int fontSize);
 ComponentRectRender * createRectRenderComponent(const GameColor color, const GameSize & size);
 
-inline const RenderInfo * getRenderBatchGroup(const ComponentRender * render)
-{
-	return render == nullptr ? nullptr : render->getBatchGroup();
-}
-
 
 } //namespace gincu
 

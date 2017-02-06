@@ -8,6 +8,7 @@
 namespace gincu {
 
 class GameTransform;
+enum class RenderAnchor;
 
 // Note an anchor is applied after matrix transform
 // so any rotation won't apply.
@@ -23,15 +24,23 @@ public:
 
 public:
 	ComponentAnchor();
-	explicit ComponentAnchor(const int anchor);
+	explicit ComponentAnchor(const RenderAnchor anchor);
 
-	int getAnchor() const { return this->anchor; }
-	void setAnchor(const int renderAnchor) { this->anchor = renderAnchor; }
+	RenderAnchor getAnchor() const { return this->anchor; }
+	ComponentAnchor * setAnchor(const RenderAnchor renderAnchor);
+
+	bool isFlipX() const { return this->flipX; }
+	ComponentAnchor * setFlipX(const bool flipX);
 	
+	bool isFlipY() const { return this->flipY; }
+	ComponentAnchor * setFlipY(const bool flipY);
+
 	void apply(GameTransform & transform, const GameSize & size);
 
 private:
-	int anchor;
+	RenderAnchor anchor;
+	bool flipX;
+	bool flipY;
 };
 
 

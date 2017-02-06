@@ -46,7 +46,7 @@ void SceneMenu::doOnEnter()
 			(new Entity())
 				->addComponent(createComponent<ComponentTransform>())
 				->addComponent(createComponent<ComponentLocalTransform>(GamePoint { x, yStart + (tileSize.height + yDistance) * i }))
-				->addComponent(createComponent<ComponentAnchor>(RenderAnchor_Center))
+				->addComponent(createComponent<ComponentAnchor>(RenderAnchor::center))
 				->addComponent(createComponent<ComponentContainerRender>()
 					->add(createRectRenderComponent(item.backgroundColor, tileSize))
 					->add(createAndLoadTextComponent(item.caption, colorBlue, menuFontSize))
@@ -62,20 +62,6 @@ void SceneMenu::doOnEnter()
 
 void SceneMenu::doOnExit()
 {
-}
-
-void SceneMenu::onStartNewGameTouched(const TouchEvent & touchEvent)
-{
-	if(touchEvent.type == TouchEventType::eventPressed) {
-		GameApplication::getInstance()->getSceneManager()->switchScene(new SceneMatchThree());
-	}
-}
-
-void SceneMenu::onAboutTouched(const TouchEvent & touchEvent)
-{
-	if(touchEvent.type == TouchEventType::eventPressed) {
-		GameApplication::getInstance()->getSceneManager()->switchScene(new SceneLogo(false));
-	}
 }
 
 

@@ -20,10 +20,6 @@ public:
 private:
 	virtual void doOnEnter() override;
 	virtual void doOnExit() override;
-
-private:
-	void onStartNewGameTouched(const TouchEvent & touchEvent);
-	void onAboutTouched(const TouchEvent & touchEvent);
 };
 
 
