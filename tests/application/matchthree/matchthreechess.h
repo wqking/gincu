@@ -21,7 +21,9 @@ enum class ChessColor
 	none
 };
 
-GImage getChessResource(const ChessColor chessColor);
+class GComponentRender;
+
+GComponentRender * createChessRender(const ChessColor chessColor);
 ChessColor randomChessColor();
 bool areCellsNeighbors(const RowColumn & cellA, const RowColumn & cellB);
 

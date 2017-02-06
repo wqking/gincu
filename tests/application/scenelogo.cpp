@@ -93,7 +93,7 @@ void SceneLogo::doOnEnter()
 			(new GEntity())
 				->addComponent(createComponent<GComponentTransform>(GPoint { x, -ySize } ))
 				->addComponent(createComponent<GComponentAnchor>(GRenderAnchor::center))
-				->addComponent(createImageComponent(getChessResource(item.chessColor)))
+				->addComponent(createChessRender(item.chessColor))
 			);
 		GComponentTransform * transform = entity->getComponentByType<GComponentTransform>();
 		timeline.setAt(delay,
@@ -131,7 +131,7 @@ void SceneLogo::doOnEnter()
 			(new GEntity())
 				->addComponent(createComponent<GComponentTransform>(startPosition ))
 				->addComponent(createComponent<GComponentAnchor>(GRenderAnchor::center))
-				->addComponent(createImageComponent(getChessResource(ChessColor::normal3)))
+				->addComponent(createChessRender(ChessColor::normal3))
 		);
 
 		GRectRender & rectRender = progressBarEntity->getComponentByType<GComponentRectRender>()->getRender();

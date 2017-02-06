@@ -1,6 +1,7 @@
 #include "gincu/grenderengine.h"
 #include "gincu/gtransform.h"
 #include "gincu/gimage.h"
+#include "gincu/gspritesheetrender.h"
 #include "gincu/gtext.h"
 #include "gincu/grectrender.h"
 #include "gincu/gapplication.h"
@@ -90,43 +91,12 @@ bool GRenderEngine::isAlive() const
 
 void GRenderEngine::draw(const GImage & image, const GTransform & transform, const GRenderInfo * renderInfo)
 {
-	if(image.isValid()) {
-		const GRect & rect = image.getRect();
-		const sf::Transform & sfmlTransform = transform.getSfmlTransform();
-		if(! this->resource->inBatchDraw) {
-			sf::Sprite sprite(image.getResource()->texture, { (int)rect.x, (int)rect.y, (int)rect.width, (int)rect.height });
-			sf::RenderStates renderStates(sfmlTransform);
-			copyBlendAndShaderToSfml(&renderStates, renderInfo);
-			this->resource->window->draw(sprite, renderStates);
-		}
-		else {
-			this->resource->batchDrawRenderInfo = *renderInfo;
-			this->resource->batchDrawRenderInfo.texture = image.getResource().get();
+	this->doDrawTexture(image.getResource().get(), image.getRect(), transform, renderInfo);
+}
 
-			sf::VertexArray & vertexArray = this->resource->batchDrawVertexArray;
-			std::size_t count = vertexArray.getVertexCount();
-			vertexArray.resize(count + 6);
-
-			vertexArray[count].position = sfmlTransform.transformPoint({ 0, 0 });
-			vertexArray[count].texCoords = { rect.x, rect.y };
-			++count;
-			vertexArray[count].position = sfmlTransform.transformPoint({ rect.width, 0 });
-			vertexArray[count].texCoords = { rect.x + rect.width, rect.y };
-			++count;
-			vertexArray[count].position = sfmlTransform.transformPoint({ rect.width, rect.height });
-			vertexArray[count].texCoords = { rect.x + rect.width, rect.y + rect.height };
-			++count;
-
-			vertexArray[count].position = sfmlTransform.transformPoint({ rect.width, rect.height });
-			vertexArray[count].texCoords = { rect.x + rect.width, rect.y + rect.height };
-			++count;
-			vertexArray[count].position = sfmlTransform.transformPoint({ 0, rect.height });
-			vertexArray[count].texCoords = { rect.x, rect.y + rect.height };
-			++count;
-			vertexArray[count].position = sfmlTransform.transformPoint({ 0, 0 });
-			vertexArray[count].texCoords = { rect.x, rect.y };
-		}
-	}
+void GRenderEngine::draw(const GSpriteSheetRender & spriteSheetRender, const GTransform & transform, const GRenderInfo * renderInfo)
+{
+	this->doDrawTexture(spriteSheetRender.getSpriteSheet().getImageResource().get(), spriteSheetRender.getRect(), transform, renderInfo);
 }
 
 void GRenderEngine::draw(const GText & text, const GTransform & transform, const GRenderInfo * renderInfo)
@@ -170,6 +140,46 @@ void GRenderEngine::onWindowResized(const GSize & newSize)
 {
 	this->windowSize = newSize;
 	this->doFitView();
+}
+
+void GRenderEngine::doDrawTexture(const GImageResource * texture, const GRect & rect, const GTransform & transform, const GRenderInfo * renderInfo)
+{
+	if(texture != nullptr) {
+		const sf::Transform & sfmlTransform = transform.getSfmlTransform();
+		if(! this->resource->inBatchDraw) {
+			sf::Sprite sprite(texture->texture, { (int)rect.x, (int)rect.y, (int)rect.width, (int)rect.height });
+			sf::RenderStates renderStates(sfmlTransform);
+			copyBlendAndShaderToSfml(&renderStates, renderInfo);
+			this->resource->window->draw(sprite, renderStates);
+		}
+		else {
+			this->resource->batchDrawRenderInfo = *renderInfo;
+			this->resource->batchDrawRenderInfo.texture = texture;
+
+			sf::VertexArray & vertexArray = this->resource->batchDrawVertexArray;
+			std::size_t count = vertexArray.getVertexCount();
+			vertexArray.resize(count + 6);
+
+			vertexArray[count].position = sfmlTransform.transformPoint({ 0, 0 });
+			vertexArray[count].texCoords = { rect.x, rect.y };
+			++count;
+			vertexArray[count].position = sfmlTransform.transformPoint({ rect.width, 0 });
+			vertexArray[count].texCoords = { rect.x + rect.width, rect.y };
+			++count;
+			vertexArray[count].position = sfmlTransform.transformPoint({ rect.width, rect.height });
+			vertexArray[count].texCoords = { rect.x + rect.width, rect.y + rect.height };
+			++count;
+
+			vertexArray[count].position = sfmlTransform.transformPoint({ rect.width, rect.height });
+			vertexArray[count].texCoords = { rect.x + rect.width, rect.y + rect.height };
+			++count;
+			vertexArray[count].position = sfmlTransform.transformPoint({ 0, rect.height });
+			vertexArray[count].texCoords = { rect.x, rect.y + rect.height };
+			++count;
+			vertexArray[count].position = sfmlTransform.transformPoint({ 0, 0 });
+			vertexArray[count].texCoords = { rect.x, rect.y };
+		}
+	}
 }
 
 void GRenderEngine::doFitView()

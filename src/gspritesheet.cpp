@@ -9,14 +9,25 @@
 
 namespace gincu {
 
-GImage GSpriteSheetResource::getImage(std::string name) const
+GImage GSpriteSheetResource::getImage(const std::string & name) const
 {
-	auto it = this->indexMap.find(name);
+	auto it = this->indexMap.find(const_cast<std::string &>(name));
 	if(it != this->indexMap.end()) {
 		return GImage(this->imageResource, this->rectList[it->second]);
 	}
 	else {
 		return GImage();
+	}
+}
+
+int GSpriteSheetResource::getIndex(const std::string & name) const
+{
+	auto it = this->indexMap.find(const_cast<std::string &>(name));
+	if(it != this->indexMap.end()) {
+		return it->second;
+	}
+	else {
+		return -1;
 	}
 }
 

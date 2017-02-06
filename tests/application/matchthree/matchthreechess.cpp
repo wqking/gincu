@@ -3,6 +3,7 @@
 #include "gincu/gresourcemanager.h"
 #include "gincu/gspritesheet.h"
 #include "gincu/gapplication.h"
+#include "gincu/gcomponentrender.h"
 #include "gincu/gutil.h"
 
 #include <map>
@@ -32,9 +33,9 @@ std::string getChessResourceName(const ChessColor chessColor)
 	return it->second;
 }
 
-GImage getChessResource(const ChessColor chessColor)
+GComponentRender * createChessRender(const ChessColor chessColor)
 {
-	return GResourceManager::getInstance()->getSpriteSheet("matchthree/chess_spritesheet", GSpriteSheetFormat::spritePackText).getImage(getChessResourceName(chessColor));
+	return createSpriteSheetComponent(GResourceManager::getInstance()->getSpriteSheet("matchthree/chess_spritesheet", GSpriteSheetFormat::spritePackText), getChessResourceName(chessColor));
 }
 
 ChessColor randomChessColor()

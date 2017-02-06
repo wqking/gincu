@@ -49,6 +49,7 @@ LOCAL_SRC_FILES := \
 	$(SRC_PATH)/gerrorhandler.cpp \
 	$(SRC_PATH)/gcolor.cpp \
 	$(SRC_PATH)/gspritesheet.cpp \
+	$(SRC_PATH)/gspritesheetrender.cpp \
 	$(SRC_PATH)/grenderanchor.cpp \
 	$(SRC_PATH)/sfml/gengineutil.cpp \
 	$(SRC_PATH)/sfml/geventprocessor.cpp \

@@ -7,6 +7,7 @@
 #include "gincu/gentity.h"
 #include "gincu/gentityutil.h"
 #include "gincu/gimage.h"
+#include "gincu/gspritesheetrender.h"
 #include "gincu/gtext.h"
 #include "gincu/grectrender.h"
 #include "gincu/grenderinfo.h"
@@ -89,48 +90,49 @@ private:
 	typedef GComponentRender super;
 
 public:
-	GComponentRenderImplement()
-	{
-	}
+	GComponentRenderImplement() : render() {}
+	explicit GComponentRenderImplement(const RenderType & render) : render(render) {}
 
-	void setRender(const RenderType & renderer) {
-		this->renderer = renderer;
+	void setRender(const RenderType & render) {
+		this->render = render;
 	}
 
 	RenderType & getRender() {
-		return renderer;
+		return render;
 	}
 
 	const RenderType & getRender() const {
-		return renderer;
+		return render;
 	}
 
 private:
 	virtual void doDraw() override {
 		GComponentTransform * transform = this->getEntity()->template getComponentByType<GComponentTransform>();
 		if(transform->isVisible()) {
-			this->renderer.draw(computeRenderableTransform(transform, this), this->getRenderInfo());
+			this->render.draw(computeRenderableTransform(transform, this), this->getRenderInfo());
 		}
 	}
 
 	virtual GSize doGetSize() const override {
-		return this->renderer.getSize();
+		return this->render.getSize();
 	}
 
 	virtual const GImageResource * doGetTexture() const override {
-		return this->renderer.getTexture();
+		return this->render.getTexture();
 	}
 
 private:
-	RenderType renderer;
+	RenderType render;
 };
 
 typedef GComponentRenderImplement<GImage> GComponentImageRender;
+typedef GComponentRenderImplement<GSpriteSheetRender> GComponentSpriteSheetRender;
 typedef GComponentRenderImplement<GText> GComponentTextRender;
 typedef GComponentRenderImplement<GRectRender> GComponentRectRender;
 
 GComponentImageRender * createAndLoadImageComponent(const std::string & resourceName);
 GComponentImageRender * createImageComponent(const GImage & image);
+GComponentSpriteSheetRender * createSpriteSheetComponent(const GSpriteSheet & spriteSheet, const std::string & name);
 GComponentTextRender * createAndLoadTextComponent(const std::string & text, const GColor textColor, const int fontSize);
 GComponentRectRender * createRectRenderComponent(const GColor color, const GSize & size);
 

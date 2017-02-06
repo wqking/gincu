@@ -13,10 +13,12 @@
 namespace gincu {
 
 class GRenderEngineResource;
+class GImageResource;
 class GTransform;
 class GImage;
 class GText;
 class GRectRender;
+class GSpriteSheetRender;
 struct GRenderInfo;
 
 class GRenderEngine
@@ -39,6 +41,7 @@ public:
 	bool isAlive() const;
 
 	void draw(const GImage & image, const GTransform & transform, const GRenderInfo * renderInfo);
+	void draw(const GSpriteSheetRender & spriteSheetRender, const GTransform & transform, const GRenderInfo * renderInfo);
 	void draw(const GText & text, const GTransform & transform, const GRenderInfo * renderInfo);
 	void draw(const GRectRender & rect, const GTransform & transform, const GRenderInfo * renderInfo);
 
@@ -53,6 +56,7 @@ public: // for internal usage
 	void onWindowResized(const GSize & newSize);
 
 private:
+	void doDrawTexture(const GImageResource * texture, const GRect & rect, const GTransform & transform, const GRenderInfo * renderInfo);
 	void doFitView();
 
 private:

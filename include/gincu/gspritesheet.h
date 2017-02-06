@@ -34,10 +34,13 @@ private:
 
 public:
 	void load(const std::string & resourceName, const GSpriteSheetFormat format);
-	GImage getImage(std::string name) const;
+
+	GImage getImage(const std::string & name) const;
+	int getIndex(const std::string & name) const;
 
 	const std::vector<std::string> & getNameList() const { return this->nameList; }
 	const std::vector<GRect> & getRectList() const { return this->rectList; }
+	const std::shared_ptr<GImageResource> & getImageResource() const { return this->imageResource; }
 
 public: // used by loaders, don't use them directly
 	void appendSubImage(const std::string & name, const GRect & rect);
@@ -68,6 +71,10 @@ public:
 
 	const std::vector<std::string> & getNameList() const { return this->resource->getNameList(); }
 	const std::vector<GRect> & getRectList() const { return this->resource->getRectList(); }
+	const std::shared_ptr<GImageResource> & getImageResource() const { return this->resource->getImageResource(); }
+
+	int getImageCount() const { return (int)this->resource->getNameList().size(); }
+	int getIndex(const std::string & name) const { return this->resource->getIndex(name); }
 
 private:
 	static LoaderMap * getLoaderMap();

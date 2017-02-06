@@ -68,33 +68,34 @@ void GComponentContainerRender::doAfterSetEntity()
 
 GComponentImageRender * createAndLoadImageComponent(const std::string & resourceName)
 {
-	GComponentImageRender * component = createComponent<GComponentImageRender >();
-	component->setRender(GResourceManager::getInstance()->getImage(resourceName));
-	return component;
+	return createComponent<GComponentImageRender>(GResourceManager::getInstance()->getImage(resourceName));
 }
 
 GComponentImageRender * createImageComponent(const GImage & image)
 {
-	GComponentImageRender * component = createComponent<GComponentImageRender >();
-	component->setRender(image);
-	return component;
+	return createComponent<GComponentImageRender>(image);
+}
+
+GComponentSpriteSheetRender * createSpriteSheetComponent(const GSpriteSheet & spriteSheet, const std::string & name)
+{
+	GSpriteSheetRender render(spriteSheet);
+	render.setIndex(render.getSpriteSheet().getIndex(name));
+	return createComponent<GComponentSpriteSheetRender>(render);
 }
 
 GComponentTextRender * createAndLoadTextComponent(const std::string & text, const GColor textColor, const int fontSize)
 {
-	GComponentTextRender * component = createComponent<GComponentTextRender >();
-	component->setRender(GText(fontSize));
-	component->getRender().setTextAndColor(text, textColor);
-	return component;
+	GText render(fontSize);
+	render.setTextAndColor(text, textColor);
+	return createComponent<GComponentTextRender>(render);
 }
 
 GComponentRectRender * createRectRenderComponent(const GColor color, const GSize & size)
 {
-	GComponentRectRender * component = createComponent<GComponentRectRender >();
-	component->setRender(GRectRender());
-	component->getRender().setColor(color);
-	component->getRender().setSize(size);
-	return component;
+	GRectRender render;
+	render.setColor(color);
+	render.setSize(size);
+	return createComponent<GComponentRectRender>(render);
 }
 
 
