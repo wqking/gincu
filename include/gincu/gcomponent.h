@@ -6,25 +6,25 @@
 
 namespace gincu {
 
-class Entity;
+class GEntity;
 
-class Component
+class GComponent
 {
 public:
 	void * operator new (const std::size_t size);
 	void operator delete(void * p);
 
-	explicit Component(const unsigned int typeId);
-	virtual ~Component();
+	explicit GComponent(const unsigned int typeId);
+	virtual ~GComponent();
 
 	template <typename T>
-	explicit Component(const T *) : Component(T::getComponentType()){
+	explicit GComponent(const T *) : GComponent(T::getComponentType()){
 	}
 
-	void setEntity(Entity * entity);
+	void setEntity(GEntity * entity);
 
 	unsigned int getTypeId() const { return typeId; }
-	Entity * getEntity() const { return entity; }
+	GEntity * getEntity() const { return entity; }
 
 protected:
 	void setTypeId(const unsigned int typeId) { this->typeId = typeId; }
@@ -34,7 +34,7 @@ private:
 
 private:
 	int typeId;
-	Entity * entity;
+	GEntity * entity;
 };
 
 constexpr unsigned int componentTypeId_Render = 0;
@@ -45,7 +45,7 @@ constexpr unsigned int componentTypeId_Anchor = 4;
 constexpr unsigned int componentTypeId_PrimaryCount = 5;
 
 // Usually we should not use componentTypeId_User directly.
-// Use registerComponentId or ComponentIdRegister.
+// Use registerComponentId or GComponentIdRegister.
 constexpr int componentTypeId_User = componentTypeId_PrimaryCount;
 
 // Return a unique component id for name.
@@ -54,10 +54,10 @@ unsigned int registerComponentId(const std::string & name);
 
 // A utility class to register type id automatically.
 // This should be singleton.
-class ComponentIdRegister
+class GComponentIdRegister
 {
 public:
-	explicit ComponentIdRegister(const std::string & name)
+	explicit GComponentIdRegister(const std::string & name)
 		: componentId(registerComponentId(name))
 	{}
 	

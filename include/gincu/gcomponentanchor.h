@@ -7,15 +7,15 @@
 
 namespace gincu {
 
-class GameTransform;
-enum class RenderAnchor;
+class GTransform;
+enum class GRenderAnchor;
 
 // Note an anchor is applied after matrix transform
 // so any rotation won't apply.
-class ComponentAnchor : public Component
+class GComponentAnchor : public GComponent
 {
 private:
-	typedef Component super;
+	typedef GComponent super;
 
 public:
 	inline static constexpr unsigned int getComponentType() {
@@ -23,22 +23,22 @@ public:
 	}
 
 public:
-	ComponentAnchor();
-	explicit ComponentAnchor(const RenderAnchor anchor);
+	GComponentAnchor();
+	explicit GComponentAnchor(const GRenderAnchor anchor);
 
-	RenderAnchor getAnchor() const { return this->anchor; }
-	ComponentAnchor * setAnchor(const RenderAnchor renderAnchor);
+	GRenderAnchor getAnchor() const { return this->anchor; }
+	GComponentAnchor * setAnchor(const GRenderAnchor renderAnchor);
 
 	bool isFlipX() const { return this->flipX; }
-	ComponentAnchor * setFlipX(const bool flipX);
+	GComponentAnchor * setFlipX(const bool flipX);
 	
 	bool isFlipY() const { return this->flipY; }
-	ComponentAnchor * setFlipY(const bool flipY);
+	GComponentAnchor * setFlipY(const bool flipY);
 
-	void apply(GameTransform & transform, const GameSize & size);
+	void apply(GTransform & transform, const GSize & size);
 
 private:
-	RenderAnchor anchor;
+	GRenderAnchor anchor;
 	bool flipX;
 	bool flipY;
 };

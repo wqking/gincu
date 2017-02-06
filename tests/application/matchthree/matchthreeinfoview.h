@@ -7,7 +7,7 @@
 namespace gincu {
 
 class SceneMatchThree;
-class Entity;
+class GEntity;
 
 class MatchThreeInfoView
 {
@@ -27,9 +27,9 @@ private:
 
 private:
 	SceneMatchThree * scene;
-	Entity * scoreEntity;
-	Entity * scoreIncrementEntity;
-	Entity * timerEntity;
+	GEntity * scoreEntity;
+	GEntity * scoreIncrementEntity;
+	GEntity * timerEntity;
 
 	cpgf::GTween * scoreTween;
 	cpgf::GTimeline * timerTimeLine;

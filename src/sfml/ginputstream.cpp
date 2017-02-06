@@ -10,47 +10,47 @@ public:
 	sf::FileInputStream stream;
 };
 
-FileInputStream::FileInputStream()
+GFileInputStream::GFileInputStream()
 {
 }
 
-FileInputStream::FileInputStream(const std::string & fileName)
+GFileInputStream::GFileInputStream(const std::string & fileName)
 {
 	this->open(fileName);
 }
 
-FileInputStream::~FileInputStream()
+GFileInputStream::~GFileInputStream()
 {
 	this->close();
 }
 
-void FileInputStream::open(const std::string & fileName)
+void GFileInputStream::open(const std::string & fileName)
 {
 	this->resource.reset(new FileInputStreamResource());
 	this->resource->stream.open(fileName);
 }
 
-void FileInputStream::close()
+void GFileInputStream::close()
 {
 	this->resource.reset();
 }
 
-int64_t FileInputStream::read(void * data, const int64_t size)
+int64_t GFileInputStream::read(void * data, const int64_t size)
 {
 	return this->resource->stream.read(data, size);
 }
 
-int64_t FileInputStream::seek(const int64_t position)
+int64_t GFileInputStream::seek(const int64_t position)
 {
 	return this->resource->stream.seek(position);
 }
 
-int64_t FileInputStream::tell()
+int64_t GFileInputStream::tell()
 {
 	return this->resource->stream.tell();
 }
 
-int64_t FileInputStream::getSize()
+int64_t GFileInputStream::getSize()
 {
 	return this->resource->stream.getSize();
 }

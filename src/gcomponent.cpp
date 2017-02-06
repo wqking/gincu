@@ -18,35 +18,35 @@ std::map<std::string, unsigned int> * getComponentNameIdMap()
 } //unnamed namespace
 
 
-void * Component::operator new (const std::size_t size)
+void * GComponent::operator new (const std::size_t size)
 {
-	return MemoryPool::getInstance()->allocate(size);
+	return GHeapPool::getInstance()->allocate(size);
 }
 
-void Component::operator delete(void * p)
+void GComponent::operator delete(void * p)
 {
-	MemoryPool::getInstance()->free(p);
+	GHeapPool::getInstance()->free(p);
 }
 
-Component::Component(const unsigned int typeId)
+GComponent::GComponent(const unsigned int typeId)
 	:
 		typeId(typeId),
 		entity(nullptr)
 {
 }
 
-Component::~Component()
+GComponent::~GComponent()
 {
 }
 
-void Component::setEntity(Entity * entity)
+void GComponent::setEntity(GEntity * entity)
 {
 	this->entity = entity;
 	
 	this->doAfterSetEntity();
 }
 
-void Component::doAfterSetEntity()
+void GComponent::doAfterSetEntity()
 {
 }
 

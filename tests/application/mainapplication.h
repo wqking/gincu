@@ -5,10 +5,10 @@
 
 namespace gincu {
 
-class MainApplication : public GameApplication
+class MainApplication : public GApplication
 {
 private:
-	typedef GameApplication super;
+	typedef GApplication super;
 
 public:
 	static MainApplication * getInstance();

@@ -32,9 +32,9 @@ std::string getChessResourceName(const ChessColor chessColor)
 	return it->second;
 }
 
-GameImage getChessResource(const ChessColor chessColor)
+GImage getChessResource(const ChessColor chessColor)
 {
-	return ResourceManager::getInstance()->getSpriteSheet("matchthree/chess_spritesheet", SpriteSheetFormat::spritePackText).getImage(getChessResourceName(chessColor));
+	return GResourceManager::getInstance()->getSpriteSheet("matchthree/chess_spritesheet", GSpriteSheetFormat::spritePackText).getImage(getChessResourceName(chessColor));
 }
 
 ChessColor randomChessColor()

@@ -9,16 +9,16 @@
 
 namespace gincu {
 
-GameEventProcessor::GameEventProcessor(GameApplication * application)
+GEventProcessor::GEventProcessor(GApplication * application)
 	: application(application)
 {
 }
 	
-void GameEventProcessor::processEvents()
+void GEventProcessor::processEvents()
 {
 	sf::Event e;
 
-	while(RenderEngine::getInstance()->getResource()->window->pollEvent(e)) {
+	while(GRenderEngine::getInstance()->getResource()->window->pollEvent(e)) {
 		switch(e.type) {
 		case sf::Event::Closed:
 			this->application->finish();
@@ -26,19 +26,19 @@ void GameEventProcessor::processEvents()
 
 		case sf::Event::MouseButtonPressed:
 		case sf::Event::MouseButtonReleased: {
-			TouchEvent touchEvent = TouchEvent();
-			touchEvent.type = (e.type == sf::Event::MouseButtonPressed ? TouchEventType::eventPressed : TouchEventType::eventReleased);
+			GTouchEvent touchEvent = GTouchEvent();
+			touchEvent.type = (e.type == sf::Event::MouseButtonPressed ? GTouchEventType::eventPressed : GTouchEventType::eventReleased);
 			touchEvent.down = (e.type == sf::Event::MouseButtonPressed);
-			touchEvent.position = RenderEngine::getInstance()->mapWindowToView({(CoordType)e.mouseButton.x, (CoordType)e.mouseButton.y});
+			touchEvent.position = GRenderEngine::getInstance()->mapWindowToView({(GCoord)e.mouseButton.x, (GCoord)e.mouseButton.y});
 			this->application->getSceneManager()->handleTouchEvent(touchEvent);
 			break;
 		}
 
 		case sf::Event::MouseMoved: {
-			TouchEvent touchEvent = TouchEvent();
-			touchEvent.type = TouchEventType::eventMoved;
+			GTouchEvent touchEvent = GTouchEvent();
+			touchEvent.type = GTouchEventType::eventMoved;
 			touchEvent.down = sf::Mouse::isButtonPressed(sf::Mouse::Left);
-			touchEvent.position = RenderEngine::getInstance()->mapWindowToView({(CoordType)e.mouseMove.x, (CoordType)e.mouseMove.y});
+			touchEvent.position = GRenderEngine::getInstance()->mapWindowToView({(GCoord)e.mouseMove.x, (GCoord)e.mouseMove.y});
 			touchEvent.deltaPosition.x = 0;
 			touchEvent.deltaPosition.y = 0;
 			this->application->getSceneManager()->handleTouchEvent(touchEvent);
@@ -48,10 +48,10 @@ void GameEventProcessor::processEvents()
 		case sf::Event::TouchBegan:
 		case sf::Event::TouchEnded: {
 			if(e.touch.finger == 0) {
-				TouchEvent touchEvent = TouchEvent();
-				touchEvent.type = (e.type == sf::Event::TouchBegan ? TouchEventType::eventPressed : TouchEventType::eventReleased);
+				GTouchEvent touchEvent = GTouchEvent();
+				touchEvent.type = (e.type == sf::Event::TouchBegan ? GTouchEventType::eventPressed : GTouchEventType::eventReleased);
 				touchEvent.down = (e.type == sf::Event::TouchBegan);
-				touchEvent.position = RenderEngine::getInstance()->mapWindowToView({(CoordType)e.touch.x, (CoordType)e.touch.y});
+				touchEvent.position = GRenderEngine::getInstance()->mapWindowToView({(GCoord)e.touch.x, (GCoord)e.touch.y});
 				this->application->getSceneManager()->handleTouchEvent(touchEvent);
 			}
 
@@ -59,10 +59,10 @@ void GameEventProcessor::processEvents()
 		}
 
 		case sf::Event::TouchMoved: {
-			TouchEvent touchEvent = TouchEvent();
-			touchEvent.type = TouchEventType::eventMoved;
+			GTouchEvent touchEvent = GTouchEvent();
+			touchEvent.type = GTouchEventType::eventMoved;
 			touchEvent.down = true;
-			touchEvent.position = RenderEngine::getInstance()->mapWindowToView({(CoordType)e.touch.x, (CoordType)e.touch.y});
+			touchEvent.position = GRenderEngine::getInstance()->mapWindowToView({(GCoord)e.touch.x, (GCoord)e.touch.y});
 			touchEvent.deltaPosition.x = 0;
 			touchEvent.deltaPosition.y = 0;
 			this->application->getSceneManager()->handleTouchEvent(touchEvent);
@@ -70,7 +70,7 @@ void GameEventProcessor::processEvents()
 		}
 
 		case sf::Event::Resized: {
-			RenderEngine::getInstance()->onWindowResized(GameSize{ (CoordType)e.size.width, (CoordType)e.size.height });
+			GRenderEngine::getInstance()->onWindowResized(GSize{ (GCoord)e.size.width, (GCoord)e.size.height });
 			break;
 		}
 

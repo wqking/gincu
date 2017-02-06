@@ -8,27 +8,27 @@
 
 namespace gincu {
 
-enum class ViewFitStrategy
+enum class GViewFitStrategy
 {
 	scaleFit, // recommend, scale the view to fit the window and keep aspect ratio
 	stretch, // always use the fixed size and cover the whole windows, doesn't keep aspect ratio
 	fitWindow, // ignore view size, always fit to the window, i.e, the view size is always same as window size
 };
 
-struct GameConfigInfo
+struct GConfigInfo
 {
 	std::string caption;
 	int framesPerSecond;
 	int renderFramesPerSecond; // -1 will use framesPerSecond
-	GameSize windowSize; // the initial window size
-	GameSize viewSize; // the virtual view size, no matter how the window resized
+	GSize windowSize; // the initial window size
+	GSize viewSize; // the virtual view size, no matter how the window resized
 	bool fullScreenMode;
 	bool resizable;
-	ViewFitStrategy viewFitStrategy;
-	GameColor backgroundColor;
+	GViewFitStrategy viewFitStrategy;
+	GColor backgroundColor;
 };
 
-inline GameConfigInfo createDefaultConfigInfo()
+inline GConfigInfo createDefaultConfigInfo()
 {
 	return {
 		"",
@@ -38,7 +38,7 @@ inline GameConfigInfo createDefaultConfigInfo()
 		{ 800, 600 },
 		false,
 		true,
-		ViewFitStrategy::scaleFit,
+		GViewFitStrategy::scaleFit,
 		colorWhite
 	};
 }

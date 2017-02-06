@@ -7,14 +7,14 @@
 
 namespace gincu {
 
-class ComponentTouchHandler : public Component
+class GComponentTouchHandler : public GComponent
 {
 private:
-	typedef Component super;
+	typedef GComponent super;
 
 public:
-	typedef cpgf::GCallback<void (const TouchEvent &)> OnTouched;
-	typedef cpgf::GCallbackList<void (const TouchEvent &)> OnTouchedList;
+	typedef cpgf::GCallback<void (const GTouchEvent &)> OnTouched;
+	typedef cpgf::GCallbackList<void (const GTouchEvent &)> OnTouchedList;
 
 public:
 	inline static constexpr unsigned int getComponentType() {
@@ -22,28 +22,28 @@ public:
 	}
 
 public:
-	ComponentTouchHandler();
+	GComponentTouchHandler();
 
-	ComponentTouchHandler * addOnTouch(const OnTouched & onTouch);
+	GComponentTouchHandler * addOnTouch(const OnTouched & onTouch);
 	void removeOnTouch(const OnTouched & onTouch);
 
-	bool canHandle(const GamePoint & point) const;
-	void handle(const TouchEvent & touchEvent);
+	bool canHandle(const GPoint & point) const;
+	void handle(const GTouchEvent & touchEvent);
 
 private:
-	virtual bool doCanHandle(const GamePoint & point) const = 0;
+	virtual bool doCanHandle(const GPoint & point) const = 0;
 
 private:
 	OnTouchedList onTouchedList;
 };
 
-class ComponentRendererTouchHandler : public ComponentTouchHandler
+class GComponentRendererTouchHandler : public GComponentTouchHandler
 {
 public:
-	ComponentRendererTouchHandler();
+	GComponentRendererTouchHandler();
 
 private:
-	virtual bool doCanHandle(const GamePoint & point) const;
+	virtual bool doCanHandle(const GPoint & point) const;
 };
 
 

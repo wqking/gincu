@@ -27,7 +27,7 @@ struct LogoItem
 {
 	ChessColor chessColor;
 	std::string text;
-	GameColor textColor;
+	GColor textColor;
 };
 
 const std::vector<LogoItem> logoItemList {
@@ -58,19 +58,19 @@ SceneLogo::~SceneLogo()
 
 void SceneLogo::doOnEnter()
 {
-	const GameApplication * application = GameApplication::getInstance();
+	const GApplication * application = GApplication::getInstance();
 
 	const int itemCount = (int)logoItemList.size();
-	const CoordType viewWidth = application->getViewSize().width;
-	const CoordType viewHeight = application->getViewSize().height;
-	const CoordType xSpace = 40;
-	const CoordType ySize = xSpace;
-	const CoordType startX = viewWidth / 2 - (itemCount -1) * xSpace / 2;
+	const GCoord viewWidth = application->getViewSize().width;
+	const GCoord viewHeight = application->getViewSize().height;
+	const GCoord xSpace = 40;
+	const GCoord ySize = xSpace;
+	const GCoord startX = viewWidth / 2 - (itemCount -1) * xSpace / 2;
 	const cpgf::GTweenNumber firstTweenDuration = 400;
 
 	this->addEntity(
-		(new Entity())
-		->addComponent(createComponent<ComponentTransform>(GamePoint { 0, 0 }, GameScale { 3.25f, 3.25f }))
+		(new GEntity())
+		->addComponent(createComponent<GComponentTransform>(GPoint { 0, 0 }, GScale { 3.25f, 3.25f }))
 			->addComponent(createAndLoadImageComponent(backgroundImageName))
 	);
 
@@ -78,7 +78,7 @@ void SceneLogo::doOnEnter()
 	cpgf::GTimeline & timeline = cpgf::GTweenList::getInstance()->timeline();
 	timeline.onComplete(cpgf::makeCallback(this, &SceneLogo::doExitLogo));
 
-	CoordType x = startX - xSpace;
+	GCoord x = startX - xSpace;
 	cpgf::GTweenNumber delay = 0;
 	for(int i = 0; i < itemCount; ++i) {
 		x += xSpace;
@@ -89,18 +89,18 @@ void SceneLogo::doOnEnter()
 			continue;
 		}
 
-		Entity * entity = this->addEntity(
-			(new Entity())
-				->addComponent(createComponent<ComponentTransform>(GamePoint { x, -ySize } ))
-				->addComponent(createComponent<ComponentAnchor>(RenderAnchor::center))
+		GEntity * entity = this->addEntity(
+			(new GEntity())
+				->addComponent(createComponent<GComponentTransform>(GPoint { x, -ySize } ))
+				->addComponent(createComponent<GComponentAnchor>(GRenderAnchor::center))
 				->addComponent(createImageComponent(getChessResource(item.chessColor)))
 			);
-		ComponentTransform * transform = entity->getComponentByType<ComponentTransform>();
+		GComponentTransform * transform = entity->getComponentByType<GComponentTransform>();
 		timeline.setAt(delay,
 			timeline.tween()
 				.duration(firstTweenDuration)
 				.ease(cpgf::QuadEase::easeOut())
-				.target(cpgf::createAccessor(transform, &ComponentTransform::getPosition, &ComponentTransform::setPosition),   GamePoint{transform->getPosition().x, viewHeight / 2 + 100})
+				.target(cpgf::createAccessor(transform, &GComponentTransform::getPosition, &GComponentTransform::setPosition),   GPoint{transform->getPosition().x, viewHeight / 2 + 100})
 				.onComplete([=]() {
 						entity->addComponent(createAndLoadTextComponent(item.text, item.textColor, largeFontSize));
 					}
@@ -110,38 +110,38 @@ void SceneLogo::doOnEnter()
 			timeline.tween()
 				.duration(300)
 				.ease(cpgf::QuadEase::easeOut())
-				.target(cpgf::createAccessor(transform, &ComponentTransform::getPosition, &ComponentTransform::setPosition),   GamePoint{transform->getPosition().x, viewHeight / 2})
+				.target(cpgf::createAccessor(transform, &GComponentTransform::getPosition, &GComponentTransform::setPosition),   GPoint{transform->getPosition().x, viewHeight / 2})
 		);
 
 		delay += 100;
 	}
 
 	if(this->showProgressBar) {
-		const CoordType progressBarWidth = 600;
-		const CoordType progressBarHeight = 20;
-		const GamePoint startPosition { viewWidth / 2 - progressBarWidth / 2, viewHeight - progressBarHeight - 20 };
+		const GCoord progressBarWidth = 600;
+		const GCoord progressBarHeight = 20;
+		const GPoint startPosition { viewWidth / 2 - progressBarWidth / 2, viewHeight - progressBarHeight - 20 };
 
-		Entity * progressBarEntity = this->addEntity(
-			(new Entity())
-				->addComponent(createComponent<ComponentTransform>(startPosition))
-				->addComponent(createComponent<ComponentAnchor>(RenderAnchor::hLeft | RenderAnchor::vCenter))
-				->addComponent(createRectRenderComponent(0x770000aa, GameSize { 0.0f, progressBarHeight }))
+		GEntity * progressBarEntity = this->addEntity(
+			(new GEntity())
+				->addComponent(createComponent<GComponentTransform>(startPosition))
+				->addComponent(createComponent<GComponentAnchor>(GRenderAnchor::hLeft | GRenderAnchor::vCenter))
+				->addComponent(createRectRenderComponent(0x770000aa, GSize { 0.0f, progressBarHeight }))
 			);
-		Entity * chessEntity = this->addEntity(
-			(new Entity())
-				->addComponent(createComponent<ComponentTransform>(startPosition ))
-				->addComponent(createComponent<ComponentAnchor>(RenderAnchor::center))
+		GEntity * chessEntity = this->addEntity(
+			(new GEntity())
+				->addComponent(createComponent<GComponentTransform>(startPosition ))
+				->addComponent(createComponent<GComponentAnchor>(GRenderAnchor::center))
 				->addComponent(createImageComponent(getChessResource(ChessColor::normal3)))
 		);
 
-		RectRender & rectRender = progressBarEntity->getComponentByType<ComponentRectRender>()->getRender();
-		ComponentTransform * transform = chessEntity->getComponentByType<ComponentTransform>();
+		GRectRender & rectRender = progressBarEntity->getComponentByType<GComponentRectRender>()->getRender();
+		GComponentTransform * transform = chessEntity->getComponentByType<GComponentTransform>();
 		timeline.setAt(0,
 			timeline.tween()
 				.duration(timeline.getDuration())
 				.ease(cpgf::LinearEase::easeIn())
-				.target(cpgf::createAccessor(&rectRender, &RectRender::getSize, &RectRender::setSize), GameSize{progressBarWidth, rectRender.getSize().height} )
-				.target(cpgf::createAccessor(transform, &ComponentTransform::getPosition, &ComponentTransform::setPosition),   GamePoint{startPosition.x + progressBarWidth, transform->getPosition().y})
+				.target(cpgf::createAccessor(&rectRender, &GRectRender::getSize, &GRectRender::setSize), GSize{progressBarWidth, rectRender.getSize().height} )
+				.target(cpgf::createAccessor(transform, &GComponentTransform::getPosition, &GComponentTransform::setPosition),   GPoint{startPosition.x + progressBarWidth, transform->getPosition().y})
 		);
 	}
 
@@ -158,9 +158,9 @@ void SceneLogo::doExitLogo()
 	SceneMenu::returnToMainMenu();
 }
 
-void SceneLogo::onPressAnyKey(const TouchEvent & touchEvent)
+void SceneLogo::onPressAnyKey(const GTouchEvent & touchEvent)
 {
-	if(touchEvent.type == TouchEventType::eventPressed) {
+	if(touchEvent.type == GTouchEventType::eventPressed) {
 		this->doExitLogo();
 	}
 }
@@ -169,7 +169,7 @@ void SceneLogo::onPressAnyKey(const TouchEvent & touchEvent)
 G_AUTO_RUN_BEFORE_MAIN()
 {
 	MenuRegister::getInstance()->registerItem("about", 9999999, [](){
-			GameApplication::getInstance()->getSceneManager()->switchScene(new SceneLogo(false));
+			GApplication::getInstance()->getSceneManager()->switchScene(new SceneLogo(false));
 		},
 		0xffaaaaff);
 }

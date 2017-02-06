@@ -4,67 +4,67 @@
 
 namespace gincu {
 
-Scene::Scene()
+GScene::GScene()
 	: touchCapture(nullptr)
 {
 }
 
-Scene::~Scene()
+GScene::~GScene()
 {
 }
 
-void Scene::onEnter()
+void GScene::onEnter()
 {
 	this->doOnEnter();
 }
 
-void Scene::onExit()
+void GScene::onExit()
 {
 	this->doOnExit();
 
 	this->entityList.clear();
 }
 
-void Scene::doOnEnter()
+void GScene::doOnEnter()
 {
 }
 
-void Scene::doOnExit()
+void GScene::doOnExit()
 {
 }
 
-void Scene::renderScene()
+void GScene::renderScene()
 {
 	this->componentsBuffer.updateLocalTransforms();
 	this->componentsBuffer.render();
 }
 
-void Scene::setTouchCapture(Entity * touchCapture)
+void GScene::setTouchCapture(GEntity * touchCapture)
 {
 	this->touchCapture = touchCapture;
-	if(this->touchCapture != nullptr && this->touchCapture->getComponentByType<ComponentTouchHandler>() == nullptr) {
+	if(this->touchCapture != nullptr && this->touchCapture->getComponentByType<GComponentTouchHandler>() == nullptr) {
 		this->touchCapture = nullptr;
 	}
 }
 
-Entity * Scene::getTouchCapture() const
+GEntity * GScene::getTouchCapture() const
 {
 	return touchCapture;
 }
 
-void Scene::handleTouchEvent(const TouchEvent & touchEvent)
+void GScene::handleTouchEvent(const GTouchEvent & touchEvent)
 {
-	std::vector<ComponentTouchHandler *> handlerList;
+	std::vector<GComponentTouchHandler *> handlerList;
 
 	this->componentsBuffer.findTouchHandlers(touchEvent.position, &handlerList);
 
-	TouchEvent tempEvent = touchEvent;
+	GTouchEvent tempEvent = touchEvent;
 
 	if(handlerList.empty()) {
 		if(this->touchCapture != nullptr) {
 			tempEvent.touchedEntity = nullptr;
 			tempEvent.target = this->touchCapture;
-			this->touchCapture->getComponentByType<ComponentTouchHandler>()->handle(tempEvent);
+			this->touchCapture->getComponentByType<GComponentTouchHandler>()->handle(tempEvent);
 		}
 	}
 	else {
@@ -76,13 +76,13 @@ void Scene::handleTouchEvent(const TouchEvent & touchEvent)
 			}
 			else {
 				tempEvent.target = this->touchCapture;
-				this->touchCapture->getComponentByType<ComponentTouchHandler>()->handle(tempEvent);
+				this->touchCapture->getComponentByType<GComponentTouchHandler>()->handle(tempEvent);
 			}
 		}
 	}
 }
 
-Entity * Scene::addEntity(Entity * entity)
+GEntity * GScene::addEntity(GEntity * entity)
 {
 	if(entity != nullptr) {
 		this->entityList.push_back(EntityPointer(entity));
@@ -92,7 +92,7 @@ Entity * Scene::addEntity(Entity * entity)
 	return entity;
 }
 
-void Scene::removeEntity(Entity * entity)
+void GScene::removeEntity(GEntity * entity)
 {
 	if(entity == nullptr) {
 		return;

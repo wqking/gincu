@@ -8,12 +8,12 @@
 namespace gincu {
 
 class FileInputStreamResource;
-class FileInputStream
+class GFileInputStream
 {
 public:
-	FileInputStream();
-	explicit FileInputStream(const std::string & fileName);
-	~FileInputStream();
+	GFileInputStream();
+	explicit GFileInputStream(const std::string & fileName);
+	~GFileInputStream();
 
 	void open(const std::string & fileName);
 	void close();

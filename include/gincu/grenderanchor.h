@@ -5,7 +5,7 @@
 
 namespace gincu {
 
-enum class RenderAnchor
+enum class GRenderAnchor
 {
 	none = 0,
 	hLeft = 0x01,
@@ -22,17 +22,17 @@ enum class RenderAnchor
 	rightTop = hRight | vTop,
 };
 
-inline RenderAnchor operator & (const RenderAnchor a, const RenderAnchor b)
+inline GRenderAnchor operator & (const GRenderAnchor a, const GRenderAnchor b)
 {
-	return (RenderAnchor)((int)a & (int)b);
+	return (GRenderAnchor)((int)a & (int)b);
 }
 
-inline RenderAnchor operator | (const RenderAnchor a, const RenderAnchor b)
+inline GRenderAnchor operator | (const GRenderAnchor a, const GRenderAnchor b)
 {
-	return (RenderAnchor)((int)a | (int)b);
+	return (GRenderAnchor)((int)a | (int)b);
 }
 
-GamePoint getOriginByRenderAnchor(const RenderAnchor renderAnchor, const GameSize & size);
+GPoint getOriginByRenderAnchor(const GRenderAnchor renderAnchor, const GSize & size);
 
 
 } //namespace gincu

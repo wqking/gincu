@@ -10,32 +10,32 @@
 
 namespace gincu{
 
-class GameTransform;
-struct RenderInfo;
-class GameTextResource;
-class GameImageResource;
+class GTransform;
+struct GRenderInfo;
+class GTextResource;
+class GImageResource;
 
-class GameText
+class GText
 {
 public:
-	GameText();
-	explicit GameText(const int fontSize);
-	~GameText();
+	GText();
+	explicit GText(const int fontSize);
+	~GText();
 
 	void setText(const std::string & text);
-	void setColor(const GameColor textColor);
-	void setTextAndColor(const std::string & text, const GameColor textColor);
+	void setColor(const GColor textColor);
+	void setTextAndColor(const std::string & text, const GColor textColor);
 
-	void draw(const GameTransform & transform, const RenderInfo * renderInfo);
+	void draw(const GTransform & transform, const GRenderInfo * renderInfo);
 
-	GameSize getSize() const;
+	GSize getSize() const;
 
-	const std::shared_ptr<GameTextResource> & getResource() const { return this->resource; }
+	const std::shared_ptr<GTextResource> & getResource() const { return this->resource; }
 
-	const GameImageResource * getTexture() const { return nullptr; }
+	const GImageResource * getTexture() const { return nullptr; }
 
 private:
-	std::shared_ptr<GameTextResource> resource;
+	std::shared_ptr<GTextResource> resource;
 };
 
 

@@ -7,7 +7,7 @@
 
 namespace gincu {
 
-enum class MemoryPoolPurgeStrategy
+enum class GHeapPoolPurgeStrategy
 {
 	never,
 	onSceneFreed, // after previous scene is freed and next scene is not created yet
@@ -15,7 +15,7 @@ enum class MemoryPoolPurgeStrategy
 	onFree
 };
 
-class MemorySizedPool
+class GHeapSizedPool
 {
 private:
 	struct IdleIndex {
@@ -29,11 +29,11 @@ private:
 	};
 	
 public:
-	MemorySizedPool(
+	GHeapSizedPool(
 			const std::size_t blockSize,
 			const std::size_t alignment = 64,
 			const std::size_t blockCountPerChunk = 256,
-			const MemoryPoolPurgeStrategy purgeStrategy = MemoryPoolPurgeStrategy::onSceneSwitched
+			const GHeapPoolPurgeStrategy purgeStrategy = GHeapPoolPurgeStrategy::onSceneSwitched
 		);
 	
 	void * allocate();
@@ -51,24 +51,24 @@ private:
 	std::size_t alignment;
 	std::size_t blockCountPerChunk;
 	std::size_t chunkSize;
-	MemoryPoolPurgeStrategy purgeStrategy;
+	GHeapPoolPurgeStrategy purgeStrategy;
 	
 	std::vector<Chunk> chunkList;
 	std::vector<IdleIndex> idleList;
 };
 
-class MemoryPool
+class GHeapPool
 {
 public:
-	static MemoryPool * getInstance();
+	static GHeapPool * getInstance();
 	
 public:
-	explicit MemoryPool(
+	explicit GHeapPool(
 			const std::size_t alignment = 64,
 			const std::size_t blockCountPerChunk = 256,
-			const MemoryPoolPurgeStrategy purgeStrategy = MemoryPoolPurgeStrategy::onSceneSwitched
+			const GHeapPoolPurgeStrategy purgeStrategy = GHeapPoolPurgeStrategy::onSceneSwitched
 		);
-	~MemoryPool();
+	~GHeapPool();
 	
 	void * allocate(const std::size_t size);
 	void free(void * p);
@@ -81,8 +81,8 @@ public:
 private:
 	std::size_t alignment;
 	std::size_t blockCountPerChunk;
-	MemoryPoolPurgeStrategy purgeStrategy;
-	std::map<std::size_t, std::unique_ptr<MemorySizedPool> > poolMap;
+	GHeapPoolPurgeStrategy purgeStrategy;
+	std::map<std::size_t, std::unique_ptr<GHeapSizedPool> > poolMap;
 };
 
 

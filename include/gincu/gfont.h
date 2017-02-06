@@ -5,19 +5,19 @@
 
 namespace gincu {
 
-class GameFontResource;
+class GFontResource;
 
-class GameFont
+class GFont
 {
 public:
-	GameFont();
-	~GameFont();
+	GFont();
+	~GFont();
 
-	void setResource(const std::shared_ptr<GameFontResource> & resource) { this->resource = resource; }
-	const std::shared_ptr<GameFontResource> & getResource() const { return this->resource; }
+	void setResource(const std::shared_ptr<GFontResource> & resource) { this->resource = resource; }
+	const std::shared_ptr<GFontResource> & getResource() const { return this->resource; }
 
 private:
-	std::shared_ptr<GameFontResource> resource;
+	std::shared_ptr<GFontResource> resource;
 };
 
 

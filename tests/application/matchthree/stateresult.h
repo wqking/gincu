@@ -6,13 +6,13 @@
 namespace gincu {
 
 class SceneMatchThree;
-class Entity;
-struct TouchEvent;
+class GEntity;
+struct GTouchEvent;
 
-class StateResult : public State
+class StateResult : public GState
 {
 private:
-	typedef State super;
+	typedef GState super;
 
 public:
 	explicit StateResult(SceneMatchThree * scene);
@@ -20,7 +20,7 @@ public:
 
 private:
 	void onBackgroundShown();
-	void onFinish(const TouchEvent & touchEvent);
+	void onFinish(const GTouchEvent & touchEvent);
 	void doCollectChesses();
 	void doShowMessage();
 
@@ -30,9 +30,9 @@ private:
 
 private:
 	SceneMatchThree * scene;
-	Entity * backgroundEntity;
-	Entity * imageEntity;
-	Entity * textEntity;
+	GEntity * backgroundEntity;
+	GEntity * imageEntity;
+	GEntity * textEntity;
 };
 
 

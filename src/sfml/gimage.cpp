@@ -7,47 +7,47 @@
 
 namespace gincu {
 
-GameImage::GameImage()
+GImage::GImage()
 	: resource()
 {
 }
 
-GameImage::GameImage(const std::shared_ptr<GameImageResource> & resource)
+GImage::GImage(const std::shared_ptr<GImageResource> & resource)
 {
 	this->setResource(resource);
 }
 
-GameImage::GameImage(const std::shared_ptr<GameImageResource> & resource, const GameRect & rect)
+GImage::GImage(const std::shared_ptr<GImageResource> & resource, const GRect & rect)
 	: resource(resource), rect(rect)
 {
 }
 
-GameImage::~GameImage()
+GImage::~GImage()
 {
 }
 
-void GameImage::load(const std::string & fileName)
+void GImage::load(const std::string & fileName)
 {
-	this->resource.reset(new GameImageResource());
+	this->resource.reset(new GImageResource());
 	this->resource->load(fileName);
 }
 
-void GameImage::draw(const GameTransform & transform, const RenderInfo * renderInfo)
+void GImage::draw(const GTransform & transform, const GRenderInfo * renderInfo)
 {
-	RenderEngine::getInstance()->draw(*this, transform, renderInfo);
+	GRenderEngine::getInstance()->draw(*this, transform, renderInfo);
 }
 
-GameSize GameImage::getSize() const
+GSize GImage::getSize() const
 {
 	return { this->rect.width, this->rect.height };
 }
 
-void GameImage::setResource(const std::shared_ptr<GameImageResource> & resource)
+void GImage::setResource(const std::shared_ptr<GImageResource> & resource)
 {
 	this->resource = resource;
 	if(this->resource) {
 		auto size = this->resource->texture.getSize();
-		this->rect = GameRect{ 0, 0, (CoordType)size.x, (CoordType)size.y };
+		this->rect = GRect{ 0, 0, (GCoord)size.x, (GCoord)size.y };
 	}
 }
 

@@ -3,16 +3,16 @@
 
 namespace gincu {
 
-EntityDynamicArrayBase::EntityDynamicArrayBase(const std::size_t initialSize)
+GEntityDynamicArrayBase::GEntityDynamicArrayBase(const std::size_t initialSize)
 	: componentList(initialSize)
 {
 }
 
-EntityDynamicArrayBase::~EntityDynamicArrayBase()
+GEntityDynamicArrayBase::~GEntityDynamicArrayBase()
 {
 }
 
-void EntityDynamicArrayBase::doAddComponent(Component * component, ComponentsBuffer * componentsBuffer)
+void GEntityDynamicArrayBase::doAddComponent(GComponent * component, GComponentsBuffer * componentsBuffer)
 {
 	const unsigned int typeId = component->getTypeId();
 	if(this->componentList.size() <= typeId) {
@@ -30,7 +30,7 @@ void EntityDynamicArrayBase::doAddComponent(Component * component, ComponentsBuf
 	}
 }
 
-void EntityDynamicArrayBase::doRemoveComponent(Component * component, ComponentsBuffer * componentsBuffer)
+void GEntityDynamicArrayBase::doRemoveComponent(GComponent * component, GComponentsBuffer * componentsBuffer)
 {
 	const unsigned int typeId = component->getTypeId();
 	if(typeId < this->componentList.size()) {
@@ -42,7 +42,7 @@ void EntityDynamicArrayBase::doRemoveComponent(Component * component, Components
 	}
 }
 
-void EntityDynamicArrayBase::doSetComponentsBuffer(ComponentsBuffer * newComponentsBuffer, ComponentsBuffer * oldComponentsBuffer)
+void GEntityDynamicArrayBase::doSetComponentsBuffer(GComponentsBuffer * newComponentsBuffer, GComponentsBuffer * oldComponentsBuffer)
 {
 	if(oldComponentsBuffer != nullptr) {
 		for(auto & component : this->componentList) {
@@ -62,7 +62,7 @@ void EntityDynamicArrayBase::doSetComponentsBuffer(ComponentsBuffer * newCompone
 	}
 }
 
-Component * EntityDynamicArrayBase::doGetComponentByTypeId(const unsigned int typeId) const
+GComponent * GEntityDynamicArrayBase::doGetComponentByTypeId(const unsigned int typeId) const
 {
 	if(typeId < this->componentList.size()) {
 		return this->componentList[typeId].get();
@@ -72,7 +72,7 @@ Component * EntityDynamicArrayBase::doGetComponentByTypeId(const unsigned int ty
 }
 
 
-void EntityDynamicMap::doAddComponent(Component * component, ComponentsBuffer * componentsBuffer)
+void GEntityDynamicMap::doAddComponent(GComponent * component, GComponentsBuffer * componentsBuffer)
 {
 	const unsigned int typeId = component->getTypeId();
 
@@ -93,7 +93,7 @@ void EntityDynamicMap::doAddComponent(Component * component, ComponentsBuffer * 
 
 }
 
-void EntityDynamicMap::doRemoveComponent(Component * component, ComponentsBuffer * componentsBuffer)
+void GEntityDynamicMap::doRemoveComponent(GComponent * component, GComponentsBuffer * componentsBuffer)
 {
 	const unsigned int typeId = component->getTypeId();
 	auto it = this->componentMap.find(typeId);
@@ -105,7 +105,7 @@ void EntityDynamicMap::doRemoveComponent(Component * component, ComponentsBuffer
 	}
 }
 
-void EntityDynamicMap::doSetComponentsBuffer(ComponentsBuffer * newComponentsBuffer, ComponentsBuffer * oldComponentsBuffer)
+void GEntityDynamicMap::doSetComponentsBuffer(GComponentsBuffer * newComponentsBuffer, GComponentsBuffer * oldComponentsBuffer)
 {
 	if(oldComponentsBuffer != nullptr) {
 		for(auto & item : this->componentMap) {
@@ -124,7 +124,7 @@ void EntityDynamicMap::doSetComponentsBuffer(ComponentsBuffer * newComponentsBuf
 	}
 }
 
-Component * EntityDynamicMap::doGetComponentByTypeId(const unsigned int typeId) const
+GComponent * GEntityDynamicMap::doGetComponentByTypeId(const unsigned int typeId) const
 {
 	auto it = this->componentMap.find(typeId);
 	if(it != this->componentMap.end()) {

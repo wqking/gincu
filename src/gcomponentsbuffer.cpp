@@ -11,13 +11,13 @@ namespace gincu {
 
 namespace {
 
-const RenderInfo * getRenderBatchGroup(const ComponentRender * render)
+const GRenderInfo * getRenderBatchGroup(const GComponentRender * render)
 {
 	if(render == nullptr) {
 		return nullptr;
 	}
 	else {
-		const RenderInfo * renderInfo = render->getBatchGroup();
+		const GRenderInfo * renderInfo = render->getBatchGroup();
 		if(renderInfo->texture == nullptr) {
 			return nullptr;
 		}
@@ -30,59 +30,59 @@ const RenderInfo * getRenderBatchGroup(const ComponentRender * render)
 
 } //unnamed namespace
 
-ComponentsBuffer::ComponentsBuffer()
+GComponentsBuffer::GComponentsBuffer()
 	: componentListBuffer(componentTypeId_PrimaryCount)
 {
 }
 
-void ComponentsBuffer::add(Component * component)
+void GComponentsBuffer::add(GComponent * component)
 {
 	this->doGetComponentList(component->getTypeId())->push_back(component);
 }
 
-void ComponentsBuffer::remove(Component * component)
+void GComponentsBuffer::remove(GComponent * component)
 {
 	ComponentListType * componentList = this->doGetComponentList(component->getTypeId());
 	componentList->erase(std::remove(componentList->begin(), componentList->end(), component), componentList->end());
 }
 
-void ComponentsBuffer::updateLocalTransforms()
+void GComponentsBuffer::updateLocalTransforms()
 {
-	ComponentListType * componentList = this->doGetComponentList(ComponentLocalTransform::getComponentType());
-	for(Component * component : *componentList) {
-		if(component != nullptr && static_cast<ComponentLocalTransform *>(component)->getParent() == nullptr) {
-			static_cast<ComponentLocalTransform *>(component)->applyGlobal();
+	ComponentListType * componentList = this->doGetComponentList(GComponentLocalTransform::getComponentType());
+	for(GComponent * component : *componentList) {
+		if(component != nullptr && static_cast<GComponentLocalTransform *>(component)->getParent() == nullptr) {
+			static_cast<GComponentLocalTransform *>(component)->applyGlobal();
 		}
 	}
 }
 
-void ComponentsBuffer::render()
+void GComponentsBuffer::render()
 {
-	ComponentListType * componentList = this->doGetComponentList(ComponentRender::getComponentType());
+	ComponentListType * componentList = this->doGetComponentList(GComponentRender::getComponentType());
 	if(componentList->empty()) {
 		return;
 	}
 
-	//for(Component * component : *componentList) {
-	//	static_cast<ComponentRender *>(component)->draw();
+	//for(GComponent * component : *componentList) {
+	//	static_cast<GComponentRender *>(component)->draw();
 	//}
 	//return;
 
 	const int count = (int)componentList->size();
-	ComponentRender * previousRender;
-	ComponentRender * currentRender = nullptr;
-	ComponentRender * nextRender = static_cast<ComponentRender *>(componentList->at(0));
-	RenderEngine * renderEngine = RenderEngine::getInstance();
+	GComponentRender * previousRender;
+	GComponentRender * currentRender = nullptr;
+	GComponentRender * nextRender = static_cast<GComponentRender *>(componentList->at(0));
+	GRenderEngine * renderEngine = GRenderEngine::getInstance();
 	bool inBatchDraw = false;
 
-	const RenderInfo * previousGroup;
-	const RenderInfo * currentGroup = nullptr;
-	const RenderInfo * nextGroup = getRenderBatchGroup(nextRender);
+	const GRenderInfo * previousGroup;
+	const GRenderInfo * currentGroup = nullptr;
+	const GRenderInfo * nextGroup = getRenderBatchGroup(nextRender);
 
 	for(int i = 0; i < count; ++i) {
 		previousRender = currentRender;
 		currentRender = nextRender;
-		nextRender = (i < count - 1 ? static_cast<ComponentRender *>(componentList->at(i + 1)) : nullptr);
+		nextRender = (i < count - 1 ? static_cast<GComponentRender *>(componentList->at(i + 1)) : nullptr);
 
 		previousGroup = currentGroup;
 		currentGroup = nextGroup;
@@ -118,17 +118,17 @@ void ComponentsBuffer::render()
 	}
 }
 
-void ComponentsBuffer::findTouchHandlers(const GamePoint & position, std::vector<ComponentTouchHandler *> * outputResult)
+void GComponentsBuffer::findTouchHandlers(const GPoint & position, std::vector<GComponentTouchHandler *> * outputResult)
 {
-	ComponentListType * componentList = this->doGetComponentList(ComponentTouchHandler::getComponentType());
-	for(Component * component : *componentList) {
-		if(static_cast<ComponentTouchHandler *>(component)->canHandle(position)) {
-			outputResult->push_back(static_cast<ComponentTouchHandler *>(component));
+	ComponentListType * componentList = this->doGetComponentList(GComponentTouchHandler::getComponentType());
+	for(GComponent * component : *componentList) {
+		if(static_cast<GComponentTouchHandler *>(component)->canHandle(position)) {
+			outputResult->push_back(static_cast<GComponentTouchHandler *>(component));
 		}
 	}
 }
 
-ComponentsBuffer::ComponentListType * ComponentsBuffer::doGetComponentList(const unsigned int typeId)
+GComponentsBuffer::ComponentListType * GComponentsBuffer::doGetComponentList(const unsigned int typeId)
 {
 	if(this->componentListBuffer.size() <= typeId) {
 		this->componentListBuffer.resize(typeId + 1);

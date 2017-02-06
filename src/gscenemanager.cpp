@@ -6,57 +6,57 @@
 
 namespace gincu {
 
-SceneManager::SceneManager()
+GSceneManager::GSceneManager()
 {
-	RenderEngine::getInstance()->appendRenderable(this);
+	GRenderEngine::getInstance()->appendRenderable(this);
 }
 
-SceneManager::~SceneManager()
+GSceneManager::~GSceneManager()
 {
-	RenderEngine::getInstance()->removeRenderable(this);
+	GRenderEngine::getInstance()->removeRenderable(this);
 }
 
-void SceneManager::switchScene(Scene * scene)
+void GSceneManager::switchScene(GScene * scene)
 {
 	this->sceneToSwitchTo.reset(scene);
 
-	GameApplication::getInstance()->addUpdater(cpgf::makeCallback(this, &SceneManager::onUpdate));
+	GApplication::getInstance()->addUpdater(cpgf::makeCallback(this, &GSceneManager::onUpdate));
 }
 
-void SceneManager::doSwitchScene(Scene * scene)
+void GSceneManager::doSwitchScene(GScene * scene)
 {
 	if(this->currentScene) {
 		this->currentScene->onExit();
 	}
 
 	this->currentScene.reset();
-	MemoryPool::getInstance()->sceneFreed();
+	GHeapPool::getInstance()->sceneFreed();
 	this->currentScene.reset(scene);
 
 	if(this->currentScene) {
 		this->currentScene->onEnter();
 		
-		MemoryPool::getInstance()->sceneSwitched();
+		GHeapPool::getInstance()->sceneSwitched();
 	}
 }
 
-void SceneManager::render()
+void GSceneManager::render()
 {
 	if(this->currentScene) {
 		this->currentScene->renderScene();
 	}
 }
 
-void SceneManager::handleTouchEvent(const TouchEvent & touchEvent)
+void GSceneManager::handleTouchEvent(const GTouchEvent & touchEvent)
 {
 	if(this->currentScene) {
 		this->currentScene->handleTouchEvent(touchEvent);
 	}
 }
 
-void SceneManager::onUpdate()
+void GSceneManager::onUpdate()
 {
-	GameApplication::getInstance()->removeUpdater(cpgf::makeCallback(this, &SceneManager::onUpdate));
+	GApplication::getInstance()->removeUpdater(cpgf::makeCallback(this, &GSceneManager::onUpdate));
 
 	if(this->sceneToSwitchTo) {
 		this->doSwitchScene(this->sceneToSwitchTo.release());

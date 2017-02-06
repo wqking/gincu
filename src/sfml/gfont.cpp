@@ -3,13 +3,13 @@
 
 namespace gincu {
 
-GameFont::GameFont()
+GFont::GFont()
 	:
-		resource(std::make_shared<GameFontResource>())
+		resource(std::make_shared<GFontResource>())
 {
 }
 
-GameFont::~GameFont()
+GFont::~GFont()
 {
 }
 

@@ -5,7 +5,7 @@
 
 namespace gincu {
 
-enum class GameBlendFunc
+enum class GBlendFunc
 {
 	zero,
 	one,
@@ -19,79 +19,79 @@ enum class GameBlendFunc
 	oneMinusDestAlpha
 };
 
-enum class GameBlendEquation
+enum class GBlendEquation
 {
 	add,
 	subtract,
 	reverseSubtract
 };
 
-struct GameBlendModeChannel
+struct GBlendModeChannel
 {
-	constexpr GameBlendModeChannel()
+	constexpr GBlendModeChannel()
 		: source(), dest(), func()
 	{}
 
-	constexpr GameBlendModeChannel(
-		const GameBlendFunc source,
-		const GameBlendFunc dest,
-		const GameBlendEquation func = GameBlendEquation::add
+	constexpr GBlendModeChannel(
+		const GBlendFunc source,
+		const GBlendFunc dest,
+		const GBlendEquation func = GBlendEquation::add
 	)
 		: source(source), dest(dest), func(func)
 	{}
 
-	GameBlendFunc source;
-	GameBlendFunc dest;
-	GameBlendEquation func;
+	GBlendFunc source;
+	GBlendFunc dest;
+	GBlendEquation func;
 };
 
-inline bool operator == (const GameBlendModeChannel & a, const GameBlendModeChannel & b)
+inline bool operator == (const GBlendModeChannel & a, const GBlendModeChannel & b)
 {
 	return a.source == b.source && a.dest == b.dest && a.func == b.func;
 }
 
-struct GameBlendMode
+struct GBlendMode
 {
-	constexpr GameBlendMode()
-		: colorChannel{ GameBlendFunc::sourceAlpha, GameBlendFunc::oneMinusSourceAlpha },
-			alphaChannel{ GameBlendFunc::one, GameBlendFunc::oneMinusSourceAlpha }
+	constexpr GBlendMode()
+		: colorChannel{ GBlendFunc::sourceAlpha, GBlendFunc::oneMinusSourceAlpha },
+			alphaChannel{ GBlendFunc::one, GBlendFunc::oneMinusSourceAlpha }
 	{}
 
-	constexpr GameBlendMode(
-		const GameBlendFunc source,
-		const GameBlendFunc dest,
-		const GameBlendEquation func = GameBlendEquation::add
+	constexpr GBlendMode(
+		const GBlendFunc source,
+		const GBlendFunc dest,
+		const GBlendEquation func = GBlendEquation::add
 	)
 		: colorChannel(source, dest, func), alphaChannel(source, dest, func)
 	{}
 
-	constexpr GameBlendMode(
-		const GameBlendModeChannel colorChannel,
-		const GameBlendModeChannel alpha
+	constexpr GBlendMode(
+		const GBlendModeChannel colorChannel,
+		const GBlendModeChannel alpha
 	)
 		: colorChannel(colorChannel), alphaChannel(alpha)
 	{}
 
-	GameBlendModeChannel colorChannel;
-	GameBlendModeChannel alphaChannel;
+	GBlendModeChannel colorChannel;
+	GBlendModeChannel alphaChannel;
 };
 
-inline bool operator == (const GameBlendMode & a, const GameBlendMode & b)
+inline bool operator == (const GBlendMode & a, const GBlendMode & b)
 {
 	return a.colorChannel == b.colorChannel && a.alphaChannel == b.alphaChannel;
 }
 
-constexpr GameBlendMode blendModeAlpha(
-	{ GameBlendFunc::sourceAlpha, GameBlendFunc::oneMinusSourceAlpha },
-	{ GameBlendFunc::one, GameBlendFunc::oneMinusSourceAlpha });
+constexpr GBlendMode blendModeAlpha(
+	{ GBlendFunc::sourceAlpha, GBlendFunc::oneMinusSourceAlpha },
+	{ GBlendFunc::one, GBlendFunc::oneMinusSourceAlpha });
 
-constexpr GameBlendMode blendModeAdd(
-	{ GameBlendFunc::sourceAlpha, GameBlendFunc::one },
-	{ GameBlendFunc::one, GameBlendFunc::one });
+constexpr GBlendMode blendModeAdd(
+	{ GBlendFunc::sourceAlpha, GBlendFunc::one },
+	{ GBlendFunc::one, GBlendFunc::one });
 
-constexpr GameBlendMode blendModeMultiply(GameBlendFunc::destColor, GameBlendFunc::zero);
+constexpr GBlendMode blendModeMultiply(GBlendFunc::destColor, GBlendFunc::zero);
 
-constexpr GameBlendMode blendModeNone(GameBlendFunc::one, GameBlendFunc::zero);
+constexpr GBlendMode blendModeNone(GBlendFunc::one, GBlendFunc::zero);
 
 
 } //namespace gincu

@@ -10,54 +10,54 @@
 
 namespace gincu {
 
-class RenderEngineResource;
-class Renderable;
-class GameTransform;
-class GameImage;
-class GameText;
-class RectRender;
-struct RenderInfo;
+class GRenderEngineResource;
+class GRenderable;
+class GTransform;
+class GImage;
+class GText;
+class GRectRender;
+struct GRenderInfo;
 
-class RenderEngine
+class GRenderEngine
 {
 public:
-	// Not singleton. It must be created somewhere, the default is created by GameApplication
-	static RenderEngine * getInstance();
+	// Not singleton. It must be created somewhere, the default is created by GApplication
+	static GRenderEngine * getInstance();
 
 public:
-	RenderEngine();
-	~RenderEngine();
+	GRenderEngine();
+	~GRenderEngine();
 
 	void inititialize();
 
 	void render();
 
-	void appendRenderable(Renderable * renderable);
-	void removeRenderable(Renderable * renderable);
+	void appendRenderable(GRenderable * renderable);
+	void removeRenderable(GRenderable * renderable);
 	
 	bool isAlive() const;
 
-	void draw(const GameImage & image, const GameTransform & transform, const RenderInfo * renderInfo);
-	void draw(const GameText & text, const GameTransform & transform, const RenderInfo * renderInfo);
-	void draw(const RectRender & rect, const GameTransform & transform, const RenderInfo * renderInfo);
+	void draw(const GImage & image, const GTransform & transform, const GRenderInfo * renderInfo);
+	void draw(const GText & text, const GTransform & transform, const GRenderInfo * renderInfo);
+	void draw(const GRectRender & rect, const GTransform & transform, const GRenderInfo * renderInfo);
 
 	void beginBatchDraw();
 	void endBatchDraw();
 
-	GamePoint mapWindowToView(const GamePoint & point) const;
+	GPoint mapWindowToView(const GPoint & point) const;
 
-	const std::shared_ptr<RenderEngineResource> & getResource() const { return this->resource; }
+	const std::shared_ptr<GRenderEngineResource> & getResource() const { return this->resource; }
 
 public: // for internal usage
-	void onWindowResized(const GameSize & newSize);
+	void onWindowResized(const GSize & newSize);
 
 private:
 	void doFitView();
 
 private:
-	std::shared_ptr<RenderEngineResource> resource;
-	std::vector<Renderable *> renderableList;
-	GameSize windowSize;
+	std::shared_ptr<GRenderEngineResource> resource;
+	std::vector<GRenderable *> renderableList;
+	GSize windowSize;
 };
 
 

@@ -5,7 +5,7 @@
 
 namespace gincu {
 
-class GameTextResource
+class GTextResource
 {
 public:
 	int fontSize;

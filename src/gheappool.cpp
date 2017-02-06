@@ -20,7 +20,7 @@ namespace gincu {
 
 constexpr std::size_t memoryPoolAlignment = GINCU_MEMORY_POOL_ALIGNMENT;
 constexpr std::size_t memoryPoolBlockCountPerTrunk = GINCU_MEMORY_POOL_BLOCK_COUNT_PER_TRUNK;
-constexpr MemoryPoolPurgeStrategy memoryPoolPurgeStrategy = MemoryPoolPurgeStrategy:: GINCU_MEMORY_POOL_PURGE_STRATEGY ;
+constexpr GHeapPoolPurgeStrategy memoryPoolPurgeStrategy = GHeapPoolPurgeStrategy:: GINCU_MEMORY_POOL_PURGE_STRATEGY ;
 
 namespace {
 
@@ -82,11 +82,11 @@ ChunkHeader * getChunkHeader(void * p)
 
 } //unnamed namespace
 
-MemorySizedPool::MemorySizedPool(
+GHeapSizedPool::GHeapSizedPool(
 		const std::size_t blockSize,
 		const std::size_t alignment,
 		const std::size_t blockCountPerChunk,
-		const MemoryPoolPurgeStrategy purgeStrategy
+		const GHeapPoolPurgeStrategy purgeStrategy
 	)
 	:
 		blockSize(blockSize),
@@ -98,12 +98,12 @@ MemorySizedPool::MemorySizedPool(
 {
 }
 
-void * MemorySizedPool::allocate()
+void * GHeapSizedPool::allocate()
 {
 	return this->allocate(this->blockSize);
 }
 
-void * MemorySizedPool::allocate(const std::size_t size)
+void * GHeapSizedPool::allocate(const std::size_t size)
 {
 	assert(size <= this->blockSize);
 
@@ -122,7 +122,7 @@ void * MemorySizedPool::allocate(const std::size_t size)
 		void * chunk = this->chunkList.back().start;
 		ChunkHeader * chunkHeader = getChunkHeader(chunk);
 		chunkHeader->usedCount = 1;
-std::cout << "MemoryPool: Allocate new chunk: " << chunk << " " << (void *)this->chunkList.back().rawMemory.get() << " " << size << " " << this->blockTotalSize << " " << this << std::endl;
+std::cout << "GHeapPool: Allocate new chunk: " << chunk << " " << (void *)this->chunkList.back().rawMemory.get() << " " << size << " " << this->blockTotalSize << " " << this << std::endl;
 		return setSize(chunk, size);
 	}
 	else {
@@ -136,7 +136,7 @@ std::cout << "MemoryPool: Allocate new chunk: " << chunk << " " << (void *)this-
 	}
 }
 
-void MemorySizedPool::free(void * p)
+void GHeapSizedPool::free(void * p)
 {
 	void * rawPointer = getRawPointer(p);
 	for(int i = 0; i < (int)this->chunkList.size(); ++i) {
@@ -148,7 +148,7 @@ void MemorySizedPool::free(void * p)
 			ChunkHeader * chunkHeader = getChunkHeader(chunk);
 			--chunkHeader->usedCount;
 			
-			if(chunkHeader->usedCount == 0 && this->purgeStrategy == MemoryPoolPurgeStrategy::onFree) {
+			if(chunkHeader->usedCount == 0 && this->purgeStrategy == GHeapPoolPurgeStrategy::onFree) {
 				this->doPurgeChunk(i);
 			}
 
@@ -157,7 +157,7 @@ void MemorySizedPool::free(void * p)
 	}
 }
 
-void MemorySizedPool::purge()
+void GHeapSizedPool::purge()
 {
 	for(int i = (int)this->chunkList.size() - 1; i >= 0; --i) {
 		char * chunk = (char *)this->chunkList[i].start;
@@ -168,7 +168,7 @@ void MemorySizedPool::purge()
 	}
 }
 
-void MemorySizedPool::doPurgeChunk(const int index)
+void GHeapSizedPool::doPurgeChunk(const int index)
 {
 	for(auto it = this->idleList.begin(); it != this->idleList.end(); ) {
 		if(it->chunkIndex == index) {
@@ -182,22 +182,22 @@ void MemorySizedPool::doPurgeChunk(const int index)
 		}
 	}
 
-std::cout << "MemoryPool: Purged one chunk " << index << " " << this->chunkList[index].start << " " << this->blockTotalSize << " remain: " << this->chunkList.size() - 1 << std::endl;
+std::cout << "GHeapPool: Purged one chunk " << index << " " << this->chunkList[index].start << " " << this->blockTotalSize << " remain: " << this->chunkList.size() - 1 << std::endl;
 	this->chunkList.erase(this->chunkList.begin() + index);
 }
 
 
-MemoryPool * MemoryPool::getInstance()
+GHeapPool * GHeapPool::getInstance()
 {
-	static MemoryPool instance(memoryPoolAlignment, memoryPoolBlockCountPerTrunk, memoryPoolPurgeStrategy);
+	static GHeapPool instance(memoryPoolAlignment, memoryPoolBlockCountPerTrunk, memoryPoolPurgeStrategy);
 	
 	return &instance;
 }
 
-MemoryPool::MemoryPool(
+GHeapPool::GHeapPool(
 		const std::size_t alignment,
 		const std::size_t blockCountPerChunk,
-		const MemoryPoolPurgeStrategy purgeStrategy
+		const GHeapPoolPurgeStrategy purgeStrategy
 	)
 	:
 		alignment(alignment),
@@ -206,13 +206,13 @@ MemoryPool::MemoryPool(
 {
 }
 
-MemoryPool::~MemoryPool()
+GHeapPool::~GHeapPool()
 {
 }
 
-void * MemoryPool::allocate(const std::size_t size)
+void * GHeapPool::allocate(const std::size_t size)
 {
-	MemorySizedPool * pool = nullptr;
+	GHeapSizedPool * pool = nullptr;
 
 	const std::size_t alignedSize = alignSize(size, this->alignment, 0);
 
@@ -221,8 +221,8 @@ void * MemoryPool::allocate(const std::size_t size)
 		pool = it->second.get();
 	}
 	else {
-		pool = new MemorySizedPool(alignedSize, this->alignment, this->blockCountPerChunk, this->purgeStrategy);
-		this->poolMap.insert(std::make_pair(alignedSize, std::unique_ptr<MemorySizedPool>(pool)));
+		pool = new GHeapSizedPool(alignedSize, this->alignment, this->blockCountPerChunk, this->purgeStrategy);
+		this->poolMap.insert(std::make_pair(alignedSize, std::unique_ptr<GHeapSizedPool>(pool)));
 	}
 	
 	void * p = pool->allocate(size);
@@ -230,7 +230,7 @@ void * MemoryPool::allocate(const std::size_t size)
 	return p;
 }
 
-void MemoryPool::free(void * p)
+void GHeapPool::free(void * p)
 {
 	const std::size_t size = getSize(p);
 	const std::size_t alignedSize = alignSize(size, this->alignment, 0);
@@ -244,23 +244,23 @@ void MemoryPool::free(void * p)
 	}
 }
 
-void MemoryPool::purge()
+void GHeapPool::purge()
 {
 	for(auto it = this->poolMap.begin(); it != this->poolMap.end(); ++it) {
 		it->second->purge();
 	}
 }
 
-void MemoryPool::sceneFreed()
+void GHeapPool::sceneFreed()
 {
-	if(this->purgeStrategy == MemoryPoolPurgeStrategy::onSceneFreed) {
+	if(this->purgeStrategy == GHeapPoolPurgeStrategy::onSceneFreed) {
 		this->purge();
 	}
 }
 
-void MemoryPool::sceneSwitched()
+void GHeapPool::sceneSwitched()
 {
-	if(this->purgeStrategy == MemoryPoolPurgeStrategy::onSceneSwitched) {
+	if(this->purgeStrategy == GHeapPoolPurgeStrategy::onSceneSwitched) {
 		this->purge();
 	}
 }

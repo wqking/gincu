@@ -11,48 +11,48 @@
 
 namespace gincu {
 
-GameText::GameText()
-	: GameText(16)
+GText::GText()
+	: GText(16)
 {
 }
 
-GameText::GameText(const int fontSize)
+GText::GText(const int fontSize)
 	:
-		resource(std::make_shared<GameTextResource>())
+		resource(std::make_shared<GTextResource>())
 {
 	this->resource->fontSize = fontSize;
 }
 
-GameText::~GameText()
+GText::~GText()
 {
 }
 
-void GameText::setText(const std::string & text)
+void GText::setText(const std::string & text)
 {
-	this->resource->text.setFont(ResourceManager::getInstance()->getFont().getResource()->font);
+	this->resource->text.setFont(GResourceManager::getInstance()->getFont().getResource()->font);
 	this->resource->text.setCharacterSize(this->resource->fontSize);
 
 	this->resource->text.setString(text);
 }
 
-void GameText::setColor(const GameColor textColor)
+void GText::setColor(const GColor textColor)
 {
 	this->resource->text.setOutlineColor(gameColorToSfml(textColor));
 	this->resource->text.setFillColor(gameColorToSfml(textColor));
 }
 
-void GameText::setTextAndColor(const std::string & text, const GameColor textColor)
+void GText::setTextAndColor(const std::string & text, const GColor textColor)
 {
 	this->setText(text);
 	this->setColor(textColor);
 }
 
-void GameText::draw(const GameTransform & transform, const RenderInfo * renderInfo)
+void GText::draw(const GTransform & transform, const GRenderInfo * renderInfo)
 {
-	RenderEngine::getInstance()->draw(*this, transform, renderInfo);
+	GRenderEngine::getInstance()->draw(*this, transform, renderInfo);
 }
 
-GameSize GameText::getSize() const
+GSize GText::getSize() const
 {
 	auto rect = this->resource->text.getLocalBounds();
 	return { rect.width, rect.height };

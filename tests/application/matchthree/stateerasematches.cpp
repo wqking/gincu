@@ -120,9 +120,9 @@ void StateEraseMatches::animateToDisappear()
 		const std::set<int> & rowSet = this->matchedColumnRows[column];
 		for(auto it = rowSet.begin(); it != rowSet.end(); ++it) {
 			const int row = *it;
-			Entity * chess = board->getChessAt(RowColumn { row, column });
-			ComponentTransform * transform = chess->getComponentByType<ComponentTransform>();
-			tween.target(cpgf::createAccessor(transform, &ComponentTransform::getScale, &ComponentTransform::setScale), GameScale { 0.1f, 0.1f });
+			GEntity * chess = board->getChessAt(RowColumn { row, column });
+			GComponentTransform * transform = chess->getComponentByType<GComponentTransform>();
+			tween.target(cpgf::createAccessor(transform, &GComponentTransform::getScale, &GComponentTransform::setScale), GScale { 0.1f, 0.1f });
 		}
 	}
 }
@@ -173,7 +173,7 @@ void StateEraseMatches::fullfilNewChesses()
 				--previousCheckedRow;
 			}
 			
-			Entity * fullfilChess = nullptr;
+			GEntity * fullfilChess = nullptr;
 
 			if(previousCheckedRow >= 0) {
 				fullfilChess = board->swapChess(RowColumn { previousCheckedRow, column }, nullptr);
@@ -183,12 +183,12 @@ void StateEraseMatches::fullfilNewChesses()
 				fullfilChess = board->createChessAt(currentCell, randomChessColor());
 			}
 
-			ComponentTransform * transform = fullfilChess->getComponentByType<ComponentTransform>();
+			GComponentTransform * transform = fullfilChess->getComponentByType<GComponentTransform>();
 			if(previousCheckedRow < 0) {
 				transform->setPosition(board->getChessPositionAt(RowColumn { -1, column }));
 			}
-			const GamePoint position = board->getChessPositionAt(currentCell);
-			tween.target(cpgf::createAccessor(transform, &ComponentTransform::getPosition, &ComponentTransform::setPosition), position);
+			const GPoint position = board->getChessPositionAt(currentCell);
+			tween.target(cpgf::createAccessor(transform, &GComponentTransform::getPosition, &GComponentTransform::setPosition), position);
 		}
 	}
 }

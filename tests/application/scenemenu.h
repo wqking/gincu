@@ -10,9 +10,9 @@
 
 namespace gincu {
 
-struct TouchEvent;
+struct GTouchEvent;
 
-class SceneMenu : public Scene
+class SceneMenu : public GScene
 {
 public:
 	static void returnToMainMenu();
@@ -30,7 +30,7 @@ struct MenuItem
 	std::string caption;
 	int order;
 	MenuCallback callback;
-	GameColor backgroundColor;
+	GColor backgroundColor;
 };
 
 class MenuRegister
@@ -39,7 +39,7 @@ public:
 	static MenuRegister * getInstance();
 
 public:
-	void registerItem(const std::string & caption, const int order, const MenuCallback & callback, const GameColor backgroundColor = 0xffeeee77);
+	void registerItem(const std::string & caption, const int order, const MenuCallback & callback, const GColor backgroundColor = 0xffeeee77);
 	const std::vector<MenuItem> & getSortedItemList() const;
 
 private:

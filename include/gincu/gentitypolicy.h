@@ -11,12 +11,12 @@
 
 namespace gincu {
 
-class Component;
-class ComponentsBuffer;
+class GComponent;
+class GComponentsBuffer;
 
-// Define how an Entity stores the components.
+// Define how an GEntity stores the components.
 // Different policy may result different time and memory usage.
-enum class EntityStoragePolicy
+enum class GEntityStoragePolicy
 {
 	// Use std::vector to hold all components, each component is at the index of componentTypeId
 	// Time complexity: O(1)
@@ -46,59 +46,59 @@ enum class EntityStoragePolicy
 };
 
 
-class EntityDynamicArrayBase
+class GEntityDynamicArrayBase
 {
 private:
-	typedef std::unique_ptr<Component> ComponentPointer;
+	typedef std::unique_ptr<GComponent> ComponentPointer;
 
 public:
-	explicit EntityDynamicArrayBase(const std::size_t initialSize);
-	~EntityDynamicArrayBase();
+	explicit GEntityDynamicArrayBase(const std::size_t initialSize);
+	~GEntityDynamicArrayBase();
 
 protected:
-	void doAddComponent(Component * component, ComponentsBuffer * componentsBuffer);
-	void doRemoveComponent(Component * component, ComponentsBuffer * componentsBuffer);
-	void doSetComponentsBuffer(ComponentsBuffer * newComponentsBuffer, ComponentsBuffer * oldComponentsBuffer);
-	Component * doGetComponentByTypeId(const unsigned int typeId) const;
+	void doAddComponent(GComponent * component, GComponentsBuffer * componentsBuffer);
+	void doRemoveComponent(GComponent * component, GComponentsBuffer * componentsBuffer);
+	void doSetComponentsBuffer(GComponentsBuffer * newComponentsBuffer, GComponentsBuffer * oldComponentsBuffer);
+	GComponent * doGetComponentByTypeId(const unsigned int typeId) const;
 
 private:
 	std::vector<ComponentPointer> componentList;
 };
 
 template <std::size_t InitialSize>
-class EntityDynamicArray : public EntityDynamicArrayBase
+class GEntityDynamicArray : public GEntityDynamicArrayBase
 {
 private:
-	typedef EntityDynamicArrayBase super;
+	typedef GEntityDynamicArrayBase super;
 
 public:
-	EntityDynamicArray() : super(InitialSize) {}
+	GEntityDynamicArray() : super(InitialSize) {}
 };
 
 
-class EntityDynamicMap
+class GEntityDynamicMap
 {
 private:
-	typedef std::unique_ptr<Component> ComponentPointer;
+	typedef std::unique_ptr<GComponent> ComponentPointer;
 
 protected:
-	void doAddComponent(Component * component, ComponentsBuffer * componentsBuffer);
-	void doRemoveComponent(Component * component, ComponentsBuffer * componentsBuffer);
-	void doSetComponentsBuffer(ComponentsBuffer * newComponentsBuffer, ComponentsBuffer * oldComponentsBuffer);
-	Component * doGetComponentByTypeId(const unsigned int typeId) const;
+	void doAddComponent(GComponent * component, GComponentsBuffer * componentsBuffer);
+	void doRemoveComponent(GComponent * component, GComponentsBuffer * componentsBuffer);
+	void doSetComponentsBuffer(GComponentsBuffer * newComponentsBuffer, GComponentsBuffer * oldComponentsBuffer);
+	GComponent * doGetComponentByTypeId(const unsigned int typeId) const;
 
 private:
 	std::map<unsigned int, ComponentPointer> componentMap;
 };
 
 template <const std::size_t ArraySize>
-class EntityStaticArray
+class GEntityStaticArray
 {
 private:
-	typedef std::unique_ptr<Component> ComponentPointer;
+	typedef std::unique_ptr<GComponent> ComponentPointer;
 
 protected:
-	void doAddComponent(Component * component, ComponentsBuffer * componentsBuffer) {
+	void doAddComponent(GComponent * component, GComponentsBuffer * componentsBuffer) {
 		const unsigned int typeId = component->getTypeId();
 		if(typeId >= ArraySize) {
 			return;
@@ -115,7 +115,7 @@ protected:
 		}
 	}
 
-	void doRemoveComponent(Component * component, ComponentsBuffer * componentsBuffer) {
+	void doRemoveComponent(GComponent * component, GComponentsBuffer * componentsBuffer) {
 		const unsigned int typeId = component->getTypeId();
 		if(typeId < ArraySize) {
 			if(componentsBuffer != nullptr) {
@@ -126,7 +126,7 @@ protected:
 		}
 	}
 
-	void doSetComponentsBuffer(ComponentsBuffer * newComponentsBuffer, ComponentsBuffer * oldComponentsBuffer) {
+	void doSetComponentsBuffer(GComponentsBuffer * newComponentsBuffer, GComponentsBuffer * oldComponentsBuffer) {
 		if(oldComponentsBuffer != nullptr) {
 			for(auto & component : this->componentList) {
 				if(component) {
@@ -145,7 +145,7 @@ protected:
 		}
 	}
 
-	Component * doGetComponentByTypeId(const unsigned int typeId) const {
+	GComponent * doGetComponentByTypeId(const unsigned int typeId) const {
 		if(typeId < ArraySize) {
 			return this->componentList[typeId].get();
 		}
@@ -159,13 +159,13 @@ private:
 
 
 template <const std::size_t ArraySize>
-class EntityMixedArray
+class GEntityMixedArray
 {
 private:
-	typedef std::unique_ptr<Component> ComponentPointer;
+	typedef std::unique_ptr<GComponent> ComponentPointer;
 
 protected:
-	void doAddComponent(Component * component, ComponentsBuffer * componentsBuffer) {
+	void doAddComponent(GComponent * component, GComponentsBuffer * componentsBuffer) {
 		ComponentPointer * componentSlot;
 		const unsigned int typeId = component->getTypeId();
 		if(typeId < ArraySize) {
@@ -190,7 +190,7 @@ protected:
 		}
 	}
 
-	void doRemoveComponent(Component * component, ComponentsBuffer * componentsBuffer) {
+	void doRemoveComponent(GComponent * component, GComponentsBuffer * componentsBuffer) {
 		const unsigned int typeId = component->getTypeId();
 		if(typeId < ArraySize) {
 			if(componentsBuffer != nullptr) {
@@ -211,7 +211,7 @@ protected:
 		}
 	}
 
-	void doSetComponentsBuffer(ComponentsBuffer * newComponentsBuffer, ComponentsBuffer * oldComponentsBuffer) {
+	void doSetComponentsBuffer(GComponentsBuffer * newComponentsBuffer, GComponentsBuffer * oldComponentsBuffer) {
 		if(oldComponentsBuffer != nullptr) {
 			for(auto & component : this->componentList) {
 				if(component) {
@@ -240,7 +240,7 @@ protected:
 		}
 	}
 
-	Component * doGetComponentByTypeId(const unsigned int typeId) const {
+	GComponent * doGetComponentByTypeId(const unsigned int typeId) const {
 		if(typeId < ArraySize) {
 			return this->componentList[typeId].get();
 		}
@@ -261,13 +261,13 @@ private:
 
 
 template <const std::size_t ArraySize>
-class EntityMixedMap
+class GEntityMixedMap
 {
 private:
-	typedef std::unique_ptr<Component> ComponentPointer;
+	typedef std::unique_ptr<GComponent> ComponentPointer;
 
 protected:
-	void doAddComponent(Component * component, ComponentsBuffer * componentsBuffer) {
+	void doAddComponent(GComponent * component, GComponentsBuffer * componentsBuffer) {
 		ComponentPointer * componentSlot;
 		const unsigned int typeId = component->getTypeId();
 		if(typeId < ArraySize) {
@@ -288,7 +288,7 @@ protected:
 		}
 	}
 
-	void doRemoveComponent(Component * component, ComponentsBuffer * componentsBuffer) {
+	void doRemoveComponent(GComponent * component, GComponentsBuffer * componentsBuffer) {
 		const unsigned int typeId = component->getTypeId();
 		if(typeId < ArraySize) {
 			if(componentsBuffer != nullptr) {
@@ -308,7 +308,7 @@ protected:
 		}
 	}
 
-	void doSetComponentsBuffer(ComponentsBuffer * newComponentsBuffer, ComponentsBuffer * oldComponentsBuffer) {
+	void doSetComponentsBuffer(GComponentsBuffer * newComponentsBuffer, GComponentsBuffer * oldComponentsBuffer) {
 		if(oldComponentsBuffer != nullptr) {
 			for(auto & component : this->componentList) {
 				if(component) {
@@ -337,7 +337,7 @@ protected:
 		}
 	}
 
-	Component * doGetComponentByTypeId(const unsigned int typeId) const {
+	GComponent * doGetComponentByTypeId(const unsigned int typeId) const {
 		if(typeId < ArraySize) {
 			return this->componentList[typeId].get();
 		}
@@ -357,39 +357,39 @@ private:
 };
 
 
-template <EntityStoragePolicy Policy, std::size_t InitialSize>
-struct EntityStoragePolicySelector
+template <GEntityStoragePolicy Policy, std::size_t InitialSize>
+struct GEntityStoragePolicySelector
 {
 };
 
 template <std::size_t InitialSize>
-struct EntityStoragePolicySelector <EntityStoragePolicy::dynamicArray, InitialSize>
+struct GEntityStoragePolicySelector <GEntityStoragePolicy::dynamicArray, InitialSize>
 {
-	typedef EntityDynamicArray<InitialSize> Result;
+	typedef GEntityDynamicArray<InitialSize> Result;
 };
 
 template <std::size_t InitialSize>
-struct EntityStoragePolicySelector <EntityStoragePolicy::dynamicMap, InitialSize>
+struct GEntityStoragePolicySelector <GEntityStoragePolicy::dynamicMap, InitialSize>
 {
-	typedef EntityDynamicMap Result;
+	typedef GEntityDynamicMap Result;
 };
 
 template <std::size_t InitialSize>
-struct EntityStoragePolicySelector <EntityStoragePolicy::staticArray, InitialSize>
+struct GEntityStoragePolicySelector <GEntityStoragePolicy::staticArray, InitialSize>
 {
-	typedef EntityStaticArray<InitialSize> Result;
+	typedef GEntityStaticArray<InitialSize> Result;
 };
 
 template <std::size_t InitialSize>
-struct EntityStoragePolicySelector <EntityStoragePolicy::mixedArray, InitialSize>
+struct GEntityStoragePolicySelector <GEntityStoragePolicy::mixedArray, InitialSize>
 {
-	typedef EntityMixedArray<InitialSize> Result;
+	typedef GEntityMixedArray<InitialSize> Result;
 };
 
 template <std::size_t InitialSize>
-struct EntityStoragePolicySelector <EntityStoragePolicy::mixedMap, InitialSize>
+struct GEntityStoragePolicySelector <GEntityStoragePolicy::mixedMap, InitialSize>
 {
-	typedef EntityMixedMap<InitialSize> Result;
+	typedef GEntityMixedMap<InitialSize> Result;
 };
 
 
@@ -401,7 +401,7 @@ struct EntityStoragePolicySelector <EntityStoragePolicy::mixedMap, InitialSize>
 #define GINCU_ENTITY_STORAGE_POLICY_INITIAL_SIZE componentTypeId_PrimaryCount
 #endif
 
-typedef EntityStoragePolicySelector<EntityStoragePolicy:: GINCU_ENTITY_STORAGE_POLICY, GINCU_ENTITY_STORAGE_POLICY_INITIAL_SIZE>::Result EntityBase;
+typedef GEntityStoragePolicySelector<GEntityStoragePolicy:: GINCU_ENTITY_STORAGE_POLICY, GINCU_ENTITY_STORAGE_POLICY_INITIAL_SIZE>::Result EntityBase;
 
 
 } //namespace gincu

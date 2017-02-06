@@ -7,10 +7,10 @@ namespace gincu {
 
 enum class ChessColor;
 
-class ComponentChess : public Component
+class ComponentChess : public GComponent
 {
 private:
-	typedef Component super;
+	typedef GComponent super;
 
 public:
 	inline static unsigned int getComponentType() {
@@ -27,7 +27,7 @@ private:
 	ChessColor color;
 	
 private:
-	static ComponentIdRegister componentIdRegister;
+	static GComponentIdRegister componentIdRegister;
 };
 
 

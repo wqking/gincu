@@ -5,24 +5,24 @@
 
 namespace gincu {
 
-StateMachine::StateMachine()
+GStateMachine::GStateMachine()
 	:
 		stateMap(),
 		currentState(nullptr)
 {
 }
 
-StateMachine::~StateMachine()
+GStateMachine::~GStateMachine()
 {
 }
 
-void StateMachine::registerState(State * state)
+void GStateMachine::registerState(GState * state)
 {
 	state->stateMachine = this;
 	this->stateMap[state->getId()].reset(state);
 }
 
-int StateMachine::getCurrentStateId() const
+int GStateMachine::getCurrentStateId() const
 {
 	if(this->currentState == nullptr) {
 		return invalidStateId;
@@ -32,9 +32,9 @@ int StateMachine::getCurrentStateId() const
 	}
 }
 
-void StateMachine::gotoState(const int stateId)
+void GStateMachine::gotoState(const int stateId)
 {
-	State * nextState = nullptr;
+	GState * nextState = nullptr;
 
 	if(stateId != invalidStateId) {
 		auto it = this->stateMap.find(stateId);

@@ -5,15 +5,15 @@ namespace gincu {
 
 const int invalidStateId = -1;
 
-class StateMachine;
+class GStateMachine;
 
 // we don't provide update() function here,
-// we can always use GameApplication::addUpdater to add an updater.
-class State
+// we can always use GApplication::addUpdater to add an updater.
+class GState
 {
 public:
-	State(const int id, const int nextId = invalidStateId);
-	virtual ~State();
+	GState(const int id, const int nextId = invalidStateId);
+	virtual ~GState();
 
 	void onEnter();
 	void onExit();
@@ -24,7 +24,7 @@ public:
 	int getId() const { return id; }
 	int getNextId() const { return nextId; }
 
-	StateMachine * getStateMachine() const { return stateMachine; }
+	GStateMachine * getStateMachine() const { return stateMachine; }
 
 private:
 	virtual void doOnEnter();
@@ -33,10 +33,10 @@ private:
 private:
 	int id;
 	int nextId;
-	StateMachine * stateMachine;
+	GStateMachine * stateMachine;
 
 private:
-	friend class StateMachine;
+	friend class GStateMachine;
 };
 
 

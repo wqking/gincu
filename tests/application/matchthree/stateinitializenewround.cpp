@@ -65,13 +65,13 @@ void StateInitializeNewRound::doOnEnter()
 				chessColor = randomChessColor();
 			}
 
-			Entity * chess = board->createChessAt(rowColumn, chessColor);
+			GEntity * chess = board->createChessAt(rowColumn, chessColor);
 
-			ComponentTransform * transform = chess->getComponentByType<ComponentTransform>();
+			GComponentTransform * transform = chess->getComponentByType<GComponentTransform>();
 			transform->setPosition(board->getChessPositionAt({ getRand(rowCount), getRand(columnCount) }));
 
-			const GamePoint position = board->getChessPositionAt(rowColumn);
-			tween.target(cpgf::createAccessor(transform, &ComponentTransform::getPosition, &ComponentTransform::setPosition), position);
+			const GPoint position = board->getChessPositionAt(rowColumn);
+			tween.target(cpgf::createAccessor(transform, &GComponentTransform::getPosition, &GComponentTransform::setPosition), position);
 		}
 	}
 }

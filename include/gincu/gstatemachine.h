@@ -6,25 +6,25 @@
 
 namespace gincu {
 
-class State;
+class GState;
 
-class StateMachine
+class GStateMachine
 {
 public:
-	StateMachine();
-	~StateMachine();
+	GStateMachine();
+	~GStateMachine();
 
 	void gotoState(const int stateId);
 
-	void registerState(State * state);
+	void registerState(GState * state);
 
 	int getCurrentStateId() const;
 
-	State * getCurrentState() const { return currentState; }
+	GState * getCurrentState() const { return currentState; }
 
 private:
-	std::map<int, std::shared_ptr<State> > stateMap;
-	State * currentState;
+	std::map<int, std::shared_ptr<GState> > stateMap;
+	GState * currentState;
 };
 
 

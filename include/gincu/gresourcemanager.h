@@ -12,34 +12,34 @@
 
 namespace gincu {
 
-class GameImage;
-class GameImageResource;
-class GameSpriteSheetResource;
-enum class SpriteSheetFormat;
+class GImage;
+class GImageResource;
+class GSpriteSheetResource;
+enum class GSpriteSheetFormat;
 
-class ResourceManager
+class GResourceManager
 {
 public:
-	// Not singleton. It must be created somewhere, the default is created by GameApplication
-	static ResourceManager * getInstance();
+	// Not singleton. It must be created somewhere, the default is created by GApplication
+	static GResourceManager * getInstance();
 
 public:
-	ResourceManager();
-	~ResourceManager();
+	GResourceManager();
+	~GResourceManager();
 
-	GameImage getImage(const std::string & resourceName) const;
+	GImage getImage(const std::string & resourceName) const;
 
-	GameSpriteSheet getSpriteSheet(const std::string & resourceName, const SpriteSheetFormat format) const;
+	GSpriteSheet getSpriteSheet(const std::string & resourceName, const GSpriteSheetFormat format) const;
 
-	FileInputStream getFileStream(const std::string & resourceName) const;
+	GFileInputStream getFileStream(const std::string & resourceName) const;
 
-	const GameFont & getFont() const;
+	const GFont & getFont() const;
 
 private:
 	std::string resourcePath;
-	mutable std::map<std::string, std::shared_ptr<GameImageResource> > imageResourceMap;
-	mutable std::map<std::string, std::shared_ptr<GameSpriteSheetResource> > spriteSheetResourceMap;
-	mutable std::unique_ptr<GameFont> font;
+	mutable std::map<std::string, std::shared_ptr<GImageResource> > imageResourceMap;
+	mutable std::map<std::string, std::shared_ptr<GSpriteSheetResource> > spriteSheetResourceMap;
+	mutable std::unique_ptr<GFont> font;
 };
 
 

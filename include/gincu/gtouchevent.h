@@ -5,23 +5,23 @@
 
 namespace gincu {
 
-enum class TouchEventType
+enum class GTouchEventType
 {
 	eventMoved,
 	eventPressed,
 	eventReleased
 };
 
-class Entity;
+class GEntity;
 
-struct TouchEvent
+struct GTouchEvent
 {
-	TouchEventType type;
+	GTouchEventType type;
 	bool down;
-	GamePoint position;
-	GamePoint deltaPosition;
-	Entity * target;
-	Entity * touchedEntity;
+	GPoint position;
+	GPoint deltaPosition;
+	GEntity * target;
+	GEntity * touchedEntity;
 };
 
 

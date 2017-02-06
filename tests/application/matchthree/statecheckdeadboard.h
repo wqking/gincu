@@ -7,10 +7,10 @@ namespace gincu {
 
 class SceneMatchThree;
 
-class StateCheckDeadBoard : public State
+class StateCheckDeadBoard : public GState
 {
 private:
-	typedef State super;
+	typedef GState super;
 
 public:
 	explicit StateCheckDeadBoard(SceneMatchThree * scene);

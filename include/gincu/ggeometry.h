@@ -3,75 +3,75 @@
 
 namespace gincu {
 
-typedef float CoordType;
+typedef float GCoord;
 
-struct GameVector2
+struct GVector2
 {
-	CoordType x;
-	CoordType y;
+	GCoord x;
+	GCoord y;
 };
 
-inline GameVector2 operator + (const GameVector2 & a, const GameVector2 & b)
+inline GVector2 operator + (const GVector2 & a, const GVector2 & b)
 {
-	return GameVector2{ a.x + b.x, a.y + b.y };
+	return GVector2{ a.x + b.x, a.y + b.y };
 }
 
-inline GameVector2 operator - (const GameVector2 & a, const GameVector2 & b)
+inline GVector2 operator - (const GVector2 & a, const GVector2 & b)
 {
-	return GameVector2{ a.x - b.x, a.y - b.y };
+	return GVector2{ a.x - b.x, a.y - b.y };
 }
 
-inline GameVector2 operator * (const GameVector2 & a, const float b)
+inline GVector2 operator * (const GVector2 & a, const float b)
 {
-	return GameVector2{ a.x * b, a.y * b };
+	return GVector2{ a.x * b, a.y * b };
 }
 
-inline bool operator == (const GameVector2 & a, const GameVector2 & b)
+inline bool operator == (const GVector2 & a, const GVector2 & b)
 {
 	return a.x == b.x && a.y == b.y;
 }
 
-inline bool operator != (const GameVector2 & a, const GameVector2 & b)
+inline bool operator != (const GVector2 & a, const GVector2 & b)
 {
 	return !(a == b);
 }
 
-inline GameVector2 operator - (const GameVector2 & a)
+inline GVector2 operator - (const GVector2 & a)
 {
-	return GameVector2{ -a.x, -a.y };
+	return GVector2{ -a.x, -a.y };
 }
 
-struct GameRect
+struct GRect
 {
-	CoordType x;
-	CoordType y;
-	CoordType width;
-	CoordType height;
+	GCoord x;
+	GCoord y;
+	GCoord width;
+	GCoord height;
 };
 
-struct GameSize
+struct GSize
 {
-	CoordType width;
-	CoordType height;
+	GCoord width;
+	GCoord height;
 };
 
-inline GameSize operator + (const GameSize & a, const GameSize & b)
+inline GSize operator + (const GSize & a, const GSize & b)
 {
-	return GameSize{ a.width + b.width, a.height + b.height };
+	return GSize{ a.width + b.width, a.height + b.height };
 }
 
-inline GameSize operator - (const GameSize & a, const GameSize & b)
+inline GSize operator - (const GSize & a, const GSize & b)
 {
-	return GameSize{ a.width - b.width, a.height - b.height };
+	return GSize{ a.width - b.width, a.height - b.height };
 }
 
-inline GameSize operator * (const GameSize & a, const float b)
+inline GSize operator * (const GSize & a, const float b)
 {
-	return GameSize{ a.width * b, a.height * b };
+	return GSize{ a.width * b, a.height * b };
 }
 
-typedef GameVector2 GamePoint;
-typedef GameVector2 GameScale;
+typedef GVector2 GPoint;
+typedef GVector2 GScale;
 
 struct RowColumn
 {

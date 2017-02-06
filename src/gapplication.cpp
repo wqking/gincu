@@ -15,57 +15,57 @@
 namespace gincu {
 
 namespace {
-	GameApplication * instance = nullptr;
+	GApplication * instance = nullptr;
 }
 
-GameApplication * GameApplication::getInstance()
+GApplication * GApplication::getInstance()
 {
 	return instance;
 }
 
-GameApplication::GameApplication()
+GApplication::GApplication()
 	:
 		finished(false)
 {
 	instance = this;
 }
 
-GameApplication::~GameApplication()
+GApplication::~GApplication()
 {
 }
 
-void GameApplication::run()
+void GApplication::run()
 {
 	this->initialize();
 	this->processMainLoop();
 	this->finalize();
 }
 
-void GameApplication::finish()
+void GApplication::finish()
 {
 	this->finished = true;
 }
 
-void GameApplication::initialize()
+void GApplication::initialize()
 {
-	this->renderEngine.reset(new RenderEngine());
+	this->renderEngine.reset(new GRenderEngine());
 	this->renderEngine->inititialize();
 
-	this->resourceManager.reset(new ResourceManager());
+	this->resourceManager.reset(new GResourceManager());
 
-	this->sceneManager.reset(new SceneManager());
+	this->sceneManager.reset(new GSceneManager());
 	
-	this->eventProcessor.reset(new GameEventProcessor(this));
+	this->eventProcessor.reset(new GEventProcessor(this));
 	
 	this->doInitialize();
 }
 
-void GameApplication::finalize()
+void GApplication::finalize()
 {
 	this->doFinalize();
 }
 
-void GameApplication::processMainLoop()
+void GApplication::processMainLoop()
 {
 	const unsigned int millisecondsPerFrame = 1000 / this->configInfo.framesPerSecond;
 	const unsigned int millisecondsPerRenderFrame = 1000 / this->configInfo.renderFramesPerSecond;
@@ -112,21 +112,21 @@ if(getMilliseconds() - lastFpsTime >= 1000) {
 	}
 }
 
-void GameApplication::addUpdater(const FrameUpdater & updater)
+void GApplication::addUpdater(const FrameUpdater & updater)
 {
 	this->updaterList.add(updater);
 }
 
-void GameApplication::removeUpdater(const FrameUpdater & updater)
+void GApplication::removeUpdater(const FrameUpdater & updater)
 {
 	this->updaterList.remove(updater);
 }
 
-void GameApplication::doInitialize()
+void GApplication::doInitialize()
 {
 }
 
-void GameApplication::doFinalize()
+void GApplication::doFinalize()
 {
 }
 

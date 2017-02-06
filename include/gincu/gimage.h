@@ -9,37 +9,37 @@
 
 namespace gincu {
 
-class GameTransform;
-struct RenderInfo;
-class GameImageResource;
+class GTransform;
+struct GRenderInfo;
+class GImageResource;
 
-class GameImage
+class GImage
 {
 public:
-	GameImage();
-	~GameImage();
-	explicit GameImage(const std::shared_ptr<GameImageResource> & resource);
-	GameImage(const std::shared_ptr<GameImageResource> & resource, const GameRect & rect);
+	GImage();
+	~GImage();
+	explicit GImage(const std::shared_ptr<GImageResource> & resource);
+	GImage(const std::shared_ptr<GImageResource> & resource, const GRect & rect);
 
 	void load(const std::string & fileName);
 
-	void draw(const GameTransform & transform, const RenderInfo * renderInfo);
+	void draw(const GTransform & transform, const GRenderInfo * renderInfo);
 
-	GameSize getSize() const;
+	GSize getSize() const;
 
-	void setResource(const std::shared_ptr<GameImageResource> & resource);
-	const std::shared_ptr<GameImageResource> & getResource() const { return this->resource; }
+	void setResource(const std::shared_ptr<GImageResource> & resource);
+	const std::shared_ptr<GImageResource> & getResource() const { return this->resource; }
 
-	void setRect(const GameRect & rect) { this->rect = rect; }
-	const GameRect & getRect() const { return this->rect; }
+	void setRect(const GRect & rect) { this->rect = rect; }
+	const GRect & getRect() const { return this->rect; }
 
 	bool isValid() const { return this->resource.get() != nullptr; }
 
-	const GameImageResource * getTexture() const { return this->resource.get(); }
+	const GImageResource * getTexture() const { return this->resource.get(); }
 
 private:
-	std::shared_ptr<GameImageResource> resource;
-	GameRect rect;
+	std::shared_ptr<GImageResource> resource;
+	GRect rect;
 };
 
 

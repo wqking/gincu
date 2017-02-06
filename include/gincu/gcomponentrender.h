@@ -15,12 +15,12 @@
 
 namespace gincu {
 
-class GameImageResource;
+class GImageResource;
 
-class ComponentRender : public Component
+class GComponentRender : public GComponent
 {
 private:
-	typedef Component super;
+	typedef GComponent super;
 
 public:
 	inline static constexpr unsigned int getComponentType() {
@@ -28,68 +28,68 @@ public:
 	}
 
 public:
-	ComponentRender();
+	GComponentRender();
 
 	void draw() {
 		this->doDraw();
 	}
 
-	GameSize getSize() const {
+	GSize getSize() const {
 		return this->doGetSize();
 	}
 
-	const RenderInfo * getBatchGroup() const {
+	const GRenderInfo * getBatchGroup() const {
 		this->renderInfo.texture = this->doGetTexture();
 		return &this->renderInfo;
 	}
 
-	ComponentRender * setBlendMode(const GameBlendMode & blendMode) {
+	GComponentRender * setBlendMode(const GBlendMode & blendMode) {
 		this->renderInfo.blendMode = blendMode;
 		return this;
 	}
 
 protected:
-	RenderInfo * getRenderInfo() { return &this->renderInfo; }
+	GRenderInfo * getRenderInfo() { return &this->renderInfo; }
 
 private:
 	virtual void doDraw() = 0;
-	virtual GameSize doGetSize() const = 0;
-	virtual const GameImageResource * doGetTexture() const = 0;
+	virtual GSize doGetSize() const = 0;
+	virtual const GImageResource * doGetTexture() const = 0;
 
 private:
-	mutable RenderInfo renderInfo;
+	mutable GRenderInfo renderInfo;
 };
 
-class ComponentContainerRender : public ComponentRender
+class GComponentContainerRender : public GComponentRender
 {
 private:
-	typedef std::shared_ptr<ComponentRender> ComponentRenderPointer;
+	typedef std::shared_ptr<GComponentRender> ComponentRenderPointer;
 
 public:
-	ComponentContainerRender();
-	~ComponentContainerRender();
+	GComponentContainerRender();
+	~GComponentContainerRender();
 	
-	ComponentContainerRender * add(ComponentRender * render);
+	GComponentContainerRender * add(GComponentRender * render);
 
 private:
 	virtual void doDraw() override;
-	virtual GameSize doGetSize() const override;
+	virtual GSize doGetSize() const override;
 	virtual void doAfterSetEntity() override;
-	virtual const GameImageResource * doGetTexture() const override { return nullptr; }
+	virtual const GImageResource * doGetTexture() const override { return nullptr; }
 
 private:
-	mutable GameSize size;
+	mutable GSize size;
 	std::vector<ComponentRenderPointer> renderList;
 };
 
 template <typename RenderType>
-class ComponentRenderImplement : public ComponentRender
+class GComponentRenderImplement : public GComponentRender
 {
 private:
-	typedef ComponentRender super;
+	typedef GComponentRender super;
 
 public:
-	ComponentRenderImplement()
+	GComponentRenderImplement()
 	{
 	}
 
@@ -107,17 +107,17 @@ public:
 
 private:
 	virtual void doDraw() override {
-		ComponentTransform * transform = this->getEntity()->template getComponentByType<ComponentTransform>();
+		GComponentTransform * transform = this->getEntity()->template getComponentByType<GComponentTransform>();
 		if(transform->isVisible()) {
 			this->renderer.draw(computeRenderableTransform(transform, this), this->getRenderInfo());
 		}
 	}
 
-	virtual GameSize doGetSize() const override {
+	virtual GSize doGetSize() const override {
 		return this->renderer.getSize();
 	}
 
-	virtual const GameImageResource * doGetTexture() const override {
+	virtual const GImageResource * doGetTexture() const override {
 		return this->renderer.getTexture();
 	}
 
@@ -125,14 +125,14 @@ private:
 	RenderType renderer;
 };
 
-typedef ComponentRenderImplement<GameImage> ComponentImageRender;
-typedef ComponentRenderImplement<GameText> ComponentTextRender;
-typedef ComponentRenderImplement<RectRender> ComponentRectRender;
+typedef GComponentRenderImplement<GImage> GComponentImageRender;
+typedef GComponentRenderImplement<GText> GComponentTextRender;
+typedef GComponentRenderImplement<GRectRender> GComponentRectRender;
 
-ComponentImageRender * createAndLoadImageComponent(const std::string & resourceName);
-ComponentImageRender * createImageComponent(const GameImage & image);
-ComponentTextRender * createAndLoadTextComponent(const std::string & text, const GameColor textColor, const int fontSize);
-ComponentRectRender * createRectRenderComponent(const GameColor color, const GameSize & size);
+GComponentImageRender * createAndLoadImageComponent(const std::string & resourceName);
+GComponentImageRender * createImageComponent(const GImage & image);
+GComponentTextRender * createAndLoadTextComponent(const std::string & text, const GColor textColor, const int fontSize);
+GComponentRectRender * createRectRenderComponent(const GColor color, const GSize & size);
 
 
 } //namespace gincu

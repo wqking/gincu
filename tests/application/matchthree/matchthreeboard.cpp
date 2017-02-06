@@ -21,14 +21,14 @@ MatchThreeBoard::MatchThreeBoard(SceneMatchThree * scene)
 		startY(boardStartY)
 {
 	this->chessBoard.resize(rowCount);
-	std::fill(this->chessBoard.begin(), this->chessBoard.end(), std::vector<Entity *>(this->columnCount));
+	std::fill(this->chessBoard.begin(), this->chessBoard.end(), std::vector<GEntity *>(this->columnCount));
 }
 
 MatchThreeBoard::~MatchThreeBoard()
 {
 }
 
-Entity * MatchThreeBoard::getChessAt(const RowColumn & cell) const
+GEntity * MatchThreeBoard::getChessAt(const RowColumn & cell) const
 {
 	if(cell.column < 0 || cell.column >= this->getColumnCount()) {
 		return nullptr;
@@ -40,50 +40,50 @@ Entity * MatchThreeBoard::getChessAt(const RowColumn & cell) const
 	return this->doReferenceChessAt(cell);
 }
 
-Entity * MatchThreeBoard::createChessAt(const RowColumn & cell, const ChessColor chessColor)
+GEntity * MatchThreeBoard::createChessAt(const RowColumn & cell, const ChessColor chessColor)
 {
-	Entity * & chessReference = this->doReferenceChessAt(cell);
+	GEntity * & chessReference = this->doReferenceChessAt(cell);
 
 	this->scene->removeEntity(chessReference);
 
 	chessReference = this->scene->addEntity(
-		(new Entity())
-			->addComponent(createComponent<ComponentTransform>(this->getChessPositionAt(cell)))
-			->addComponent(createComponent<ComponentAnchor>(RenderAnchor::center))
+		(new GEntity())
+			->addComponent(createComponent<GComponentTransform>(this->getChessPositionAt(cell)))
+			->addComponent(createComponent<GComponentAnchor>(GRenderAnchor::center))
 			->addComponent(createImageComponent(getChessResource(chessColor)))
-			->addComponent(createComponent<ComponentRendererTouchHandler>()->addOnTouch(cpgf::makeCallback(scene, &SceneMatchThree::onChessTouched)))
+			->addComponent(createComponent<GComponentRendererTouchHandler>()->addOnTouch(cpgf::makeCallback(scene, &SceneMatchThree::onChessTouched)))
 			->addComponent(createComponent<ComponentChess>(chessColor))
 		);
 
 	return chessReference;
 }
 
-Entity * MatchThreeBoard::swapChess(const RowColumn & cell, Entity * replacer)
+GEntity * MatchThreeBoard::swapChess(const RowColumn & cell, GEntity * replacer)
 {
-	Entity * & chessReference = doReferenceChessAt(cell);
-	Entity * result = chessReference;
+	GEntity * & chessReference = doReferenceChessAt(cell);
+	GEntity * result = chessReference;
 	chessReference = replacer;
 	return result;
 }
 
 void MatchThreeBoard::removeChess(const RowColumn & cell)
 {
-	Entity * & chessReference = this->doReferenceChessAt(cell);
+	GEntity * & chessReference = this->doReferenceChessAt(cell);
 
 	scene->removeEntity(chessReference);
 
 	chessReference = nullptr;
 }
 
-GamePoint MatchThreeBoard::getChessPositionAt(const RowColumn & cell) const
+GPoint MatchThreeBoard::getChessPositionAt(const RowColumn & cell) const
 {
-	return GamePoint {
-		this->startX + (CoordType)(cell.column * this->cellSize),
-		this->startY + (CoordType)(cell.row * this->cellSize)
+	return GPoint {
+		this->startX + (GCoord)(cell.column * this->cellSize),
+		this->startY + (GCoord)(cell.row * this->cellSize)
 	};
 }
 
-RowColumn MatchThreeBoard::getChessCell(const Entity * chess) const
+RowColumn MatchThreeBoard::getChessCell(const GEntity * chess) const
 {
 	RowColumn result;
 
@@ -100,12 +100,12 @@ RowColumn MatchThreeBoard::getChessCell(const Entity * chess) const
 	return RowColumn { -1, -1 };
 }
 
-Entity * const & MatchThreeBoard::doReferenceChessAt(const RowColumn & cell) const
+GEntity * const & MatchThreeBoard::doReferenceChessAt(const RowColumn & cell) const
 {
 	return this->chessBoard[cell.row][cell.column];
 }
 
-Entity * & MatchThreeBoard::doReferenceChessAt(const RowColumn & cell)
+GEntity * & MatchThreeBoard::doReferenceChessAt(const RowColumn & cell)
 {
 	return this->chessBoard[cell.row][cell.column];
 }

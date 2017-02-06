@@ -6,43 +6,43 @@
 
 namespace gincu {
 
-RectRender::RectRender()
-	: resource(std::make_shared<RectRenderResource>())
+GRectRender::GRectRender()
+	: resource(std::make_shared<GRectRenderResource>())
 {
 
 }
 
-RectRender::~RectRender()
+GRectRender::~GRectRender()
 {
 
 }
 
-void RectRender::draw(const GameTransform & transform, const RenderInfo * renderInfo)
+void GRectRender::draw(const GTransform & transform, const GRenderInfo * renderInfo)
 {
-	RenderEngine::getInstance()->draw(*this, transform, renderInfo);
+	GRenderEngine::getInstance()->draw(*this, transform, renderInfo);
 }
 
-void RectRender::setColor(const GameColor color)
+void GRectRender::setColor(const GColor color)
 {
 	const sf::Color sfmlColor = gameColorToSfml(color);
 	this->resource->rectangle.setOutlineColor(sfmlColor);
 	this->resource->rectangle.setFillColor(sfmlColor);
 }
 
-GameColor RectRender::getColor() const
+GColor GRectRender::getColor() const
 {
 	return sfmlColorToGame(this->resource->rectangle.getFillColor());
 }
 
-void RectRender::setSize(const GameSize & size)
+void GRectRender::setSize(const GSize & size)
 {
 	this->resource->rectangle.setSize(sf::Vector2f(size.width, size.height));
 }
 
-GameSize RectRender::getSize() const
+GSize GRectRender::getSize() const
 {
 	const sf::Vector2f size = this->resource->rectangle.getSize();
-	return GameSize{size.x, size.y};
+	return GSize{size.x, size.y};
 }
 
 

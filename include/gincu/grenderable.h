@@ -3,7 +3,7 @@
 
 namespace gincu {
 
-class Renderable
+class GRenderable
 {
 public:
 	virtual void render() = 0;

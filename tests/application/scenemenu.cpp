@@ -16,43 +16,43 @@ namespace gincu {
 
 void SceneMenu::returnToMainMenu()
 {
-	GameApplication::getInstance()->getSceneManager()->switchScene(new SceneMenu());
+	GApplication::getInstance()->getSceneManager()->switchScene(new SceneMenu());
 }
 
 void SceneMenu::doOnEnter()
 {
-	const GameApplication * application = GameApplication::getInstance();
+	const GApplication * application = GApplication::getInstance();
 
-	const CoordType viewWidth = application->getViewSize().width;
-	const CoordType viewHeight = application->getViewSize().height;
-	const GameSize tileSize { 400, 80};
-	const CoordType yDistance = 40;
+	const GCoord viewWidth = application->getViewSize().width;
+	const GCoord viewHeight = application->getViewSize().height;
+	const GSize tileSize { 400, 80};
+	const GCoord yDistance = 40;
 
 	this->addEntity(
-		(new Entity())
-		->addComponent(createComponent<ComponentTransform>(GamePoint { -700, -230 }, GameScale { 2.2f, 2.2f }))
+		(new GEntity())
+		->addComponent(createComponent<GComponentTransform>(GPoint { -700, -230 }, GScale { 2.2f, 2.2f }))
 			->addComponent(createAndLoadImageComponent(menuBackgroundImageName))
 	);
 
 	auto itemList = MenuRegister::getInstance()->getSortedItemList();
 	const int itemCount = (int)itemList.size();
-	const CoordType totalHeight = itemCount * tileSize.height + (itemCount - 1) * itemCount;
-	const CoordType yStart = (viewHeight - totalHeight) / 2;
-	const CoordType x = viewWidth / 2;
+	const GCoord totalHeight = itemCount * tileSize.height + (itemCount - 1) * itemCount;
+	const GCoord yStart = (viewHeight - totalHeight) / 2;
+	const GCoord x = viewWidth / 2;
 
 	for(int i = 0; i < itemCount; ++i) {
 		const auto item = itemList[i];
 		this->addEntity(
-			(new Entity())
-				->addComponent(createComponent<ComponentTransform>())
-				->addComponent(createComponent<ComponentLocalTransform>(GamePoint { x, yStart + (tileSize.height + yDistance) * i }))
-				->addComponent(createComponent<ComponentAnchor>(RenderAnchor::center))
-				->addComponent(createComponent<ComponentContainerRender>()
+			(new GEntity())
+				->addComponent(createComponent<GComponentTransform>())
+				->addComponent(createComponent<GComponentLocalTransform>(GPoint { x, yStart + (tileSize.height + yDistance) * i }))
+				->addComponent(createComponent<GComponentAnchor>(GRenderAnchor::center))
+				->addComponent(createComponent<GComponentContainerRender>()
 					->add(createRectRenderComponent(item.backgroundColor, tileSize))
 					->add(createAndLoadTextComponent(item.caption, colorBlue, menuFontSize))
 				)
-				->addComponent(createComponent<ComponentRendererTouchHandler>()->addOnTouch([=](const TouchEvent & touchEvent) {
-					if(touchEvent.type == TouchEventType::eventPressed) {
+				->addComponent(createComponent<GComponentRendererTouchHandler>()->addOnTouch([=](const GTouchEvent & touchEvent) {
+					if(touchEvent.type == GTouchEventType::eventPressed) {
 						item.callback();
 					}
 				}))
@@ -72,7 +72,7 @@ MenuRegister * MenuRegister::getInstance()
 	return &instance;
 }
 
-void MenuRegister::registerItem(const std::string & caption, const int order, const MenuCallback & callback, const GameColor backgroundColor)
+void MenuRegister::registerItem(const std::string & caption, const int order, const MenuCallback & callback, const GColor backgroundColor)
 {
 	this->itemList.push_back({
 		caption,

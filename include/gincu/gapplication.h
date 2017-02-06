@@ -10,22 +10,22 @@
 
 namespace gincu {
 
-class RenderEngine;
-class ResourceManager;
-class SceneManager;
-class GameEventProcessor;
-class MemoryPool;
+class GRenderEngine;
+class GResourceManager;
+class GSceneManager;
+class GEventProcessor;
+class GHeapPool;
 
 typedef cpgf::GCallback<void ()> FrameUpdater;
 
-class GameApplication
+class GApplication
 {
 public:
-	static GameApplication * getInstance();
+	static GApplication * getInstance();
 
 public:
-	GameApplication();
-	virtual ~GameApplication();
+	GApplication();
+	virtual ~GApplication();
 
 	void run();
 	
@@ -34,13 +34,13 @@ public:
 	void addUpdater(const FrameUpdater & updater);
 	void removeUpdater(const FrameUpdater & updater);
 
-	const GameConfigInfo & getConfigInfo() const { return this->configInfo; }
-	const GameSize & getViewSize() const { return this->configInfo.viewSize; }
+	const GConfigInfo & getConfigInfo() const { return this->configInfo; }
+	const GSize & getViewSize() const { return this->configInfo.viewSize; }
 
-	SceneManager * getSceneManager() const { return this->sceneManager.get(); }
+	GSceneManager * getSceneManager() const { return this->sceneManager.get(); }
 
 protected:
-	void setConfigInfo(const GameConfigInfo & configInfo) { this->configInfo = configInfo; }
+	void setConfigInfo(const GConfigInfo & configInfo) { this->configInfo = configInfo; }
 
 private:
 	void initialize();
@@ -52,12 +52,12 @@ private:
 	virtual void doFinalize();
 
 private:
-	GameConfigInfo configInfo;
+	GConfigInfo configInfo;
 
-	std::unique_ptr<RenderEngine> renderEngine;
-	std::unique_ptr<ResourceManager> resourceManager;
-	std::unique_ptr<SceneManager> sceneManager;
-	std::unique_ptr<GameEventProcessor> eventProcessor;
+	std::unique_ptr<GRenderEngine> renderEngine;
+	std::unique_ptr<GResourceManager> resourceManager;
+	std::unique_ptr<GSceneManager> sceneManager;
+	std::unique_ptr<GEventProcessor> eventProcessor;
 
 	bool finished;
 

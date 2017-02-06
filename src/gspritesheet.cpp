@@ -9,20 +9,20 @@
 
 namespace gincu {
 
-GameImage GameSpriteSheetResource::getImage(std::string name) const
+GImage GSpriteSheetResource::getImage(std::string name) const
 {
 	auto it = this->indexMap.find(name);
 	if(it != this->indexMap.end()) {
-		return GameImage(this->imageResource, this->rectList[it->second]);
+		return GImage(this->imageResource, this->rectList[it->second]);
 	}
 	else {
-		return GameImage();
+		return GImage();
 	}
 }
 
-void GameSpriteSheetResource::load(const std::string & resourceName, const SpriteSheetFormat format)
+void GSpriteSheetResource::load(const std::string & resourceName, const GSpriteSheetFormat format)
 {
-	const GameSpriteSheet::LoaderMap * loaderMap = GameSpriteSheet::getLoaderMap();
+	const GSpriteSheet::LoaderMap * loaderMap = GSpriteSheet::getLoaderMap();
 	auto it = loaderMap->find(format);
 	if(it == loaderMap->end()) {
 		handleFatal("Can't find sprite sheet loader.");
@@ -31,41 +31,41 @@ void GameSpriteSheetResource::load(const std::string & resourceName, const Sprit
 
 	it->second(resourceName,this);
 
-	this->imageResource = ResourceManager::getInstance()->getImage(this->imageName).getResource();
+	this->imageResource = GResourceManager::getInstance()->getImage(this->imageName).getResource();
 
 	for(std::size_t i = 0; i < this->nameList.size(); ++i) {
 		this->indexMap.insert(std::make_pair(std::reference_wrapper<std::string>(this->nameList[i]), i));
 	}
 }
 
-void GameSpriteSheetResource::appendSubImage(const std::string & name, const GameRect & rect)
+void GSpriteSheetResource::appendSubImage(const std::string & name, const GRect & rect)
 {
 	this->nameList.push_back(name);
 	this->rectList.push_back(rect);
 }
 
-void GameSpriteSheetResource::setImageName(const std::string & imageName)
+void GSpriteSheetResource::setImageName(const std::string & imageName)
 {
 	this->imageName = imageName;
 }
 
-GameSpriteSheet::LoaderMap * GameSpriteSheet::getLoaderMap()
+GSpriteSheet::LoaderMap * GSpriteSheet::getLoaderMap()
 {
 	static LoaderMap loaderMap;
 	
 	return &loaderMap;
 }
 
-void GameSpriteSheet::registerLoader(const SpriteSheetFormat format, const LoaderCallback & loader)
+void GSpriteSheet::registerLoader(const GSpriteSheetFormat format, const LoaderCallback & loader)
 {
 	getLoaderMap()->insert(std::make_pair(format, loader));
 }
 
-GameSpriteSheet::GameSpriteSheet()
+GSpriteSheet::GSpriteSheet()
 {
 }
 
-GameSpriteSheet::GameSpriteSheet(const std::shared_ptr<GameSpriteSheetResource> & resource)
+GSpriteSheet::GSpriteSheet(const std::shared_ptr<GSpriteSheetResource> & resource)
 	: resource(resource)
 {
 }
@@ -107,11 +107,11 @@ std::string getNextToken(char * & data, char * end, const char delimiter)
 	return result;
 }
 
-void spriteSheetLoader_spritePackText(const std::string & resourceName, GameSpriteSheetResource * spriteSheet)
+void spriteSheetLoader_spritePackText(const std::string & resourceName, GSpriteSheetResource * spriteSheet)
 {
 	spriteSheet->setImageName(resourceName + ".png");
 	
-	FileInputStream stream = ResourceManager::getInstance()->getFileStream(resourceName + ".txt");
+	GFileInputStream stream = GResourceManager::getInstance()->getFileStream(resourceName + ".txt");
 	
 	const std::size_t size = (std::size_t)stream.getSize();
 	std::unique_ptr<char[]> buffer(new char[size + 2]);
@@ -145,11 +145,11 @@ void spriteSheetLoader_spritePackText(const std::string & resourceName, GameSpri
 			const std::string height = getNextToken(data, endLine, ' ');
 			if(height.empty()) break;
 
-			spriteSheet->appendSubImage(resourceName, GameRect{
-				(CoordType)std::stoi(x),
-				(CoordType)std::stoi(y),
-				(CoordType)std::stoi(width),
-				(CoordType)std::stoi(height),
+			spriteSheet->appendSubImage(resourceName, GRect{
+				(GCoord)std::stoi(x),
+				(GCoord)std::stoi(y),
+				(GCoord)std::stoi(width),
+				(GCoord)std::stoi(height),
 			});
 
 			break;
@@ -161,7 +161,7 @@ void spriteSheetLoader_spritePackText(const std::string & resourceName, GameSpri
 
 G_AUTO_RUN_BEFORE_MAIN()
 {
-	GameSpriteSheet::registerLoader(SpriteSheetFormat::spritePackText, &spriteSheetLoader_spritePackText);
+	GSpriteSheet::registerLoader(GSpriteSheetFormat::spritePackText, &spriteSheetLoader_spritePackText);
 }
 
 

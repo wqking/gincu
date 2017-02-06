@@ -8,7 +8,7 @@
 namespace gincu {
 
 class SceneMatchThree;
-class Entity;
+class GEntity;
 enum class ChessColor;
 
 class MatchThreeBoard
@@ -17,21 +17,21 @@ public:
 	explicit MatchThreeBoard(SceneMatchThree * scene);
 	~MatchThreeBoard();
 
-	Entity * getChessAt(const RowColumn & cell) const;
-	Entity * createChessAt(const RowColumn & cell, const ChessColor chessColor);
-	GamePoint getChessPositionAt(const RowColumn & cell) const;
+	GEntity * getChessAt(const RowColumn & cell) const;
+	GEntity * createChessAt(const RowColumn & cell, const ChessColor chessColor);
+	GPoint getChessPositionAt(const RowColumn & cell) const;
 
-	Entity * swapChess(const RowColumn & cell, Entity * replacer);
+	GEntity * swapChess(const RowColumn & cell, GEntity * replacer);
 	void removeChess(const RowColumn & cell);
 
-	RowColumn getChessCell(const Entity * chess) const;
+	RowColumn getChessCell(const GEntity * chess) const;
 
 	int getColumnCount() const { return columnCount; }
 	int getRowCount() const { return rowCount; }
 
 private:
-	Entity * const & doReferenceChessAt(const RowColumn & cell) const;
-	Entity * & doReferenceChessAt(const RowColumn & cell);
+	GEntity * const & doReferenceChessAt(const RowColumn & cell) const;
+	GEntity * & doReferenceChessAt(const RowColumn & cell);
 
 private:
 	SceneMatchThree * scene;
@@ -42,7 +42,7 @@ private:
 	int startX;
 	int startY;
 
-	std::vector<std::vector<Entity *> > chessBoard;
+	std::vector<std::vector<GEntity *> > chessBoard;
 };
 
 

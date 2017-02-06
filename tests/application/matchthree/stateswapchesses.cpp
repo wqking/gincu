@@ -39,8 +39,8 @@ bool StateSwapChesses::doStartSwapChesses()
 		return false;
 	}
 
-	Entity * chessA = this->scene->getTouchedChessList()[0];
-	Entity * chessB = this->scene->getTouchedChessList()[1];
+	GEntity * chessA = this->scene->getTouchedChessList()[0];
+	GEntity * chessB = this->scene->getTouchedChessList()[1];
 	RowColumn cellA = this->scene->getBoard()->getChessCell(chessA);
 	RowColumn cellB = this->scene->getBoard()->getChessCell(chessB);
 
@@ -48,14 +48,14 @@ bool StateSwapChesses::doStartSwapChesses()
 		return false;
 	}
 
-	ComponentTransform * transformA = chessA->getComponentByType<ComponentTransform>();
-	ComponentTransform * transformB = chessB->getComponentByType<ComponentTransform>();
+	GComponentTransform * transformA = chessA->getComponentByType<GComponentTransform>();
+	GComponentTransform * transformB = chessB->getComponentByType<GComponentTransform>();
 	cpgf::GTweenList::getInstance()->tween()
 		.duration(200.0f)
 		.ease(cpgf::QuadEase::easeIn())
 		.onComplete(cpgf::makeCallback(this, &StateSwapChesses::onSwapFinish))
-		.target(cpgf::createAccessor(transformA, &ComponentTransform::getPosition, &ComponentTransform::setPosition), transformB->getPosition())
-		.target(cpgf::createAccessor(transformB, &ComponentTransform::getPosition, &ComponentTransform::setPosition), transformA->getPosition())
+		.target(cpgf::createAccessor(transformA, &GComponentTransform::getPosition, &GComponentTransform::setPosition), transformB->getPosition())
+		.target(cpgf::createAccessor(transformB, &GComponentTransform::getPosition, &GComponentTransform::setPosition), transformA->getPosition())
 	;
 
 	return true;
@@ -63,8 +63,8 @@ bool StateSwapChesses::doStartSwapChesses()
 
 void StateSwapChesses::onSwapFinish()
 {
-	Entity * chessA = this->scene->getTouchedChessList()[0];
-	Entity * chessB = this->scene->getTouchedChessList()[1];
+	GEntity * chessA = this->scene->getTouchedChessList()[0];
+	GEntity * chessB = this->scene->getTouchedChessList()[1];
 	RowColumn cellA = this->scene->getBoard()->getChessCell(chessA);
 	RowColumn cellB = this->scene->getBoard()->getChessCell(chessB);
 	this->scene->getBoard()->swapChess(cellA, chessB);

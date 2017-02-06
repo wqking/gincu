@@ -7,31 +7,31 @@
 
 namespace gincu {
 
-class Scene;
-struct TouchEvent;
+class GScene;
+struct GTouchEvent;
 
-class SceneManager : public Renderable
+class GSceneManager : public GRenderable
 {
 public:
-	SceneManager();
-	~SceneManager();
+	GSceneManager();
+	~GSceneManager();
 
-	void switchScene(Scene * scene);
+	void switchScene(GScene * scene);
 
-	void handleTouchEvent(const TouchEvent & touchEvent);
+	void handleTouchEvent(const GTouchEvent & touchEvent);
 
-	Scene * getCurrentScene() const { return currentScene.get(); }
+	GScene * getCurrentScene() const { return currentScene.get(); }
 
 private:
-	void doSwitchScene(Scene * scene);
+	void doSwitchScene(GScene * scene);
 	void onUpdate();
 
 private:
 	virtual void render() override;
 
 private:
-	std::unique_ptr<Scene> currentScene;
-	std::unique_ptr<Scene> sceneToSwitchTo;
+	std::unique_ptr<GScene> currentScene;
+	std::unique_ptr<GScene> sceneToSwitchTo;
 };
 
 

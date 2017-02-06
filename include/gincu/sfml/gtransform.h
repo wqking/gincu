@@ -8,41 +8,41 @@
 
 namespace gincu {
 
-class GameTransform
+class GTransform
 {
 public:
-	GameTransform();
-	explicit GameTransform(const GamePoint & position, const GameScale & scale = {1.0f, 1.0f});
-	explicit GameTransform(const sf::Transform & sfmlTransform);
+	GTransform();
+	explicit GTransform(const GPoint & position, const GScale & scale = {1.0f, 1.0f});
+	explicit GTransform(const sf::Transform & sfmlTransform);
 
-	GamePoint getPosition() const;
-	void setPosition(const GamePoint & position);
+	GPoint getPosition() const;
+	void setPosition(const GPoint & position);
 
-	GamePoint getOrigin() const;
-	void setOrigin(const GamePoint & origin);
+	GPoint getOrigin() const;
+	void setOrigin(const GPoint & origin);
 
-	GameScale getScale() const;
-	void setScale(const GameScale & scale);
+	GScale getScale() const;
+	void setScale(const GScale & scale);
 
 	float getRotation() const;
 	void setRotation(const float rotation);
 
 	const sf::Transform & getSfmlTransform() const;
 	
-	GameTransform multiply(const GameTransform & other) const;
+	GTransform multiply(const GTransform & other) const;
 
-	void translate(const GamePoint & offset);
-	void scale(const GameScale & scale);
+	void translate(const GPoint & offset);
+	void scale(const GScale & scale);
 
-	GameScale getDecompositedScale() const;
+	GScale getDecompositedScale() const;
 
 private:
 	void doUpdateTransform() const;
 
 private:
-	GamePoint position;
-	GamePoint origin;
-	GameScale scaleValue;
+	GPoint position;
+	GPoint origin;
+	GScale scaleValue;
 	float rotation; // degree
 	mutable bool needReloadTransform;
 	mutable sf::Transform sfmlTransform;

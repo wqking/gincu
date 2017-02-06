@@ -5,12 +5,12 @@
 
 namespace gincu {
 
-class ComponentTransform;
-class ComponentRender;
+class GComponentTransform;
+class GComponentRender;
 
-GameTransform computeRenderableTransform(
-		ComponentTransform * transform,
-		ComponentRender * render = nullptr
+GTransform computeRenderableTransform(
+		GComponentTransform * transform,
+		GComponentRender * render = nullptr
 	);
 
 

@@ -4,17 +4,17 @@
 
 namespace gincu {
 
-class GameApplication;
+class GApplication;
 
-class GameEventProcessor
+class GEventProcessor
 {
 public:
-	explicit GameEventProcessor(GameApplication * application);
+	explicit GEventProcessor(GApplication * application);
 	
 	void processEvents();
 
 private:
-	GameApplication * application;
+	GApplication * application;
 };
 
 

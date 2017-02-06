@@ -9,16 +9,16 @@ namespace gincu {
 
 namespace {
 
-ResourceManager * instance = nullptr;
+GResourceManager * instance = nullptr;
 
 } //unnamed namespace
 
-ResourceManager * ResourceManager::getInstance()
+GResourceManager * GResourceManager::getInstance()
 {
 	return instance;
 }
 
-ResourceManager::ResourceManager()
+GResourceManager::GResourceManager()
 	: resourcePath("resources/")
 {
 	assert(instance == nullptr);
@@ -26,55 +26,55 @@ ResourceManager::ResourceManager()
 	instance = this;
 }
 
-ResourceManager::~ResourceManager()
+GResourceManager::~GResourceManager()
 {
 }
 
-GameImage ResourceManager::getImage(const std::string & resourceName) const
+GImage GResourceManager::getImage(const std::string & resourceName) const
 {
-	std::shared_ptr<GameImageResource> resource;
+	std::shared_ptr<GImageResource> resource;
 	auto it = this->imageResourceMap.find(resourceName);
 	if(it != this->imageResourceMap.end()) {
 		resource = it->second;
 	}
 	else {
-		resource = std::make_shared<GameImageResource>();
+		resource = std::make_shared<GImageResource>();
 		this->imageResourceMap.insert(std::make_pair(resourceName, resource));
 		const std::string fileName = this->resourcePath + resourceName;
 		resource->load(fileName);
 	}
 
-	return GameImage(resource);
+	return GImage(resource);
 }
 
-GameSpriteSheet ResourceManager::getSpriteSheet(const std::string & resourceName, const SpriteSheetFormat format) const
+GSpriteSheet GResourceManager::getSpriteSheet(const std::string & resourceName, const GSpriteSheetFormat format) const
 {
-	std::shared_ptr<GameSpriteSheetResource> resource;
+	std::shared_ptr<GSpriteSheetResource> resource;
 
 	auto it = this->spriteSheetResourceMap.find(resourceName);
 	if(it != this->spriteSheetResourceMap.end()) {
 		resource = it->second;
 	}
 	else {
-		resource = std::make_shared<GameSpriteSheetResource>();
+		resource = std::make_shared<GSpriteSheetResource>();
 		resource->load(resourceName, format);
 		this->spriteSheetResourceMap.insert(std::make_pair(resourceName, resource));
 	}
 
-	return GameSpriteSheet(resource);
+	return GSpriteSheet(resource);
 }
 
-FileInputStream ResourceManager::getFileStream(const std::string & resourceName) const
+GFileInputStream GResourceManager::getFileStream(const std::string & resourceName) const
 {
-	FileInputStream stream;
+	GFileInputStream stream;
 	stream.open(this->resourcePath + resourceName);
 	return stream;
 }
 
-const GameFont & ResourceManager::getFont() const
+const GFont & GResourceManager::getFont() const
 {
 	if(! this->font) {
-		this->font.reset(new GameFont());
+		this->font.reset(new GFont());
 		this->font->getResource()->font.loadFromFile(this->resourcePath + "arialbd.ttf");
 	}
 	

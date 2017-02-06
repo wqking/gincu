@@ -40,22 +40,22 @@ SceneMatchThree::~SceneMatchThree()
 void SceneMatchThree::doOnEnter()
 {
 	this->addEntity(
-		(new Entity())
-			->addComponent(createComponent<ComponentTransform>())
+		(new GEntity())
+			->addComponent(createComponent<GComponentTransform>())
 			->addComponent(createAndLoadImageComponent(backgroundImageName))
 	);
 	this->addEntity(
-		(new Entity())
-			->addComponent(createComponent<ComponentTransform>(GamePoint { 10, GameApplication::getInstance()->getViewSize().height - 30 }))
-			->addComponent(createComponent<ComponentContainerRender>()
-				->add(createRectRenderComponent(0xffeeee77, GameSize{ 160, 60 }))
+		(new GEntity())
+			->addComponent(createComponent<GComponentTransform>(GPoint { 10, GApplication::getInstance()->getViewSize().height - 30 }))
+			->addComponent(createComponent<GComponentContainerRender>()
+				->add(createRectRenderComponent(0xffeeee77, GSize{ 160, 60 }))
 				->add(createAndLoadTextComponent("Quit game", colorBlue, normalFontSize))
 			)
-			->addComponent(createComponent<ComponentRendererTouchHandler>()->addOnTouch(cpgf::makeCallback(this, &SceneMatchThree::onQuitGameClicked)))
+			->addComponent(createComponent<GComponentRendererTouchHandler>()->addOnTouch(cpgf::makeCallback(this, &SceneMatchThree::onQuitGameClicked)))
 	);
 
 
-	this->stateMachine.reset(new StateMachine());
+	this->stateMachine.reset(new GStateMachine());
 	this->board.reset(new MatchThreeBoard(this));
 	this->infoView.reset(new MatchThreeInfoView(this));
 
@@ -72,7 +72,7 @@ void SceneMatchThree::doOnEnter()
 
 	this->roundStartMilliseconds = getMilliseconds();
 
-	GameApplication::getInstance()->addUpdater(cpgf::makeCallback(this, &SceneMatchThree::onUpdate));
+	GApplication::getInstance()->addUpdater(cpgf::makeCallback(this, &SceneMatchThree::onUpdate));
 
 	this->infoView->setRemainingSeconds(secondsPerRound);
 
@@ -81,7 +81,7 @@ void SceneMatchThree::doOnEnter()
 
 void SceneMatchThree::doOnExit()
 {
-	GameApplication::getInstance()->removeUpdater(cpgf::makeCallback(this, &SceneMatchThree::onUpdate));
+	GApplication::getInstance()->removeUpdater(cpgf::makeCallback(this, &SceneMatchThree::onUpdate));
 
 	cpgf::GTweenList::getInstance()->clear();
 }
@@ -94,7 +94,7 @@ void SceneMatchThree::clearTouchedChessList()
 void SceneMatchThree::restoreTouchedChessList()
 {
 	for(auto it = this->touchedChessList.begin(); it != this->touchedChessList.end(); ++it) {
-		(*it)->getComponentByType<ComponentTransform>()->setScale(GameScale { 1.0f, 1.0f });
+		(*it)->getComponentByType<GComponentTransform>()->setScale(GScale { 1.0f, 1.0f });
 	}
 }
 
@@ -109,28 +109,28 @@ void SceneMatchThree::onUpdate()
 	}
 }
 
-void SceneMatchThree::onQuitGameClicked(const TouchEvent & touchEvent)
+void SceneMatchThree::onQuitGameClicked(const GTouchEvent & touchEvent)
 {
-	if(touchEvent.type == TouchEventType::eventPressed) {
+	if(touchEvent.type == GTouchEventType::eventPressed) {
 		this->roundStartMilliseconds = getMilliseconds() - secondsPerRound * 1000;
 	}
 }
 
-void SceneMatchThree::onChessTouched(const TouchEvent & touchEvent)
+void SceneMatchThree::onChessTouched(const GTouchEvent & touchEvent)
 {
 	if(this->stateMachine->getCurrentStateId() != stateMainLoop || isTimeUp()) {
 		return;
 	}
 
 	switch(touchEvent.type) {
-	case TouchEventType::eventPressed:
+	case GTouchEventType::eventPressed:
 		if(touchEvent.touchedEntity == nullptr || touchEvent.touchedEntity->getComponentByType<ComponentChess>() == nullptr) {
 			this->restoreTouchedChessList();
 			this->clearTouchedChessList();
 		}
 		else {
 			if(this->touchedChessList.size() == 1) {
-				Entity * chessA = touchedChessList[0];
+				GEntity * chessA = touchedChessList[0];
 				RowColumn cellA = board->getChessCell(chessA);
 				RowColumn cellB = board->getChessCell(touchEvent.touchedEntity);
 
@@ -144,7 +144,7 @@ void SceneMatchThree::onChessTouched(const TouchEvent & touchEvent)
 				}
 			}
 			if(this->touchedChessList.empty()) {
-				touchEvent.touchedEntity->getComponentByType<ComponentTransform>()->setScale(GameScale { 1.2f, 1.2f });
+				touchEvent.touchedEntity->getComponentByType<GComponentTransform>()->setScale(GScale { 1.2f, 1.2f });
 			}
 
 			this->touchedChessList.push_back(touchEvent.touchedEntity);
@@ -154,7 +154,7 @@ void SceneMatchThree::onChessTouched(const TouchEvent & touchEvent)
 		}
 		break;
 
-	case TouchEventType::eventReleased:
+	case GTouchEventType::eventReleased:
 		this->previousTouchPosition.x = -1;
 		if(touchEvent.touchedEntity == nullptr || touchEvent.touchedEntity->getComponentByType<ComponentChess>() == nullptr) {
 			this->restoreTouchedChessList();
@@ -170,14 +170,14 @@ void SceneMatchThree::onChessTouched(const TouchEvent & touchEvent)
 		}
 		break;
 
-	case TouchEventType::eventMoved:
+	case GTouchEventType::eventMoved:
 		if(this->previousTouchPosition.x > 0
 			&& this->touchedChessList.size() == 1
 			&& this->touchedChessList.back() != touchEvent.touchedEntity
 			) {
 			const RowColumn cell = this->board->getChessCell(this->touchedChessList.back());
-			const CoordType deltaX = fabs(touchEvent.position.x - this->previousTouchPosition.x);
-			const CoordType deltaY = fabs(touchEvent.position.y - this->previousTouchPosition.y);
+			const GCoord deltaX = fabs(touchEvent.position.x - this->previousTouchPosition.x);
+			const GCoord deltaY = fabs(touchEvent.position.y - this->previousTouchPosition.y);
 			RowColumn cellToSwap = cell;
 			if(deltaX > deltaY) {
 				if(touchEvent.position.x > this->previousTouchPosition.x) {
@@ -196,7 +196,7 @@ void SceneMatchThree::onChessTouched(const TouchEvent & touchEvent)
 				}
 			}
 
-			Entity * chessToSwap = this->board->getChessAt(cellToSwap);
+			GEntity * chessToSwap = this->board->getChessAt(cellToSwap);
 			if(chessToSwap != nullptr) {
 				this->touchedChessList.push_back(chessToSwap);
 			}
@@ -231,7 +231,7 @@ bool SceneMatchThree::isTimeUp() const
 G_AUTO_RUN_BEFORE_MAIN()
 {
 	MenuRegister::getInstance()->registerItem("match three", 1, [](){
-			GameApplication::getInstance()->getSceneManager()->switchScene(new SceneMatchThree());
+			GApplication::getInstance()->getSceneManager()->switchScene(new SceneMatchThree());
 		},
 		0xffeeee77);
 }

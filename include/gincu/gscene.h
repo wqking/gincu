@@ -9,39 +9,39 @@
 
 namespace gincu {
 
-class Entity;
-struct TouchEvent;
+class GEntity;
+struct GTouchEvent;
 
-class Scene
+class GScene
 {
 private:
-	typedef std::unique_ptr<Entity> EntityPointer;
+	typedef std::unique_ptr<GEntity> EntityPointer;
 
 public:
-	Scene();
-	virtual ~Scene();
+	GScene();
+	virtual ~GScene();
 
 	void onEnter();
 	void onExit();
 
 	void renderScene();
 
-	void handleTouchEvent(const TouchEvent & touchEvent);
+	void handleTouchEvent(const GTouchEvent & touchEvent);
 
-	Entity * addEntity(Entity * entity);
-	void removeEntity(Entity * entity);
+	GEntity * addEntity(GEntity * entity);
+	void removeEntity(GEntity * entity);
 
-	void setTouchCapture(Entity * touchCapture);
-	Entity * getTouchCapture() const;
+	void setTouchCapture(GEntity * touchCapture);
+	GEntity * getTouchCapture() const;
 
 private:
 	virtual void doOnEnter();
 	virtual void doOnExit();
 
 private:
-	ComponentsBuffer componentsBuffer;
+	GComponentsBuffer componentsBuffer;
 	std::vector<EntityPointer> entityList;
-	Entity * touchCapture;
+	GEntity * touchCapture;
 };
 
 

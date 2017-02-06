@@ -11,16 +11,16 @@ namespace gincu {
 
 class MatchThreeBoard;
 class MatchThreeInfoView;
-class StateMachine;
-struct TouchEvent;
+class GStateMachine;
+struct GTouchEvent;
 
-class SceneMatchThree : public Scene
+class SceneMatchThree : public GScene
 {
 public:
 	SceneMatchThree();
 	~SceneMatchThree();
 
-	void onChessTouched(const TouchEvent & touchEvent);
+	void onChessTouched(const GTouchEvent & touchEvent);
 
 	void clearTouchedChessList();
 
@@ -29,11 +29,11 @@ public:
 	int getTotalScore() const;
 
 	MatchThreeBoard * getBoard() const { return board.get(); }
-	const std::vector<Entity *> & getTouchedChessList() const { return touchedChessList; }
+	const std::vector<GEntity *> & getTouchedChessList() const { return touchedChessList; }
 
 private:
 	void onUpdate();
-	void onQuitGameClicked(const TouchEvent & touchEvent);
+	void onQuitGameClicked(const GTouchEvent & touchEvent);
 	void restoreTouchedChessList();
 	bool isTimeUp() const;
 
@@ -42,12 +42,12 @@ private:
 	virtual void doOnExit() override;
 
 private:
-	std::unique_ptr<StateMachine> stateMachine;
+	std::unique_ptr<GStateMachine> stateMachine;
 	std::unique_ptr<MatchThreeBoard> board;
 	std::unique_ptr<MatchThreeInfoView> infoView;
-	std::vector<Entity *> touchedChessList;
+	std::vector<GEntity *> touchedChessList;
 
-	GamePoint previousTouchPosition;
+	GPoint previousTouchPosition;
 
 	unsigned int roundStartMilliseconds;
 };

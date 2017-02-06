@@ -5,7 +5,7 @@
 
 namespace gincu {
 
-GameTransform::GameTransform()
+GTransform::GTransform()
 	:
 		position(),
 		origin(),
@@ -15,7 +15,7 @@ GameTransform::GameTransform()
 {
 }
 
-GameTransform::GameTransform(const GamePoint & position, const GameScale & scale)
+GTransform::GTransform(const GPoint & position, const GScale & scale)
 	:
 		position(position),
 		origin(),
@@ -25,7 +25,7 @@ GameTransform::GameTransform(const GamePoint & position, const GameScale & scale
 {
 }
 
-GameTransform::GameTransform(const sf::Transform & sfmlTransform)
+GTransform::GTransform(const sf::Transform & sfmlTransform)
 	:
 		position(),
 		origin(),
@@ -36,23 +36,23 @@ GameTransform::GameTransform(const sf::Transform & sfmlTransform)
 {
 }
 
-GamePoint GameTransform::getPosition() const
+GPoint GTransform::getPosition() const
 {
 	return this->position;
 }
 
-void GameTransform::setPosition(const GamePoint & position)
+void GTransform::setPosition(const GPoint & position)
 {
 	this->position = position;
 	this->needReloadTransform = true;
 }
 
-GamePoint GameTransform::getOrigin() const
+GPoint GTransform::getOrigin() const
 {
 	return this->origin;
 }
 
-void GameTransform::setOrigin(const GamePoint & origin)
+void GTransform::setOrigin(const GPoint & origin)
 {
 	if(this->origin != origin) {
 		this->origin = origin;
@@ -60,29 +60,29 @@ void GameTransform::setOrigin(const GamePoint & origin)
 	}
 }
 
-GameScale GameTransform::getScale() const
+GScale GTransform::getScale() const
 {
 	return this->scaleValue;
 }
 
-void GameTransform::setScale(const GameScale & scale)
+void GTransform::setScale(const GScale & scale)
 {
 	this->scaleValue = scale;
 	this->needReloadTransform = true;
 }
 
-float GameTransform::getRotation() const
+float GTransform::getRotation() const
 {
 	return this->rotation;
 }
 
-void GameTransform::setRotation(const float rotation)
+void GTransform::setRotation(const float rotation)
 {
 	this->rotation = rotation;
 	this->needReloadTransform = true;
 }
 
-void GameTransform::doUpdateTransform() const
+void GTransform::doUpdateTransform() const
 {
 	if(this->needReloadTransform) {
 		this->needReloadTransform = false;
@@ -104,7 +104,7 @@ void GameTransform::doUpdateTransform() const
 	}
 }
 
-GameScale GameTransform::getDecompositedScale() const
+GScale GTransform::getDecompositedScale() const
 {
 	this->doUpdateTransform();
 	const auto p1 = this->sfmlTransform.transformPoint(0, 0);
@@ -129,27 +129,27 @@ GameScale GameTransform::getDecompositedScale() const
 */
 }
 
-const sf::Transform & GameTransform::getSfmlTransform() const
+const sf::Transform & GTransform::getSfmlTransform() const
 {
 	this->doUpdateTransform();
 	return this->sfmlTransform;
 }
 
-GameTransform GameTransform::multiply(const GameTransform & other) const
+GTransform GTransform::multiply(const GTransform & other) const
 {
 	this->doUpdateTransform();
 	other.doUpdateTransform();
 
-	return GameTransform(this->sfmlTransform * other.sfmlTransform);
+	return GTransform(this->sfmlTransform * other.sfmlTransform);
 }
 
-void GameTransform::translate(const GamePoint & offset)
+void GTransform::translate(const GPoint & offset)
 {
 	this->doUpdateTransform();
 	this->sfmlTransform.translate({offset.x, offset.y});
 }
 
-void GameTransform::scale(const GameScale & scale)
+void GTransform::scale(const GScale & scale)
 {
 	this->doUpdateTransform();
 	this->sfmlTransform.scale({scale.x, scale.y});

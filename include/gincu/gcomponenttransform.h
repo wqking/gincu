@@ -8,10 +8,10 @@
 
 namespace gincu{
 
-class ComponentTransform : public Component
+class GComponentTransform : public GComponent
 {
 private:
-	typedef Component super;
+	typedef GComponent super;
 
 public:
 	inline static constexpr unsigned int getComponentType() {
@@ -19,15 +19,15 @@ public:
 	}
 
 public:
-	ComponentTransform();
-	explicit ComponentTransform(const GamePoint & position, const GameScale & scale = {1.0f, 1.0f}, const bool visible = true);
-	~ComponentTransform();
+	GComponentTransform();
+	explicit GComponentTransform(const GPoint & position, const GScale & scale = {1.0f, 1.0f}, const bool visible = true);
+	~GComponentTransform();
 
-	GamePoint getPosition() const { return this->transform.getPosition(); }
-	void setPosition(const GamePoint & position) { this->transform.setPosition(position); }
+	GPoint getPosition() const { return this->transform.getPosition(); }
+	void setPosition(const GPoint & position) { this->transform.setPosition(position); }
 
-	GameScale getScale() const { return this->transform.getScale(); }
-	void setScale(const GameScale & scale) { this->transform.setScale(scale); }
+	GScale getScale() const { return this->transform.getScale(); }
+	void setScale(const GScale & scale) { this->transform.setScale(scale); }
 
 	float getRotation() const { return this->transform.getRotation(); }
 	void setRotation(const float rotation) { this->transform.setRotation(rotation); }
@@ -35,18 +35,18 @@ public:
 	bool isVisible() const { return this->visible; }
 	void setVisible(const bool visible) { this->visible = visible; }
 	
-	const GameTransform & getTransform() const { return this->transform; }
-	void setTransform(const GameTransform & transform) { this->transform = transform; }
+	const GTransform & getTransform() const { return this->transform; }
+	void setTransform(const GTransform & transform) { this->transform = transform; }
 
 private:
-	GameTransform transform;
+	GTransform transform;
 	bool visible;
 };
 
-class ComponentLocalTransform : public ComponentTransform
+class GComponentLocalTransform : public GComponentTransform
 {
 private:
-	typedef ComponentTransform super;
+	typedef GComponentTransform super;
 
 public:
 	inline static constexpr int getComponentType() {
@@ -54,22 +54,22 @@ public:
 	}
 	
 public:
-	ComponentLocalTransform();
-	explicit ComponentLocalTransform(const GamePoint & position, const GameScale & scale = {1.0f, 1.0f}, const bool visible = true);
- 	~ComponentLocalTransform();
+	GComponentLocalTransform();
+	explicit GComponentLocalTransform(const GPoint & position, const GScale & scale = {1.0f, 1.0f}, const bool visible = true);
+ 	~GComponentLocalTransform();
 	
-	ComponentLocalTransform * setParent(ComponentLocalTransform * parent);
-	ComponentLocalTransform * getParent() const;
+	GComponentLocalTransform * setParent(GComponentLocalTransform * parent);
+	GComponentLocalTransform * getParent() const;
 	
 	void applyGlobal();
 
 private:
-	void addChild(ComponentLocalTransform * child);
-	void removeChild(ComponentLocalTransform * child);
+	void addChild(GComponentLocalTransform * child);
+	void removeChild(GComponentLocalTransform * child);
 
 private:
-	ComponentLocalTransform * parent;
-	std::vector<ComponentLocalTransform *> children;
+	GComponentLocalTransform * parent;
+	std::vector<GComponentLocalTransform *> children;
 };
 
 

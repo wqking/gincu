@@ -21,7 +21,7 @@ enum class ChessColor
 	none
 };
 
-GameImage getChessResource(const ChessColor chessColor);
+GImage getChessResource(const ChessColor chessColor);
 ChessColor randomChessColor();
 bool areCellsNeighbors(const RowColumn & cellA, const RowColumn & cellB);
 

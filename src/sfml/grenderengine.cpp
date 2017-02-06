@@ -18,31 +18,31 @@ namespace gincu {
 
 namespace {
 
-RenderEngine * instance = nullptr;
+GRenderEngine * instance = nullptr;
 
 } //unnamed namespace
 
-RenderEngine * RenderEngine::getInstance()
+GRenderEngine * GRenderEngine::getInstance()
 {
 	return instance;
 }
 
-RenderEngine::RenderEngine()
+GRenderEngine::GRenderEngine()
 	:
-		resource(std::make_shared<RenderEngineResource>())
+		resource(std::make_shared<GRenderEngineResource>())
 {
 	assert(instance == nullptr);
 
 	instance = this;
 }
 
-RenderEngine::~RenderEngine()
+GRenderEngine::~GRenderEngine()
 {
 }
 
-void RenderEngine::inititialize()
+void GRenderEngine::inititialize()
 {
-	const GameConfigInfo & configInfo = GameApplication::getInstance()->getConfigInfo();
+	const GConfigInfo & configInfo = GApplication::getInstance()->getConfigInfo();
 
 	int flags = 0;
 	if(configInfo.fullScreenMode) {
@@ -65,9 +65,9 @@ void RenderEngine::inititialize()
 	this->doFitView();
 }
 
-void RenderEngine::render()
+void GRenderEngine::render()
 {
-	this->resource->window->clear(gameColorToSfml(GameApplication::getInstance()->getConfigInfo().backgroundColor));
+	this->resource->window->clear(gameColorToSfml(GApplication::getInstance()->getConfigInfo().backgroundColor));
 	
 	for(auto it = this->renderableList.rbegin(); it != this->renderableList.rend(); ++it) {
 		(*it)->render();
@@ -76,12 +76,12 @@ void RenderEngine::render()
 	this->resource->window->display();
 }
 
-void RenderEngine::appendRenderable(Renderable * renderable)
+void GRenderEngine::appendRenderable(GRenderable * renderable)
 {
 	this->renderableList.push_back(renderable);
 }
 
-void RenderEngine::removeRenderable(Renderable * renderable)
+void GRenderEngine::removeRenderable(GRenderable * renderable)
 {
 	auto it = std::find(this->renderableList.begin(), this->renderableList.end(), renderable);
 	if(it != this->renderableList.end()) {
@@ -89,15 +89,15 @@ void RenderEngine::removeRenderable(Renderable * renderable)
 	}
 }
 
-bool RenderEngine::isAlive() const
+bool GRenderEngine::isAlive() const
 {
 	return this->resource->window->isOpen();
 }
 
-void RenderEngine::draw(const GameImage & image, const GameTransform & transform, const RenderInfo * renderInfo)
+void GRenderEngine::draw(const GImage & image, const GTransform & transform, const GRenderInfo * renderInfo)
 {
 	if(image.isValid()) {
-		const GameRect & rect = image.getRect();
+		const GRect & rect = image.getRect();
 		const sf::Transform & sfmlTransform = transform.getSfmlTransform();
 		if(! this->resource->inBatchDraw) {
 			sf::Sprite sprite(image.getResource()->texture, { (int)rect.x, (int)rect.y, (int)rect.width, (int)rect.height });
@@ -135,27 +135,27 @@ void RenderEngine::draw(const GameImage & image, const GameTransform & transform
 	}
 }
 
-void RenderEngine::draw(const GameText & text, const GameTransform & transform, const RenderInfo * renderInfo)
+void GRenderEngine::draw(const GText & text, const GTransform & transform, const GRenderInfo * renderInfo)
 {
 	sf::RenderStates renderStates(transform.getSfmlTransform());
 	copyBlendAndShaderToSfml(&renderStates, renderInfo);
 	this->resource->window->draw(text.getResource()->text, renderStates);
 }
 
-void RenderEngine::draw(const RectRender & rect, const GameTransform & transform, const RenderInfo * renderInfo)
+void GRenderEngine::draw(const GRectRender & rect, const GTransform & transform, const GRenderInfo * renderInfo)
 {
 	sf::RenderStates renderStates(transform.getSfmlTransform());
 	copyBlendAndShaderToSfml(&renderStates, renderInfo);
 	this->resource->window->draw(rect.getResource()->rectangle, renderStates);
 }
 
-void RenderEngine::beginBatchDraw()
+void GRenderEngine::beginBatchDraw()
 {
 	this->resource->clearBatchDrawState();
 	this->resource->inBatchDraw = true;
 }
 
-void RenderEngine::endBatchDraw()
+void GRenderEngine::endBatchDraw()
 {
 	if(this->resource->batchDrawRenderInfo.texture != nullptr && this->resource->inBatchDraw) {
 		sf::RenderStates renderStates(&this->resource->batchDrawRenderInfo.texture->texture);
@@ -166,24 +166,24 @@ void RenderEngine::endBatchDraw()
 	this->resource->clearBatchDrawState();
 }
 
-GamePoint RenderEngine::mapWindowToView(const GamePoint & point) const
+GPoint GRenderEngine::mapWindowToView(const GPoint & point) const
 {
 	auto pt = this->resource->window->mapPixelToCoords({(int)point.x, (int)point.y});
 	return {pt.x, pt.y};
 }
 
-void RenderEngine::onWindowResized(const GameSize & newSize)
+void GRenderEngine::onWindowResized(const GSize & newSize)
 {
 	this->windowSize = newSize;
 	this->doFitView();
 }
 
-void RenderEngine::doFitView()
+void GRenderEngine::doFitView()
 {
-	const GameConfigInfo & configInfo = GameApplication::getInstance()->getConfigInfo();
+	const GConfigInfo & configInfo = GApplication::getInstance()->getConfigInfo();
 
 	switch(configInfo.viewFitStrategy) {
-	case ViewFitStrategy::scaleFit: {
+	case GViewFitStrategy::scaleFit: {
 		this->resource->view.reset(sf::FloatRect(0, 0, configInfo.viewSize.width, configInfo.viewSize.height));
 		float viewportX = 0;
 		float viewportY = 0;
@@ -199,12 +199,12 @@ void RenderEngine::doFitView()
 	}
 		break;
 
-	case ViewFitStrategy::fitWindow:
+	case GViewFitStrategy::fitWindow:
 		this->resource->view.reset(sf::FloatRect(0, 0, this->windowSize.width, this->windowSize.height));
 		this->resource->view.setViewport(sf::FloatRect(0, 0, 1, 1));
 		break;
 
-	case ViewFitStrategy::stretch:
+	case GViewFitStrategy::stretch:
 		this->resource->view.reset(sf::FloatRect(0, 0, configInfo.viewSize.width, configInfo.viewSize.height));
 		this->resource->view.setViewport(sf::FloatRect(0, 0, 1, 1));
 		break;

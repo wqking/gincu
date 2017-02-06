@@ -5,27 +5,27 @@
 
 namespace gincu {
 
-void * Entity::operator new (const std::size_t size)
+void * GEntity::operator new (const std::size_t size)
 {
-	return MemoryPool::getInstance()->allocate(size);
+	return GHeapPool::getInstance()->allocate(size);
 }
 
-void Entity::operator delete(void * p)
+void GEntity::operator delete(void * p)
 {
-	MemoryPool::getInstance()->free(p);
+	GHeapPool::getInstance()->free(p);
 }
 
-Entity::Entity()
+GEntity::GEntity()
 	: componentsBuffer(nullptr)
 {
 }
 
-Entity::~Entity()
+GEntity::~GEntity()
 {
 	this->setComponentsBuffer(nullptr);
 }
 
-Entity * Entity::addComponent(Component * component)
+GEntity * GEntity::addComponent(GComponent * component)
 {
 	component->setEntity(this);
 
@@ -34,12 +34,12 @@ Entity * Entity::addComponent(Component * component)
 	return this;
 }
 
-void Entity::removeComponent(Component * component)
+void GEntity::removeComponent(GComponent * component)
 {
 	this->doRemoveComponent(component, this->componentsBuffer);
 }
 
-void Entity::setComponentsBuffer(ComponentsBuffer * componentsBuffer)
+void GEntity::setComponentsBuffer(GComponentsBuffer * componentsBuffer)
 {
 	if(this->componentsBuffer != componentsBuffer) {
 		this->doSetComponentsBuffer(componentsBuffer, this->componentsBuffer);
@@ -47,7 +47,7 @@ void Entity::setComponentsBuffer(ComponentsBuffer * componentsBuffer)
 	}
 }
 
-Component * Entity::getComponentByTypeId(const unsigned int typeId) const
+GComponent * GEntity::getComponentByTypeId(const unsigned int typeId) const
 {
 	return this->doGetComponentByTypeId(typeId);
 }

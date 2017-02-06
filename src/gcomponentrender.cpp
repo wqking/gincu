@@ -5,22 +5,22 @@
 
 namespace gincu {
 
-ComponentRender::ComponentRender()
+GComponentRender::GComponentRender()
 	: super(this)
 {
 }
 
 
-ComponentContainerRender::ComponentContainerRender()
+GComponentContainerRender::GComponentContainerRender()
 	: size{ 0, 0 }, renderList{}
 {
 }
 
-ComponentContainerRender::~ComponentContainerRender()
+GComponentContainerRender::~GComponentContainerRender()
 {
 }
 
-ComponentContainerRender * ComponentContainerRender::add(ComponentRender * render)
+GComponentContainerRender * GComponentContainerRender::add(GComponentRender * render)
 {
 	this->size.width = -1;
 
@@ -30,21 +30,21 @@ ComponentContainerRender * ComponentContainerRender::add(ComponentRender * rende
 	return this;
 }
 
-void ComponentContainerRender::doDraw()
+void GComponentContainerRender::doDraw()
 {
 	for(const ComponentRenderPointer & render : this->renderList) {
 		render->draw();
 	}
 }
 
-GameSize ComponentContainerRender::doGetSize() const
+GSize GComponentContainerRender::doGetSize() const
 {
 	if(this->size.width < 0) {
 		this->size.width = 0;
 		this->size.height = 0;
 		
 		for(const ComponentRenderPointer & render : this->renderList) {
-			const GameSize renderSize = render->getSize();
+			const GSize renderSize = render->getSize();
 			if(this->size.width < renderSize.width) {
 				this->size.width = renderSize.width;
 			}
@@ -57,41 +57,41 @@ GameSize ComponentContainerRender::doGetSize() const
 	return this->size;
 }
 
-void ComponentContainerRender::doAfterSetEntity()
+void GComponentContainerRender::doAfterSetEntity()
 {
-	Entity * entity = this->getEntity();
+	GEntity * entity = this->getEntity();
 	for(const ComponentRenderPointer & render : this->renderList) {
 		render->setEntity(entity);
 	}
 }
 
 
-ComponentImageRender * createAndLoadImageComponent(const std::string & resourceName)
+GComponentImageRender * createAndLoadImageComponent(const std::string & resourceName)
 {
-	ComponentImageRender * component = createComponent<ComponentImageRender >();
-	component->setRender(ResourceManager::getInstance()->getImage(resourceName));
+	GComponentImageRender * component = createComponent<GComponentImageRender >();
+	component->setRender(GResourceManager::getInstance()->getImage(resourceName));
 	return component;
 }
 
-ComponentImageRender * createImageComponent(const GameImage & image)
+GComponentImageRender * createImageComponent(const GImage & image)
 {
-	ComponentImageRender * component = createComponent<ComponentImageRender >();
+	GComponentImageRender * component = createComponent<GComponentImageRender >();
 	component->setRender(image);
 	return component;
 }
 
-ComponentTextRender * createAndLoadTextComponent(const std::string & text, const GameColor textColor, const int fontSize)
+GComponentTextRender * createAndLoadTextComponent(const std::string & text, const GColor textColor, const int fontSize)
 {
-	ComponentTextRender * component = createComponent<ComponentTextRender >();
-	component->setRender(GameText(fontSize));
+	GComponentTextRender * component = createComponent<GComponentTextRender >();
+	component->setRender(GText(fontSize));
 	component->getRender().setTextAndColor(text, textColor);
 	return component;
 }
 
-ComponentRectRender * createRectRenderComponent(const GameColor color, const GameSize & size)
+GComponentRectRender * createRectRenderComponent(const GColor color, const GSize & size)
 {
-	ComponentRectRender * component = createComponent<ComponentRectRender >();
-	component->setRender(RectRender());
+	GComponentRectRender * component = createComponent<GComponentRectRender >();
+	component->setRender(GRectRender());
 	component->getRender().setColor(color);
 	component->getRender().setSize(size);
 	return component;

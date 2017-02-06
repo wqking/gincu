@@ -7,7 +7,7 @@
 
 namespace gincu {
 
-class GameImageResource
+class GImageResource
 {
 public:
 	void load(const std::string & fileName)

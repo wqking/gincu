@@ -8,24 +8,24 @@
 
 namespace gincu {
 
-class Component;
-class ComponentsBuffer;
+class GComponent;
+class GComponentsBuffer;
 
-class Entity : public EntityBase
+class GEntity : public EntityBase
 {
 public:
 	void * operator new (const std::size_t size);
 	void operator delete(void * p);
 
-	Entity();
-	~Entity();
+	GEntity();
+	~GEntity();
 
-	Entity * addComponent(Component * component);
-	void removeComponent(Component * component);
+	GEntity * addComponent(GComponent * component);
+	void removeComponent(GComponent * component);
 	
-	void setComponentsBuffer(ComponentsBuffer * componentsBuffer);
+	void setComponentsBuffer(GComponentsBuffer * componentsBuffer);
 
-	Component * getComponentByTypeId(const unsigned int typeId) const;
+	GComponent * getComponentByTypeId(const unsigned int typeId) const;
 	
 	template <typename T>
 	T * getComponentByType() const {
@@ -33,7 +33,7 @@ public:
 	}
 	
 private:
-	ComponentsBuffer * componentsBuffer;
+	GComponentsBuffer * componentsBuffer;
 };
 
 

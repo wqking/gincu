@@ -7,10 +7,10 @@ namespace gincu {
 
 class SceneMatchThree;
 
-class StateSwapChesses : public State
+class StateSwapChesses : public GState
 {
 private:
-	typedef State super;
+	typedef GState super;
 
 public:
 	StateSwapChesses(SceneMatchThree * scene, const int stateId, const int nextStateId);

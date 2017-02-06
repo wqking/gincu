@@ -7,10 +7,10 @@ namespace gincu {
 
 class SceneMatchThree;
 
-class StateInitializeNewRound : public State
+class StateInitializeNewRound : public GState
 {
 private:
-	typedef State super;
+	typedef GState super;
 
 public:
 	explicit StateInitializeNewRound(SceneMatchThree * scene);

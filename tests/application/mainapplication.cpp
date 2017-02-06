@@ -18,11 +18,11 @@ MainApplication::MainApplication()
 			"Gincu",
 			gameFramesPerSecond,
 			gameRenderFramesPerSecond,
-			{ (CoordType)gameViewWidth, (CoordType)gameViewHeight },
-			{ (CoordType)gameViewWidth, (CoordType)gameViewHeight },
+			{ (GCoord)gameViewWidth, (GCoord)gameViewHeight },
+			{ (GCoord)gameViewWidth, (GCoord)gameViewHeight },
 			false,
 			true,
-			ViewFitStrategy::scaleFit,
+			GViewFitStrategy::scaleFit,
 			colorWhite
 		}
 	);

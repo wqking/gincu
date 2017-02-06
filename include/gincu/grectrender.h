@@ -9,31 +9,31 @@
 
 namespace gincu {
 
-class GameTransform;
-struct RenderInfo;
-class RectRenderResource;
-class GameImageResource;
+class GTransform;
+struct GRenderInfo;
+class GRectRenderResource;
+class GImageResource;
 
-class RectRender
+class GRectRender
 {
 public:
-	RectRender();
-	~RectRender();
+	GRectRender();
+	~GRectRender();
 
-	void draw(const GameTransform & transform, const RenderInfo * renderInfo);
+	void draw(const GTransform & transform, const GRenderInfo * renderInfo);
 
-	void setColor(const GameColor color);
-	GameColor getColor() const;
+	void setColor(const GColor color);
+	GColor getColor() const;
 
-	void setSize(const GameSize & size);
-	GameSize getSize() const;
+	void setSize(const GSize & size);
+	GSize getSize() const;
 
-	const std::shared_ptr<RectRenderResource> & getResource() const { return this->resource; }
+	const std::shared_ptr<GRectRenderResource> & getResource() const { return this->resource; }
 
-	const GameImageResource * getTexture() const { return nullptr; }
+	const GImageResource * getTexture() const { return nullptr; }
 
 private:
-	std::shared_ptr<RectRenderResource> resource;
+	std::shared_ptr<GRectRenderResource> resource;
 };
 
 

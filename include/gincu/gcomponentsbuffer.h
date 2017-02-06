@@ -7,24 +7,24 @@
 
 namespace gincu {
 
-class Component;
-class ComponentTouchHandler;
+class GComponent;
+class GComponentTouchHandler;
 
 // This is NOT for pooled component allocation
-class ComponentsBuffer
+class GComponentsBuffer
 {
 private:
-	typedef std::vector<Component *> ComponentListType;
+	typedef std::vector<GComponent *> ComponentListType;
 
 public:
-	ComponentsBuffer();
+	GComponentsBuffer();
 
-	void add(Component * component);
-	void remove(Component * component);
+	void add(GComponent * component);
+	void remove(GComponent * component);
 	
 	void updateLocalTransforms();
 	void render();
-	void findTouchHandlers(const GamePoint & position, std::vector<ComponentTouchHandler *> * outputResult);
+	void findTouchHandlers(const GPoint & position, std::vector<GComponentTouchHandler *> * outputResult);
 	
 private:
 	ComponentListType * doGetComponentList(const unsigned int typeId);

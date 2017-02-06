@@ -7,10 +7,10 @@ namespace gincu {
 
 class SceneMatchThree;
 
-class StateMainLoop : public State
+class StateMainLoop : public GState
 {
 private:
-	typedef State super;
+	typedef GState super;
 
 public:
 	explicit StateMainLoop(SceneMatchThree * scene);

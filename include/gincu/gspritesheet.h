@@ -13,7 +13,7 @@
 
 namespace gincu {
 
-enum class SpriteSheetFormat
+enum class GSpriteSheetFormat
 {
 	// http://spritesheetpacker.codeplex.com/
 	// a = 0 0 60 60
@@ -22,9 +22,9 @@ enum class SpriteSheetFormat
 	spritePackText,
 };
 
-class GameImageResource;
+class GImageResource;
 
-class GameSpriteSheetResource
+class GSpriteSheetResource
 {
 private:
 	template <typename T>
@@ -33,50 +33,50 @@ private:
 	};
 
 public:
-	void load(const std::string & resourceName, const SpriteSheetFormat format);
-	GameImage getImage(std::string name) const;
+	void load(const std::string & resourceName, const GSpriteSheetFormat format);
+	GImage getImage(std::string name) const;
 
 	const std::vector<std::string> & getNameList() const { return this->nameList; }
-	const std::vector<GameRect> & getRectList() const { return this->rectList; }
+	const std::vector<GRect> & getRectList() const { return this->rectList; }
 
 public: // used by loaders, don't use them directly
-	void appendSubImage(const std::string & name, const GameRect & rect);
+	void appendSubImage(const std::string & name, const GRect & rect);
 	void setImageName(const std::string & imageName);
 
 private:
 	std::string imageName;
 	std::vector<std::string> nameList;
-	std::vector<GameRect> rectList;
+	std::vector<GRect> rectList;
 	std::map<std::reference_wrapper<std::string>, std::size_t, LessCompare<std::reference_wrapper<std::string> > > indexMap;
-	std::shared_ptr<GameImageResource> imageResource;
+	std::shared_ptr<GImageResource> imageResource;
 };
 
-class GameSpriteSheet
+class GSpriteSheet
 {
 private:
-	typedef cpgf::GCallback<void (const std::string &, GameSpriteSheetResource *)> LoaderCallback;
-	typedef std::map<SpriteSheetFormat, LoaderCallback> LoaderMap;
+	typedef cpgf::GCallback<void (const std::string &, GSpriteSheetResource *)> LoaderCallback;
+	typedef std::map<GSpriteSheetFormat, LoaderCallback> LoaderMap;
 
 public:
-	static void registerLoader(const SpriteSheetFormat format, const LoaderCallback & loader);
+	static void registerLoader(const GSpriteSheetFormat format, const LoaderCallback & loader);
 
 public:
-	GameSpriteSheet();
-	explicit GameSpriteSheet(const std::shared_ptr<GameSpriteSheetResource> & resource);
+	GSpriteSheet();
+	explicit GSpriteSheet(const std::shared_ptr<GSpriteSheetResource> & resource);
 
-	GameImage getImage(const std::string & name) const { return this->resource->getImage(name); }
+	GImage getImage(const std::string & name) const { return this->resource->getImage(name); }
 
 	const std::vector<std::string> & getNameList() const { return this->resource->getNameList(); }
-	const std::vector<GameRect> & getRectList() const { return this->resource->getRectList(); }
+	const std::vector<GRect> & getRectList() const { return this->resource->getRectList(); }
 
 private:
 	static LoaderMap * getLoaderMap();
 
 private:
-	std::shared_ptr<GameSpriteSheetResource> resource;
+	std::shared_ptr<GSpriteSheetResource> resource;
 
 private:
-	friend class GameSpriteSheetResource;
+	friend class GSpriteSheetResource;
 };
 
 } //namespace gincu

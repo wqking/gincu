@@ -8,48 +8,48 @@
 
 namespace gincu {
 
-ComponentTouchHandler::ComponentTouchHandler()
+GComponentTouchHandler::GComponentTouchHandler()
 	: super(this)
 {
 }
 
-ComponentTouchHandler * ComponentTouchHandler::addOnTouch(const ComponentTouchHandler::OnTouched & onTouch)
+GComponentTouchHandler * GComponentTouchHandler::addOnTouch(const GComponentTouchHandler::OnTouched & onTouch)
 {
 	onTouchedList.add(onTouch);
 	
 	return this;
 }
 
-void ComponentTouchHandler::removeOnTouch(const ComponentTouchHandler::OnTouched & onTouch)
+void GComponentTouchHandler::removeOnTouch(const GComponentTouchHandler::OnTouched & onTouch)
 {
 	onTouchedList.remove(onTouch);
 }
 
-bool ComponentTouchHandler::canHandle(const GamePoint & point) const
+bool GComponentTouchHandler::canHandle(const GPoint & point) const
 {
 	return doCanHandle(point);
 }
 
-void ComponentTouchHandler::handle(const TouchEvent & touchEvent)
+void GComponentTouchHandler::handle(const GTouchEvent & touchEvent)
 {
 	OnTouchedList tempOnTouchedList = onTouchedList;
 	tempOnTouchedList(touchEvent);
 }
 
 
-ComponentRendererTouchHandler::ComponentRendererTouchHandler()
+GComponentRendererTouchHandler::GComponentRendererTouchHandler()
 {
 }
 
-bool ComponentRendererTouchHandler::doCanHandle(const GamePoint & point) const
+bool GComponentRendererTouchHandler::doCanHandle(const GPoint & point) const
 {
-	ComponentTransform * transform = getEntity()->getComponentByType<ComponentTransform>();
+	GComponentTransform * transform = getEntity()->getComponentByType<GComponentTransform>();
 	if(! transform->isVisible()) {
 		return false;
 	}
 
-	const GameTransform t = computeRenderableTransform(transform);
-	const GameSize size = getEntity()->getComponentByType<ComponentRender>()->getSize();
+	const GTransform t = computeRenderableTransform(transform);
+	const GSize size = getEntity()->getComponentByType<GComponentRender>()->getSize();
 	const sf::Transform & sfmlTransform = t.getSfmlTransform();
 	auto normalizedRect = sfmlTransform.transformRect({ 0, 0, size.width, size.height });
 	

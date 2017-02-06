@@ -2,7 +2,7 @@
 
 namespace gincu {
 
-ComponentIdRegister ComponentChess::componentIdRegister("componentChess");
+GComponentIdRegister ComponentChess::componentIdRegister("componentChess");
 
 ComponentChess::ComponentChess(const ChessColor color)
 	:

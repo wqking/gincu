@@ -11,10 +11,10 @@ namespace gincu {
 
 class SceneMatchThree;
 
-class StateEraseMatches : public State
+class StateEraseMatches : public GState
 {
 private:
-	typedef State super;
+	typedef GState super;
 
 public:
 	explicit StateEraseMatches(SceneMatchThree * scene, const int stateId, const int nextStateId);

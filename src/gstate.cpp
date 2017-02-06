@@ -3,39 +3,39 @@
 
 namespace gincu {
 
-State::State(const int id, const int nextId)
+GState::GState(const int id, const int nextId)
 	: id(id), nextId(nextId), stateMachine(nullptr)
 {
 }
 
-State::~State()
+GState::~GState()
 {
 }
 
-void State::onEnter()
+void GState::onEnter()
 {
 	this->doOnEnter();
 }
 
-void State::onExit()
+void GState::onExit()
 {
 	this->doOnExit();
 }
 
-void State::doOnEnter()
+void GState::doOnEnter()
 {
 }
 
-void State::doOnExit()
+void GState::doOnExit()
 {
 }
 
-void State::finish()
+void GState::finish()
 {
 	this->gotoNext();
 }
 
-void State::gotoNext()
+void GState::gotoNext()
 {
 	this->getStateMachine()->gotoState(this->getNextId());
 }

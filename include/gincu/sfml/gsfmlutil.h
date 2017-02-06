@@ -10,22 +10,22 @@
 
 namespace gincu {
 
-inline sf::Color gameColorToSfml(const GameColor color)
+inline sf::Color gameColorToSfml(const GColor color)
 {
 	return sf::Color(((color & 0xff000000) >> 24) | ((color & 0xffffff) << 8));
 }
 
-inline GameColor sfmlColorToGame(const sf::Color & color)
+inline GColor sfmlColorToGame(const sf::Color & color)
 {
 	return gameColorMakeARGB(color.a, color.r, color.g, color.b);
 }
 
-inline sf::Vector2f gameVector2ToSfml(const GameVector2 & v)
+inline sf::Vector2f gameVector2ToSfml(const GVector2 & v)
 {
 	return { v.x, v.y };
 }
 
-inline sf::BlendMode gameBlendModeToSfml(const GameBlendMode & blendMode)
+inline sf::BlendMode gameBlendModeToSfml(const GBlendMode & blendMode)
 {
 	return sf::BlendMode(
 		(sf::BlendMode::Factor)blendMode.colorChannel.source,
@@ -37,7 +37,7 @@ inline sf::BlendMode gameBlendModeToSfml(const GameBlendMode & blendMode)
 	);
 }
 
-inline void copyBlendAndShaderToSfml(sf::RenderStates * renderStates, const RenderInfo * renderInfo)
+inline void copyBlendAndShaderToSfml(sf::RenderStates * renderStates, const GRenderInfo * renderInfo)
 {
 	renderStates->blendMode = gameBlendModeToSfml(renderInfo->blendMode);
 }

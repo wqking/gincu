@@ -4,13 +4,13 @@
 
 namespace gincu {
 
-ComponentTransform::ComponentTransform()
+GComponentTransform::GComponentTransform()
 	:
-		ComponentTransform(GamePoint())
+		GComponentTransform(GPoint())
 {
 }
 
-ComponentTransform::ComponentTransform(const GamePoint & position, const GameScale & scale, const bool visible)
+GComponentTransform::GComponentTransform(const GPoint & position, const GScale & scale, const bool visible)
 	:
 		super(this),
 		transform(position, scale),
@@ -18,42 +18,42 @@ ComponentTransform::ComponentTransform(const GamePoint & position, const GameSca
 {
 }
 
-ComponentTransform::~ComponentTransform()
+GComponentTransform::~GComponentTransform()
 {
 }
 
 
-ComponentLocalTransform::ComponentLocalTransform()
+GComponentLocalTransform::GComponentLocalTransform()
 	:
 		super(),
 		parent(nullptr)
 {
 	// must set explicitly because the super is another component.
-	this->setTypeId(ComponentLocalTransform::getComponentType());
+	this->setTypeId(GComponentLocalTransform::getComponentType());
 }
 
-ComponentLocalTransform::ComponentLocalTransform(const GamePoint & position, const GameScale & scale, const bool visible)
+GComponentLocalTransform::GComponentLocalTransform(const GPoint & position, const GScale & scale, const bool visible)
 	:
 		super(position, scale, visible),
 		parent(nullptr)
 {
 	// must set explicitly because the super is another component.
-	this->setTypeId(ComponentLocalTransform::getComponentType());
+	this->setTypeId(GComponentLocalTransform::getComponentType());
 }
 
-ComponentLocalTransform::~ComponentLocalTransform()
+GComponentLocalTransform::~GComponentLocalTransform()
 {
 	this->setParent(nullptr);
 
 	// can't iterate through on this->children because child->setParent will invalid any iterator.
-	std::vector<ComponentLocalTransform *> tempChildrenList;
+	std::vector<GComponentLocalTransform *> tempChildrenList;
 	tempChildrenList.swap(this->children);
-	for(ComponentLocalTransform * child : tempChildrenList) {
+	for(GComponentLocalTransform * child : tempChildrenList) {
 		child->setParent(nullptr);
 	}
 }
 
-ComponentLocalTransform * ComponentLocalTransform::setParent(ComponentLocalTransform * parent)
+GComponentLocalTransform * GComponentLocalTransform::setParent(GComponentLocalTransform * parent)
 {
 	if(this->parent != parent) {
 		if(this->parent != nullptr) {
@@ -70,17 +70,17 @@ ComponentLocalTransform * ComponentLocalTransform::setParent(ComponentLocalTrans
 	return this;
 }
 
-ComponentLocalTransform * ComponentLocalTransform::getParent() const
+GComponentLocalTransform * GComponentLocalTransform::getParent() const
 {
 	return this->parent;
 }
 
-void ComponentLocalTransform::addChild(ComponentLocalTransform * child)
+void GComponentLocalTransform::addChild(GComponentLocalTransform * child)
 {
 	this->children.push_back(child);
 }
 
-void ComponentLocalTransform::removeChild(ComponentLocalTransform * child)
+void GComponentLocalTransform::removeChild(GComponentLocalTransform * child)
 {
 	auto it = std::find(this->children.begin(), this->children.end(), child);
 	if(it != this->children.end()) {
@@ -88,14 +88,14 @@ void ComponentLocalTransform::removeChild(ComponentLocalTransform * child)
 	}
 }
 
-void ComponentLocalTransform::applyGlobal()
+void GComponentLocalTransform::applyGlobal()
 {
-	ComponentTransform * globalTransform = this->getEntity()->getComponentByType<ComponentTransform>();
+	GComponentTransform * globalTransform = this->getEntity()->getComponentByType<GComponentTransform>();
 	if(globalTransform != nullptr) {
 		if(this->parent != nullptr) {
-			ComponentTransform * parentGlobalTransform = this->parent->getEntity()->getComponentByType<ComponentTransform>();
+			GComponentTransform * parentGlobalTransform = this->parent->getEntity()->getComponentByType<GComponentTransform>();
 			if(parentGlobalTransform != nullptr) {
-				GameTransform parentTransform = parentGlobalTransform->getTransform();
+				GTransform parentTransform = parentGlobalTransform->getTransform();
 				parentTransform.translate(this->parent->getTransform().getOrigin());
 				globalTransform->setTransform(parentTransform.multiply(this->getTransform()));
 			}
@@ -105,7 +105,7 @@ void ComponentLocalTransform::applyGlobal()
 		}
 	}
 
-	for(ComponentLocalTransform * child : this->children) {
+	for(GComponentLocalTransform * child : this->children) {
 		child->applyGlobal();
 	}
 }

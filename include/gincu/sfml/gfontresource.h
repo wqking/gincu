@@ -5,7 +5,7 @@
 
 namespace gincu {
 
-class GameFontResource
+class GFontResource
 {
 public:
 	sf::Font font;

@@ -50,13 +50,13 @@ void StateResult::doOnExit()
 
 void StateResult::onBackgroundShown()
 {
-	this->textEntity->addComponent(createComponent<ComponentRendererTouchHandler>()->addOnTouch(cpgf::makeCallback(this, &StateResult::onFinish)));
+	this->textEntity->addComponent(createComponent<GComponentRendererTouchHandler>()->addOnTouch(cpgf::makeCallback(this, &StateResult::onFinish)));
 	this->scene->setTouchCapture(this->textEntity);
 }
 
-void StateResult::onFinish(const TouchEvent & touchEvent)
+void StateResult::onFinish(const GTouchEvent & touchEvent)
 {
-	if(touchEvent.type == TouchEventType::eventPressed) {
+	if(touchEvent.type == GTouchEventType::eventPressed) {
 		SceneMenu::returnToMainMenu();
 		this->gotoNext();
 	}
@@ -66,7 +66,7 @@ void StateResult::doCollectChesses()
 {
 	MatchThreeBoard * board = this->scene->getBoard();
 
-	const GameApplication * application = GameApplication::getInstance();
+	const GApplication * application = GApplication::getInstance();
 
 	cpgf::GTween & tween = cpgf::GTweenList::getInstance()->tween()
 		.duration(600)
@@ -81,60 +81,60 @@ void StateResult::doCollectChesses()
 		for(int column = 0; column < columnCount; ++column) {
 			const RowColumn rowColumn { row, column };
 
-			Entity * chess = board->getChessAt(rowColumn);
+			GEntity * chess = board->getChessAt(rowColumn);
 
-			ComponentTransform * transform = chess->getComponentByType<ComponentTransform>();
+			GComponentTransform * transform = chess->getComponentByType<GComponentTransform>();
 
-			CoordType x = 0;
-			CoordType y = 0;
+			GCoord x = 0;
+			GCoord y = 0;
 			if(getRand(2) == 0) {
 				x = (getRand(2) == 0 ? -getRand(50, 100) : application->getViewSize().width + getRand(50, 100));
-				y = (CoordType)getRand((int)application->getViewSize().height);
+				y = (GCoord)getRand((int)application->getViewSize().height);
 			}
 			else {
-				x = (CoordType)getRand((int)application->getViewSize().width);
-				y = (CoordType)(getRand(2) == 0 ? -getRand(50, 100) : application->getViewSize().height + getRand(50, 100));
+				x = (GCoord)getRand((int)application->getViewSize().width);
+				y = (GCoord)(getRand(2) == 0 ? -getRand(50, 100) : application->getViewSize().height + getRand(50, 100));
 			}
-			tween.target(cpgf::createAccessor(transform, &ComponentTransform::getPosition, &ComponentTransform::setPosition), GamePoint{x, y});
+			tween.target(cpgf::createAccessor(transform, &GComponentTransform::getPosition, &GComponentTransform::setPosition), GPoint{x, y});
 		}
 	}
 }
 
 void StateResult::doShowMessage()
 {
-	const GameApplication * application = GameApplication::getInstance();
+	const GApplication * application = GApplication::getInstance();
 
 	this->backgroundEntity = this->scene->addEntity(
-		(new Entity())
-		->addComponent(createComponent<ComponentTransform>())
-		->addComponent(createComponent<ComponentLocalTransform>(GamePoint { application->getViewSize().width / 2, application->getViewSize().height / 2 }, GameScale { 0.1f, 0.1f }))
-		->addComponent(createComponent<ComponentAnchor>(RenderAnchor::center))
-		->addComponent(createRectRenderComponent(gameColorSetAlpha(colorGreen, 127), GameSize { 450, 200}))
+		(new GEntity())
+		->addComponent(createComponent<GComponentTransform>())
+		->addComponent(createComponent<GComponentLocalTransform>(GPoint { application->getViewSize().width / 2, application->getViewSize().height / 2 }, GScale { 0.1f, 0.1f }))
+		->addComponent(createComponent<GComponentAnchor>(GRenderAnchor::center))
+		->addComponent(createRectRenderComponent(gameColorSetAlpha(colorGreen, 127), GSize { 450, 200}))
 		);
 
 	this->imageEntity = this->scene->addEntity(
-		(new Entity())
-		->addComponent(createComponent<ComponentTransform>())
-		->addComponent(createComponent<ComponentLocalTransform>(GamePoint{ 0, 0 }, GameScale{ 0.2f, 0.2f })->setParent(this->backgroundEntity->getComponentByType<ComponentLocalTransform>()))
-		->addComponent(createComponent<ComponentAnchor>(RenderAnchor::center)->setFlipX(true)->setFlipY(true))
+		(new GEntity())
+		->addComponent(createComponent<GComponentTransform>())
+		->addComponent(createComponent<GComponentLocalTransform>(GPoint{ 0, 0 }, GScale{ 0.2f, 0.2f })->setParent(this->backgroundEntity->getComponentByType<GComponentLocalTransform>()))
+		->addComponent(createComponent<GComponentAnchor>(GRenderAnchor::center)->setFlipX(true)->setFlipY(true))
 		->addComponent(createAndLoadImageComponent(backgroundImageName))
 	);
 
 	this->textEntity = this->scene->addEntity(
-		(new Entity())
-		->addComponent(createComponent<ComponentTransform>())
-		->addComponent(createComponent<ComponentLocalTransform>(GamePoint{ 0, 0 })->setParent(this->backgroundEntity->getComponentByType<ComponentLocalTransform>()))
-		->addComponent(createComponent<ComponentAnchor>(RenderAnchor::center))
+		(new GEntity())
+		->addComponent(createComponent<GComponentTransform>())
+		->addComponent(createComponent<GComponentLocalTransform>(GPoint{ 0, 0 })->setParent(this->backgroundEntity->getComponentByType<GComponentLocalTransform>()))
+		->addComponent(createComponent<GComponentAnchor>(GRenderAnchor::center))
 		->addComponent(createAndLoadTextComponent("Great! Your score is " + toString(scene->getTotalScore()), colorWhite, normalFontSize))
 		);
 
-	ComponentLocalTransform * transform = backgroundEntity->getComponentByType<ComponentLocalTransform>();
+	GComponentLocalTransform * transform = backgroundEntity->getComponentByType<GComponentLocalTransform>();
 	cpgf::GTweenList::getInstance()->tween()
 		.duration(1000)
 		.ease(cpgf::ElasticEase::easeOut())
 		.onComplete(cpgf::makeCallback(this, &StateResult::onBackgroundShown))
-		.target(cpgf::createAccessor(transform, &ComponentLocalTransform::getScale, &ComponentLocalTransform::setScale), GameScale { 1.0f, 1.0f })
-		.target(cpgf::createAccessor(transform, &ComponentLocalTransform::getRotation, &ComponentLocalTransform::setRotation), 360)
+		.target(cpgf::createAccessor(transform, &GComponentLocalTransform::getScale, &GComponentLocalTransform::setScale), GScale { 1.0f, 1.0f })
+		.target(cpgf::createAccessor(transform, &GComponentLocalTransform::getRotation, &GComponentLocalTransform::setRotation), 360)
 	;
 }
 

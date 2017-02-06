@@ -5,28 +5,28 @@
 
 namespace gincu {
 
-class GameImageResource;
+class GImageResource;
 
-struct RenderInfo
+struct GRenderInfo
 {
-	constexpr RenderInfo()
+	constexpr GRenderInfo()
 		: blendMode(), texture(nullptr)
 	{}
 
-	GameBlendMode blendMode;
-	const GameImageResource * texture;
+	GBlendMode blendMode;
+	const GImageResource * texture;
 	
 	// will add shader in the future
 };
 
-inline bool operator == (const RenderInfo & a, const RenderInfo & b)
+inline bool operator == (const GRenderInfo & a, const GRenderInfo & b)
 {
 	return a.blendMode == b.blendMode
 		&& a.texture == b.texture
 	;
 }
 
-inline bool operator != (const RenderInfo & a, const RenderInfo & b)
+inline bool operator != (const GRenderInfo & a, const GRenderInfo & b)
 {
 	return !(a == b);
 }

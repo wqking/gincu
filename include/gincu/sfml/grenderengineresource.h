@@ -9,10 +9,10 @@
 
 namespace gincu {
 
-class RenderEngineResource
+class GRenderEngineResource
 {
 public:
-	RenderEngineResource() :
+	GRenderEngineResource() :
 		window(),
 		view(),
 		batchDrawVertexArray(sf::Triangles),
@@ -30,7 +30,7 @@ public:
 	sf::View view;
 
 	sf::VertexArray batchDrawVertexArray;
-	RenderInfo batchDrawRenderInfo;
+	GRenderInfo batchDrawRenderInfo;
 	bool inBatchDraw;
 };
 

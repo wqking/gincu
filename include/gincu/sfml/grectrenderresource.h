@@ -5,7 +5,7 @@
 
 namespace gincu {
 
-class RectRenderResource
+class GRectRenderResource
 {
 public:
 	sf::RectangleShape rectangle;

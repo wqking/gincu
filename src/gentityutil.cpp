@@ -5,16 +5,16 @@
 
 namespace gincu {
 
-GameTransform computeRenderableTransform(
-	ComponentTransform * transform,
-	ComponentRender * render
+GTransform computeRenderableTransform(
+	GComponentTransform * transform,
+	GComponentRender * render
 )
 {
-	ComponentAnchor * anchor = transform->getEntity()->template getComponentByType<ComponentAnchor>();
+	GComponentAnchor * anchor = transform->getEntity()->template getComponentByType<GComponentAnchor>();
 	if(anchor != nullptr) {
-		GameTransform t = transform->getTransform();
+		GTransform t = transform->getTransform();
 		if(render == nullptr) {
-			render = transform->getEntity()->getComponentByType<ComponentRender>();
+			render = transform->getEntity()->getComponentByType<GComponentRender>();
 		}
 		anchor->apply(t, render->getSize());
 		return t;
