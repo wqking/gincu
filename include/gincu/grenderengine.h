@@ -4,6 +4,8 @@
 #include "gincu/ggeometry.h"
 #include "gincu/gcolor.h"
 
+#include "cpgf/gcallbackList.h"
+
 #include <vector>
 #include <map>
 #include <memory>
@@ -11,7 +13,6 @@
 namespace gincu {
 
 class GRenderEngineResource;
-class GRenderable;
 class GTransform;
 class GImage;
 class GText;
@@ -32,8 +33,8 @@ public:
 
 	void render();
 
-	void appendRenderable(GRenderable * renderable);
-	void removeRenderable(GRenderable * renderable);
+	void appendRender(const cpgf::GCallback<void ()> & render);
+	void removeRender(const cpgf::GCallback<void ()> & render);
 	
 	bool isAlive() const;
 
@@ -56,7 +57,7 @@ private:
 
 private:
 	std::shared_ptr<GRenderEngineResource> resource;
-	std::vector<GRenderable *> renderableList;
+	cpgf::GCallbackList<void ()> renderList;
 	GSize windowSize;
 };
 

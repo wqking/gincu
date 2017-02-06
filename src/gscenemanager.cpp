@@ -8,12 +8,12 @@ namespace gincu {
 
 GSceneManager::GSceneManager()
 {
-	GRenderEngine::getInstance()->appendRenderable(this);
+	GRenderEngine::getInstance()->appendRender(cpgf::makeCallback(this, &GSceneManager::render));
 }
 
 GSceneManager::~GSceneManager()
 {
-	GRenderEngine::getInstance()->removeRenderable(this);
+	GRenderEngine::getInstance()->removeRender(cpgf::makeCallback(this, &GSceneManager::render));
 }
 
 void GSceneManager::switchScene(GScene * scene)

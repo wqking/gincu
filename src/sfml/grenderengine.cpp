@@ -1,5 +1,4 @@
 #include "gincu/grenderengine.h"
-#include "gincu/grenderable.h"
 #include "gincu/gtransform.h"
 #include "gincu/gimage.h"
 #include "gincu/gtext.h"
@@ -69,24 +68,19 @@ void GRenderEngine::render()
 {
 	this->resource->window->clear(gameColorToSfml(GApplication::getInstance()->getConfigInfo().backgroundColor));
 	
-	for(auto it = this->renderableList.rbegin(); it != this->renderableList.rend(); ++it) {
-		(*it)->render();
-	}
+	this->renderList();
 
 	this->resource->window->display();
 }
 
-void GRenderEngine::appendRenderable(GRenderable * renderable)
+void GRenderEngine::appendRender(const cpgf::GCallback<void ()> & render)
 {
-	this->renderableList.push_back(renderable);
+	this->renderList.add(render);
 }
 
-void GRenderEngine::removeRenderable(GRenderable * renderable)
+void GRenderEngine::removeRender(const cpgf::GCallback<void ()> & render)
 {
-	auto it = std::find(this->renderableList.begin(), this->renderableList.end(), renderable);
-	if(it != this->renderableList.end()) {
-		this->renderableList.erase(it);
-	}
+	this->renderList.remove(render);
 }
 
 bool GRenderEngine::isAlive() const

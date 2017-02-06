@@ -1,8 +1,6 @@
 #ifndef GSCENEMANAGER_H
 #define GSCENEMANAGER_H
 
-#include "gincu/grenderable.h"
-
 #include <memory>
 
 namespace gincu {
@@ -10,7 +8,7 @@ namespace gincu {
 class GScene;
 struct GTouchEvent;
 
-class GSceneManager : public GRenderable
+class GSceneManager
 {
 public:
 	GSceneManager();
@@ -27,7 +25,7 @@ private:
 	void onUpdate();
 
 private:
-	virtual void render() override;
+	void render();
 
 private:
 	std::unique_ptr<GScene> currentScene;
