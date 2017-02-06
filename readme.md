@@ -85,11 +85,9 @@ There are several ways to contribute to the project
 
  * bin. The resources, libraries, and the game program. CMake was already configured to output compiled program there.
  * build. CMake build home.
- * src. All the source code.
- * src/engine. The low level engine. It's about rendering, transforming, and etc.
- * src/engine/sfml. All SFML related code.
- * src/framework. The high level game framework. It's about the general game logic.
- * src/application. All application code. Each sub folder is a single game or application.
- * src/application/matchthree. The match-three game. If you need to add another game XYZ, create folder src/application/xyz.
+ * include. The include folder of the library.
+ * src. The source code of the library..
+ * tests/application. All application code. Each sub folder is a single game or application.
+ * tests/application/matchthree. The match-three game. If you need to add another game XYZ, create folder src/application/xyz.
  
  
