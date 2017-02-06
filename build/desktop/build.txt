@@ -2,6 +2,8 @@ set(TARGET gincu)
 set(ROOT_PATH ${PROJECT_SOURCE_DIR}/../..)
 set(BIN_PATH ${ROOT_PATH}/bin)
 set(SRC_PATH ${ROOT_PATH}/src)
+set(INCLUDE_PATH ${ROOT_PATH}/include)
+set(TESTS_PATH ${ROOT_PATH}/tests)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${BIN_PATH})
 
@@ -57,19 +59,15 @@ macro(globAndAppendFiles fileList)
 	list(APPEND ${fileList} ${temp})
 endmacro()
 
-set(fileList ${SRC_PATH}/main.cpp)
-
 globAndAppendFiles(fileList
 	${SRC_PATH}/*.cpp
-	${SRC_PATH}/engine/*.cpp
-	${SRC_PATH}/framework/*.cpp
-	${SRC_PATH}/application/*.cpp
-	${SRC_PATH}/application/matchthree/*.cpp
+	${SRC_PATH}/sfml/*.cpp
+	${TESTS_PATH}/application/*.cpp
+	${TESTS_PATH}/application/matchthree/*.cpp
 	${CPGF_PATH}/src/tween/*.cpp
 	${CPGF_PATH}/src/gexception.cpp
 	${CPGF_PATH}/src/glifecycle.cpp
 	${CPGF_PATH}/src/gmemorypool.cpp
-	${SRC_PATH}/engine/sfml/*.cpp
 )
 
 add_executable(
@@ -89,8 +87,8 @@ set_target_properties(
 	DEBUGGER_WORKING_DIRECTORY ${BIN_PATH}
 )
 include_directories(
-	${SRC_PATH}
-	${SRC_PATH}/application
+	${INCLUDE_PATH}
+	${TESTS_PATH}/application
 	${CPGF_PATH}/include
 	${SFML_PATH}/include
 )

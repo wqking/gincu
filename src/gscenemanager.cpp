@@ -1,0 +1,67 @@
+#include "gincu/gscenemanager.h"
+#include "gincu/gscene.h"
+#include "gincu/grenderengine.h"
+#include "gincu/gapplication.h"
+#include "gincu/gheappool.h"
+
+namespace gincu {
+
+SceneManager::SceneManager()
+{
+	RenderEngine::getInstance()->appendRenderable(this);
+}
+
+SceneManager::~SceneManager()
+{
+	RenderEngine::getInstance()->removeRenderable(this);
+}
+
+void SceneManager::switchScene(Scene * scene)
+{
+	this->sceneToSwitchTo.reset(scene);
+
+	GameApplication::getInstance()->addUpdater(cpgf::makeCallback(this, &SceneManager::onUpdate));
+}
+
+void SceneManager::doSwitchScene(Scene * scene)
+{
+	if(this->currentScene) {
+		this->currentScene->onExit();
+	}
+
+	this->currentScene.reset();
+	MemoryPool::getInstance()->sceneFreed();
+	this->currentScene.reset(scene);
+
+	if(this->currentScene) {
+		this->currentScene->onEnter();
+		
+		MemoryPool::getInstance()->sceneSwitched();
+	}
+}
+
+void SceneManager::render()
+{
+	if(this->currentScene) {
+		this->currentScene->renderScene();
+	}
+}
+
+void SceneManager::handleTouchEvent(const TouchEvent & touchEvent)
+{
+	if(this->currentScene) {
+		this->currentScene->handleTouchEvent(touchEvent);
+	}
+}
+
+void SceneManager::onUpdate()
+{
+	GameApplication::getInstance()->removeUpdater(cpgf::makeCallback(this, &SceneManager::onUpdate));
+
+	if(this->sceneToSwitchTo) {
+		this->doSwitchScene(this->sceneToSwitchTo.release());
+	}
+}
+
+
+} //namespace gincu
