@@ -3,6 +3,15 @@ set(SFML_PATH /source/SFML-2.4.1)
 
 
 #[[
+The level to output log messages.
+If this macro is not defined, default is G_LOG_LEVEL_INFO.
+See G_LOG_LEVEL_XXX in glog.h for all possible values.
+Uncomment to change it.
+]]
+#add_definitions(-DGINCU_LOG_LEVEL=G_LOG_LEVEL_INFO)
+
+
+#[[
 The component storage policy used by Entity.
 If this macro is not defined, default is mixedArray.
 See EntityStoragePolicy in entitypolicy.h for all possible values.

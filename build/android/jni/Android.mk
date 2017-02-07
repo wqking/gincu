@@ -13,15 +13,20 @@ ROOT_PATH := E:\projects\gincu
 SRC_PATH := $(ROOT_PATH)\src
 TESTS_PATH := $(ROOT_PATH)\tests
 
-LOCAL_CFLAGS += -fexceptions -std=c++11
-
-#PRODUCT_COPY_FILES += $(ROOT_PATH)/bin/resources/arialbd.ttf
+LOCAL_CFLAGS += -fexceptions -std=c++11 \
+#	-DGINCU_LOG_LEVEL=G_LOG_LEVEL_DEBUG \
+#	-DGINCU_ENTITY_STORAGE_POLICY=mixedArray \
+#	-DGINCU_ENTITY_STORAGE_POLICY_INITIAL_SIZE=componentTypeId_PrimaryCount \
+#	-DGINCU_MEMORY_POOL_ALIGNMENT=64 \
+#	-DGINCU_MEMORY_POOL_BLOCK_COUNT_PER_TRUNK=256 \
+#	-DGINCU_MEMORY_POOL_PURGE_STRATEGY=onSceneSwitched \
 
 LOCAL_C_INCLUDES += \
 	$(ROOT_PATH)/include \
 	$(TESTS_PATH)/application \
 	$(CPGF_PATH)/include \
 	$(SFML_PATH)/include \
+	$(ROOT_PATH)/thirdparty \
 
 LOCAL_SRC_FILES := \
 	$(CPGF_PATH)/src/gexception.cpp \
@@ -83,6 +88,7 @@ LOCAL_SRC_FILES := \
 	$(SRC_PATH)/gstate.cpp \
 	$(SRC_PATH)/gstatemachine.cpp \
 	$(SRC_PATH)/gutil.cpp \
+	$(ROOT_PATH)/thirdparty/zf_log.cpp \
 
 LOCAL_SHARED_LIBRARIES := sfml-system
 LOCAL_SHARED_LIBRARIES += sfml-window

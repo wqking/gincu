@@ -64,8 +64,11 @@ globAndAppendFiles(fileList
 	${CPGF_PATH}/src/gexception.cpp
 	${CPGF_PATH}/src/glifecycle.cpp
 	${CPGF_PATH}/src/gmemorypool.cpp
+	
 	${SRC_PATH}/*.cpp
 	${SRC_PATH}/sfml/*.cpp
+	${ROOT_PATH}/thirdparty/*.cpp
+	
 	${TESTS_PATH}/application/*.cpp
 	${TESTS_PATH}/application/matchthree/*.cpp
 	${TESTS_PATH}/application/testbed/*.cpp
@@ -93,6 +96,7 @@ include_directories(
 	${TESTS_PATH}/application
 	${CPGF_PATH}/include
 	${SFML_PATH}/include
+	${ROOT_PATH}/thirdparty
 )
 target_link_libraries(${TARGET} ${LIBS} )
 

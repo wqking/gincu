@@ -1,8 +1,8 @@
 #include "gincu/gheappool.h"
+#include "gincu/glog.h"
 
 #include <algorithm>
 #include <cassert>
-#include <iostream>
 
 #ifndef GINCU_MEMORY_POOL_ALIGNMENT
 #define GINCU_MEMORY_POOL_ALIGNMENT 64
@@ -122,7 +122,9 @@ void * GHeapSizedPool::allocate(const std::size_t size)
 		void * chunk = this->chunkList.back().start;
 		ChunkHeader * chunkHeader = getChunkHeader(chunk);
 		chunkHeader->usedCount = 1;
-std::cout << "GHeapPool: Allocate new chunk: " << chunk << " " << (void *)this->chunkList.back().rawMemory.get() << " " << size << " " << this->blockTotalSize << " " << this << std::endl;
+
+		G_LOG_DEBUG("Allocate new chunk: %p %p %u %u %p", chunk, (void *)this->chunkList.back().rawMemory.get(), size, this->blockTotalSize, this);
+
 		return setSize(chunk, size);
 	}
 	else {
@@ -182,7 +184,8 @@ void GHeapSizedPool::doPurgeChunk(const int index)
 		}
 	}
 
-std::cout << "GHeapPool: Purged one chunk " << index << " " << this->chunkList[index].start << " " << this->blockTotalSize << " remain: " << this->chunkList.size() - 1 << std::endl;
+	G_LOG_DEBUG("Purged one chunk %d %p %d remain: %d", index, this->chunkList[index].start, this->blockTotalSize, this->chunkList.size() - 1);
+
 	this->chunkList.erase(this->chunkList.begin() + index);
 }
 
@@ -225,9 +228,7 @@ void * GHeapPool::allocate(const std::size_t size)
 		this->poolMap.insert(std::make_pair(alignedSize, std::unique_ptr<GHeapSizedPool>(pool)));
 	}
 	
-	void * p = pool->allocate(size);
-//std::cout << p << std::endl;
-	return p;
+	return pool->allocate(size);
 }
 
 void GHeapPool::free(void * p)
@@ -240,7 +241,7 @@ void GHeapPool::free(void * p)
 		it->second->free(p);
 	}
 	else {
-		std::cerr << "ERROR: can't find memory pool to free buffer." << std::endl;
+		G_LOG_FATAL("ERROR: can't find memory pool to free buffer.");
 	}
 }
 
