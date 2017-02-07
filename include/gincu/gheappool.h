@@ -75,8 +75,7 @@ public:
 	
 	void purge();
 
-	void sceneFreed();
-	void sceneSwitched();
+	GHeapPoolPurgeStrategy getPurgeStrategy() const { return this->purgeStrategy; }
 
 private:
 	std::size_t alignment;

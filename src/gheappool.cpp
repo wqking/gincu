@@ -251,20 +251,6 @@ void GHeapPool::purge()
 	}
 }
 
-void GHeapPool::sceneFreed()
-{
-	if(this->purgeStrategy == GHeapPoolPurgeStrategy::onSceneFreed) {
-		this->purge();
-	}
-}
-
-void GHeapPool::sceneSwitched()
-{
-	if(this->purgeStrategy == GHeapPoolPurgeStrategy::onSceneSwitched) {
-		this->purge();
-	}
-}
-
 
 } //namespace gincu
 

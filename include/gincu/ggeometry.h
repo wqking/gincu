@@ -73,12 +73,6 @@ inline GSize operator * (const GSize & a, const float b)
 typedef GVector2 GPoint;
 typedef GVector2 GScale;
 
-struct RowColumn
-{
-	int row;
-	int column;
-};
-
 
 } //namespace gincu
 

@@ -1,6 +1,7 @@
 #ifndef MATCHTHREEBOARD_H
 #define MATCHTHREEBOARD_H
 
+#include "matchthree/matchthreechess.h"
 #include "gincu/ggeometry.h"
 
 #include <vector>

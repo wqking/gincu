@@ -21,6 +21,12 @@ enum class ChessColor
 	none
 };
 
+struct RowColumn
+{
+	int row;
+	int column;
+};
+
 class GComponentRender;
 
 GComponentRender * createChessRender(const ChessColor chessColor);

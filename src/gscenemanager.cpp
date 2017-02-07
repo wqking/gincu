@@ -30,13 +30,19 @@ void GSceneManager::doSwitchScene(GScene * scene)
 	}
 
 	this->currentScene.reset();
-	GHeapPool::getInstance()->sceneFreed();
+
+	if(GHeapPool::getInstance()->getPurgeStrategy() == GHeapPoolPurgeStrategy::onSceneFreed) {
+		GHeapPool::getInstance()->purge();
+	}
+
 	this->currentScene.reset(scene);
 
 	if(this->currentScene) {
 		this->currentScene->onEnter();
 		
-		GHeapPool::getInstance()->sceneSwitched();
+		if(GHeapPool::getInstance()->getPurgeStrategy() == GHeapPoolPurgeStrategy::onSceneSwitched) {
+			GHeapPool::getInstance()->purge();
+		}
 	}
 }
 
