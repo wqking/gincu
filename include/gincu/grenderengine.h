@@ -12,11 +12,11 @@
 
 namespace gincu {
 
-class GRenderEngineResource;
-class GImageResource;
+class GRenderEngineData;
+class GImageData;
 class GTransform;
 class GImage;
-class GText;
+class GTextRender;
 class GRectRender;
 class GSpriteSheetRender;
 struct GRenderInfo;
@@ -42,7 +42,7 @@ public:
 
 	void draw(const GImage & image, const GTransform & transform, const GRenderInfo * renderInfo);
 	void draw(const GSpriteSheetRender & spriteSheetRender, const GTransform & transform, const GRenderInfo * renderInfo);
-	void draw(const GText & text, const GTransform & transform, const GRenderInfo * renderInfo);
+	void draw(const GTextRender & text, const GTransform & transform, const GRenderInfo * renderInfo);
 	void draw(const GRectRender & rect, const GTransform & transform, const GRenderInfo * renderInfo);
 
 	void beginBatchDraw();
@@ -50,17 +50,17 @@ public:
 
 	GPoint mapWindowToView(const GPoint & point) const;
 
-	const std::shared_ptr<GRenderEngineResource> & getResource() const { return this->resource; }
+	const std::shared_ptr<GRenderEngineData> & getData() const { return this->data; }
 
 public: // for internal usage
 	void onWindowResized(const GSize & newSize);
 
 private:
-	void doDrawTexture(const GImageResource * texture, const GRect & rect, const GTransform & transform, const GRenderInfo * renderInfo);
+	void doDrawTexture(const GImageData * texture, const GRect & rect, const GTransform & transform, const GRenderInfo * renderInfo);
 	void doFitView();
 
 private:
-	std::shared_ptr<GRenderEngineResource> resource;
+	std::shared_ptr<GRenderEngineData> data;
 	cpgf::GCallbackList<void ()> renderList;
 	GSize windowSize;
 };

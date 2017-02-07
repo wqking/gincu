@@ -1,7 +1,7 @@
 #include "gincu/gresourcemanager.h"
 #include "gincu/gspritesheet.h"
-#include "gincu/sfml/gimageresource.h"
-#include "gincu/sfml/gfontresource.h"
+#include "gincu/sfml/gimagedata.h"
+#include "gincu/sfml/gfontdata.h"
 
 #include <cassert>
 
@@ -32,36 +32,36 @@ GResourceManager::~GResourceManager()
 
 GImage GResourceManager::getImage(const std::string & resourceName) const
 {
-	std::shared_ptr<GImageResource> resource;
+	std::shared_ptr<GImageData> data;
 	auto it = this->imageResourceMap.find(resourceName);
 	if(it != this->imageResourceMap.end()) {
-		resource = it->second;
+		data = it->second;
 	}
 	else {
-		resource = std::make_shared<GImageResource>();
-		this->imageResourceMap.insert(std::make_pair(resourceName, resource));
+		data = std::make_shared<GImageData>();
+		this->imageResourceMap.insert(std::make_pair(resourceName, data));
 		const std::string fileName = this->resourcePath + resourceName;
-		resource->load(fileName);
+		data->load(fileName);
 	}
 
-	return GImage(resource);
+	return GImage(data);
 }
 
 GSpriteSheet GResourceManager::getSpriteSheet(const std::string & resourceName, const GSpriteSheetFormat format) const
 {
-	std::shared_ptr<GSpriteSheetResource> resource;
+	std::shared_ptr<GSpriteSheetData> data;
 
 	auto it = this->spriteSheetResourceMap.find(resourceName);
 	if(it != this->spriteSheetResourceMap.end()) {
-		resource = it->second;
+		data = it->second;
 	}
 	else {
-		resource = std::make_shared<GSpriteSheetResource>();
-		resource->load(resourceName, format);
-		this->spriteSheetResourceMap.insert(std::make_pair(resourceName, resource));
+		data = std::make_shared<GSpriteSheetData>();
+		data->load(resourceName, format);
+		this->spriteSheetResourceMap.insert(std::make_pair(resourceName, data));
 	}
 
-	return GSpriteSheet(resource);
+	return GSpriteSheet(data);
 }
 
 GFileInputStream GResourceManager::getFileStream(const std::string & resourceName) const
@@ -75,7 +75,7 @@ const GFont & GResourceManager::getFont() const
 {
 	if(! this->font) {
 		this->font.reset(new GFont());
-		this->font->getResource()->font.loadFromFile(this->resourcePath + "arialbd.ttf");
+		this->font->getData()->font.loadFromFile(this->resourcePath + "arialbd.ttf");
 	}
 	
 	return *this->font.get();

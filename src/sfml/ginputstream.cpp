@@ -4,7 +4,7 @@
 
 namespace gincu {
 
-class FileInputStreamResource
+class FileInputStreamData
 {
 public:
 	sf::FileInputStream stream;
@@ -26,33 +26,33 @@ GFileInputStream::~GFileInputStream()
 
 void GFileInputStream::open(const std::string & fileName)
 {
-	this->resource.reset(new FileInputStreamResource());
-	this->resource->stream.open(fileName);
+	this->data.reset(new FileInputStreamData());
+	this->data->stream.open(fileName);
 }
 
 void GFileInputStream::close()
 {
-	this->resource.reset();
+	this->data.reset();
 }
 
-int64_t GFileInputStream::read(void * data, const int64_t size)
+int64_t GFileInputStream::read(void * buffer, const int64_t size)
 {
-	return this->resource->stream.read(data, size);
+	return this->data->stream.read(buffer, size);
 }
 
 int64_t GFileInputStream::seek(const int64_t position)
 {
-	return this->resource->stream.seek(position);
+	return this->data->stream.seek(position);
 }
 
 int64_t GFileInputStream::tell()
 {
-	return this->resource->stream.tell();
+	return this->data->stream.tell();
 }
 
 int64_t GFileInputStream::getSize()
 {
-	return this->resource->stream.getSize();
+	return this->data->stream.getSize();
 }
 
 

@@ -9,7 +9,7 @@
 
 namespace gincu {
 
-GImage GSpriteSheetResource::getImage(const std::string & name) const
+GImage GSpriteSheetData::getImage(const std::string & name) const
 {
 	auto it = this->indexMap.find(const_cast<std::string &>(name));
 	if(it != this->indexMap.end()) {
@@ -20,7 +20,7 @@ GImage GSpriteSheetResource::getImage(const std::string & name) const
 	}
 }
 
-int GSpriteSheetResource::getIndex(const std::string & name) const
+int GSpriteSheetData::getIndex(const std::string & name) const
 {
 	auto it = this->indexMap.find(const_cast<std::string &>(name));
 	if(it != this->indexMap.end()) {
@@ -31,7 +31,7 @@ int GSpriteSheetResource::getIndex(const std::string & name) const
 	}
 }
 
-void GSpriteSheetResource::load(const std::string & resourceName, const GSpriteSheetFormat format)
+void GSpriteSheetData::load(const std::string & resourceName, const GSpriteSheetFormat format)
 {
 	const GSpriteSheet::LoaderMap * loaderMap = GSpriteSheet::getLoaderMap();
 	auto it = loaderMap->find(format);
@@ -42,20 +42,20 @@ void GSpriteSheetResource::load(const std::string & resourceName, const GSpriteS
 
 	it->second(resourceName,this);
 
-	this->imageResource = GResourceManager::getInstance()->getImage(this->imageName).getResource();
+	this->imageResource = GResourceManager::getInstance()->getImage(this->imageName).getData();
 
 	for(std::size_t i = 0; i < this->nameList.size(); ++i) {
 		this->indexMap.insert(std::make_pair(std::reference_wrapper<std::string>(this->nameList[i]), i));
 	}
 }
 
-void GSpriteSheetResource::appendSubImage(const std::string & name, const GRect & rect)
+void GSpriteSheetData::appendSubImage(const std::string & name, const GRect & rect)
 {
 	this->nameList.push_back(name);
 	this->rectList.push_back(rect);
 }
 
-void GSpriteSheetResource::setImageName(const std::string & imageName)
+void GSpriteSheetData::setImageName(const std::string & imageName)
 {
 	this->imageName = imageName;
 }
@@ -76,8 +76,8 @@ GSpriteSheet::GSpriteSheet()
 {
 }
 
-GSpriteSheet::GSpriteSheet(const std::shared_ptr<GSpriteSheetResource> & resource)
-	: resource(resource)
+GSpriteSheet::GSpriteSheet(const std::shared_ptr<GSpriteSheetData> & data)
+	: data(data)
 {
 }
 
@@ -100,25 +100,25 @@ char * backSkipSpaces(char * p, char * begin)
 	return p;
 }
 
-std::string getNextToken(char * & data, char * end, const char delimiter)
+std::string getNextToken(char * & buffer, char * end, const char delimiter)
 {
-	data = skipSpaces(data, end);
-	char * p = data;
+	buffer = skipSpaces(buffer, end);
+	char * p = buffer;
 	while(p < end && *p != delimiter) {
 		++p;
 	}
 
-	if(p == data) {
+	if(p == buffer) {
 		return std::string();
 	}
 
-	char * tokenEnd = backSkipSpaces(p - 1, data);
-	std::string result(data, tokenEnd + 1 - data);
-	data = p + 1;
+	char * tokenEnd = backSkipSpaces(p - 1, buffer);
+	std::string result(buffer, tokenEnd + 1 - buffer);
+	buffer = p + 1;
 	return result;
 }
 
-void spriteSheetLoader_spritePackText(const std::string & resourceName, GSpriteSheetResource * spriteSheet)
+void spriteSheetLoader_spritePackText(const std::string & resourceName, GSpriteSheetData * spriteSheet)
 {
 	spriteSheet->setImageName(resourceName + ".png");
 	
@@ -132,28 +132,28 @@ void spriteSheetLoader_spritePackText(const std::string & resourceName, GSpriteS
 
 	char * bufferEnd = buffer.get() + size;
 
-	char * data = buffer.get();
+	char * ptr = buffer.get();
 	for(;;) {
-		data = skipSpaces(data, bufferEnd);
-		if(data >= bufferEnd) {
+		ptr = skipSpaces(ptr, bufferEnd);
+		if(ptr >= bufferEnd) {
 			break;
 		}
 
-		char * endLine = strchr(data, '\n');
+		char * endLine = strchr(ptr, '\n');
 		if(endLine == nullptr) {
 			break;
 		}
 
 		for(;;) {
-			const std::string resourceName = getNextToken(data, endLine, '=');
+			const std::string resourceName = getNextToken(ptr, endLine, '=');
 			if(resourceName.empty()) break;
-			const std::string x = getNextToken(data, endLine, ' ');
+			const std::string x = getNextToken(ptr, endLine, ' ');
 			if(x.empty()) break;
-			const std::string y = getNextToken(data, endLine, ' ');
+			const std::string y = getNextToken(ptr, endLine, ' ');
 			if(y.empty()) break;
-			const std::string width = getNextToken(data, endLine, ' ');
+			const std::string width = getNextToken(ptr, endLine, ' ');
 			if(width.empty()) break;
-			const std::string height = getNextToken(data, endLine, ' ');
+			const std::string height = getNextToken(ptr, endLine, ' ');
 			if(height.empty()) break;
 
 			spriteSheet->appendSubImage(resourceName, GRect{
@@ -166,7 +166,7 @@ void spriteSheetLoader_spritePackText(const std::string & resourceName, GSpriteS
 			break;
 		}
 
-		data = endLine + 1;
+		ptr = endLine + 1;
 	}
 }
 

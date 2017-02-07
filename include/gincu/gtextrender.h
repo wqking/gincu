@@ -1,5 +1,5 @@
-#ifndef GTEXT_H
-#define GTEXT_H
+#ifndef GTEXTRENDER_H
+#define GTEXTRENDER_H
 
 #include "gincu/gcolor.h"
 #include "gincu/ggeometry.h"
@@ -12,15 +12,15 @@ namespace gincu{
 
 class GTransform;
 struct GRenderInfo;
-class GTextResource;
-class GImageResource;
+class GTextRenderData;
+class GImageData;
 
-class GText
+class GTextRender
 {
 public:
-	GText();
-	explicit GText(const int fontSize);
-	~GText();
+	GTextRender();
+	explicit GTextRender(const int fontSize);
+	~GTextRender();
 
 	void setText(const std::string & text);
 	void setColor(const GColor textColor);
@@ -30,12 +30,12 @@ public:
 
 	GSize getSize() const;
 
-	const std::shared_ptr<GTextResource> & getResource() const { return this->resource; }
+	const std::shared_ptr<GTextRenderData> & getData() const { return this->data; }
 
-	const GImageResource * getTexture() const { return nullptr; }
+	const GImageData * getTexture() const { return nullptr; }
 
 private:
-	std::shared_ptr<GTextResource> resource;
+	std::shared_ptr<GTextRenderData> data;
 };
 
 

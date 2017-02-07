@@ -1,5 +1,5 @@
-#ifndef GIMAGERESOURCE_H
-#define GIMAGERESOURCE_H
+#ifndef GIMAGEDATA_H
+#define GIMAGEDATA_H
 
 #include <SFML/Graphics.hpp>
 
@@ -7,7 +7,7 @@
 
 namespace gincu {
 
-class GImageResource
+class GImageData
 {
 public:
 	void load(const std::string & fileName)

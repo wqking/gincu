@@ -22,9 +22,9 @@ enum class GSpriteSheetFormat
 	spritePackText,
 };
 
-class GImageResource;
+class GImageData;
 
-class GSpriteSheetResource
+class GSpriteSheetData
 {
 private:
 	template <typename T>
@@ -40,7 +40,7 @@ public:
 
 	const std::vector<std::string> & getNameList() const { return this->nameList; }
 	const std::vector<GRect> & getRectList() const { return this->rectList; }
-	const std::shared_ptr<GImageResource> & getImageResource() const { return this->imageResource; }
+	const std::shared_ptr<GImageData> & getImageResource() const { return this->imageResource; }
 
 public: // used by loaders, don't use them directly
 	void appendSubImage(const std::string & name, const GRect & rect);
@@ -51,13 +51,13 @@ private:
 	std::vector<std::string> nameList;
 	std::vector<GRect> rectList;
 	std::map<std::reference_wrapper<std::string>, std::size_t, LessCompare<std::reference_wrapper<std::string> > > indexMap;
-	std::shared_ptr<GImageResource> imageResource;
+	std::shared_ptr<GImageData> imageResource;
 };
 
 class GSpriteSheet
 {
 private:
-	typedef cpgf::GCallback<void (const std::string &, GSpriteSheetResource *)> LoaderCallback;
+	typedef cpgf::GCallback<void (const std::string &, GSpriteSheetData *)> LoaderCallback;
 	typedef std::map<GSpriteSheetFormat, LoaderCallback> LoaderMap;
 
 public:
@@ -65,25 +65,25 @@ public:
 
 public:
 	GSpriteSheet();
-	explicit GSpriteSheet(const std::shared_ptr<GSpriteSheetResource> & resource);
+	explicit GSpriteSheet(const std::shared_ptr<GSpriteSheetData> & data);
 
-	GImage getImage(const std::string & name) const { return this->resource->getImage(name); }
+	GImage getImage(const std::string & name) const { return this->data->getImage(name); }
 
-	const std::vector<std::string> & getNameList() const { return this->resource->getNameList(); }
-	const std::vector<GRect> & getRectList() const { return this->resource->getRectList(); }
-	const std::shared_ptr<GImageResource> & getImageResource() const { return this->resource->getImageResource(); }
+	const std::vector<std::string> & getNameList() const { return this->data->getNameList(); }
+	const std::vector<GRect> & getRectList() const { return this->data->getRectList(); }
+	const std::shared_ptr<GImageData> & getImageResource() const { return this->data->getImageResource(); }
 
-	int getImageCount() const { return (int)this->resource->getNameList().size(); }
-	int getIndex(const std::string & name) const { return this->resource->getIndex(name); }
+	int getImageCount() const { return (int)this->data->getNameList().size(); }
+	int getIndex(const std::string & name) const { return this->data->getIndex(name); }
 
 private:
 	static LoaderMap * getLoaderMap();
 
 private:
-	std::shared_ptr<GSpriteSheetResource> resource;
+	std::shared_ptr<GSpriteSheetData> data;
 
 private:
-	friend class GSpriteSheetResource;
+	friend class GSpriteSheetData;
 };
 
 } //namespace gincu

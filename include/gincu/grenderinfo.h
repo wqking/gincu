@@ -5,7 +5,7 @@
 
 namespace gincu {
 
-class GImageResource;
+class GImageData;
 
 struct GRenderInfo
 {
@@ -14,7 +14,7 @@ struct GRenderInfo
 	{}
 
 	GBlendMode blendMode;
-	const GImageResource * texture;
+	const GImageData * texture;
 	
 	// will add shader in the future
 };

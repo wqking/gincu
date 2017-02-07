@@ -85,7 +85,7 @@ GComponentSpriteSheetRender * createSpriteSheetComponent(const GSpriteSheet & sp
 
 GComponentTextRender * createAndLoadTextComponent(const std::string & text, const GColor textColor, const int fontSize)
 {
-	GText render(fontSize);
+	GTextRender render(fontSize);
 	render.setTextAndColor(text, textColor);
 	return createComponent<GComponentTextRender>(render);
 }

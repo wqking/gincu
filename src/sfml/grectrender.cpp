@@ -2,12 +2,12 @@
 #include "gincu/grenderengine.h"
 #include "gincu/gtransform.h"
 #include "gincu/sfml/gsfmlutil.h"
-#include "gincu/sfml/grectrenderresource.h"
+#include "gincu/sfml/grectrenderdata.h"
 
 namespace gincu {
 
 GRectRender::GRectRender()
-	: resource(std::make_shared<GRectRenderResource>())
+	: data(std::make_shared<GRectRenderData>())
 {
 
 }
@@ -25,23 +25,23 @@ void GRectRender::draw(const GTransform & transform, const GRenderInfo * renderI
 void GRectRender::setColor(const GColor color)
 {
 	const sf::Color sfmlColor = gameColorToSfml(color);
-	this->resource->rectangle.setOutlineColor(sfmlColor);
-	this->resource->rectangle.setFillColor(sfmlColor);
+	this->data->rectangle.setOutlineColor(sfmlColor);
+	this->data->rectangle.setFillColor(sfmlColor);
 }
 
 GColor GRectRender::getColor() const
 {
-	return sfmlColorToGame(this->resource->rectangle.getFillColor());
+	return sfmlColorToGame(this->data->rectangle.getFillColor());
 }
 
 void GRectRender::setSize(const GSize & size)
 {
-	this->resource->rectangle.setSize(sf::Vector2f(size.width, size.height));
+	this->data->rectangle.setSize(sf::Vector2f(size.width, size.height));
 }
 
 GSize GRectRender::getSize() const
 {
-	const sf::Vector2f size = this->resource->rectangle.getSize();
+	const sf::Vector2f size = this->data->rectangle.getSize();
 	return GSize{size.x, size.y};
 }
 

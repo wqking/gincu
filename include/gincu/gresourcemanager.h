@@ -13,8 +13,8 @@
 namespace gincu {
 
 class GImage;
-class GImageResource;
-class GSpriteSheetResource;
+class GImageData;
+class GSpriteSheetData;
 enum class GSpriteSheetFormat;
 
 class GResourceManager
@@ -37,8 +37,8 @@ public:
 
 private:
 	std::string resourcePath;
-	mutable std::map<std::string, std::shared_ptr<GImageResource> > imageResourceMap;
-	mutable std::map<std::string, std::shared_ptr<GSpriteSheetResource> > spriteSheetResourceMap;
+	mutable std::map<std::string, std::shared_ptr<GImageData> > imageResourceMap;
+	mutable std::map<std::string, std::shared_ptr<GSpriteSheetData> > spriteSheetResourceMap;
 	mutable std::unique_ptr<GFont> font;
 };
 

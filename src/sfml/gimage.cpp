@@ -3,22 +3,22 @@
 #include "gincu/gerrorhandler.h"
 #include "gincu/gtransform.h"
 #include "gincu/grenderinfo.h"
-#include "gincu/sfml/gimageresource.h"
+#include "gincu/sfml/gimagedata.h"
 
 namespace gincu {
 
 GImage::GImage()
-	: resource()
+	: data()
 {
 }
 
-GImage::GImage(const std::shared_ptr<GImageResource> & resource)
+GImage::GImage(const std::shared_ptr<GImageData> & data)
 {
-	this->setResource(resource);
+	this->setResource(data);
 }
 
-GImage::GImage(const std::shared_ptr<GImageResource> & resource, const GRect & rect)
-	: resource(resource), rect(rect)
+GImage::GImage(const std::shared_ptr<GImageData> & data, const GRect & rect)
+	: data(data), rect(rect)
 {
 }
 
@@ -28,8 +28,8 @@ GImage::~GImage()
 
 void GImage::load(const std::string & fileName)
 {
-	this->resource.reset(new GImageResource());
-	this->resource->load(fileName);
+	this->data.reset(new GImageData());
+	this->data->load(fileName);
 }
 
 void GImage::draw(const GTransform & transform, const GRenderInfo * renderInfo)
@@ -42,11 +42,11 @@ GSize GImage::getSize() const
 	return { this->rect.width, this->rect.height };
 }
 
-void GImage::setResource(const std::shared_ptr<GImageResource> & resource)
+void GImage::setResource(const std::shared_ptr<GImageData> & data)
 {
-	this->resource = resource;
-	if(this->resource) {
-		auto size = this->resource->texture.getSize();
+	this->data = data;
+	if(this->data) {
+		auto size = this->data->texture.getSize();
 		this->rect = GRect{ 0, 0, (GCoord)size.x, (GCoord)size.y };
 	}
 }

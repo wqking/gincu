@@ -11,8 +11,8 @@ namespace gincu {
 
 class GTransform;
 struct GRenderInfo;
-class GRectRenderResource;
-class GImageResource;
+class GRectRenderData;
+class GImageData;
 
 class GRectRender
 {
@@ -28,12 +28,12 @@ public:
 	void setSize(const GSize & size);
 	GSize getSize() const;
 
-	const std::shared_ptr<GRectRenderResource> & getResource() const { return this->resource; }
+	const std::shared_ptr<GRectRenderData> & getData() const { return this->data; }
 
-	const GImageResource * getTexture() const { return nullptr; }
+	const GImageData * getTexture() const { return nullptr; }
 
 private:
-	std::shared_ptr<GRectRenderResource> resource;
+	std::shared_ptr<GRectRenderData> data;
 };
 
 

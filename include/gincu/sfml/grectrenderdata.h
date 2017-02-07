@@ -1,11 +1,11 @@
-#ifndef GRECTRENDERRESOURCE_H
-#define GRECTRENDERRESOURCE_H
+#ifndef GRECTRENDERDATA_H
+#define GRECTRENDERDATA_H
 
 #include <SFML/Graphics.hpp>
 
 namespace gincu {
 
-class GRectRenderResource
+class GRectRenderData
 {
 public:
 	sf::RectangleShape rectangle;

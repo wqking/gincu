@@ -8,7 +8,7 @@
 #include "gincu/gentityutil.h"
 #include "gincu/gimage.h"
 #include "gincu/gspritesheetrender.h"
-#include "gincu/gtext.h"
+#include "gincu/gtextrender.h"
 #include "gincu/grectrender.h"
 #include "gincu/grenderinfo.h"
 
@@ -16,7 +16,7 @@
 
 namespace gincu {
 
-class GImageResource;
+class GImageData;
 
 class GComponentRender : public GComponent
 {
@@ -55,7 +55,7 @@ protected:
 private:
 	virtual void doDraw() = 0;
 	virtual GSize doGetSize() const = 0;
-	virtual const GImageResource * doGetTexture() const = 0;
+	virtual const GImageData * doGetTexture() const = 0;
 
 private:
 	mutable GRenderInfo renderInfo;
@@ -76,7 +76,7 @@ private:
 	virtual void doDraw() override;
 	virtual GSize doGetSize() const override;
 	virtual void doAfterSetEntity() override;
-	virtual const GImageResource * doGetTexture() const override { return nullptr; }
+	virtual const GImageData * doGetTexture() const override { return nullptr; }
 
 private:
 	mutable GSize size;
@@ -117,7 +117,7 @@ private:
 		return this->render.getSize();
 	}
 
-	virtual const GImageResource * doGetTexture() const override {
+	virtual const GImageData * doGetTexture() const override {
 		return this->render.getTexture();
 	}
 
@@ -127,7 +127,7 @@ private:
 
 typedef GComponentRenderImplement<GImage> GComponentImageRender;
 typedef GComponentRenderImplement<GSpriteSheetRender> GComponentSpriteSheetRender;
-typedef GComponentRenderImplement<GText> GComponentTextRender;
+typedef GComponentRenderImplement<GTextRender> GComponentTextRender;
 typedef GComponentRenderImplement<GRectRender> GComponentRectRender;
 
 GComponentImageRender * createAndLoadImageComponent(const std::string & resourceName);

@@ -5,7 +5,7 @@
 
 namespace gincu {
 
-class GFontResource;
+class GFontData;
 
 class GFont
 {
@@ -13,11 +13,11 @@ public:
 	GFont();
 	~GFont();
 
-	void setResource(const std::shared_ptr<GFontResource> & resource) { this->resource = resource; }
-	const std::shared_ptr<GFontResource> & getResource() const { return this->resource; }
+	void setResource(const std::shared_ptr<GFontData> & data) { this->data = data; }
+	const std::shared_ptr<GFontData> & getData() const { return this->data; }
 
 private:
-	std::shared_ptr<GFontResource> resource;
+	std::shared_ptr<GFontData> data;
 };
 
 

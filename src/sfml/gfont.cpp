@@ -1,11 +1,11 @@
 #include "gincu/gfont.h"
-#include "gincu/sfml/gfontresource.h"
+#include "gincu/sfml/gfontdata.h"
 
 namespace gincu {
 
 GFont::GFont()
 	:
-		resource(std::make_shared<GFontResource>())
+		data(std::make_shared<GFontData>())
 {
 }
 

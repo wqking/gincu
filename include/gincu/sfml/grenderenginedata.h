@@ -1,5 +1,5 @@
-#ifndef GRENDERENGINERESOURCE_H
-#define GRENDERENGINERESOURCE_H
+#ifndef GRENDERENGINEDATA_H
+#define GRENDERENGINEDATA_H
 
 #include "gincu/grenderinfo.h"
 
@@ -9,10 +9,10 @@
 
 namespace gincu {
 
-class GRenderEngineResource
+class GRenderEngineData
 {
 public:
-	GRenderEngineResource() :
+	GRenderEngineData() :
 		window(),
 		view(),
 		batchDrawVertexArray(sf::Triangles),

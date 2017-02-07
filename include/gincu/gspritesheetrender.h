@@ -5,7 +5,7 @@
 
 namespace gincu {
 
-class GImageResource;
+class GImageData;
 
 class GSpriteSheetRender
 {
@@ -23,7 +23,7 @@ public:
 
 	const GRect & getRect() const { return this->spriteSheet.getRectList()[this->index]; }
 
-	const GImageResource * getTexture() const { return this->spriteSheet.getImageResource().get(); }
+	const GImageData * getTexture() const { return this->spriteSheet.getImageResource().get(); }
 
 private:
 	GSpriteSheet spriteSheet;

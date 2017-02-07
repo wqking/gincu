@@ -3,7 +3,7 @@
 #include "gincu/grenderengine.h"
 #include "gincu/gapplication.h"
 #include "gincu/gscenemanager.h"
-#include "gincu/sfml/grenderengineresource.h"
+#include "gincu/sfml/grenderenginedata.h"
 
 #include <SFML/Window.hpp>
 
@@ -18,7 +18,7 @@ void GEventProcessor::processEvents()
 {
 	sf::Event e;
 
-	while(GRenderEngine::getInstance()->getResource()->window->pollEvent(e)) {
+	while(GRenderEngine::getInstance()->getData()->window->pollEvent(e)) {
 		switch(e.type) {
 		case sf::Event::Closed:
 			this->application->finish();

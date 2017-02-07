@@ -2,15 +2,15 @@
 #include "gincu/gtransform.h"
 #include "gincu/gimage.h"
 #include "gincu/gspritesheetrender.h"
-#include "gincu/gtext.h"
+#include "gincu/gtextrender.h"
 #include "gincu/grectrender.h"
 #include "gincu/gapplication.h"
 #include "gincu/grenderinfo.h"
 #include "gincu/sfml/gsfmlutil.h"
-#include "gincu/sfml/gimageresource.h"
-#include "gincu/sfml/gtextresource.h"
-#include "gincu/sfml/grectrenderresource.h"
-#include "gincu/sfml/grenderengineresource.h"
+#include "gincu/sfml/gimagedata.h"
+#include "gincu/sfml/gtextrenderdata.h"
+#include "gincu/sfml/grectrenderdata.h"
+#include "gincu/sfml/grenderenginedata.h"
 
 #include <cassert>
 
@@ -29,7 +29,7 @@ GRenderEngine * GRenderEngine::getInstance()
 
 GRenderEngine::GRenderEngine()
 	:
-		resource(std::make_shared<GRenderEngineResource>())
+		data(std::make_shared<GRenderEngineData>())
 {
 	assert(instance == nullptr);
 
@@ -56,7 +56,7 @@ void GRenderEngine::inititialize()
 	}
 
 	this->windowSize = configInfo.windowSize;
-	this->resource->window.reset(new sf::RenderWindow(
+	this->data->window.reset(new sf::RenderWindow(
 		sf::VideoMode((int)this->windowSize.width, (int)this->windowSize.height),
 		configInfo.caption,
 		flags
@@ -67,11 +67,11 @@ void GRenderEngine::inititialize()
 
 void GRenderEngine::render()
 {
-	this->resource->window->clear(gameColorToSfml(GApplication::getInstance()->getConfigInfo().backgroundColor));
+	this->data->window->clear(gameColorToSfml(GApplication::getInstance()->getConfigInfo().backgroundColor));
 	
 	this->renderList();
 
-	this->resource->window->display();
+	this->data->window->display();
 }
 
 void GRenderEngine::appendRender(const cpgf::GCallback<void ()> & render)
@@ -86,12 +86,12 @@ void GRenderEngine::removeRender(const cpgf::GCallback<void ()> & render)
 
 bool GRenderEngine::isAlive() const
 {
-	return this->resource->window->isOpen();
+	return this->data->window->isOpen();
 }
 
 void GRenderEngine::draw(const GImage & image, const GTransform & transform, const GRenderInfo * renderInfo)
 {
-	this->doDrawTexture(image.getResource().get(), image.getRect(), transform, renderInfo);
+	this->doDrawTexture(image.getData().get(), image.getRect(), transform, renderInfo);
 }
 
 void GRenderEngine::draw(const GSpriteSheetRender & spriteSheetRender, const GTransform & transform, const GRenderInfo * renderInfo)
@@ -99,40 +99,40 @@ void GRenderEngine::draw(const GSpriteSheetRender & spriteSheetRender, const GTr
 	this->doDrawTexture(spriteSheetRender.getSpriteSheet().getImageResource().get(), spriteSheetRender.getRect(), transform, renderInfo);
 }
 
-void GRenderEngine::draw(const GText & text, const GTransform & transform, const GRenderInfo * renderInfo)
+void GRenderEngine::draw(const GTextRender & text, const GTransform & transform, const GRenderInfo * renderInfo)
 {
 	sf::RenderStates renderStates(transform.getSfmlTransform());
 	copyBlendAndShaderToSfml(&renderStates, renderInfo);
-	this->resource->window->draw(text.getResource()->text, renderStates);
+	this->data->window->draw(text.getData()->text, renderStates);
 }
 
 void GRenderEngine::draw(const GRectRender & rect, const GTransform & transform, const GRenderInfo * renderInfo)
 {
 	sf::RenderStates renderStates(transform.getSfmlTransform());
 	copyBlendAndShaderToSfml(&renderStates, renderInfo);
-	this->resource->window->draw(rect.getResource()->rectangle, renderStates);
+	this->data->window->draw(rect.getData()->rectangle, renderStates);
 }
 
 void GRenderEngine::beginBatchDraw()
 {
-	this->resource->clearBatchDrawState();
-	this->resource->inBatchDraw = true;
+	this->data->clearBatchDrawState();
+	this->data->inBatchDraw = true;
 }
 
 void GRenderEngine::endBatchDraw()
 {
-	if(this->resource->batchDrawRenderInfo.texture != nullptr && this->resource->inBatchDraw) {
-		sf::RenderStates renderStates(&this->resource->batchDrawRenderInfo.texture->texture);
-		copyBlendAndShaderToSfml(&renderStates, &this->resource->batchDrawRenderInfo);
-		this->resource->window->draw(this->resource->batchDrawVertexArray, renderStates);
+	if(this->data->batchDrawRenderInfo.texture != nullptr && this->data->inBatchDraw) {
+		sf::RenderStates renderStates(&this->data->batchDrawRenderInfo.texture->texture);
+		copyBlendAndShaderToSfml(&renderStates, &this->data->batchDrawRenderInfo);
+		this->data->window->draw(this->data->batchDrawVertexArray, renderStates);
 	}
 
-	this->resource->clearBatchDrawState();
+	this->data->clearBatchDrawState();
 }
 
 GPoint GRenderEngine::mapWindowToView(const GPoint & point) const
 {
-	auto pt = this->resource->window->mapPixelToCoords({(int)point.x, (int)point.y});
+	auto pt = this->data->window->mapPixelToCoords({(int)point.x, (int)point.y});
 	return {pt.x, pt.y};
 }
 
@@ -142,21 +142,21 @@ void GRenderEngine::onWindowResized(const GSize & newSize)
 	this->doFitView();
 }
 
-void GRenderEngine::doDrawTexture(const GImageResource * texture, const GRect & rect, const GTransform & transform, const GRenderInfo * renderInfo)
+void GRenderEngine::doDrawTexture(const GImageData * texture, const GRect & rect, const GTransform & transform, const GRenderInfo * renderInfo)
 {
 	if(texture != nullptr) {
 		const sf::Transform & sfmlTransform = transform.getSfmlTransform();
-		if(! this->resource->inBatchDraw) {
+		if(! this->data->inBatchDraw) {
 			sf::Sprite sprite(texture->texture, { (int)rect.x, (int)rect.y, (int)rect.width, (int)rect.height });
 			sf::RenderStates renderStates(sfmlTransform);
 			copyBlendAndShaderToSfml(&renderStates, renderInfo);
-			this->resource->window->draw(sprite, renderStates);
+			this->data->window->draw(sprite, renderStates);
 		}
 		else {
-			this->resource->batchDrawRenderInfo = *renderInfo;
-			this->resource->batchDrawRenderInfo.texture = texture;
+			this->data->batchDrawRenderInfo = *renderInfo;
+			this->data->batchDrawRenderInfo.texture = texture;
 
-			sf::VertexArray & vertexArray = this->resource->batchDrawVertexArray;
+			sf::VertexArray & vertexArray = this->data->batchDrawVertexArray;
 			std::size_t count = vertexArray.getVertexCount();
 			vertexArray.resize(count + 6);
 
@@ -188,7 +188,7 @@ void GRenderEngine::doFitView()
 
 	switch(configInfo.viewFitStrategy) {
 	case GViewFitStrategy::scaleFit: {
-		this->resource->view.reset(sf::FloatRect(0, 0, configInfo.viewSize.width, configInfo.viewSize.height));
+		this->data->view.reset(sf::FloatRect(0, 0, configInfo.viewSize.width, configInfo.viewSize.height));
 		float viewportX = 0;
 		float viewportY = 0;
 		const float xRatio = (float)configInfo.viewSize.width / (float)this->windowSize.width;
@@ -199,22 +199,22 @@ void GRenderEngine::doFitView()
 		else {
 			viewportX = (1.0f - xRatio / yRatio) / 2.0f;
 		}
-		this->resource->view.setViewport(sf::FloatRect(viewportX, viewportY, 1.0f - viewportX * 2.0f, 1.0f - viewportY * 2.0f));
+		this->data->view.setViewport(sf::FloatRect(viewportX, viewportY, 1.0f - viewportX * 2.0f, 1.0f - viewportY * 2.0f));
 	}
 		break;
 
 	case GViewFitStrategy::fitWindow:
-		this->resource->view.reset(sf::FloatRect(0, 0, this->windowSize.width, this->windowSize.height));
-		this->resource->view.setViewport(sf::FloatRect(0, 0, 1, 1));
+		this->data->view.reset(sf::FloatRect(0, 0, this->windowSize.width, this->windowSize.height));
+		this->data->view.setViewport(sf::FloatRect(0, 0, 1, 1));
 		break;
 
 	case GViewFitStrategy::stretch:
-		this->resource->view.reset(sf::FloatRect(0, 0, configInfo.viewSize.width, configInfo.viewSize.height));
-		this->resource->view.setViewport(sf::FloatRect(0, 0, 1, 1));
+		this->data->view.reset(sf::FloatRect(0, 0, configInfo.viewSize.width, configInfo.viewSize.height));
+		this->data->view.setViewport(sf::FloatRect(0, 0, 1, 1));
 		break;
 	}
 
-	this->resource->window->setView(this->resource->view);
+	this->data->window->setView(this->data->view);
 }
 
 } //namespace gincu

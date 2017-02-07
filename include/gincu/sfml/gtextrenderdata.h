@@ -1,14 +1,15 @@
-#ifndef GFONTRESOURCE_H
-#define GFONTRESOURCE_H
+#ifndef GTEXTRENDERDATA_H
+#define GTEXTRENDERDATA_H
 
 #include <SFML/Graphics.hpp>
 
 namespace gincu {
 
-class GFontResource
+class GTextRenderData
 {
 public:
-	sf::Font font;
+	int fontSize;
+	sf::Text text;
 };
 
 
