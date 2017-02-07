@@ -5,12 +5,12 @@
 #include "gincu/gscenemanager.h"
 #include "gincu/gheappool.h"
 #include "gincu/gutil.h"
+#include "gincu/glog.h"
 
 #include "cpgf/tween/gtweenlist.h"
 
 #include <chrono>
 #include <thread>
-#include <iostream>
 
 namespace gincu {
 
@@ -25,7 +25,11 @@ GApplication * GApplication::getInstance()
 
 GApplication::GApplication()
 	:
-		finished(false)
+		finished(false),
+		frameCount(0),
+		frameRate(60),
+		renderFrameRate(60),
+		frameMilliseconds(1)
 {
 	instance = this;
 }
@@ -70,14 +74,20 @@ void GApplication::processMainLoop()
 	const unsigned int millisecondsPerFrame = 1000 / this->configInfo.framesPerSecond;
 	const unsigned int millisecondsPerRenderFrame = 1000 / this->configInfo.renderFramesPerSecond;
 
+	this->frameCount = 0;
+
 	unsigned int lastTweenTime = getMilliseconds();
 	unsigned int lastRenderTime = 0;
 
-//unsigned int lastFpsTime = getMilliseconds();
-//int fps = 0;
-//int renderFps = 0;
+	unsigned int lastFpsTime = getMilliseconds();
+	int fps = 0;
+	int renderFps = 0;
+
+	unsigned int milliseconds;
 
 	while(! this->finished && this->renderEngine->isAlive()) {
+		++this->frameCount;
+
 		const unsigned int frameBeginTime = getMilliseconds();
 
 		this->eventProcessor->processEvents();
@@ -88,10 +98,11 @@ void GApplication::processMainLoop()
 			|| getMilliseconds() - lastRenderTime >= millisecondsPerRenderFrame) {
 			lastRenderTime = getMilliseconds();
 			this->renderEngine->render();
-//++renderFps;
+			
+			++renderFps;
 		}
 
-		const unsigned int milliseconds = getMilliseconds();
+		milliseconds = getMilliseconds();
 		cpgf::GTweenList::getInstance()->tick((cpgf::GTweenNumber)(milliseconds - lastTweenTime));
 		lastTweenTime = milliseconds;
 
@@ -100,15 +111,21 @@ void GApplication::processMainLoop()
 				sleepMilliseconds(1);
 			}
 		}
-/*
-++fps;
-if(getMilliseconds() - lastFpsTime >= 1000) {
-	std::cout << "FPS " << fps << " Render: " << renderFps << std::endl;
-	lastFpsTime = getMilliseconds();
-	fps = 0;
-	renderFps = 0;
-}
-*/
+
+		++fps;
+
+		milliseconds = getMilliseconds();
+		this->frameMilliseconds = milliseconds - frameBeginTime;
+
+		if(milliseconds - lastFpsTime >= 1000) {
+			this->frameRate = fps;
+			this->renderFrameRate = renderFps;
+			lastFpsTime = milliseconds;
+			fps = 0;
+			renderFps = 0;
+
+			G_LOG_VERBOSE("FPS: %d RenderFPS: %d", this->frameRate, this->renderFrameRate);
+		}
 	}
 }
 

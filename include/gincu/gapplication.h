@@ -3,10 +3,12 @@
 
 #include "gincu/ggeometry.h"
 #include "gincu/gconfiginfo.h"
+
 #include "cpgf/gcallbacklist.h"
 
 #include <memory>
 #include <string>
+#include <cstdint>
 
 namespace gincu {
 
@@ -39,6 +41,11 @@ public:
 
 	GSceneManager * getSceneManager() const { return this->sceneManager.get(); }
 
+	int64_t getFrameCount() const { return this->frameCount; }
+	int getFrameRate() const { return this->frameRate; }
+	int getRenderFrameRate() const { return this->renderFrameRate; }
+	unsigned int getFrameMilliseconds() const { return this->frameMilliseconds; }
+
 protected:
 	void setConfigInfo(const GConfigInfo & configInfo) { this->configInfo = configInfo; }
 
@@ -59,9 +66,13 @@ private:
 	std::unique_ptr<GSceneManager> sceneManager;
 	std::unique_ptr<GEventProcessor> eventProcessor;
 
-	bool finished;
-
 	cpgf::GCallbackList<void ()> updaterList;
+
+	bool finished;
+	int64_t frameCount;
+	int frameRate;
+	int renderFrameRate;
+	unsigned int frameMilliseconds;
 };
 
 

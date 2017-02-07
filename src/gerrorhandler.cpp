@@ -1,13 +1,14 @@
 #include "gincu/gerrorhandler.h"
+#include "gincu/glog.h"
 
-//#include <windows.h>
+#include <exception>
 
 namespace gincu {
 
-void handleFatal(const std::string & /*message*/)
+void handleFatal(const std::string & message)
 {
-//	MessageBoxA(NULL, message.c_str(), "Fatal", MB_OK);
-//	exit(1);
+	G_LOG_FATAL(message.c_str());
+	std::terminate();
 }
 
 

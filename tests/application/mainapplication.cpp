@@ -23,7 +23,7 @@ MainApplication::MainApplication()
 			false,
 			true,
 			GViewFitStrategy::scaleFit,
-			colorWhite
+			0xffeeeeee
 		}
 	);
 }

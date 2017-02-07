@@ -14,6 +14,8 @@ GSceneManager::GSceneManager()
 
 GSceneManager::~GSceneManager()
 {
+	this->doSwitchScene(nullptr, false);
+
 	GRenderEngine::getInstance()->removeRender(cpgf::makeCallback(this, &GSceneManager::render));
 }
 

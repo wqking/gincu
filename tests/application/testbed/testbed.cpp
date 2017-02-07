@@ -4,8 +4,7 @@
 #include "scenetestbed.h"
 #include "gincu/gapplication.h"
 #include "gincu/gscenemanager.h"
-
-#include <iostream>
+#include "gincu/glog.h"
 
 using namespace gincu;
 
@@ -37,7 +36,7 @@ void TestBed::finishTestCase()
 
 void TestBed::print(const std::string & message) const
 {
-	std::cout << message << std::endl;
+	G_LOG_INFO(message.c_str());
 }
 
 
