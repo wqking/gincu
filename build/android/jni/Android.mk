@@ -32,6 +32,7 @@ LOCAL_SRC_FILES := \
 	$(CPGF_PATH)/src/tween/gtweencommon.cpp \
 	$(CPGF_PATH)/src/tween/gtweenlist.cpp \
 	$(TESTS_PATH)/application/main.cpp \
+	$(TESTS_PATH)/application/uiutil.cpp \
 	$(TESTS_PATH)/application/mainapplication.cpp \
 	$(TESTS_PATH)/application/scenelogo.cpp \
 	$(TESTS_PATH)/application/scenemenu.cpp \
@@ -46,6 +47,11 @@ LOCAL_SRC_FILES := \
 	$(TESTS_PATH)/application/matchthree/statemainloop.cpp \
 	$(TESTS_PATH)/application/matchthree/stateresult.cpp \
 	$(TESTS_PATH)/application/matchthree/stateswapchesses.cpp \
+	$(TESTS_PATH)/application/testbed/scenetestbed.cpp \
+	$(TESTS_PATH)/application/testbed/scenetestcase.cpp \
+	$(TESTS_PATH)/application/testbed/testbed.cpp \
+	$(TESTS_PATH)/application/testbed/testcase.cpp \
+	$(TESTS_PATH)/application/testbed/testcases/testcase_flip.cpp \
 	$(SRC_PATH)/gerrorhandler.cpp \
 	$(SRC_PATH)/gcolor.cpp \
 	$(SRC_PATH)/gspritesheet.cpp \

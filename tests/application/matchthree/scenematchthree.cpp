@@ -3,9 +3,10 @@
 #include "matchthree/matchthreeinfoview.h"
 #include "matchthree/matchthreechess.h"
 #include "matchthree/matchthreeconsts.h"
-#include "scenemenu.h"
 #include "matchthree/matchthreestates.h"
 #include "matchthree/componentchess.h"
+#include "scenemenu.h"
+#include "uiutil.h"
 #include "gincu/gstatemachine.h"
 #include "gincu/gentity.h"
 #include "gincu/gcomponentrender.h"
@@ -44,16 +45,7 @@ void SceneMatchThree::doOnEnter()
 			->addComponent(createComponent<GComponentTransform>())
 			->addComponent(createAndLoadImageComponent(backgroundImageName))
 	);
-	this->addEntity(
-		(new GEntity())
-			->addComponent(createComponent<GComponentTransform>(GPoint { 10, GApplication::getInstance()->getViewSize().height - 30 }))
-			->addComponent(createComponent<GComponentContainerRender>()
-				->add(createRectRenderComponent(0xffeeee77, GSize{ 160, 60 }))
-				->add(createAndLoadTextComponent("Quit game", colorBlue, normalFontSize))
-			)
-			->addComponent(createComponent<GComponentRendererTouchHandler>()->addOnTouch(cpgf::makeCallback(this, &SceneMatchThree::onQuitGameClicked)))
-	);
-
+	this->addEntity(createBackButton(cpgf::makeCallback(this, &SceneMatchThree::onQuitGameClicked)));
 
 	this->stateMachine.reset(new GStateMachine());
 	this->board.reset(new MatchThreeBoard(this));
@@ -109,11 +101,9 @@ void SceneMatchThree::onUpdate()
 	}
 }
 
-void SceneMatchThree::onQuitGameClicked(const GTouchEvent & touchEvent)
+void SceneMatchThree::onQuitGameClicked()
 {
-	if(touchEvent.type == GTouchEventType::eventPressed) {
-		this->roundStartMilliseconds = getMilliseconds() - secondsPerRound * 1000;
-	}
+	this->roundStartMilliseconds = getMilliseconds() - secondsPerRound * 1000;
 }
 
 void SceneMatchThree::onChessTouched(const GTouchEvent & touchEvent)

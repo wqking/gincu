@@ -60,14 +60,16 @@ macro(globAndAppendFiles fileList)
 endmacro()
 
 globAndAppendFiles(fileList
-	${SRC_PATH}/*.cpp
-	${SRC_PATH}/sfml/*.cpp
-	${TESTS_PATH}/application/*.cpp
-	${TESTS_PATH}/application/matchthree/*.cpp
 	${CPGF_PATH}/src/tween/*.cpp
 	${CPGF_PATH}/src/gexception.cpp
 	${CPGF_PATH}/src/glifecycle.cpp
 	${CPGF_PATH}/src/gmemorypool.cpp
+	${SRC_PATH}/*.cpp
+	${SRC_PATH}/sfml/*.cpp
+	${TESTS_PATH}/application/*.cpp
+	${TESTS_PATH}/application/matchthree/*.cpp
+	${TESTS_PATH}/application/testbed/*.cpp
+	${TESTS_PATH}/application/testbed/testcases/*.cpp
 )
 
 add_executable(

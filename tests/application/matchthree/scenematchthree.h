@@ -33,7 +33,7 @@ public:
 
 private:
 	void onUpdate();
-	void onQuitGameClicked(const GTouchEvent & touchEvent);
+	void onQuitGameClicked();
 	void restoreTouchedChessList();
 	bool isTimeUp() const;
 

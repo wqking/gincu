@@ -26,7 +26,7 @@ void SceneMenu::doOnEnter()
 	const GCoord viewWidth = application->getViewSize().width;
 	const GCoord viewHeight = application->getViewSize().height;
 	const GSize tileSize { 400, 80};
-	const GCoord yDistance = 40;
+	const GCoord ySpace = 40;
 
 	this->addEntity(
 		(new GEntity())
@@ -36,7 +36,7 @@ void SceneMenu::doOnEnter()
 
 	auto itemList = MenuRegister::getInstance()->getSortedItemList();
 	const int itemCount = (int)itemList.size();
-	const GCoord totalHeight = itemCount * tileSize.height + (itemCount - 1) * itemCount;
+	const GCoord totalHeight = itemCount * tileSize.height + (itemCount - 1) * ySpace;
 	const GCoord yStart = (viewHeight - totalHeight) / 2;
 	const GCoord x = viewWidth / 2;
 
@@ -45,7 +45,7 @@ void SceneMenu::doOnEnter()
 		this->addEntity(
 			(new GEntity())
 				->addComponent(createComponent<GComponentTransform>())
-				->addComponent(createComponent<GComponentLocalTransform>(GPoint { x, yStart + (tileSize.height + yDistance) * i }))
+				->addComponent(createComponent<GComponentLocalTransform>(GPoint { x, yStart + (tileSize.height + ySpace) * i }))
 				->addComponent(createComponent<GComponentAnchor>(GRenderAnchor::center))
 				->addComponent(createComponent<GComponentContainerRender>()
 					->add(createRectRenderComponent(item.backgroundColor, tileSize))

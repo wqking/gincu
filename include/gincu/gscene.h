@@ -45,6 +45,13 @@ private:
 };
 
 
+template <typename T>
+T * sceneCreator()
+{
+	return new T();
+}
+
+
 } //namespace gincu
 
 #endif
