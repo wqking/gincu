@@ -4,6 +4,7 @@
 #include <string>
 #include <sstream>
 #include <cmath>
+#include <limits>
 
 namespace gincu {
 

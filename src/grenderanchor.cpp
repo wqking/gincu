@@ -17,6 +17,9 @@ GPoint getOriginByRenderAnchor(const GRenderAnchor renderAnchor, const GSize & s
 	case GRenderAnchor::hRight:
 		result.x = size.width;
 		break;
+
+	default:
+		break;
 	}
 
 	switch(renderAnchor & GRenderAnchor::vMask) {
@@ -29,6 +32,9 @@ GPoint getOriginByRenderAnchor(const GRenderAnchor renderAnchor, const GSize & s
 
 	case GRenderAnchor::vBottom:
 		result.y = size.height;
+		break;
+
+	default:
 		break;
 	}
 

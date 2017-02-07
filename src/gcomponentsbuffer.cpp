@@ -69,7 +69,6 @@ void GComponentsBuffer::render()
 	//return;
 
 	const int count = (int)componentList->size();
-	GComponentRender * previousRender;
 	GComponentRender * currentRender = nullptr;
 	GComponentRender * nextRender = static_cast<GComponentRender *>(componentList->at(0));
 	GRenderEngine * renderEngine = GRenderEngine::getInstance();
@@ -80,7 +79,6 @@ void GComponentsBuffer::render()
 	const GRenderInfo * nextGroup = getRenderBatchGroup(nextRender);
 
 	for(int i = 0; i < count; ++i) {
-		previousRender = currentRender;
 		currentRender = nextRender;
 		nextRender = (i < count - 1 ? static_cast<GComponentRender *>(componentList->at(i + 1)) : nullptr);
 
