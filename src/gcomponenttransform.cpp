@@ -1,6 +1,7 @@
 #include "gincu/gcomponenttransform.h"
 #include "gincu/gcomponentanchor.h"
 #include "gincu/gentity.h"
+#include "gincu/gentityutil.h"
 
 namespace gincu {
 
@@ -96,6 +97,8 @@ void GComponentLocalTransform::applyGlobal()
 			GComponentTransform * parentGlobalTransform = this->parent->getEntity()->getComponentByType<GComponentTransform>();
 			if(parentGlobalTransform != nullptr) {
 				GTransform parentTransform = parentGlobalTransform->getTransform();
+				// can't apply anchor, otherwise the display is choas
+				//GTransform parentTransform = computeRenderableTransform(parentGlobalTransform); 
 				parentTransform.translate(this->parent->getTransform().getOrigin());
 				globalTransform->setTransform(parentTransform.multiply(this->getTransform()));
 			}

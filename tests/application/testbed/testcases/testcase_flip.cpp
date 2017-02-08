@@ -72,7 +72,7 @@ void TestCase_Flip::doInitializeText(const GPoint & position)
 
 void TestCase_Flip::doInitializeImage(const GPoint & position)
 {
-	const std::string imageName("testbed/cat.jpg");
+	const std::string imageName("testbed/cat.png");
 	const GCoord x = position.x;
 	const GCoord y = position.y;
 	const GCoord xDelta = 150;

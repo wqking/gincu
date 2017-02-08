@@ -108,8 +108,10 @@ GScale GTransform::getDecompositedScale() const
 {
 	this->doUpdateTransform();
 	const auto p1 = this->sfmlTransform.transformPoint(0, 0);
-	const auto p2 = this->sfmlTransform.transformPoint(1, 1);
-	return { p2.x - p1.x, p2.y - p1.y };
+	const auto p2 = this->sfmlTransform.transformPoint(1, 0);
+	const auto p3 = this->sfmlTransform.transformPoint(0, 1);
+	return { p2.x - p1.x, p3.y - p1.y };
+
 /*
 	const float angle  = -degreeToRadian(this->rotation);
 	const float * matrix = this->sfmlTransform.getMatrix();

@@ -56,8 +56,9 @@ LOCAL_SRC_FILES := \
 	$(TESTS_PATH)/application/testbed/scenetestcase.cpp \
 	$(TESTS_PATH)/application/testbed/testbed.cpp \
 	$(TESTS_PATH)/application/testbed/testcase.cpp \
-	$(TESTS_PATH)/application/testbed/testcases/testcase_flip.cpp \
 	$(TESTS_PATH)/application/testbed/testcases/testcase_animation.cpp \
+	$(TESTS_PATH)/application/testbed/testcases/testcase_flip.cpp \
+	$(TESTS_PATH)/application/testbed/testcases/testcase_scenegraph.cpp \
 	$(SRC_PATH)/gerrorhandler.cpp \
 	$(SRC_PATH)/gcolor.cpp \
 	$(SRC_PATH)/gframeanimation.cpp \
