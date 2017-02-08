@@ -61,12 +61,12 @@ private:
 private:
 	GConfigInfo configInfo;
 
+	cpgf::GCallbackList<void ()> updaterList;
+
 	std::unique_ptr<GRenderEngine> renderEngine;
 	std::unique_ptr<GResourceManager> resourceManager;
 	std::unique_ptr<GSceneManager> sceneManager;
 	std::unique_ptr<GEventProcessor> eventProcessor;
-
-	cpgf::GCallbackList<void ()> updaterList;
 
 	bool finished;
 	int64_t frameCount;

@@ -24,19 +24,19 @@ public:
 	~GComponentTransform();
 
 	GPoint getPosition() const { return this->transform.getPosition(); }
-	void setPosition(const GPoint & position) { this->transform.setPosition(position); }
+	GComponentTransform * setPosition(const GPoint & position) { this->transform.setPosition(position); return this; }
 
 	GScale getScale() const { return this->transform.getScale(); }
-	void setScale(const GScale & scale) { this->transform.setScale(scale); }
+	GComponentTransform * setScale(const GScale & scale) { this->transform.setScale(scale); return this; }
 
 	float getRotation() const { return this->transform.getRotation(); }
-	void setRotation(const float rotation) { this->transform.setRotation(rotation); }
+	GComponentTransform * setRotation(const float rotation) { this->transform.setRotation(rotation); return this; }
 
 	bool isVisible() const { return this->visible; }
-	void setVisible(const bool visible) { this->visible = visible; }
+	GComponentTransform * setVisible(const bool visible) { this->visible = visible; return this; }
 	
 	const GTransform & getTransform() const { return this->transform; }
-	void setTransform(const GTransform & transform) { this->transform = transform; }
+	GComponentTransform * setTransform(const GTransform & transform) { this->transform = transform; return this; }
 
 private:
 	GTransform transform;

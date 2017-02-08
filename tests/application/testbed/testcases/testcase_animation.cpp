@@ -26,7 +26,7 @@ private:
 
 void TestCase_Animation::doInitialize()
 {
-	this->doInitializeAnimation({ 100, 150 });
+	this->doInitializeAnimation({ 100, 50 });
 }
 
 GComponentTweenedFrameAnimation * createAnimation(GEntity * entity, const std::string & spriteSheetName)
@@ -39,7 +39,7 @@ GComponentTweenedFrameAnimation * createAnimation(GEntity * entity, const std::s
 		render->getRender().setIndex(index);
 	});
 	animation.getTween().repeat(-1);
-	animation.getTween().timeScale(0.1);
+	animation.getTween().timeScale(0.2f);
 	return createComponent<GComponentTweenedFrameAnimation>(animation);
 }
 
@@ -48,7 +48,7 @@ void TestCase_Animation::doInitializeAnimation(const GPoint & position)
 	const std::string spriteSheetName("testbed/animation_yellow_boy");
 	const GCoord x = position.x;
 	const GCoord y = position.y;
-	const GCoord xDelta = 150;
+	const GCoord xDelta = 180;
 	const GCoord yDelta = 150;
 
 	GEntity * entity;
@@ -61,6 +61,56 @@ void TestCase_Animation::doInitializeAnimation(const GPoint & position)
 		->addComponent(createSpriteSheetComponent(GResourceManager::getInstance()->getSpriteSheet(spriteSheetName, GSpriteSheetFormat::spritePackText), ""))
 		->addComponent(createAnimation(entity, spriteSheetName))
 		->addComponent(createComponent<GComponentRendererTouchHandler>()->addOnTouch(createOnPressCallback([=](){ this->getTestBed()->print("clicked: animation LeftTop no flip"); })))
+	);
+
+	entity = new GEntity();
+	this->getScene()->addEntity(
+		entity
+		->addComponent(createComponent<GComponentTransform>(GPoint{x, y + yDelta}))
+		->addComponent(createComponent<GComponentAnchor>(GRenderAnchor::leftTop)->setFlipX(true))
+		->addComponent(createSpriteSheetComponent(GResourceManager::getInstance()->getSpriteSheet(spriteSheetName, GSpriteSheetFormat::spritePackText), ""))
+		->addComponent(createAnimation(entity, spriteSheetName))
+		->addComponent(createComponent<GComponentRendererTouchHandler>()->addOnTouch(createOnPressCallback([=](){ this->getTestBed()->print("clicked: animation LeftTop flip x"); })))
+	);
+
+	entity = new GEntity();
+	this->getScene()->addEntity(
+		entity
+		->addComponent(createComponent<GComponentTransform>(GPoint{x + xDelta, y}))
+		->addComponent(createComponent<GComponentAnchor>(GRenderAnchor::leftTop)->setFlipY(true))
+		->addComponent(createSpriteSheetComponent(GResourceManager::getInstance()->getSpriteSheet(spriteSheetName, GSpriteSheetFormat::spritePackText), ""))
+		->addComponent(createAnimation(entity, spriteSheetName))
+		->addComponent(createComponent<GComponentRendererTouchHandler>()->addOnTouch(createOnPressCallback([=](){ this->getTestBed()->print("clicked: animation LeftTop flip y"); })))
+	);
+
+	entity = new GEntity();
+	this->getScene()->addEntity(
+		entity
+		->addComponent(createComponent<GComponentTransform>(GPoint{x + xDelta, y + yDelta}))
+		->addComponent(createComponent<GComponentAnchor>(GRenderAnchor::leftTop)->setFlipX(true)->setFlipY(true))
+		->addComponent(createSpriteSheetComponent(GResourceManager::getInstance()->getSpriteSheet(spriteSheetName, GSpriteSheetFormat::spritePackText), ""))
+		->addComponent(createAnimation(entity, spriteSheetName))
+		->addComponent(createComponent<GComponentRendererTouchHandler>()->addOnTouch(createOnPressCallback([=](){ this->getTestBed()->print("clicked: animation LeftTop flip x/y"); })))
+	);
+
+	entity = new GEntity();
+	this->getScene()->addEntity(
+		entity
+		->addComponent(createComponent<GComponentTransform>(GPoint{x + xDelta * 2, y})->setRotation(30))
+		->addComponent(createComponent<GComponentAnchor>(GRenderAnchor::leftTop))
+		->addComponent(createSpriteSheetComponent(GResourceManager::getInstance()->getSpriteSheet(spriteSheetName, GSpriteSheetFormat::spritePackText), ""))
+		->addComponent(createAnimation(entity, spriteSheetName))
+		->addComponent(createComponent<GComponentRendererTouchHandler>()->addOnTouch(createOnPressCallback([=](){ this->getTestBed()->print("clicked: animation LeftTop rotate 30"); })))
+	);
+
+	entity = new GEntity();
+	this->getScene()->addEntity(
+		entity
+		->addComponent(createComponent<GComponentTransform>(GPoint{x + xDelta * 3, y})->setRotation(30))
+		->addComponent(createComponent<GComponentAnchor>(GRenderAnchor::center))
+		->addComponent(createSpriteSheetComponent(GResourceManager::getInstance()->getSpriteSheet(spriteSheetName, GSpriteSheetFormat::spritePackText), ""))
+		->addComponent(createAnimation(entity, spriteSheetName))
+		->addComponent(createComponent<GComponentRendererTouchHandler>()->addOnTouch(createOnPressCallback([=](){ this->getTestBed()->print("clicked: animation Center rotate 30"); })))
 	);
 }
 
