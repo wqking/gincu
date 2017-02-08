@@ -28,7 +28,7 @@ void StateInitializeNewRound::doOnEnter()
 {
 	MatchThreeBoard * board = this->scene->getBoard();
 
-	cpgf::GTween & tween = cpgf::GTweenList::getInstance()->tween()
+	cpgf::GTween & tween = getTweenListFromScene()->tween()
 		.duration(500.0f) // 0.5 seconds
 		.ease(cpgf::QuadEase::easeIn())
 		.onComplete(cpgf::makeCallback(this, &StateInitializeNewRound::finish))

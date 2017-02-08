@@ -29,7 +29,8 @@ GApplication::GApplication()
 		frameCount(0),
 		frameRate(60),
 		renderFrameRate(60),
-		frameMilliseconds(1)
+		frameMilliseconds(1),
+		renderMilliseconds(1)
 {
 	instance = this;
 }
@@ -76,10 +77,15 @@ void GApplication::processMainLoop()
 
 	this->frameCount = 0;
 
-	unsigned int lastTweenTime = getMilliseconds();
+	const unsigned int startTime = getMilliseconds();
+
 	unsigned int lastRenderTime = 0;
 
-	unsigned int lastFpsTime = getMilliseconds();
+	if(startTime > millisecondsPerRenderFrame + 1) {
+		lastRenderTime = startTime - millisecondsPerRenderFrame - 1;
+	}
+
+	unsigned int lastFpsTime = startTime;
 	int fps = 0;
 	int renderFps = 0;
 
@@ -96,15 +102,16 @@ void GApplication::processMainLoop()
 
 		if(this->configInfo.renderFramesPerSecond < 0
 			|| getMilliseconds() - lastRenderTime >= millisecondsPerRenderFrame) {
-			lastRenderTime = getMilliseconds();
+			milliseconds = getMilliseconds();
+			this->renderMilliseconds = milliseconds - lastRenderTime;
+			lastRenderTime = milliseconds;;
+
 			this->renderEngine->render();
 			
 			++renderFps;
 		}
 
-		milliseconds = getMilliseconds();
-		cpgf::GTweenList::getInstance()->tick((cpgf::GTweenNumber)(milliseconds - lastTweenTime));
-		lastTweenTime = milliseconds;
+		cpgf::GTweenList::getInstance()->tick((cpgf::GTweenNumber)this->frameMilliseconds);
 
 		if(millisecondsPerFrame > 0) {
 			while(getMilliseconds() < frameBeginTime + millisecondsPerFrame - 1) {

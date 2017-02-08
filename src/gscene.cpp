@@ -1,6 +1,8 @@
 #include "gincu/gscene.h"
 #include "gincu/gentity.h"
 #include "gincu/gcomponenttouchhandler.h"
+#include "gincu/gapplication.h"
+#include "gincu/gscenemanager.h"
 
 namespace gincu {
 
@@ -22,6 +24,7 @@ void GScene::onExit()
 {
 	this->doOnExit();
 
+	this->tweenList.clear();
 	this->entityList.clear();
 }
 
@@ -35,6 +38,8 @@ void GScene::doOnExit()
 
 void GScene::renderScene()
 {
+	this->tweenList.tick((cpgf::GTweenNumber)GApplication::getInstance()->getRenderMilliseconds());
+
 	this->componentsBuffer.updateDuringRender();
 }
 
@@ -103,6 +108,11 @@ void GScene::removeEntity(GEntity * entity)
 			break;
 		}
 	}
+}
+
+cpgf::GTweenList * getTweenListFromScene()
+{
+	return GApplication::getInstance()->getSceneManager()->getCurrentScene()->getTweenList();
 }
 
 

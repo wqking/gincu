@@ -68,7 +68,7 @@ void StateResult::doCollectChesses()
 
 	const GApplication * application = GApplication::getInstance();
 
-	cpgf::GTween & tween = cpgf::GTweenList::getInstance()->tween()
+	cpgf::GTween & tween = getTweenListFromScene()->tween()
 		.duration(600)
 		.ease(cpgf::QuadEase::easeIn())
 		.onComplete(cpgf::makeCallback(this, &StateResult::doShowMessage))
@@ -129,7 +129,7 @@ void StateResult::doShowMessage()
 		);
 
 	GComponentLocalTransform * transform = backgroundEntity->getComponentByType<GComponentLocalTransform>();
-	cpgf::GTweenList::getInstance()->tween()
+	getTweenListFromScene()->tween()
 		.duration(1000)
 		.ease(cpgf::ElasticEase::easeOut())
 		.onComplete(cpgf::makeCallback(this, &StateResult::onBackgroundShown))

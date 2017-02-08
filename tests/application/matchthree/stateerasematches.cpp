@@ -110,7 +110,7 @@ void StateEraseMatches::animateToDisappear()
 {
 	MatchThreeBoard * board = this->scene->getBoard();
 
-	cpgf::GTween & tween = cpgf::GTweenList::getInstance()->tween()
+	cpgf::GTween & tween = getTweenListFromScene()->tween()
 		.duration(200)
 		.ease(cpgf::QuadEase::easeIn())
 		.onComplete(cpgf::makeCallback(this, &StateEraseMatches::fullfilNewChesses))
@@ -132,7 +132,7 @@ void StateEraseMatches::fullfilNewChesses()
 	MatchThreeBoard * board = this->scene->getBoard();
 	const int rowCount = board->getRowCount();
 
-	cpgf::GTween & tween = cpgf::GTweenList::getInstance()->tween()
+	cpgf::GTween & tween = getTweenListFromScene()->tween()
 		.duration(300)
 		.ease(cpgf::QuadEase::easeIn())
 		.onComplete(cpgf::makeCallback(this, &StateEraseMatches::finishedMatch))

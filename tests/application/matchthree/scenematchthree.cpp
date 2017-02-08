@@ -74,8 +74,6 @@ void SceneMatchThree::doOnEnter()
 void SceneMatchThree::doOnExit()
 {
 	GApplication::getInstance()->removeUpdater(cpgf::makeCallback(this, &SceneMatchThree::onUpdate));
-
-	cpgf::GTweenList::getInstance()->clear();
 }
 
 void SceneMatchThree::clearTouchedChessList()

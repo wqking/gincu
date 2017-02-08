@@ -4,6 +4,8 @@
 #include "gincu/ggeometry.h"
 #include "gincu/gcomponentsbuffer.h"
 
+#include "cpgf/tween/gtweenlist.h"
+
 #include <memory>
 #include <vector>
 
@@ -34,6 +36,8 @@ public:
 	void setTouchCapture(GEntity * touchCapture);
 	GEntity * getTouchCapture() const;
 
+	cpgf::GTweenList * getTweenList() { return &this->tweenList; }
+
 private:
 	virtual void doOnEnter();
 	virtual void doOnExit();
@@ -42,6 +46,7 @@ private:
 	GComponentsBuffer componentsBuffer;
 	std::vector<EntityPointer> entityList;
 	GEntity * touchCapture;
+	cpgf::GTweenList tweenList;
 };
 
 
@@ -50,6 +55,8 @@ T * sceneCreator()
 {
 	return new T();
 }
+
+cpgf::GTweenList * getTweenListFromScene();
 
 
 } //namespace gincu

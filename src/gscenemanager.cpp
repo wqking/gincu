@@ -23,7 +23,7 @@ void GSceneManager::switchScene(GScene * scene)
 {
 	this->sceneToSwitchTo.reset(scene);
 
-	GApplication::getInstance()->addUpdater(cpgf::makeCallback(this, &GSceneManager::onUpdate));
+	GApplication::getInstance()->addUpdater(cpgf::makeCallback(this, &GSceneManager::lazySwitchScene));
 }
 
 void GSceneManager::switchScene(const std::string & sceneName, const SceneCreator & creator)
@@ -35,7 +35,7 @@ void GSceneManager::switchScene(const std::string & sceneName, const SceneCreato
 		this->sceneNameToSwitchTo = sceneName;
 		this->sceneCreatorToSwitchTo = creator;
 
-		GApplication::getInstance()->addUpdater(cpgf::makeCallback(this, &GSceneManager::onUpdate));
+		GApplication::getInstance()->addUpdater(cpgf::makeCallback(this, &GSceneManager::lazySwitchScene));
 	}
 }
 
@@ -82,9 +82,9 @@ void GSceneManager::handleTouchEvent(const GTouchEvent & touchEvent)
 	}
 }
 
-void GSceneManager::onUpdate()
+void GSceneManager::lazySwitchScene()
 {
-	GApplication::getInstance()->removeUpdater(cpgf::makeCallback(this, &GSceneManager::onUpdate));
+	GApplication::getInstance()->removeUpdater(cpgf::makeCallback(this, &GSceneManager::lazySwitchScene));
 
 	if(this->sceneToSwitchTo) {
 		this->doSwitchScene(this->sceneToSwitchTo.release(), false);

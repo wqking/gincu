@@ -45,6 +45,7 @@ public:
 	int getFrameRate() const { return this->frameRate; }
 	int getRenderFrameRate() const { return this->renderFrameRate; }
 	unsigned int getFrameMilliseconds() const { return this->frameMilliseconds; }
+	unsigned int getRenderMilliseconds() const { return this->renderMilliseconds; }
 
 protected:
 	void setConfigInfo(const GConfigInfo & configInfo) { this->configInfo = configInfo; }
@@ -73,6 +74,7 @@ private:
 	int frameRate;
 	int renderFrameRate;
 	unsigned int frameMilliseconds;
+	unsigned int renderMilliseconds;
 };
 
 

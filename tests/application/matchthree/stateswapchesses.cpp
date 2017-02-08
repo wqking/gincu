@@ -50,7 +50,7 @@ bool StateSwapChesses::doStartSwapChesses()
 
 	GComponentTransform * transformA = chessA->getComponentByType<GComponentTransform>();
 	GComponentTransform * transformB = chessB->getComponentByType<GComponentTransform>();
-	cpgf::GTweenList::getInstance()->tween()
+	getTweenListFromScene()->tween()
 		.duration(200.0f)
 		.ease(cpgf::QuadEase::easeIn())
 		.onComplete(cpgf::makeCallback(this, &StateSwapChesses::onSwapFinish))

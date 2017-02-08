@@ -30,7 +30,7 @@ public:
 
 private:
 	void doSwitchScene(GScene * scene, const bool keepScene);
-	void onUpdate();
+	void lazySwitchScene();
 	void render();
 
 private:
