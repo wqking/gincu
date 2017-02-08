@@ -51,11 +51,14 @@ bool GComponentRendererTouchHandler::doCanHandle(const GPoint & point) const
 	const GTransform t = computeRenderableTransform(transform);
 	const GSize size = getEntity()->getComponentByType<GComponentRender>()->getSize();
 	const sf::Transform & sfmlTransform = t.getSfmlTransform();
-	auto normalizedRect = sfmlTransform.transformRect({ 0, 0, size.width, size.height });
-	
-	return isWithin(point.x, normalizedRect.left, normalizedRect.left + normalizedRect.width)
-		&& isWithin(point.y, normalizedRect.top, normalizedRect.top + normalizedRect.height)
-	;
+
+	auto normalizedPoint = sfmlTransform.getInverse().transformPoint({ point.x, point.y });
+	return isWithin(normalizedPoint.x, 0, size.width) && isWithin(normalizedPoint.y, 0, size.height);
+
+	//auto normalizedRect = sfmlTransform.transformRect({ 0, 0, size.width, size.height });
+	//return isWithin(point.x, normalizedRect.left, normalizedRect.left + normalizedRect.width)
+	//	&& isWithin(point.y, normalizedRect.top, normalizedRect.top + normalizedRect.height)
+	//;
 }
 
 
