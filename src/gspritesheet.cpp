@@ -11,7 +11,7 @@ namespace gincu {
 
 GImage GSpriteSheetData::getImage(const std::string & name) const
 {
-	auto it = this->indexMap.find(const_cast<std::string &>(name));
+	auto it = this->indexMap.find(name);
 	if(it != this->indexMap.end()) {
 		return GImage(this->imageResource, this->rectList[it->second]);
 	}
@@ -45,7 +45,7 @@ void GSpriteSheetData::load(const std::string & resourceName, const GSpriteSheet
 	this->imageResource = GResourceManager::getInstance()->getImage(this->imageName).getData();
 
 	for(std::size_t i = 0; i < this->nameList.size(); ++i) {
-		this->indexMap.insert(std::make_pair(std::reference_wrapper<std::string>(this->nameList[i]), i));
+		this->indexMap.insert(std::make_pair(std::reference_wrapper<const std::string>(this->nameList[i]), i));
 	}
 }
 

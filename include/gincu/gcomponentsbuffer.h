@@ -22,9 +22,17 @@ public:
 	void add(GComponent * component);
 	void remove(GComponent * component);
 	
+	void updateAnimation();
 	void updateLocalTransforms();
 	void render();
+
 	void findTouchHandlers(const GPoint & position, std::vector<GComponentTouchHandler *> * outputResult);
+
+	void updateDuringRender() {
+		this->updateAnimation();
+		this->updateLocalTransforms();
+		this->render();
+	}
 	
 private:
 	ComponentListType * doGetComponentList(const unsigned int typeId);

@@ -3,6 +3,7 @@
 
 #include "gincu/ggeometry.h"
 #include "gincu/gimage.h"
+#include "gincu/gutil.h"
 #include "cpgf/gcallback.h"
 
 #include <string>
@@ -26,12 +27,6 @@ class GImageData;
 
 class GSpriteSheetData
 {
-private:
-	template <typename T>
-	struct LessCompare {
-		bool operator() (const T & a, const T & b) const { return a.get() < b.get(); }
-	};
-
 public:
 	void load(const std::string & resourceName, const GSpriteSheetFormat format);
 
@@ -50,7 +45,7 @@ private:
 	std::string imageName;
 	std::vector<std::string> nameList;
 	std::vector<GRect> rectList;
-	std::map<std::reference_wrapper<std::string>, std::size_t, LessCompare<std::reference_wrapper<std::string> > > indexMap;
+	std::map<std::reference_wrapper<const std::string>, std::size_t, ReferenceWrapperLessCompare<std::reference_wrapper<const std::string> > > indexMap;
 	std::shared_ptr<GImageData> imageResource;
 };
 
@@ -75,6 +70,8 @@ public:
 
 	int getImageCount() const { return (int)this->data->getNameList().size(); }
 	int getIndex(const std::string & name) const { return this->data->getIndex(name); }
+
+	const std::shared_ptr<GSpriteSheetData> & getData() const { return this->data; }
 
 private:
 	static LoaderMap * getLoaderMap();

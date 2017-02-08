@@ -33,7 +33,11 @@ public:
 
 	GFileInputStream getFileStream(const std::string & resourceName) const;
 
-	const GFont & getFont() const;
+	GFont getFont() const;
+
+	std::string solveResourcePath(const std::string & resourceName) const;
+
+	const std::string & getResourcePath() const { return this->resourcePath; }
 
 private:
 	std::string resourcePath;

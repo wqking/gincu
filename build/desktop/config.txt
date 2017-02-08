@@ -13,17 +13,17 @@ Uncomment to change it.
 
 #[[
 The component storage policy used by Entity.
-If this macro is not defined, default is mixedArray.
-See EntityStoragePolicy in entitypolicy.h for all possible values.
+If this macro is not defined, default is mixedMap.
+See GEntityStoragePolicy in gentitypolicy.h for all possible values.
 Uncomment to change it.
 ]]
-#add_definitions(-DGINCU_ENTITY_STORAGE_POLICY=mixedArray)
+#add_definitions(-DGINCU_ENTITY_STORAGE_POLICY=mixedMap)
 
 
 #[[
 The component storage initial size used by Entity.
 If this macro is not defined, default is componentTypeId_PrimaryCount.
-See EntityStoragePolicy in entitypolicy.h for all possible values.
+See GEntityStoragePolicy in gentitypolicy.h for all possible values.
 Uncomment to change it.
 ]]
 #add_definitions(-DGINCU_ENTITY_STORAGE_POLICY_INITIAL_SIZE=componentTypeId_PrimaryCount)
@@ -48,7 +48,7 @@ Uncomment to change it.
 #[[
 The purge strategy used in memory pool.
 If this macro is not defined, default is onSceneSwitched.
-See MemoryPoolPurgeStrategy in memorypool.h for all possible values.
+See GHeapPoolPurgeStrategy in gheappool.h for all possible values.
 Uncomment to change it.
 ]]
 #add_definitions(-DGINCU_MEMORY_POOL_PURGE_STRATEGY=onSceneSwitched)

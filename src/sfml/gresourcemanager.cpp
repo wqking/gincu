@@ -40,7 +40,7 @@ GImage GResourceManager::getImage(const std::string & resourceName) const
 	else {
 		data = std::make_shared<GImageData>();
 		this->imageResourceMap.insert(std::make_pair(resourceName, data));
-		const std::string fileName = this->resourcePath + resourceName;
+		const std::string fileName = this->solveResourcePath(resourceName);
 		data->load(fileName);
 	}
 
@@ -67,18 +67,23 @@ GSpriteSheet GResourceManager::getSpriteSheet(const std::string & resourceName, 
 GFileInputStream GResourceManager::getFileStream(const std::string & resourceName) const
 {
 	GFileInputStream stream;
-	stream.open(this->resourcePath + resourceName);
+	stream.open(this->solveResourcePath(resourceName));
 	return stream;
 }
 
-const GFont & GResourceManager::getFont() const
+GFont GResourceManager::getFont() const
 {
 	if(! this->font) {
 		this->font.reset(new GFont());
-		this->font->getData()->font.loadFromFile(this->resourcePath + "arialbd.ttf");
+		this->font->getData()->font.loadFromFile(this->solveResourcePath("arialbd.ttf"));
 	}
 	
 	return *this->font.get();
+}
+
+std::string GResourceManager::solveResourcePath(const std::string & resourceName) const
+{
+	return this->resourcePath + resourceName;
 }
 
 

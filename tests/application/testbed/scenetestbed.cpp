@@ -54,10 +54,12 @@ void SceneTestBed::doOnEnter()
 
 	for(int i = 0; i < itemCount; ++i) {
 		const auto item = itemList[i];
+		const int row = i % rowCount;
+		const int column = i / rowCount;
 		this->addEntity(
 			(new GEntity())
 			->addComponent(createComponent<GComponentTransform>())
-			->addComponent(createComponent<GComponentLocalTransform>(GPoint { xStart + (tileSize.width + xSpace) * i, yStart + (tileSize.height + ySpace) * i }))
+			->addComponent(createComponent<GComponentLocalTransform>(GPoint { xStart + (tileSize.width + xSpace) * column, yStart + (tileSize.height + ySpace) * row }))
 			->addComponent(createComponent<GComponentAnchor>(GRenderAnchor::center))
 			->addComponent(createComponent<GComponentContainerRender>()
 				->add(createRectRenderComponent(0xffeeee77, tileSize))

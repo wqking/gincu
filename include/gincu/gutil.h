@@ -22,6 +22,12 @@ std::string toString(const T & value)
 	return stream.str();
 }
 
+template <typename T>
+struct ReferenceWrapperLessCompare {
+	bool operator() (const T & a, const T & b) const { return a.get() < b.get(); }
+};
+
+
 inline bool isEqual(const int a, const int b)
 {
 	return a == b;

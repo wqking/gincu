@@ -77,8 +77,6 @@ void TestCase_Flip::doInitializeImage(const GPoint & position)
 	const GCoord y = position.y;
 	const GCoord xDelta = 150;
 	const GCoord yDelta = 150;
-	const GColor color = colorBlue;
-	const int fontSize = 32;
 	this->getScene()->addEntity(
 		(new GEntity())
 		->addComponent(createComponent<GComponentTransform>(GPoint{x, y}))
@@ -113,7 +111,7 @@ void TestCase_Flip::doInitializeImage(const GPoint & position)
 }
 
 
-G_AUTO_RUN_BEFORE_MAIN()
+G_AUTO_RUN_BEFORE_MAIN(TestCase_Flip)
 {
 	TestBedRegister::getInstance()->registerItem("Flip", &testCaseCreator<TestCase_Flip>);
 }

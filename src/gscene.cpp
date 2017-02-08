@@ -35,8 +35,7 @@ void GScene::doOnExit()
 
 void GScene::renderScene()
 {
-	this->componentsBuffer.updateLocalTransforms();
-	this->componentsBuffer.render();
+	this->componentsBuffer.updateDuringRender();
 }
 
 void GScene::setTouchCapture(GEntity * touchCapture)

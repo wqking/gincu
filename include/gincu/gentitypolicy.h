@@ -394,7 +394,7 @@ struct GEntityStoragePolicySelector <GEntityStoragePolicy::mixedMap, InitialSize
 
 
 #ifndef GINCU_ENTITY_STORAGE_POLICY
-#define GINCU_ENTITY_STORAGE_POLICY mixedArray
+#define GINCU_ENTITY_STORAGE_POLICY mixedMap
 #endif
 
 #ifndef GINCU_ENTITY_STORAGE_POLICY_INITIAL_SIZE

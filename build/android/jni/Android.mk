@@ -57,8 +57,10 @@ LOCAL_SRC_FILES := \
 	$(TESTS_PATH)/application/testbed/testbed.cpp \
 	$(TESTS_PATH)/application/testbed/testcase.cpp \
 	$(TESTS_PATH)/application/testbed/testcases/testcase_flip.cpp \
+	$(TESTS_PATH)/application/testbed/testcases/testcase_animation.cpp \
 	$(SRC_PATH)/gerrorhandler.cpp \
 	$(SRC_PATH)/gcolor.cpp \
+	$(SRC_PATH)/gframeanimation.cpp \
 	$(SRC_PATH)/gspritesheet.cpp \
 	$(SRC_PATH)/gspritesheetrender.cpp \
 	$(SRC_PATH)/grenderanchor.cpp \
@@ -74,6 +76,7 @@ LOCAL_SRC_FILES := \
 	$(SRC_PATH)/sfml/gresourcemanager.cpp \
 	$(SRC_PATH)/gcomponent.cpp \
 	$(SRC_PATH)/gcomponentanchor.cpp \
+	$(SRC_PATH)/gcomponentanimation.cpp \
 	$(SRC_PATH)/gcomponentrender.cpp \
 	$(SRC_PATH)/gcomponentsbuffer.cpp \
 	$(SRC_PATH)/gcomponenttouchhandler.cpp \

@@ -2,7 +2,6 @@
 #define GCOMPONENTANCHOR_H
 
 #include "gincu/gcomponent.h"
-#include "gincu/gentity.h"
 #include "gincu/ggeometry.h"
 
 namespace gincu {

@@ -79,7 +79,9 @@ GComponentImageRender * createImageComponent(const GImage & image)
 GComponentSpriteSheetRender * createSpriteSheetComponent(const GSpriteSheet & spriteSheet, const std::string & name)
 {
 	GSpriteSheetRender render(spriteSheet);
-	render.setIndex(render.getSpriteSheet().getIndex(name));
+	if(! name.empty()) {
+		render.setIndex(render.getSpriteSheet().getIndex(name));
+	}
 	return createComponent<GComponentSpriteSheetRender>(render);
 }
 

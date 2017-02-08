@@ -84,14 +84,14 @@ private:
 };
 
 template <typename RenderType>
-class GComponentRenderImplement : public GComponentRender
+class GComponentRenderCommon : public GComponentRender
 {
 private:
 	typedef GComponentRender super;
 
 public:
-	GComponentRenderImplement() : render() {}
-	explicit GComponentRenderImplement(const RenderType & render) : render(render) {}
+	GComponentRenderCommon() : render() {}
+	explicit GComponentRenderCommon(const RenderType & render) : render(render) {}
 
 	void setRender(const RenderType & render) {
 		this->render = render;
@@ -125,10 +125,10 @@ private:
 	RenderType render;
 };
 
-typedef GComponentRenderImplement<GImage> GComponentImageRender;
-typedef GComponentRenderImplement<GSpriteSheetRender> GComponentSpriteSheetRender;
-typedef GComponentRenderImplement<GTextRender> GComponentTextRender;
-typedef GComponentRenderImplement<GRectRender> GComponentRectRender;
+typedef GComponentRenderCommon<GImage> GComponentImageRender;
+typedef GComponentRenderCommon<GSpriteSheetRender> GComponentSpriteSheetRender;
+typedef GComponentRenderCommon<GTextRender> GComponentTextRender;
+typedef GComponentRenderCommon<GRectRender> GComponentRectRender;
 
 GComponentImageRender * createAndLoadImageComponent(const std::string & resourceName);
 GComponentImageRender * createImageComponent(const GImage & image);

@@ -2,6 +2,7 @@
 #include "gincu/gcomponent.h"
 #include "gincu/gcomponenttransform.h"
 #include "gincu/gcomponentrender.h"
+#include "gincu/gcomponentanimation.h"
 #include "gincu/gcomponenttouchhandler.h"
 #include "gincu/grenderengine.h"
 
@@ -46,6 +47,14 @@ void GComponentsBuffer::remove(GComponent * component)
 	componentList->erase(std::remove(componentList->begin(), componentList->end(), component), componentList->end());
 }
 
+void GComponentsBuffer::updateAnimation()
+{
+	ComponentListType * componentList = this->doGetComponentList(GComponentAnimation::getComponentType());
+	for(GComponent * component : *componentList) {
+		static_cast<GComponentAnimation *>(component)->update();
+	}
+}
+
 void GComponentsBuffer::updateLocalTransforms()
 {
 	ComponentListType * componentList = this->doGetComponentList(GComponentLocalTransform::getComponentType());
@@ -62,11 +71,6 @@ void GComponentsBuffer::render()
 	if(componentList->empty()) {
 		return;
 	}
-
-	//for(GComponent * component : *componentList) {
-	//	static_cast<GComponentRender *>(component)->draw();
-	//}
-	//return;
 
 	const int count = (int)componentList->size();
 	GComponentRender * currentRender = nullptr;
