@@ -8,10 +8,14 @@
 #include "gincu/gcomponenttransform.h"
 #include "gincu/gcomponenttouchhandler.h"
 #include "gincu/gcomponentanchor.h"
+#include "gincu/gcomponentanimation.h"
+#include "gincu/gresourcemanager.h"
 
 #include "cpgf/accessor/gaccessor.h"
 #include "cpgf/tween/easing/elastic.h"
 #include "cpgf/goutmain.h"
+
+namespace {
 
 using namespace gincu;
 
@@ -35,21 +39,37 @@ void TestCase_SceneGraph::doInitialize()
 	this->doInitializeRotationAnimation({ 450, 350 });
 }
 
+GComponentTweenedFrameAnimation * createAnimation(GEntity * entity, const std::string & spriteSheetName)
+{
+	std::shared_ptr<GFrameAnimationSetData> data(std::make_shared<GFrameAnimationSetData>());
+	buildFrameAnimationDataFromSpriteSheet(data.get(), GResourceManager::getInstance()->getSpriteSheet(spriteSheetName, GSpriteSheetFormat::spritePackText));
+	GTweenedFrameAnimation animation(data);
+	animation.setUpdater([=](const int index) {
+		GComponentSpriteSheetRender * render = entity->getComponentByType<GComponentSpriteSheetRender>();
+		render->getRender().setIndex(index);
+	});
+	animation.getTween().repeat(-1);
+	animation.getTween().timeScale(0.2f);
+	return createComponent<GComponentTweenedFrameAnimation>(animation);
+}
+
 GComponentLocalTransform * TestCase_SceneGraph::createParentedObject(const GPoint & position, const GRenderAnchor anchor, const float rotation, const float scale)
 {
 	const std::string imageNameA("testbed/cat.png");
 	const std::string imageNameB("testbed/dog.png");
 	const std::string imageNameC("testbed/pig.png");
 	const std::string imageNameD("testbed/rabbit.png");
+	const std::string spriteSheetName("testbed/animation_yellow_boy");
 	const GCoord x = position.x;
 	const GCoord y = position.y;
-	const GCoord xDelta = 150;
+//	const GCoord xDelta = 150;
 	const GCoord yDelta = 150;
 
 	GComponentLocalTransform * result;
 
 	GEntity * entityA;
 	GEntity * entityB;
+	GEntity * entityD;
 	this->getScene()->addEntity(
 		(entityA = new GEntity())
 		->addComponent(createComponent<GComponentTransform>())
@@ -77,12 +97,14 @@ GComponentLocalTransform * TestCase_SceneGraph::createParentedObject(const GPoin
 		->addComponent(createComponent<GComponentRendererTouchHandler>()->addOnTouch(createOnPressCallback([=](){ this->getTestBed()->print("clicked: imageC-B flip y"); })))
 	);
 
+	entityD = new GEntity();
 	this->getScene()->addEntity(
-		(new GEntity())
+		entityD
 		->addComponent(createComponent<GComponentTransform>())
 		->addComponent(createComponent<GComponentLocalTransform>(GPoint{0, yDelta * 2})->setParent(entityB->getComponentByType<GComponentLocalTransform>()))
 		->addComponent(createComponent<GComponentAnchor>(anchor)->setFlipX(true)->setFlipY(true))
-		->addComponent(createAndLoadImageComponent(imageNameD))
+		->addComponent(createSpriteSheetComponent(GResourceManager::getInstance()->getSpriteSheet(spriteSheetName, GSpriteSheetFormat::spritePackText), ""))
+		->addComponent(createAnimation(entityD, spriteSheetName))
 		->addComponent(createComponent<GComponentRendererTouchHandler>()->addOnTouch(createOnPressCallback([=](){ this->getTestBed()->print("clicked: imageD-B flip x/y"); })))
 	);
 
@@ -115,3 +137,6 @@ G_AUTO_RUN_BEFORE_MAIN(TestCase_SceneGraph)
 {
 	TestBedRegister::getInstance()->registerItem("Scene Graph", &testCaseCreator<TestCase_SceneGraph>);
 }
+
+
+} //unnamed namespace

@@ -13,6 +13,8 @@
 
 #include "cpgf/goutmain.h"
 
+namespace {
+
 using namespace gincu;
 
 class TestCase_Animation : public TestCase
@@ -119,3 +121,6 @@ G_AUTO_RUN_BEFORE_MAIN(TestCase_Animation)
 {
 	TestBedRegister::getInstance()->registerItem("Animation", &testCaseCreator<TestCase_Animation>);
 }
+
+
+} //unnamed namespace

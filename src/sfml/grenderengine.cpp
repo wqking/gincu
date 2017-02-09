@@ -96,7 +96,7 @@ void GRenderEngine::draw(const GImage & image, const GTransform & transform, con
 
 void GRenderEngine::draw(const GSpriteSheetRender & spriteSheetRender, const GTransform & transform, const GRenderInfo * renderInfo)
 {
-	this->doDrawTexture(spriteSheetRender.getSpriteSheet().getImageResource().get(), spriteSheetRender.getRect(), transform, renderInfo);
+	this->doDrawTexture(spriteSheetRender.getSpriteSheet().getImageData().get(), spriteSheetRender.getRect(), transform, renderInfo);
 }
 
 void GRenderEngine::draw(const GTextRender & text, const GTransform & transform, const GRenderInfo * renderInfo)

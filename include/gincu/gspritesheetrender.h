@@ -23,7 +23,7 @@ public:
 
 	const GRect & getRect() const { return this->spriteSheet.getRectList()[this->index]; }
 
-	const GImageData * getTexture() const { return this->spriteSheet.getImageResource().get(); }
+	const GImageData * getTexture() const { return this->spriteSheet.getImageData().get(); }
 
 private:
 	GSpriteSheet spriteSheet;

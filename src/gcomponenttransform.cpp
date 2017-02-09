@@ -97,8 +97,6 @@ void GComponentLocalTransform::applyGlobal()
 			GComponentTransform * parentGlobalTransform = this->parent->getEntity()->getComponentByType<GComponentTransform>();
 			if(parentGlobalTransform != nullptr) {
 				GTransform parentTransform = parentGlobalTransform->getTransform();
-				// can't apply anchor, otherwise the display is choas
-				//GTransform parentTransform = computeRenderableTransform(parentGlobalTransform); 
 				parentTransform.translate(this->parent->getTransform().getOrigin());
 				globalTransform->setTransform(parentTransform.multiply(this->getTransform()));
 			}
