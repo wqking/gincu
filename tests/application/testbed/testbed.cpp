@@ -20,16 +20,13 @@ TestBed::~TestBed()
 void TestBed::executeTestCase(TestCase * testCase)
 {
 	this->testCase.reset(testCase);
-	this->scene = new SceneTestCase(this->testCase.get());
-	
-	this->testCase->initialize(this);
+	this->scene = new SceneTestCase(this, this->testCase.get());
 
 	GApplication::getInstance()->getSceneManager()->switchScene(this->scene);
 }
 
 void TestBed::finishTestCase()
 {
-	this->testCase->finalize();
 	this->scene = nullptr;
 	SceneTestBed::switchToScene();
 }

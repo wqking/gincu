@@ -9,8 +9,6 @@ namespace gincu {
 class GTransform;
 enum class GRenderAnchor;
 
-// Note an anchor is applied after matrix transform
-// so any rotation won't apply.
 class GComponentAnchor : public GComponent
 {
 private:
@@ -35,6 +33,9 @@ public:
 	GComponentAnchor * setFlipY(const bool flipY);
 
 	void apply(GTransform & transform, const GSize & size);
+
+private:
+	void doCalculateGlobalFlip(bool * outputFlipX, bool * outputFlipY) const;
 
 private:
 	GRenderAnchor anchor;

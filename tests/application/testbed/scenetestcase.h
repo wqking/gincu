@@ -3,18 +3,20 @@
 
 #include "gincu/gscene.h"
 
+class TestBed;
 class TestCase;
 
 class SceneTestCase : public gincu::GScene
 {
 public:
-	explicit SceneTestCase(TestCase * testCase);
+	SceneTestCase(TestBed * testBed, TestCase * testCase);
 
 private:
 	virtual void doOnEnter() override;
 	virtual void doOnExit() override;
 
 private:
+	TestBed * testBed;
 	TestCase * testCase;
 };
 

@@ -3,13 +3,15 @@
 #include "testbed.h"
 #include "uiutil.h"
 
-SceneTestCase::SceneTestCase(TestCase * testCase)
-	: testCase(testCase)
+SceneTestCase::SceneTestCase(TestBed * testBed, TestCase * testCase)
+	: testBed(testBed), testCase(testCase)
 {
 }
 
 void SceneTestCase::doOnEnter()
 {
+	this->testCase->initialize(this->testBed);
+
 	this->addEntity(createBackButton([=]() {
 		this->testCase->getTestBed()->finishTestCase();
 	}));
@@ -17,5 +19,6 @@ void SceneTestCase::doOnEnter()
 
 void SceneTestCase::doOnExit()
 {
+	this->testCase->finalize();
 }
 
