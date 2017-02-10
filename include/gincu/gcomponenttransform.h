@@ -62,6 +62,9 @@ public:
 	GComponentLocalTransform * getParent() const;
 	
 	void applyGlobal();
+	
+	int getChildCount() const { return (int)this->children.size(); }
+	GComponentLocalTransform * getChildAt(const int index) const { return this->children[index]; }
 
 private:
 	void addChild(GComponentLocalTransform * child);

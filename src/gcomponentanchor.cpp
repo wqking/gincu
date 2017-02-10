@@ -2,6 +2,7 @@
 #include "gincu/gcomponentrender.h"
 #include "gincu/gcomponenttransform.h"
 #include "gincu/gentity.h"
+#include "gincu/gentityutil.h"
 #include "gincu/gutil.h"
 #include "gincu/grenderanchor.h"
 
@@ -10,18 +11,14 @@ namespace gincu {
 GComponentAnchor::GComponentAnchor()
 	:
 		super(this),
-		anchor(GRenderAnchor::leftTop),
-		flipX(false),
-		flipY(false)
+		anchor(GRenderAnchor::leftTop)
 {
 }
 
 GComponentAnchor::GComponentAnchor(const GRenderAnchor anchor)
 	:
 		super(this),
-		anchor(anchor),
-		flipX(false),
-		flipY(false)
+		anchor(anchor)
 {
 }
 
@@ -33,21 +30,34 @@ GComponentAnchor * GComponentAnchor::setAnchor(const GRenderAnchor renderAnchor)
 
 GComponentAnchor * GComponentAnchor::setFlipX(const bool flipX)
 {
-	this->flipX = flipX;
+	if(flipX != this->isFlipX()) {
+		const bool parentGlobalFlipX = this->isFlipX() ^ this->isGlobalFlipX();
+		const bool parentGlobalFlipY = this->isFlipY() ^ this->isGlobalFlipY();
+		
+		this->flags.setByBool(flagFlipX, flipX);
+		
+		this->doApplyGlobalFlipXy(parentGlobalFlipX, parentGlobalFlipY);
+	}
 	return this;
 }
 
 GComponentAnchor * GComponentAnchor::setFlipY(const bool flipY)
 {
-	this->flipY = flipY;
+	if(flipY != this->isFlipY()) {
+		const bool parentGlobalFlipX = this->isFlipX() ^ this->isGlobalFlipX();
+		const bool parentGlobalFlipY = this->isFlipY() ^ this->isGlobalFlipY();
+		
+		this->flags.setByBool(flagFlipY, flipY);
+		
+		this->doApplyGlobalFlipXy(parentGlobalFlipX, parentGlobalFlipY);
+	}
 	return this;
 }
 
 void GComponentAnchor::apply(GTransform & transform, const GSize & size)
 {
-	bool globalFlipX;
-	bool globalFlipY;
-	this->doCalculateGlobalFlip(&globalFlipX, &globalFlipY);
+	const bool globalFlipX = this->isGlobalFlipX();
+	const bool globalFlipY = this->isGlobalFlipY();
 	
 	if(globalFlipX || globalFlipY) {
 		const GScale scale = transform.getDecompositedScale();
@@ -84,19 +94,32 @@ void GComponentAnchor::apply(GTransform & transform, const GSize & size)
 	}
 }
 
-void GComponentAnchor::doCalculateGlobalFlip(bool * outputFlipX, bool * outputFlipY) const
+void GComponentAnchor::doApplyGlobalFlipXy(const bool parentGlobalFlipX, const bool parentGlobalFlipY)
 {
-	*outputFlipX = this->flipX;
-	*outputFlipY = this->flipY;
+	this->flags.setByBool(flagGlobalFlipX, parentGlobalFlipX ^ this->isFlipX());
+	this->flags.setByBool(flagGlobalFlipY, parentGlobalFlipY ^ this->isFlipY());
 	
-	GComponentLocalTransform * localTransform = this->getEntity()->getComponentByType<GComponentLocalTransform>();
-	if(localTransform != nullptr) {
-		while((localTransform = localTransform->getParent()) != nullptr) {
-			const GComponentAnchor * parentAnchor = localTransform->getEntity()->getComponentByType<GComponentAnchor>();
-			if(parentAnchor != nullptr) {
-				*outputFlipX ^= parentAnchor->flipX;
-				*outputFlipY ^= parentAnchor->flipY;
+	if(this->getEntity() == nullptr) {
+		return;
+	}
+	enumerateEntityChildren(this->getEntity()->getComponentByType<GComponentLocalTransform>(),
+		[=](GComponentLocalTransform * localTransform) {
+			GComponentAnchor * anchor = localTransform->getEntity()->getComponentByType<GComponentAnchor>();
+			if(anchor != nullptr) {
+				anchor->doApplyGlobalFlipXy(this->isGlobalFlipX(), this->isGlobalFlipY());
 			}
+		}
+	);
+}
+
+void GComponentAnchor::doAfterSetEntity()
+{
+	GComponentLocalTransform * localTransform = this->getEntity()->getComponentByType<GComponentLocalTransform>();
+	if(localTransform != nullptr && localTransform->getParent() != nullptr) {
+		GComponentAnchor * parentAnchor = localTransform->getParent()->getEntity()->getComponentByType<GComponentAnchor>();
+		if(parentAnchor != nullptr) {
+			this->flags.setByBool(flagGlobalFlipX, parentAnchor->isGlobalFlipX() ^ this->isFlipX());
+			this->flags.setByBool(flagGlobalFlipY, parentAnchor->isGlobalFlipY() ^ this->isFlipY());
 		}
 	}
 }
