@@ -56,6 +56,7 @@ public: // for internal usage
 	void onWindowResized(const GSize & newSize);
 
 private:
+	void doInitialize();
 	void flush();
 	void doDrawTexture(const std::shared_ptr<GImageData> & texture, const GRect & rect, const GTransform & transform, const GRenderInfo * renderInfo);
 

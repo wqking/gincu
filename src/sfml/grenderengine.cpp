@@ -63,6 +63,8 @@ void GRenderEngine::inititialize()
 	));
 
 	this->doFitView();
+	
+	this->doInitialize();
 }
 
 void GRenderEngine::appendRender(const cpgf::GCallback<void ()> & render)
@@ -139,5 +141,9 @@ void GRenderEngine::doFitView()
 
 } //namespace gincu
 
+#if GINCU_MULTI_THREAD_RENDER
+#include "grenderenginemultithread.hxx"
+#else
 #include "grenderenginesinglethread.hxx"
+#endif
 

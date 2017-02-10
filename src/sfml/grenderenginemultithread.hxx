@@ -18,6 +18,7 @@ namespace gincu {
 
 void GRenderEngine::doInitialize()
 {
+	this->data->window->setActive(false);
 }
 
 void GRenderEngine::render()
