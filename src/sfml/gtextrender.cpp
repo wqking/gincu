@@ -20,7 +20,7 @@ GTextRender::GTextRender(const int fontSize)
 	:
 		data(std::make_shared<GTextRenderData>())
 {
-	this->data->fontSize = fontSize;
+	this->data->text.setCharacterSize(fontSize);
 }
 
 GTextRender::~GTextRender()
@@ -30,7 +30,6 @@ GTextRender::~GTextRender()
 void GTextRender::setText(const std::string & text)
 {
 	this->data->text.setFont(GResourceManager::getInstance()->getFont().getData()->font);
-	this->data->text.setCharacterSize(this->data->fontSize);
 
 	this->data->text.setString(text);
 }

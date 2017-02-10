@@ -8,7 +8,6 @@ namespace gincu {
 class GTextRenderData
 {
 public:
-	int fontSize;
 	sf::Text text;
 };
 
