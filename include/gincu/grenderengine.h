@@ -57,6 +57,7 @@ public: // for internal usage
 
 private:
 	void doInitialize();
+	void doFinalize();
 	void flush();
 	void doDrawTexture(const std::shared_ptr<GImageData> & texture, const GRect & rect, const GTransform & transform, const GRenderInfo * renderInfo);
 

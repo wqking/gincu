@@ -7,51 +7,55 @@
 #include <SFML/Graphics.hpp>
 
 #include <memory>
+#include <vector>
+#include <atomic>
+#include <condition_variable>
 
 namespace gincu {
 
-enum class GCachedRenderType
+enum class GRenderCommandType
 {
 	none,
-	texture
+	image,
+	text,
+	rect
 };
 
-struct GCachedRenderItem
+class GImageData;
+class GTextRenderData;
+class GRectRenderData;
+
+struct GRenderCommand
 {
-	GCachedRenderItem() : type(GCachedRenderType::none), imageData() {}
+	GRenderCommandType type;
 
-	void reset() {
-		this->type = GCachedRenderType::none;
-		this->imageData.reset();
-	}
-
-	GCachedRenderType type;
 	std::shared_ptr<GImageData> imageData;
-	GRect imageRect;
-	GTransform imageTransform;
-	GRenderInfo imageRenderInfo;
+	std::shared_ptr<GTextRenderData> textData;
+	std::shared_ptr<GRectRenderData> rectData;
+
+	GRect rect;
+	GTransform transform;
+	GRenderInfo renderInfo;
 };
 
 class GRenderEngineData
 {
+private:
+	typedef std::vector<GRenderCommand> RenderCommandQueue;
+
 public:
 	GRenderEngineData();
-
-	void clearBatchDrawState();
-
-	void directDrawTexture(const std::shared_ptr<GImageData> & texture, const GRect & rect, const GTransform & transform, const GRenderInfo * renderInfo);
-	void batchDrawTexture(const std::shared_ptr<GImageData> & texture, const GRect & rect, const GTransform & transform, const GRenderInfo * renderInfo);
-
 
 	std::unique_ptr<sf::RenderWindow> window;
 	sf::View view;
 
-	sf::VertexArray batchDrawVertexArray;
-	GRenderInfo batchDrawRenderInfo;
-	std::shared_ptr<GImageData> batchDrawImageData;
-	bool inBatchDraw;
-
-	GCachedRenderItem cachedRenderItem;
+	std::atomic_bool updaterReady;
+	std::atomic_bool renderReady;
+	std::condition_variable updaterReadySignal;
+	std::condition_variable renderReadySignal;
+	RenderCommandQueue queueStorage[2];
+	RenderCommandQueue * updaterQueue;
+	RenderCommandQueue * renderQueue;
 };
 
 

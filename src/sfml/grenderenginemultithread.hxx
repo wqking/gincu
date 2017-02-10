@@ -12,13 +12,40 @@
 #include "grectrenderdata.h"
 #include "grenderenginedata.h"
 
-#include <cassert>
+#include <thread>
 
 namespace gincu {
+
+
+namespace {
+
+void threadMain(GRenderEngine * renderEngine)
+{
+}
+
+} //unnamed namespace
+
+GRenderEngineData::GRenderEngineData()
+	:
+		window(),
+		view(),
+		updaterReady(false),
+		renderReady(false),
+		updaterQueue(nullptr),
+		renderQueue(nullptr)
+{
+}
 
 void GRenderEngine::doInitialize()
 {
 	this->data->window->setActive(false);
+
+	this->data->updaterQueue = &this->data->queueStorage[0];
+	this->data->renderQueue = &this->data->queueStorage[1];
+}
+
+void GRenderEngine::doFinalize()
+{
 }
 
 void GRenderEngine::render()
@@ -34,56 +61,22 @@ void GRenderEngine::render()
 
 void GRenderEngine::draw(const GTextRender & text, const GTransform & transform, const GRenderInfo * renderInfo)
 {
-	this->endBatchDraw();
-
-	sf::RenderStates renderStates(transform.getSfmlTransform());
-	copyBlendAndShaderToSfml(&renderStates, renderInfo);
-	this->data->window->draw(text.getData()->text, renderStates);
 }
 
 void GRenderEngine::draw(const GRectRender & rect, const GTransform & transform, const GRenderInfo * renderInfo)
 {
-	this->endBatchDraw();
-
-	sf::RenderStates renderStates(transform.getSfmlTransform());
-	copyBlendAndShaderToSfml(&renderStates, renderInfo);
-	this->data->window->draw(rect.getData()->rectangle, renderStates);
 }
 
 void GRenderEngine::beginBatchDraw()
 {
-	this->data->clearBatchDrawState();
-	this->data->inBatchDraw = true;
 }
 
 void GRenderEngine::endBatchDraw()
 {
-	this->flush();
-
-	if(this->data->inBatchDraw) {
-		if(this->data->batchDrawImageData) {
-			sf::RenderStates renderStates(&this->data->batchDrawImageData->texture);
-			copyBlendAndShaderToSfml(&renderStates, &this->data->batchDrawRenderInfo);
-			this->data->window->draw(this->data->batchDrawVertexArray, renderStates);
-		}
-
-		this->data->clearBatchDrawState();
-	}
 }
 
 void GRenderEngine::flush()
 {
-	GCachedRenderItem & cachedItem = this->data->cachedRenderItem;
-	switch(cachedItem.type) {
-	case GCachedRenderType::texture:
-		this->data->directDrawTexture(cachedItem.imageData, cachedItem.imageRect, cachedItem.imageTransform, &cachedItem.imageRenderInfo);
-		break;
-
-	case GCachedRenderType::none:
-		break;
-	}
-
-	cachedItem.reset();
 }
 
 void GRenderEngine::doDrawTexture(const std::shared_ptr<GImageData> & texture, const GRect & rect, const GTransform & transform, const GRenderInfo * renderInfo)
@@ -92,43 +85,6 @@ void GRenderEngine::doDrawTexture(const std::shared_ptr<GImageData> & texture, c
 		return;
 	}
 
-	GCachedRenderItem & cachedItem = this->data->cachedRenderItem;
-	if(cachedItem.type != GCachedRenderType::none && cachedItem.type != GCachedRenderType::texture) {
-		this->flush();
-	}
-
-	bool needCache = false;
-	if(this->data->inBatchDraw) {
-		if(texture == this->data->batchDrawImageData
-			&& *renderInfo == this->data->batchDrawRenderInfo) {
-			this->data->batchDrawTexture(texture, rect, transform, renderInfo);
-		}
-		else {
-			this->endBatchDraw();
-			needCache = true;
-		}
-	}
-	else {
-		if(texture == cachedItem.imageData
-			&& *renderInfo == cachedItem.imageRenderInfo) {
-			this->beginBatchDraw();
-			this->data->batchDrawTexture(cachedItem.imageData, cachedItem.imageRect, cachedItem.imageTransform, &cachedItem.imageRenderInfo);
-			this->data->batchDrawTexture(texture, rect, transform, renderInfo);
-		}
-		else {
-			if(cachedItem.imageData) {
-				this->flush();
-			}
-			needCache = true;
-		}
-	}
-	if(needCache) {
-		cachedItem.type = GCachedRenderType::texture;
-		cachedItem.imageData = texture;
-		cachedItem.imageRect = rect;
-		cachedItem.imageTransform = transform;
-		cachedItem.imageRenderInfo = *renderInfo;
-	}
 }
 
 
