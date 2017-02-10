@@ -9,6 +9,7 @@
 #include <memory>
 #include <vector>
 #include <atomic>
+#include <mutex>
 #include <condition_variable>
 
 namespace gincu {
@@ -46,16 +47,23 @@ private:
 public:
 	GRenderEngineData();
 
+	void processRenderCommands();
+	void batchDrawImages(const int firstIndex, const int lastIndex);
+
 	std::unique_ptr<sf::RenderWindow> window;
 	sf::View view;
 
+	std::atomic_bool finished;
 	std::atomic_bool updaterReady;
 	std::atomic_bool renderReady;
+	std::mutex updaterMutex;
+	std::mutex renderMutex;
 	std::condition_variable updaterReadySignal;
 	std::condition_variable renderReadySignal;
 	RenderCommandQueue queueStorage[2];
 	RenderCommandQueue * updaterQueue;
 	RenderCommandQueue * renderQueue;
+	std::mutex updaterQueueMutex;
 };
 
 
