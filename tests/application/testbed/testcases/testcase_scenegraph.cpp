@@ -125,11 +125,18 @@ void TestCase_SceneGraph::doInitializeRotationAnimation(const GPoint & position)
 {
 	GComponentLocalTransform * localTransform = this->createParentedObject(position, GRenderAnchor::center, 0, 0.5f);
 	getTweenListFromScene()->tween()
-		.duration(3000)
+		.duration(10000)
 		.ease(cpgf::ElasticEase::easeOut())
 		.repeat(-1)
 		.target(cpgf::createAccessor(localTransform, &GComponentLocalTransform::getRotation, &GComponentLocalTransform::setRotation), 360)
 	;
+
+	GComponentLocalTransform * childLocalTransform = localTransform->getChildAt(0)->getChildAt(0);
+	getTweenListFromScene()->tween()
+		.duration(3000)
+		.repeat(-1)
+		.target(cpgf::createAccessor(childLocalTransform, &GComponentLocalTransform::getRotation, &GComponentLocalTransform::setRotation), 360)
+		;
 }
 
 

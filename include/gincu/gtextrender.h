@@ -32,8 +32,6 @@ public:
 
 	const std::shared_ptr<GTextRenderData> & getData() const { return this->data; }
 
-	const GImageData * getTexture() const { return nullptr; }
-
 private:
 	std::shared_ptr<GTextRenderData> data;
 };

@@ -10,11 +10,10 @@ class GImageData;
 struct GRenderInfo
 {
 	constexpr GRenderInfo()
-		: blendMode(), texture(nullptr)
+		: blendMode()
 	{}
 
 	GBlendMode blendMode;
-	const GImageData * texture;
 	
 	// will add shader in the future
 };
@@ -22,7 +21,6 @@ struct GRenderInfo
 inline bool operator == (const GRenderInfo & a, const GRenderInfo & b)
 {
 	return a.blendMode == b.blendMode
-		&& a.texture == b.texture
 	;
 }
 

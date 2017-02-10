@@ -10,27 +10,6 @@
 
 namespace gincu {
 
-namespace {
-
-const GRenderInfo * getRenderBatchGroup(const GComponentRender * render)
-{
-	if(render == nullptr) {
-		return nullptr;
-	}
-	else {
-		const GRenderInfo * renderInfo = render->getBatchGroup();
-		if(renderInfo->texture == nullptr) {
-			return nullptr;
-		}
-		else {
-			return renderInfo;
-		}
-	}
-}
-
-
-} //unnamed namespace
-
 GComponentsBuffer::GComponentsBuffer()
 	: componentListBuffer(componentTypeId_PrimaryCount)
 {

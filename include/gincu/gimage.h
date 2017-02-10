@@ -35,8 +35,6 @@ public:
 
 	bool isValid() const { return this->data.get() != nullptr; }
 
-	const GImageData * getTexture() const { return this->data.get(); }
-
 private:
 	std::shared_ptr<GImageData> data;
 	GRect rect;

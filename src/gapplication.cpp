@@ -98,6 +98,8 @@ void GApplication::processMainLoop()
 
 		this->eventProcessor->processEvents();
 
+		cpgf::GTweenList::getInstance()->tick((cpgf::GTweenNumber)this->frameMilliseconds);
+
 		this->updaterList();
 
 		if(this->configInfo.renderFramesPerSecond < 0
@@ -110,8 +112,6 @@ void GApplication::processMainLoop()
 			
 			++renderFps;
 		}
-
-		cpgf::GTweenList::getInstance()->tick((cpgf::GTweenNumber)this->frameMilliseconds);
 
 		if(millisecondsPerFrame > 0) {
 			while(getMilliseconds() < frameBeginTime + millisecondsPerFrame - 1) {

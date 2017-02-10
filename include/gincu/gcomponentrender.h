@@ -39,11 +39,6 @@ public:
 		return this->doGetSize();
 	}
 
-	const GRenderInfo * getBatchGroup() const {
-		this->renderInfo.texture = this->doGetTexture();
-		return &this->renderInfo;
-	}
-
 	GComponentRender * setBlendMode(const GBlendMode & blendMode) {
 		this->renderInfo.blendMode = blendMode;
 		return this;
@@ -55,7 +50,6 @@ protected:
 private:
 	virtual void doDraw() = 0;
 	virtual GSize doGetSize() const = 0;
-	virtual const GImageData * doGetTexture() const = 0;
 
 private:
 	mutable GRenderInfo renderInfo;
@@ -76,7 +70,6 @@ private:
 	virtual void doDraw() override;
 	virtual GSize doGetSize() const override;
 	virtual void doAfterSetEntity() override;
-	virtual const GImageData * doGetTexture() const override { return nullptr; }
 
 private:
 	mutable GSize size;
@@ -115,10 +108,6 @@ private:
 
 	virtual GSize doGetSize() const override {
 		return this->render.getSize();
-	}
-
-	virtual const GImageData * doGetTexture() const override {
-		return this->render.getTexture();
 	}
 
 private:

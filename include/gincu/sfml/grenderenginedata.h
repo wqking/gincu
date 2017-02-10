@@ -35,20 +35,13 @@ struct GCachedRenderItem
 class GRenderEngineData
 {
 public:
-	GRenderEngineData() :
-		window(),
-		view(),
-		batchDrawVertexArray(sf::Triangles),
-		batchDrawRenderInfo(),
-		inBatchDraw(false)
-	{}
+	GRenderEngineData();
 
-	void clearBatchDrawState() {
-		this->batchDrawVertexArray.clear();
-		this->batchDrawRenderInfo.texture = nullptr;
-		this->batchDrawImageData.reset();
-		this->inBatchDraw = false;
-	}
+	void clearBatchDrawState();
+
+	void directDrawTexture(const std::shared_ptr<GImageData> & texture, const GRect & rect, const GTransform & transform, const GRenderInfo * renderInfo);
+	void batchDrawTexture(const std::shared_ptr<GImageData> & texture, const GRect & rect, const GTransform & transform, const GRenderInfo * renderInfo);
+
 
 	std::unique_ptr<sf::RenderWindow> window;
 	sf::View view;
