@@ -169,8 +169,8 @@ void GRenderEngineData::batchDrawImages(const int firstIndex, const int lastInde
 void GRenderEngine::doInitialize()
 {
 	std::shared_ptr<GRenderEngineData> data = this->getData();
-	this->data->window->setActive(false);
 	this->data->window->setVerticalSyncEnabled(false);
+	this->data->window->setActive(false);
 
 	this->data->updaterQueue = &this->data->queueStorage[0];
 	this->data->renderQueue = &this->data->queueStorage[1];
