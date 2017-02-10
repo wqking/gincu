@@ -6,11 +6,11 @@
 #include "gincu/grectrender.h"
 #include "gincu/gapplication.h"
 #include "gincu/grenderinfo.h"
-#include "gincu/sfml/gsfmlutil.h"
-#include "gincu/sfml/gimagedata.h"
-#include "gincu/sfml/gtextrenderdata.h"
-#include "gincu/sfml/grectrenderdata.h"
-#include "gincu/sfml/grenderenginedata.h"
+#include "gsfmlutil.h"
+#include "gimagedata.h"
+#include "gtextrenderdata.h"
+#include "grectrenderdata.h"
+#include "grenderenginedata.h"
 
 #include <cassert>
 

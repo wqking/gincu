@@ -3,7 +3,7 @@
 #include "gincu/gerrorhandler.h"
 #include "gincu/gtransform.h"
 #include "gincu/grenderinfo.h"
-#include "gincu/sfml/gimagedata.h"
+#include "gimagedata.h"
 
 namespace gincu {
 

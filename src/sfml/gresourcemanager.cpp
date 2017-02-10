@@ -1,7 +1,7 @@
 #include "gincu/gresourcemanager.h"
 #include "gincu/gspritesheet.h"
-#include "gincu/sfml/gimagedata.h"
-#include "gincu/sfml/gfontdata.h"
+#include "gimagedata.h"
+#include "gfontdata.h"
 
 #include <cassert>
 

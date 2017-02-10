@@ -1,8 +1,8 @@
 #include "gincu/grectrender.h"
 #include "gincu/grenderengine.h"
 #include "gincu/gtransform.h"
-#include "gincu/sfml/gsfmlutil.h"
-#include "gincu/sfml/grectrenderdata.h"
+#include "gsfmlutil.h"
+#include "grectrenderdata.h"
 
 namespace gincu {
 

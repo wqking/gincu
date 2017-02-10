@@ -1,5 +1,5 @@
 #include "gincu/gfont.h"
-#include "gincu/sfml/gfontdata.h"
+#include "gfontdata.h"
 
 namespace gincu {
 

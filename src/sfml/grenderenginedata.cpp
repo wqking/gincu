@@ -1,6 +1,6 @@
-#include "gincu/sfml/grenderenginedata.h"
-#include "gincu/sfml/gimagedata.h"
-#include "gincu/sfml/gsfmlutil.h"
+#include "grenderenginedata.h"
+#include "gimagedata.h"
+#include "gsfmlutil.h"
 
 namespace gincu {
 

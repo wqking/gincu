@@ -3,7 +3,7 @@
 #include "gincu/grenderengine.h"
 #include "gincu/gapplication.h"
 #include "gincu/gscenemanager.h"
-#include "gincu/sfml/grenderenginedata.h"
+#include "grenderenginedata.h"
 
 #include <SFML/Window.hpp>
 

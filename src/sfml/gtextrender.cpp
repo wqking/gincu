@@ -3,9 +3,9 @@
 #include "gincu/gerrorhandler.h"
 #include "gincu/gresourcemanager.h"
 #include "gincu/gtransform.h"
-#include "gincu/sfml/gsfmlutil.h"
-#include "gincu/sfml/gtextrenderdata.h"
-#include "gincu/sfml/gfontdata.h"
+#include "gsfmlutil.h"
+#include "gtextrenderdata.h"
+#include "gfontdata.h"
 
 #include <SFML/Graphics.hpp>
 
