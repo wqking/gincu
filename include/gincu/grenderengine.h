@@ -56,7 +56,11 @@ public: // for internal usage
 	void onWindowResized(const GSize & newSize);
 
 private:
-	void doDrawTexture(const GImageData * texture, const GRect & rect, const GTransform & transform, const GRenderInfo * renderInfo);
+	void flush();
+	void doDrawTexture(const std::shared_ptr<GImageData> & texture, const GRect & rect, const GTransform & transform, const GRenderInfo * renderInfo);
+	void doDirectDrawTexture(const std::shared_ptr<GImageData> & texture, const GRect & rect, const GTransform & transform, const GRenderInfo * renderInfo);
+	void doBatchDrawTexture(const std::shared_ptr<GImageData> & texture, const GRect & rect, const GTransform & transform, const GRenderInfo * renderInfo);
+
 	void doFitView();
 
 private:

@@ -71,6 +71,8 @@ void GRenderEngine::render()
 	
 	this->renderList();
 
+	this->endBatchDraw();
+
 	this->data->window->display();
 }
 
@@ -91,16 +93,18 @@ bool GRenderEngine::isAlive() const
 
 void GRenderEngine::draw(const GImage & image, const GTransform & transform, const GRenderInfo * renderInfo)
 {
-	this->doDrawTexture(image.getData().get(), image.getRect(), transform, renderInfo);
+	this->doDrawTexture(image.getData(), image.getRect(), transform, renderInfo);
 }
 
 void GRenderEngine::draw(const GSpriteSheetRender & spriteSheetRender, const GTransform & transform, const GRenderInfo * renderInfo)
 {
-	this->doDrawTexture(spriteSheetRender.getSpriteSheet().getImageData().get(), spriteSheetRender.getRect(), transform, renderInfo);
+	this->doDrawTexture(spriteSheetRender.getSpriteSheet().getImageData(), spriteSheetRender.getRect(), transform, renderInfo);
 }
 
 void GRenderEngine::draw(const GTextRender & text, const GTransform & transform, const GRenderInfo * renderInfo)
 {
+	this->endBatchDraw();
+
 	sf::RenderStates renderStates(transform.getSfmlTransform());
 	copyBlendAndShaderToSfml(&renderStates, renderInfo);
 	this->data->window->draw(text.getData()->text, renderStates);
@@ -108,6 +112,8 @@ void GRenderEngine::draw(const GTextRender & text, const GTransform & transform,
 
 void GRenderEngine::draw(const GRectRender & rect, const GTransform & transform, const GRenderInfo * renderInfo)
 {
+	this->endBatchDraw();
+
 	sf::RenderStates renderStates(transform.getSfmlTransform());
 	copyBlendAndShaderToSfml(&renderStates, renderInfo);
 	this->data->window->draw(rect.getData()->rectangle, renderStates);
@@ -121,13 +127,17 @@ void GRenderEngine::beginBatchDraw()
 
 void GRenderEngine::endBatchDraw()
 {
-	if(this->data->batchDrawRenderInfo.texture != nullptr && this->data->inBatchDraw) {
-		sf::RenderStates renderStates(&this->data->batchDrawRenderInfo.texture->texture);
-		copyBlendAndShaderToSfml(&renderStates, &this->data->batchDrawRenderInfo);
-		this->data->window->draw(this->data->batchDrawVertexArray, renderStates);
-	}
+	this->flush();
 
-	this->data->clearBatchDrawState();
+	if(this->data->inBatchDraw) {
+		if(this->data->batchDrawImageData) {
+			sf::RenderStates renderStates(&this->data->batchDrawImageData->texture);
+			copyBlendAndShaderToSfml(&renderStates, &this->data->batchDrawRenderInfo);
+			this->data->window->draw(this->data->batchDrawVertexArray, renderStates);
+		}
+
+		this->data->clearBatchDrawState();
+	}
 }
 
 GPoint GRenderEngine::mapWindowToView(const GPoint & point) const
@@ -142,44 +152,105 @@ void GRenderEngine::onWindowResized(const GSize & newSize)
 	this->doFitView();
 }
 
-void GRenderEngine::doDrawTexture(const GImageData * texture, const GRect & rect, const GTransform & transform, const GRenderInfo * renderInfo)
+void GRenderEngine::flush()
 {
-	if(texture != nullptr) {
-		const sf::Transform & sfmlTransform = transform.getSfmlTransform();
-		if(! this->data->inBatchDraw) {
-			sf::Sprite sprite(texture->texture, { (int)rect.x, (int)rect.y, (int)rect.width, (int)rect.height });
-			sf::RenderStates renderStates(sfmlTransform);
-			copyBlendAndShaderToSfml(&renderStates, renderInfo);
-			this->data->window->draw(sprite, renderStates);
+	GCachedRenderItem & cachedItem = this->data->cachedRenderItem;
+	switch(cachedItem.type) {
+	case GCachedRenderType::texture:
+		this->doDirectDrawTexture(cachedItem.imageData, cachedItem.imageRect, cachedItem.imageTransform, &cachedItem.imageRenderInfo);
+		break;
+
+	case GCachedRenderType::none:
+		break;
+	}
+
+	cachedItem.reset();
+}
+
+void GRenderEngine::doDrawTexture(const std::shared_ptr<GImageData> & texture, const GRect & rect, const GTransform & transform, const GRenderInfo * renderInfo)
+{
+	if(! texture) {
+		return;
+	}
+
+	GCachedRenderItem & cachedItem = this->data->cachedRenderItem;
+	if(cachedItem.type != GCachedRenderType::none && cachedItem.type != GCachedRenderType::texture) {
+		this->flush();
+	}
+
+	bool needCache = false;
+	if(this->data->inBatchDraw) {
+		if(texture == this->data->batchDrawImageData
+			&& *renderInfo == this->data->batchDrawRenderInfo) {
+			this->doBatchDrawTexture(texture, rect, transform, renderInfo);
 		}
 		else {
-			this->data->batchDrawRenderInfo = *renderInfo;
-			this->data->batchDrawRenderInfo.texture = texture;
-
-			sf::VertexArray & vertexArray = this->data->batchDrawVertexArray;
-			std::size_t count = vertexArray.getVertexCount();
-			vertexArray.resize(count + 6);
-
-			vertexArray[count].position = sfmlTransform.transformPoint({ 0, 0 });
-			vertexArray[count].texCoords = { rect.x, rect.y };
-			++count;
-			vertexArray[count].position = sfmlTransform.transformPoint({ rect.width, 0 });
-			vertexArray[count].texCoords = { rect.x + rect.width, rect.y };
-			++count;
-			vertexArray[count].position = sfmlTransform.transformPoint({ rect.width, rect.height });
-			vertexArray[count].texCoords = { rect.x + rect.width, rect.y + rect.height };
-			++count;
-
-			vertexArray[count].position = sfmlTransform.transformPoint({ rect.width, rect.height });
-			vertexArray[count].texCoords = { rect.x + rect.width, rect.y + rect.height };
-			++count;
-			vertexArray[count].position = sfmlTransform.transformPoint({ 0, rect.height });
-			vertexArray[count].texCoords = { rect.x, rect.y + rect.height };
-			++count;
-			vertexArray[count].position = sfmlTransform.transformPoint({ 0, 0 });
-			vertexArray[count].texCoords = { rect.x, rect.y };
+			this->endBatchDraw();
+			needCache = true;
 		}
 	}
+	else {
+		if(texture == cachedItem.imageData
+			&& *renderInfo == cachedItem.imageRenderInfo) {
+			this->beginBatchDraw();
+			this->doBatchDrawTexture(cachedItem.imageData, cachedItem.imageRect, cachedItem.imageTransform, &cachedItem.imageRenderInfo);
+			this->doBatchDrawTexture(texture, rect, transform, renderInfo);
+		}
+		else {
+			if(cachedItem.imageData) {
+				this->flush();
+			}
+			needCache = true;
+		}
+	}
+	if(needCache) {
+		cachedItem.type = GCachedRenderType::texture;
+		cachedItem.imageData = texture;
+		cachedItem.imageRect = rect;
+		cachedItem.imageTransform = transform;
+		cachedItem.imageRenderInfo = *renderInfo;
+	}
+}
+
+void GRenderEngine::doDirectDrawTexture(const std::shared_ptr<GImageData> & texture, const GRect & rect, const GTransform & transform, const GRenderInfo * renderInfo)
+{
+	const sf::Transform & sfmlTransform = transform.getSfmlTransform();
+
+	sf::Sprite sprite(texture->texture, { (int)rect.x, (int)rect.y, (int)rect.width, (int)rect.height });
+	sf::RenderStates renderStates(sfmlTransform);
+	copyBlendAndShaderToSfml(&renderStates, renderInfo);
+	this->data->window->draw(sprite, renderStates);
+}
+
+void GRenderEngine::doBatchDrawTexture(const std::shared_ptr<GImageData> & texture, const GRect & rect, const GTransform & transform, const GRenderInfo * renderInfo)
+{
+	const sf::Transform & sfmlTransform = transform.getSfmlTransform();
+
+	this->data->batchDrawRenderInfo = *renderInfo;
+	this->data->batchDrawImageData = texture;
+
+	sf::VertexArray & vertexArray = this->data->batchDrawVertexArray;
+	std::size_t count = vertexArray.getVertexCount();
+	vertexArray.resize(count + 6);
+
+	vertexArray[count].position = sfmlTransform.transformPoint({ 0, 0 });
+	vertexArray[count].texCoords = { rect.x, rect.y };
+	++count;
+	vertexArray[count].position = sfmlTransform.transformPoint({ rect.width, 0 });
+	vertexArray[count].texCoords = { rect.x + rect.width, rect.y };
+	++count;
+	vertexArray[count].position = sfmlTransform.transformPoint({ rect.width, rect.height });
+	vertexArray[count].texCoords = { rect.x + rect.width, rect.y + rect.height };
+	++count;
+
+	vertexArray[count].position = sfmlTransform.transformPoint({ rect.width, rect.height });
+	vertexArray[count].texCoords = { rect.x + rect.width, rect.y + rect.height };
+	++count;
+	vertexArray[count].position = sfmlTransform.transformPoint({ 0, rect.height });
+	vertexArray[count].texCoords = { rect.x, rect.y + rect.height };
+	++count;
+	vertexArray[count].position = sfmlTransform.transformPoint({ 0, 0 });
+	vertexArray[count].texCoords = { rect.x, rect.y };
 }
 
 void GRenderEngine::doFitView()

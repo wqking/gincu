@@ -68,55 +68,9 @@ void GComponentsBuffer::updateLocalTransforms()
 void GComponentsBuffer::render()
 {
 	ComponentListType * componentList = this->doGetComponentList(GComponentRender::getComponentType());
-	if(componentList->empty()) {
-		return;
-	}
 
-	const int count = (int)componentList->size();
-	GComponentRender * currentRender = nullptr;
-	GComponentRender * nextRender = static_cast<GComponentRender *>(componentList->at(0));
-	GRenderEngine * renderEngine = GRenderEngine::getInstance();
-	bool inBatchDraw = false;
-
-	const GRenderInfo * previousGroup;
-	const GRenderInfo * currentGroup = nullptr;
-	const GRenderInfo * nextGroup = getRenderBatchGroup(nextRender);
-
-	for(int i = 0; i < count; ++i) {
-		currentRender = nextRender;
-		nextRender = (i < count - 1 ? static_cast<GComponentRender *>(componentList->at(i + 1)) : nullptr);
-
-		previousGroup = currentGroup;
-		currentGroup = nextGroup;
-		nextGroup = getRenderBatchGroup(nextRender);
-
-		if(! inBatchDraw) {
-			if(currentGroup != nullptr
-				&& nextGroup != nullptr
-				&& *currentGroup == *nextGroup
-			) {
-				renderEngine->beginBatchDraw();
-				inBatchDraw = true;
-			}
-		}
-		else {
-			if(currentGroup == nullptr) {
-				renderEngine->endBatchDraw();
-				inBatchDraw = false;
-			}
-			else if(currentGroup != nullptr
-				&& previousGroup != nullptr
-				&& *currentGroup != *previousGroup) {
-				renderEngine->endBatchDraw();
-				inBatchDraw = false;
-			}
-		}
-
-		currentRender->draw();
-	}
-
-	if(inBatchDraw) {
-		renderEngine->endBatchDraw();
+	for(GComponent * component : *componentList) {
+		static_cast<GComponentRender *>(component)->draw();
 	}
 }
 
