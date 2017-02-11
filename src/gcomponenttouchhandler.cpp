@@ -9,20 +9,22 @@
 namespace gincu {
 
 GComponentTouchHandler::GComponentTouchHandler()
-	: super(this)
+	:
+		super(this),
+		onTouchedList(std::make_shared<OnTouchedList>())
 {
 }
 
 GComponentTouchHandler * GComponentTouchHandler::addOnTouch(const GComponentTouchHandler::OnTouched & onTouch)
 {
-	onTouchedList.add(onTouch);
+	this->onTouchedList->add(onTouch);
 	
 	return this;
 }
 
 void GComponentTouchHandler::removeOnTouch(const GComponentTouchHandler::OnTouched & onTouch)
 {
-	onTouchedList.remove(onTouch);
+	this->onTouchedList->remove(onTouch);
 }
 
 bool GComponentTouchHandler::canHandle(const GPoint & point) const
@@ -32,8 +34,10 @@ bool GComponentTouchHandler::canHandle(const GPoint & point) const
 
 void GComponentTouchHandler::handle(const GTouchEvent & touchEvent)
 {
-	OnTouchedList tempOnTouchedList = onTouchedList;
-	tempOnTouchedList(touchEvent);
+	// The touch handler may be freed during event handling,
+	// so we have to cache the callback list in a local variable.
+	auto tempOnTouchedList = this->onTouchedList;
+	(*tempOnTouchedList)(touchEvent);
 }
 
 

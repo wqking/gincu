@@ -73,6 +73,7 @@ void GScene::handleTouchEvent(const GTouchEvent & touchEvent)
 	}
 	else {
 		for(auto it = handlerList.begin(); it != handlerList.end(); ++it) {
+			tempEvent.propagation = false;
 			tempEvent.touchedEntity = (*it)->getEntity();
 			if(this->touchCapture == nullptr) {
 				tempEvent.target = tempEvent.touchedEntity;
@@ -81,6 +82,10 @@ void GScene::handleTouchEvent(const GTouchEvent & touchEvent)
 			else {
 				tempEvent.target = this->touchCapture;
 				this->touchCapture->getComponentByType<GComponentTouchHandler>()->handle(tempEvent);
+			}
+
+			if(! tempEvent.propagation) {
+				break;
 			}
 		}
 	}

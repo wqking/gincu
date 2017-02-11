@@ -3,7 +3,10 @@
 
 #include "gincu/gcomponent.h"
 #include "gincu/gtouchevent.h"
+
 #include "cpgf/gcallbacklist.h"
+
+#include <memory>
 
 namespace gincu {
 
@@ -34,7 +37,7 @@ private:
 	virtual bool doCanHandle(const GPoint & point) const = 0;
 
 private:
-	OnTouchedList onTouchedList;
+	std::shared_ptr<OnTouchedList> onTouchedList;
 };
 
 class GComponentRendererTouchHandler : public GComponentTouchHandler

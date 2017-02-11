@@ -150,11 +150,81 @@ void GComponentManager::render()
 
 void GComponentManager::findTouchHandlers(const GPoint & position, std::vector<GComponentTouchHandler *> * outputResult)
 {
+	struct Item {
+		GComponentTouchHandler * touchHandler;
+		std::vector<int> zOrderList;
+	};
+
+	std::vector<Item> itemList;
+
 	ComponentListType * componentList = this->doGetComponentList(GComponentTouchHandler::getComponentType());
 	for(GComponent * component : *componentList) {
 		if(static_cast<GComponentTouchHandler *>(component)->canHandle(position)) {
-			outputResult->push_back(static_cast<GComponentTouchHandler *>(component));
+			itemList.push_back({ static_cast<GComponentTouchHandler *>(component), std::vector<int>() });
 		}
+	}
+
+	if(itemList.empty()) {
+		return;
+	}
+	else if(itemList.size() == 1) {
+		outputResult->push_back(itemList.front().touchHandler);
+		return;
+	}
+
+	for(Item & item : itemList) {
+		GEntity * entity = item.touchHandler->getEntity();
+
+		while(entity != nullptr) {
+			GComponentLocalTransform * localTransform = entity->getComponentByType<GComponentLocalTransform>();
+			if(localTransform != nullptr) {
+				item.zOrderList.push_back(localTransform->getZOrder());
+
+				GComponentLocalTransform * parentLocalTransform = localTransform->getParent();
+				if(parentLocalTransform != nullptr) {
+					entity = parentLocalTransform->getEntity();
+				}
+				else {
+					entity = nullptr;
+				}
+			}
+			else {
+				GComponentTransform * transform = entity->getComponentByType<GComponentTransform>();
+				if(transform != nullptr) {
+					item.zOrderList.push_back(transform->getZOrder());
+				}
+				else {
+					item.zOrderList.push_back(0);
+				}
+				entity = nullptr;
+			}
+		}
+	}
+
+	std::stable_sort(itemList.begin(), itemList.end(), [](const Item & a, const Item & b) {
+		int indexA = (int)a.zOrderList.size() - 1;
+		int indexB = (int)b.zOrderList.size() - 1;
+
+		while(indexA >= 0 && indexB >= 0) {
+			if(a.zOrderList[indexA--] < b.zOrderList[indexB--]) {
+				return true;
+			}
+		}
+
+		if(indexA >= 0) {
+			return a.zOrderList[indexA] < 0;
+		}
+		if(indexB >= 0) {
+			return b.zOrderList[indexB] < 0;
+		}
+
+		return false;
+	});
+
+	const int count = (int)itemList.size();
+	outputResult->resize(count);
+	for(int i =  count - 1; i >= 0; --i) {
+		outputResult->at(count - i - 1) = itemList[i].touchHandler;
 	}
 }
 
