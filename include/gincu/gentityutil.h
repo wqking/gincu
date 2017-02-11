@@ -3,15 +3,9 @@
 
 #include "gincu/gtransform.h"
 #include "gincu/gcomponenttransform.h"
+#include "gincu/gentity.h"
 
 namespace gincu {
-
-class GComponentRender;
-
-GTransform computeRenderableTransform(
-		GComponentTransform * transform,
-		GComponentRender * render = nullptr
-	);
 
 template <typename Callback>
 void enumerateEntityChildren(GComponentLocalTransform * localTransform, const Callback callback)
@@ -22,6 +16,32 @@ void enumerateEntityChildren(GComponentLocalTransform * localTransform, const Ca
 		}
 	}
 }
+
+template <typename T>
+T * getComponentByTypeFromComponent(GComponent * component)
+{
+	if(component != nullptr) {
+		GEntity * entity = component->getEntity();
+		if(entity != nullptr) {
+			return entity->getComponentByType<T>();
+		}
+	}
+
+	return nullptr;
+}
+
+class GComponentRender;
+class GEntity;
+class GComponentManager;
+
+GTransform computeRenderableTransform(
+		GComponentTransform * transform,
+		GComponentRender * render = nullptr
+	);
+
+GComponentManager * getComponentManagerFromEntity(const GEntity * entity);
+GComponentLocalTransform * getParentLocalTransform(const GEntity * entity);
+GEntity * getAncestor(GEntity * entity);
 
 
 } //namespace gincu

@@ -5,25 +5,55 @@
 #include "gincu/gcomponentanimation.h"
 #include "gincu/gcomponenttouchhandler.h"
 #include "gincu/grenderengine.h"
+#include "gincu/gutil.h"
 
 #include <algorithm>
 
 namespace gincu {
 
 GComponentManager::GComponentManager()
-	: componentListHotArray(componentTypeId_PrimaryCount)
+	:
+		componentListHotArray(componentTypeId_PrimaryCount),
+		needSortRootTransformList(false)
 {
 }
 
 void GComponentManager::add(GComponent * component)
 {
 	this->doGetComponentList(component->getTypeId())->push_back(component);
+
+	if(component->getTypeId() == componentTypeId_Transform) {
+		if(getParentLocalTransform(component->getEntity()) == nullptr) {
+			this->rootTransformList.push_back(static_cast<GComponentTransform *>(component));
+			this->needSortRootTransformList = true;
+		}
+	}
 }
 
 void GComponentManager::remove(GComponent * component)
 {
 	ComponentListType * componentList = this->doGetComponentList(component->getTypeId());
-	componentList->erase(std::remove(componentList->begin(), componentList->end(), component), componentList->end());
+	removeValueFromContainer(*componentList, component);
+
+	if(component->getTypeId() == componentTypeId_Transform) {
+		if(getParentLocalTransform(component->getEntity()) == nullptr) {
+			removeValueFromContainer(this->rootTransformList, component);
+		}
+	}
+}
+
+void GComponentManager::parentChanged(GComponentLocalTransform * localTransform)
+{
+	GComponentTransform * transform = getComponentByTypeFromComponent<GComponentTransform>(localTransform);
+	if(transform != nullptr) {
+		if(localTransform->getParent() == nullptr) {
+			this->rootTransformList.push_back(transform);
+			this->needSortRootTransformList = true;
+		}
+		else {
+			removeValueFromContainer(this->rootTransformList, transform);
+		}
+	}
 }
 
 void GComponentManager::updateAnimation()
@@ -44,12 +74,77 @@ void GComponentManager::updateLocalTransforms()
 	}
 }
 
+namespace {
+
+void doRenderEntity(GEntity * entity);
+
+void doRenderLocalTransformList(const std::vector<GComponentLocalTransform *> & transformList, GComponentRender * parentRender)
+{
+	const int count = (int)transformList.size();
+	int index = 0;
+
+	while(index < count && transformList[index]->getZOrder() < 0) {
+		doRenderEntity(transformList[index]->getEntity());
+		++index;
+	}
+
+	if(parentRender != nullptr) {
+		parentRender->draw();
+	}
+
+	while(index < count) {
+		doRenderEntity(transformList[index]->getEntity());
+		++index;
+	}
+}
+
+void doRenderEntity(GEntity * entity)
+{
+	GComponentRender * render = entity->getComponentByType<GComponentRender>();
+	GComponentLocalTransform * localTransform = entity->getComponentByType<GComponentLocalTransform>();
+	if(localTransform != nullptr) {
+		doRenderLocalTransformList(localTransform->getSortedChildren(), render);
+	}
+	else {
+		if(render != nullptr) {
+			render->draw();
+		}
+	}
+}
+
+} //unnamed namespace
+
 void GComponentManager::render()
 {
-	ComponentListType * componentList = this->doGetComponentList(GComponentRender::getComponentType());
+	if(this->needSortRootTransformList) {
+		this->needSortRootTransformList = false;
 
-	for(GComponent * component : *componentList) {
-		static_cast<GComponentRender *>(component)->draw();
+		std::stable_sort(this->rootTransformList.begin(), this->rootTransformList.end(), [](const GComponentTransform * a, const GComponentTransform * b) {
+			int zOrderA, zOrderB;
+			GComponentLocalTransform * localTransform;
+
+			localTransform = a->getEntity()->getComponentByType<GComponentLocalTransform>();
+			if(localTransform != nullptr) {
+				zOrderA = localTransform->getZOrder();
+			}
+			else {
+				zOrderA = a->getZOrder();
+			}
+
+			localTransform = b->getEntity()->getComponentByType<GComponentLocalTransform>();
+			if(localTransform != nullptr) {
+				zOrderB = localTransform->getZOrder();
+			}
+			else {
+				zOrderB = b->getZOrder();
+			}
+
+			return zOrderA < zOrderB;
+		});
+	}
+
+	for(GComponentTransform * transform : this->rootTransformList) {
+		doRenderEntity(transform->getEntity());
 	}
 }
 

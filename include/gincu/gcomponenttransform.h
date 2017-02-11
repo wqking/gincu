@@ -38,9 +38,16 @@ public:
 	const GTransform & getTransform() const { return this->transform; }
 	GComponentTransform * setTransform(const GTransform & transform) { this->transform = transform; return this; }
 
+	int getZOrder() const { return this->zOrder; }
+	GComponentTransform * setZOrder(const int zOrder);
+
+private:
+	virtual void doAfterZOrderChanged(const int oldZOrder);
+
 private:
 	GTransform transform;
 	bool visible;
+	int zOrder;
 };
 
 class GComponentLocalTransform : public GComponentTransform
@@ -59,20 +66,25 @@ public:
  	~GComponentLocalTransform();
 	
 	GComponentLocalTransform * setParent(GComponentLocalTransform * parent);
-	GComponentLocalTransform * getParent() const;
+	GComponentLocalTransform * getParent() const { return this->parent; }
 	
 	void applyGlobal();
 	
 	int getChildCount() const { return (int)this->children.size(); }
 	GComponentLocalTransform * getChildAt(const int index) const { return this->children[index]; }
+	const std::vector<GComponentLocalTransform *> & getSortedChildren() const;
 
 private:
 	void addChild(GComponentLocalTransform * child);
 	void removeChild(GComponentLocalTransform * child);
 
 private:
+	virtual void doAfterZOrderChanged(const int oldZOrder) override;
+
+private:
 	GComponentLocalTransform * parent;
-	std::vector<GComponentLocalTransform *> children;
+	mutable std::vector<GComponentLocalTransform *> children;
+	mutable bool needSortChildren;
 };
 
 

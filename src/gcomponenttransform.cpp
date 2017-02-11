@@ -3,6 +3,8 @@
 #include "gincu/gentity.h"
 #include "gincu/gentityutil.h"
 
+#include <algorithm>
+
 namespace gincu {
 
 GComponentTransform::GComponentTransform()
@@ -15,7 +17,8 @@ GComponentTransform::GComponentTransform(const GPoint & position, const GScale &
 	:
 		super(this),
 		transform(position, scale),
-		visible(visible)
+		visible(visible),
+		zOrder(0)
 {
 }
 
@@ -23,11 +26,29 @@ GComponentTransform::~GComponentTransform()
 {
 }
 
+GComponentTransform * GComponentTransform::setZOrder(const int zOrder)
+{
+	if(this->zOrder != zOrder) {
+		const int oldZOrder = this->zOrder;
+		
+		this->zOrder = zOrder;
+		
+		this->doAfterZOrderChanged(oldZOrder);
+	}
+
+	return this;
+}
+
+void GComponentTransform::doAfterZOrderChanged(const int /*oldZOrder*/)
+{
+}
+
 
 GComponentLocalTransform::GComponentLocalTransform()
 	:
 		super(),
-		parent(nullptr)
+		parent(nullptr),
+		needSortChildren(false)
 {
 	// must set explicitly because the super is another component.
 	this->setTypeId(GComponentLocalTransform::getComponentType());
@@ -36,7 +57,8 @@ GComponentLocalTransform::GComponentLocalTransform()
 GComponentLocalTransform::GComponentLocalTransform(const GPoint & position, const GScale & scale, const bool visible)
 	:
 		super(position, scale, visible),
-		parent(nullptr)
+		parent(nullptr),
+		needSortChildren(false)
 {
 	// must set explicitly because the super is another component.
 	this->setTypeId(GComponentLocalTransform::getComponentType());
@@ -60,25 +82,26 @@ GComponentLocalTransform * GComponentLocalTransform::setParent(GComponentLocalTr
 		if(this->parent != nullptr) {
 			this->parent->removeChild(this);
 		}
-		
+	
 		this->parent = parent;
 		
 		if(this->parent != nullptr) {
 			this->parent->addChild(this);
+		}
+
+		GComponentManager * componentManager = getComponentManagerFromEntity(this->getEntity());
+		if(componentManager != nullptr) {
+			componentManager->parentChanged(this);
 		}
 	}
 	
 	return this;
 }
 
-GComponentLocalTransform * GComponentLocalTransform::getParent() const
-{
-	return this->parent;
-}
-
 void GComponentLocalTransform::addChild(GComponentLocalTransform * child)
 {
 	this->children.push_back(child);
+	this->needSortChildren = true;
 }
 
 void GComponentLocalTransform::removeChild(GComponentLocalTransform * child)
@@ -96,20 +119,41 @@ void GComponentLocalTransform::applyGlobal()
 		if(this->parent != nullptr) {
 			GComponentTransform * parentGlobalTransform = this->parent->getEntity()->getComponentByType<GComponentTransform>();
 			if(parentGlobalTransform != nullptr) {
+				globalTransform->setVisible(parentGlobalTransform->isVisible() && this->isVisible());
+
 				GTransform parentTransform = parentGlobalTransform->getTransform();
 				parentTransform.translate(this->parent->getTransform().getOrigin());
 				globalTransform->setTransform(parentTransform.multiply(this->getTransform()));
-				globalTransform->setVisible(parentGlobalTransform->isVisible() && this->isVisible());
 			}
 		}
 		else {
-			globalTransform->setTransform(this->getTransform());
 			globalTransform->setVisible(this->isVisible());
+
+			globalTransform->setTransform(this->getTransform());
 		}
 	}
 
 	for(GComponentLocalTransform * child : this->children) {
 		child->applyGlobal();
+	}
+}
+
+const std::vector<GComponentLocalTransform *> & GComponentLocalTransform::getSortedChildren() const
+{
+	if(this->needSortChildren) {
+		this->needSortChildren = false;
+		std::stable_sort(this->children.begin(), this->children.end(), [](const GComponentLocalTransform * a, const GComponentLocalTransform * b) {
+			return a->getZOrder() < b->getZOrder();
+		});
+	}
+
+	return this->children;
+}
+
+void GComponentLocalTransform::doAfterZOrderChanged(const int /*oldZOrder*/)
+{
+	if(this->parent != nullptr) {
+		this->parent->needSortChildren = true;
 	}
 }
 

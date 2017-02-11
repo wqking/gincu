@@ -24,5 +24,44 @@ GTransform computeRenderableTransform(
 	}
 }
 
+GComponentManager * getComponentManagerFromEntity(const GEntity * entity)
+{
+	if(entity != nullptr) {
+		return entity ->getComponentManager();
+	}
+	else {
+		return nullptr;
+	}
+}
+
+GComponentLocalTransform * getParentLocalTransform(const GEntity * entity)
+{
+	if(entity != nullptr) {
+		GComponentLocalTransform * localTransform = entity->getComponentByType<GComponentLocalTransform>();
+		if(localTransform != nullptr) {
+			return localTransform->getParent();
+		}
+	}
+
+	return nullptr;
+}
+
+GEntity * getAncestor(GEntity * entity)
+{
+	GEntity * ancestor = entity;
+
+	for(;;) {
+		GComponentLocalTransform * localTransform = ancestor->getComponentByType<GComponentLocalTransform>();
+		if(localTransform != nullptr) {
+			ancestor = localTransform->getParent()->getEntity();
+		}
+		else {
+			break;
+		}
+	}
+
+	return ancestor;
+}
+
 
 } //namespace gincu

@@ -5,8 +5,14 @@
 #include <sstream>
 #include <cmath>
 #include <limits>
+#include <algorithm>
 
 namespace gincu {
+
+template <typename T>
+struct ReferenceWrapperLessCompare {
+	bool operator() (const T & a, const T & b) const { return a.get() < b.get(); }
+};
 
 template <typename T, typename A, typename B>
 inline bool isWithin(const T value, const A a, const B b)
@@ -22,10 +28,11 @@ std::string toString(const T & value)
 	return stream.str();
 }
 
-template <typename T>
-struct ReferenceWrapperLessCompare {
-	bool operator() (const T & a, const T & b) const { return a.get() < b.get(); }
-};
+template <typename C, typename V>
+void removeValueFromContainer(C & container, const V & value)
+{
+	container.erase(std::remove(container.begin(), container.end(), value), container.end());
+}
 
 
 inline bool isEqual(const int a, const int b)

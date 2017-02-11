@@ -42,21 +42,21 @@ void GEntityDynamicArrayBase::doRemoveComponent(GComponent * component, GCompone
 	}
 }
 
-void GEntityDynamicArrayBase::doSetComponentsBuffer(GComponentManager * newComponentsBuffer, GComponentManager * oldComponentsBuffer)
+void GEntityDynamicArrayBase::doSetComponentManager(GComponentManager * newComponentManager, GComponentManager * oldComponentManager)
 {
-	if(oldComponentsBuffer != nullptr) {
+	if(oldComponentManager != nullptr) {
 		for(auto & component : this->componentList) {
 			if(component) {
-				oldComponentsBuffer->remove(component.get());
+				oldComponentManager->remove(component.get());
 			}
 		}
 	}
 
 
-	if(newComponentsBuffer != nullptr) {
+	if(newComponentManager != nullptr) {
 		for(auto & component : this->componentList) {
 			if(component) {
-				newComponentsBuffer->add(component.get());
+				newComponentManager->add(component.get());
 			}
 		}
 	}
@@ -105,20 +105,20 @@ void GEntityDynamicMap::doRemoveComponent(GComponent * component, GComponentMana
 	}
 }
 
-void GEntityDynamicMap::doSetComponentsBuffer(GComponentManager * newComponentsBuffer, GComponentManager * oldComponentsBuffer)
+void GEntityDynamicMap::doSetComponentManager(GComponentManager * newComponentManager, GComponentManager * oldComponentManager)
 {
-	if(oldComponentsBuffer != nullptr) {
+	if(oldComponentManager != nullptr) {
 		for(auto & item : this->componentMap) {
 			if(item.second) {
-				oldComponentsBuffer->remove(item.second.get());
+				oldComponentManager->remove(item.second.get());
 			}
 		}
 	}
 
-	if(newComponentsBuffer != nullptr) {
+	if(newComponentManager != nullptr) {
 		for(auto & item : this->componentMap) {
 			if(item.second) {
-				newComponentsBuffer->add(item.second.get());
+				newComponentManager->add(item.second.get());
 			}
 		}
 	}

@@ -90,7 +90,7 @@ GEntity * GScene::addEntity(GEntity * entity)
 {
 	if(entity != nullptr) {
 		this->entityList.push_back(EntityPointer(entity));
-		entity->setComponentsBuffer(&this->componentManager);
+		entity->setComponentManager(&this->componentManager);
 	}
 
 	return entity;

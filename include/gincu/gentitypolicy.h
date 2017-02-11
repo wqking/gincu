@@ -58,7 +58,7 @@ public:
 protected:
 	void doAddComponent(GComponent * component, GComponentManager * componentManager);
 	void doRemoveComponent(GComponent * component, GComponentManager * componentManager);
-	void doSetComponentsBuffer(GComponentManager * newComponentsBuffer, GComponentManager * oldComponentsBuffer);
+	void doSetComponentManager(GComponentManager * newComponentManager, GComponentManager * oldComponentManager);
 	GComponent * doGetComponentByTypeId(const unsigned int typeId) const;
 
 private:
@@ -84,7 +84,7 @@ private:
 protected:
 	void doAddComponent(GComponent * component, GComponentManager * componentManager);
 	void doRemoveComponent(GComponent * component, GComponentManager * componentManager);
-	void doSetComponentsBuffer(GComponentManager * newComponentsBuffer, GComponentManager * oldComponentsBuffer);
+	void doSetComponentManager(GComponentManager * newComponentManager, GComponentManager * oldComponentManager);
 	GComponent * doGetComponentByTypeId(const unsigned int typeId) const;
 
 private:
@@ -126,20 +126,20 @@ protected:
 		}
 	}
 
-	void doSetComponentsBuffer(GComponentManager * newComponentsBuffer, GComponentManager * oldComponentsBuffer) {
-		if(oldComponentsBuffer != nullptr) {
+	void doSetComponentManager(GComponentManager * newComponentManager, GComponentManager * oldComponentManager) {
+		if(oldComponentManager != nullptr) {
 			for(auto & component : this->componentList) {
 				if(component) {
-					oldComponentsBuffer->remove(component.get());
+					oldComponentManager->remove(component.get());
 				}
 			}
 		}
 
 
-		if(newComponentsBuffer != nullptr) {
+		if(newComponentManager != nullptr) {
 			for(auto & component : this->componentList) {
 				if(component) {
-					newComponentsBuffer->add(component.get());
+					newComponentManager->add(component.get());
 				}
 			}
 		}
@@ -211,30 +211,30 @@ protected:
 		}
 	}
 
-	void doSetComponentsBuffer(GComponentManager * newComponentsBuffer, GComponentManager * oldComponentsBuffer) {
-		if(oldComponentsBuffer != nullptr) {
+	void doSetComponentManager(GComponentManager * newComponentManager, GComponentManager * oldComponentManager) {
+		if(oldComponentManager != nullptr) {
 			for(auto & component : this->componentList) {
 				if(component) {
-					oldComponentsBuffer->remove(component.get());
+					oldComponentManager->remove(component.get());
 				}
 			}
 			for(auto & component : this->coldComponentList) {
 				if(component) {
-					oldComponentsBuffer->remove(component.get());
+					oldComponentManager->remove(component.get());
 				}
 			}
 		}
 
 
-		if(newComponentsBuffer != nullptr) {
+		if(newComponentManager != nullptr) {
 			for(auto & component : this->componentList) {
 				if(component) {
-					newComponentsBuffer->add(component.get());
+					newComponentManager->add(component.get());
 				}
 			}
 			for(auto & component : this->coldComponentList) {
 				if(component) {
-					newComponentsBuffer->add(component.get());
+					newComponentManager->add(component.get());
 				}
 			}
 		}
@@ -308,30 +308,30 @@ protected:
 		}
 	}
 
-	void doSetComponentsBuffer(GComponentManager * newComponentsBuffer, GComponentManager * oldComponentsBuffer) {
-		if(oldComponentsBuffer != nullptr) {
+	void doSetComponentManager(GComponentManager * newComponentManager, GComponentManager * oldComponentManager) {
+		if(oldComponentManager != nullptr) {
 			for(auto & component : this->componentList) {
 				if(component) {
-					oldComponentsBuffer->remove(component.get());
+					oldComponentManager->remove(component.get());
 				}
 			}
 			for(auto & item : this->coldComponentMap) {
 				if(item.second) {
-					oldComponentsBuffer->remove(item.second.get());
+					oldComponentManager->remove(item.second.get());
 				}
 			}
 		}
 
 
-		if(newComponentsBuffer != nullptr) {
+		if(newComponentManager != nullptr) {
 			for(auto & component : this->componentList) {
 				if(component) {
-					newComponentsBuffer->add(component.get());
+					newComponentManager->add(component.get());
 				}
 			}
 			for(auto & item : this->coldComponentMap) {
 				if(item.second) {
-					newComponentsBuffer->add(item.second.get());
+					newComponentManager->add(item.second.get());
 				}
 			}
 		}

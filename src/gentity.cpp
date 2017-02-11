@@ -22,7 +22,7 @@ GEntity::GEntity()
 
 GEntity::~GEntity()
 {
-	this->setComponentsBuffer(nullptr);
+	this->setComponentManager(nullptr);
 }
 
 GEntity * GEntity::addComponent(GComponent * component)
@@ -39,10 +39,10 @@ void GEntity::removeComponent(GComponent * component)
 	this->doRemoveComponent(component, this->componentManager);
 }
 
-void GEntity::setComponentsBuffer(GComponentManager * componentManager)
+void GEntity::setComponentManager(GComponentManager * componentManager)
 {
 	if(this->componentManager != componentManager) {
-		this->doSetComponentsBuffer(componentManager, this->componentManager);
+		this->doSetComponentManager(componentManager, this->componentManager);
 		this->componentManager = componentManager;
 	}
 }

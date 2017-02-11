@@ -10,6 +10,8 @@ namespace gincu {
 
 class GComponent;
 class GComponentTouchHandler;
+class GComponentTransform;
+class GComponentLocalTransform;
 
 class GComponentManager
 {
@@ -21,6 +23,8 @@ public:
 
 	void add(GComponent * component);
 	void remove(GComponent * component);
+
+	void parentChanged(GComponentLocalTransform * localTransform);
 	
 	void updateAnimation();
 	void updateLocalTransforms();
@@ -40,6 +44,8 @@ private:
 private:
 	std::vector<ComponentListType> componentListHotArray;
 	std::map<unsigned int, ComponentListType> componentListColdMap;
+	mutable std::vector<GComponentTransform *> rootTransformList;
+	mutable bool needSortRootTransformList;
 };
 
 

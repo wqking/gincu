@@ -23,7 +23,8 @@ public:
 	GEntity * addComponent(GComponent * component);
 	void removeComponent(GComponent * component);
 	
-	void setComponentsBuffer(GComponentManager * componentManager);
+	void setComponentManager(GComponentManager * componentManager);
+	GComponentManager * getComponentManager() const { return this->componentManager; }
 
 	GComponent * getComponentByTypeId(const unsigned int typeId) const;
 	
