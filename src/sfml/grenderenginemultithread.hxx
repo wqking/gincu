@@ -69,6 +69,15 @@ GRenderEngineData::GRenderEngineData()
 {
 }
 
+void GRenderEngineData::initialize()
+{
+	this->window->setVerticalSyncEnabled(false);
+	this->window->setActive(false);
+
+	this->updaterQueue = &this->queueStorage[0];
+	this->renderQueue = &this->queueStorage[1];
+}
+
 void GRenderEngineData::processRenderCommands()
 {
 	this->window->clear(gameColorToSfml(GApplication::getInstance()->getConfigInfo().backgroundColor));
@@ -168,12 +177,7 @@ void GRenderEngineData::batchDrawImages(const int firstIndex, const int lastInde
 
 void GRenderEngine::doInitialize()
 {
-	std::shared_ptr<GRenderEngineData> data = this->getData();
-	this->data->window->setVerticalSyncEnabled(false);
-	this->data->window->setActive(false);
-
-	this->data->updaterQueue = &this->data->queueStorage[0];
-	this->data->renderQueue = &this->data->queueStorage[1];
+	this->data->initialize();
 
 	std::thread thread(&threadMain, this);
 	thread.detach();
@@ -221,18 +225,6 @@ void GRenderEngine::draw(const GRectRender & rect, const GTransform & transform,
 	command.renderInfo = *renderInfo;
 
 	this->data->updaterQueue->push_back(command);
-}
-
-void GRenderEngine::beginBatchDraw()
-{
-}
-
-void GRenderEngine::endBatchDraw()
-{
-}
-
-void GRenderEngine::flush()
-{
 }
 
 void GRenderEngine::doDrawTexture(const std::shared_ptr<GImageData> & texture, const GRect & rect, const GTransform & transform, const GRenderInfo * renderInfo)

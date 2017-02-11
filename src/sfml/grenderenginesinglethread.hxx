@@ -73,6 +73,42 @@ void GRenderEngineData::batchDrawTexture(const std::shared_ptr<GImageData> & tex
 	vertexArray[count].texCoords = { rect.x, rect.y };
 }
 
+void GRenderEngineData::beginBatchDraw()
+{
+	this->clearBatchDrawState();
+	this->inBatchDraw = true;
+}
+
+void GRenderEngineData::endBatchDraw()
+{
+	this->flush();
+
+	if(this->inBatchDraw) {
+		if(this->batchDrawImageData) {
+			sf::RenderStates renderStates(&this->batchDrawImageData->texture);
+			copyBlendAndShaderToSfml(&renderStates, &this->batchDrawRenderInfo);
+			this->window->draw(this->batchDrawVertexArray, renderStates);
+		}
+
+		this->clearBatchDrawState();
+	}
+}
+
+void GRenderEngineData::flush()
+{
+	GCachedRenderItem & cachedItem = this->cachedRenderItem;
+	switch(cachedItem.type) {
+	case GCachedRenderType::texture:
+		this->directDrawTexture(cachedItem.imageData, cachedItem.imageRect, cachedItem.imageTransform, &cachedItem.imageRenderInfo);
+		break;
+
+	case GCachedRenderType::none:
+		break;
+	}
+
+	cachedItem.reset();
+}
+
 
 void GRenderEngine::doInitialize()
 {
@@ -88,14 +124,14 @@ void GRenderEngine::render()
 
 	this->renderList();
 
-	this->endBatchDraw();
+	this->data->endBatchDraw();
 
 	this->data->window->display();
 }
 
 void GRenderEngine::draw(const GTextRender & text, const GTransform & transform, const GRenderInfo * renderInfo)
 {
-	this->endBatchDraw();
+	this->data->endBatchDraw();
 
 	sf::RenderStates renderStates(transform.getSfmlTransform());
 	copyBlendAndShaderToSfml(&renderStates, renderInfo);
@@ -104,47 +140,11 @@ void GRenderEngine::draw(const GTextRender & text, const GTransform & transform,
 
 void GRenderEngine::draw(const GRectRender & rect, const GTransform & transform, const GRenderInfo * renderInfo)
 {
-	this->endBatchDraw();
+	this->data->endBatchDraw();
 
 	sf::RenderStates renderStates(transform.getSfmlTransform());
 	copyBlendAndShaderToSfml(&renderStates, renderInfo);
 	this->data->window->draw(rect.getData()->rectangle, renderStates);
-}
-
-void GRenderEngine::beginBatchDraw()
-{
-	this->data->clearBatchDrawState();
-	this->data->inBatchDraw = true;
-}
-
-void GRenderEngine::endBatchDraw()
-{
-	this->flush();
-
-	if(this->data->inBatchDraw) {
-		if(this->data->batchDrawImageData) {
-			sf::RenderStates renderStates(&this->data->batchDrawImageData->texture);
-			copyBlendAndShaderToSfml(&renderStates, &this->data->batchDrawRenderInfo);
-			this->data->window->draw(this->data->batchDrawVertexArray, renderStates);
-		}
-
-		this->data->clearBatchDrawState();
-	}
-}
-
-void GRenderEngine::flush()
-{
-	GCachedRenderItem & cachedItem = this->data->cachedRenderItem;
-	switch(cachedItem.type) {
-	case GCachedRenderType::texture:
-		this->data->directDrawTexture(cachedItem.imageData, cachedItem.imageRect, cachedItem.imageTransform, &cachedItem.imageRenderInfo);
-		break;
-
-	case GCachedRenderType::none:
-		break;
-	}
-
-	cachedItem.reset();
 }
 
 void GRenderEngine::doDrawTexture(const std::shared_ptr<GImageData> & texture, const GRect & rect, const GTransform & transform, const GRenderInfo * renderInfo)
@@ -155,7 +155,7 @@ void GRenderEngine::doDrawTexture(const std::shared_ptr<GImageData> & texture, c
 
 	GCachedRenderItem & cachedItem = this->data->cachedRenderItem;
 	if(cachedItem.type != GCachedRenderType::none && cachedItem.type != GCachedRenderType::texture) {
-		this->flush();
+		this->data->flush();
 	}
 
 	bool needCache = false;
@@ -165,20 +165,20 @@ void GRenderEngine::doDrawTexture(const std::shared_ptr<GImageData> & texture, c
 			this->data->batchDrawTexture(texture, rect, transform, renderInfo);
 		}
 		else {
-			this->endBatchDraw();
+			this->data->endBatchDraw();
 			needCache = true;
 		}
 	}
 	else {
 		if(texture == cachedItem.imageData
 			&& *renderInfo == cachedItem.imageRenderInfo) {
-			this->beginBatchDraw();
+			this->data->beginBatchDraw();
 			this->data->batchDrawTexture(cachedItem.imageData, cachedItem.imageRect, cachedItem.imageTransform, &cachedItem.imageRenderInfo);
 			this->data->batchDrawTexture(texture, rect, transform, renderInfo);
 		}
 		else {
 			if(cachedItem.imageData) {
-				this->flush();
+				this->data->flush();
 			}
 			needCache = true;
 		}

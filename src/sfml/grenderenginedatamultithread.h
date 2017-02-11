@@ -47,6 +47,7 @@ private:
 public:
 	GRenderEngineData();
 
+	void initialize();
 	void processRenderCommands();
 	void batchDrawImages(const int firstIndex, const int lastIndex);
 

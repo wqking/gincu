@@ -41,7 +41,9 @@ public:
 
 	void directDrawTexture(const std::shared_ptr<GImageData> & texture, const GRect & rect, const GTransform & transform, const GRenderInfo * renderInfo);
 	void batchDrawTexture(const std::shared_ptr<GImageData> & texture, const GRect & rect, const GTransform & transform, const GRenderInfo * renderInfo);
-
+	void beginBatchDraw();
+	void endBatchDraw();
+	void flush();
 
 	std::unique_ptr<sf::RenderWindow> window;
 	sf::View view;

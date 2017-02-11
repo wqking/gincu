@@ -45,9 +45,6 @@ public:
 	void draw(const GTextRender & text, const GTransform & transform, const GRenderInfo * renderInfo);
 	void draw(const GRectRender & rect, const GTransform & transform, const GRenderInfo * renderInfo);
 
-	void beginBatchDraw();
-	void endBatchDraw();
-
 	GPoint mapWindowToView(const GPoint & point) const;
 
 	const std::shared_ptr<GRenderEngineData> & getData() const { return this->data; }
@@ -58,7 +55,6 @@ public: // for internal usage
 private:
 	void doInitialize();
 	void doFinalize();
-	void flush();
 	void doDrawTexture(const std::shared_ptr<GImageData> & texture, const GRect & rect, const GTransform & transform, const GRenderInfo * renderInfo);
 
 	void doFitView();
