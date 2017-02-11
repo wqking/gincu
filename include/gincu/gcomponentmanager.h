@@ -1,23 +1,23 @@
-#ifndef GCOMPONENTSBUFFER_H
-#define GCOMPONENTSBUFFER_H
+#ifndef GCOMPONENTMANAGER_H
+#define GCOMPONENTMANAGER_H
 
 #include "gincu/ggeometry.h"
 
 #include <vector>
+#include <map>
 
 namespace gincu {
 
 class GComponent;
 class GComponentTouchHandler;
 
-// This is NOT for pooled component allocation
-class GComponentsBuffer
+class GComponentManager
 {
 private:
 	typedef std::vector<GComponent *> ComponentListType;
 
 public:
-	GComponentsBuffer();
+	GComponentManager();
 
 	void add(GComponent * component);
 	void remove(GComponent * component);
@@ -38,7 +38,8 @@ private:
 	ComponentListType * doGetComponentList(const unsigned int typeId);
 
 private:
-	std::vector<ComponentListType> componentListBuffer;
+	std::vector<ComponentListType> componentListHotArray;
+	std::map<unsigned int, ComponentListType> componentListColdMap;
 };
 
 

@@ -9,7 +9,7 @@
 namespace gincu {
 
 class GComponent;
-class GComponentsBuffer;
+class GComponentManager;
 
 class GEntity : public EntityBase
 {
@@ -23,7 +23,7 @@ public:
 	GEntity * addComponent(GComponent * component);
 	void removeComponent(GComponent * component);
 	
-	void setComponentsBuffer(GComponentsBuffer * componentsBuffer);
+	void setComponentsBuffer(GComponentManager * componentManager);
 
 	GComponent * getComponentByTypeId(const unsigned int typeId) const;
 	
@@ -33,7 +33,7 @@ public:
 	}
 	
 private:
-	GComponentsBuffer * componentsBuffer;
+	GComponentManager * componentManager;
 };
 
 

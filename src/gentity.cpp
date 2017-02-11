@@ -1,6 +1,6 @@
 #include "gincu/gentity.h"
 #include "gincu/gcomponent.h"
-#include "gincu/gcomponentsbuffer.h"
+#include "gincu/gcomponentmanager.h"
 #include "gincu/gheappool.h"
 
 namespace gincu {
@@ -16,7 +16,7 @@ void GEntity::operator delete(void * p)
 }
 
 GEntity::GEntity()
-	: componentsBuffer(nullptr)
+	: componentManager(nullptr)
 {
 }
 
@@ -29,21 +29,21 @@ GEntity * GEntity::addComponent(GComponent * component)
 {
 	component->setEntity(this);
 
-	this->doAddComponent(component, this->componentsBuffer);
+	this->doAddComponent(component, this->componentManager);
 
 	return this;
 }
 
 void GEntity::removeComponent(GComponent * component)
 {
-	this->doRemoveComponent(component, this->componentsBuffer);
+	this->doRemoveComponent(component, this->componentManager);
 }
 
-void GEntity::setComponentsBuffer(GComponentsBuffer * componentsBuffer)
+void GEntity::setComponentsBuffer(GComponentManager * componentManager)
 {
-	if(this->componentsBuffer != componentsBuffer) {
-		this->doSetComponentsBuffer(componentsBuffer, this->componentsBuffer);
-		this->componentsBuffer = componentsBuffer;
+	if(this->componentManager != componentManager) {
+		this->doSetComponentsBuffer(componentManager, this->componentManager);
+		this->componentManager = componentManager;
 	}
 }
 

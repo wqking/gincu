@@ -2,7 +2,7 @@
 #define GENTITYPOLICY_H
 
 #include "gincu/gcomponent.h"
-#include "gincu/gcomponentsbuffer.h"
+#include "gincu/gcomponentmanager.h"
 
 #include <memory>
 #include <vector>
@@ -12,7 +12,7 @@
 namespace gincu {
 
 class GComponent;
-class GComponentsBuffer;
+class GComponentManager;
 
 // Define how an GEntity stores the components.
 // Different policy may result different time and memory usage.
@@ -56,9 +56,9 @@ public:
 	~GEntityDynamicArrayBase();
 
 protected:
-	void doAddComponent(GComponent * component, GComponentsBuffer * componentsBuffer);
-	void doRemoveComponent(GComponent * component, GComponentsBuffer * componentsBuffer);
-	void doSetComponentsBuffer(GComponentsBuffer * newComponentsBuffer, GComponentsBuffer * oldComponentsBuffer);
+	void doAddComponent(GComponent * component, GComponentManager * componentManager);
+	void doRemoveComponent(GComponent * component, GComponentManager * componentManager);
+	void doSetComponentsBuffer(GComponentManager * newComponentsBuffer, GComponentManager * oldComponentsBuffer);
 	GComponent * doGetComponentByTypeId(const unsigned int typeId) const;
 
 private:
@@ -82,9 +82,9 @@ private:
 	typedef std::unique_ptr<GComponent> ComponentPointer;
 
 protected:
-	void doAddComponent(GComponent * component, GComponentsBuffer * componentsBuffer);
-	void doRemoveComponent(GComponent * component, GComponentsBuffer * componentsBuffer);
-	void doSetComponentsBuffer(GComponentsBuffer * newComponentsBuffer, GComponentsBuffer * oldComponentsBuffer);
+	void doAddComponent(GComponent * component, GComponentManager * componentManager);
+	void doRemoveComponent(GComponent * component, GComponentManager * componentManager);
+	void doSetComponentsBuffer(GComponentManager * newComponentsBuffer, GComponentManager * oldComponentsBuffer);
 	GComponent * doGetComponentByTypeId(const unsigned int typeId) const;
 
 private:
@@ -98,35 +98,35 @@ private:
 	typedef std::unique_ptr<GComponent> ComponentPointer;
 
 protected:
-	void doAddComponent(GComponent * component, GComponentsBuffer * componentsBuffer) {
+	void doAddComponent(GComponent * component, GComponentManager * componentManager) {
 		const unsigned int typeId = component->getTypeId();
 		if(typeId >= ArraySize) {
 			return;
 		}
 
-		if(componentsBuffer != nullptr && this->componentList[typeId]) {
-			componentsBuffer->remove(this->componentList[typeId].get());
+		if(componentManager != nullptr && this->componentList[typeId]) {
+			componentManager->remove(this->componentList[typeId].get());
 		}
 
 		this->componentList[typeId].reset(component);
 
-		if(componentsBuffer != nullptr) {
-			componentsBuffer->add(component);
+		if(componentManager != nullptr) {
+			componentManager->add(component);
 		}
 	}
 
-	void doRemoveComponent(GComponent * component, GComponentsBuffer * componentsBuffer) {
+	void doRemoveComponent(GComponent * component, GComponentManager * componentManager) {
 		const unsigned int typeId = component->getTypeId();
 		if(typeId < ArraySize) {
-			if(componentsBuffer != nullptr) {
-				componentsBuffer->remove(component);
+			if(componentManager != nullptr) {
+				componentManager->remove(component);
 			}
 
 			this->componentList[typeId].reset();
 		}
 	}
 
-	void doSetComponentsBuffer(GComponentsBuffer * newComponentsBuffer, GComponentsBuffer * oldComponentsBuffer) {
+	void doSetComponentsBuffer(GComponentManager * newComponentsBuffer, GComponentManager * oldComponentsBuffer) {
 		if(oldComponentsBuffer != nullptr) {
 			for(auto & component : this->componentList) {
 				if(component) {
@@ -165,7 +165,7 @@ private:
 	typedef std::unique_ptr<GComponent> ComponentPointer;
 
 protected:
-	void doAddComponent(GComponent * component, GComponentsBuffer * componentsBuffer) {
+	void doAddComponent(GComponent * component, GComponentManager * componentManager) {
 		ComponentPointer * componentSlot;
 		const unsigned int typeId = component->getTypeId();
 		if(typeId < ArraySize) {
@@ -179,22 +179,22 @@ protected:
 			componentSlot = &this->coldComponentList[coldIndex];
 		}
 
-		if(componentsBuffer != nullptr && *componentSlot) {
-			componentsBuffer->remove(componentSlot->get());
+		if(componentManager != nullptr && *componentSlot) {
+			componentManager->remove(componentSlot->get());
 		}
 
 		componentSlot->reset(component);
 
-		if(componentsBuffer != nullptr) {
-			componentsBuffer->add(component);
+		if(componentManager != nullptr) {
+			componentManager->add(component);
 		}
 	}
 
-	void doRemoveComponent(GComponent * component, GComponentsBuffer * componentsBuffer) {
+	void doRemoveComponent(GComponent * component, GComponentManager * componentManager) {
 		const unsigned int typeId = component->getTypeId();
 		if(typeId < ArraySize) {
-			if(componentsBuffer != nullptr) {
-				componentsBuffer->remove(component);
+			if(componentManager != nullptr) {
+				componentManager->remove(component);
 			}
 
 			this->componentList[typeId].reset();
@@ -202,8 +202,8 @@ protected:
 		else {
 			const unsigned int coldIndex = typeId - ArraySize;
 			if(coldIndex < this->coldComponentList.size()) {
-				if(componentsBuffer != nullptr) {
-					componentsBuffer->remove(component);
+				if(componentManager != nullptr) {
+					componentManager->remove(component);
 				}
 
 				this->coldComponentList[coldIndex].reset();
@@ -211,7 +211,7 @@ protected:
 		}
 	}
 
-	void doSetComponentsBuffer(GComponentsBuffer * newComponentsBuffer, GComponentsBuffer * oldComponentsBuffer) {
+	void doSetComponentsBuffer(GComponentManager * newComponentsBuffer, GComponentManager * oldComponentsBuffer) {
 		if(oldComponentsBuffer != nullptr) {
 			for(auto & component : this->componentList) {
 				if(component) {
@@ -267,7 +267,7 @@ private:
 	typedef std::unique_ptr<GComponent> ComponentPointer;
 
 protected:
-	void doAddComponent(GComponent * component, GComponentsBuffer * componentsBuffer) {
+	void doAddComponent(GComponent * component, GComponentManager * componentManager) {
 		ComponentPointer * componentSlot;
 		const unsigned int typeId = component->getTypeId();
 		if(typeId < ArraySize) {
@@ -277,22 +277,22 @@ protected:
 			componentSlot = &this->coldComponentMap[typeId];
 		}
 
-		if(componentsBuffer != nullptr && *componentSlot) {
-			componentsBuffer->remove(componentSlot->get());
+		if(componentManager != nullptr && *componentSlot) {
+			componentManager->remove(componentSlot->get());
 		}
 
 		componentSlot->reset(component);
 
-		if(componentsBuffer != nullptr) {
-			componentsBuffer->add(component);
+		if(componentManager != nullptr) {
+			componentManager->add(component);
 		}
 	}
 
-	void doRemoveComponent(GComponent * component, GComponentsBuffer * componentsBuffer) {
+	void doRemoveComponent(GComponent * component, GComponentManager * componentManager) {
 		const unsigned int typeId = component->getTypeId();
 		if(typeId < ArraySize) {
-			if(componentsBuffer != nullptr) {
-				componentsBuffer->remove(component);
+			if(componentManager != nullptr) {
+				componentManager->remove(component);
 			}
 
 			this->componentList[typeId].reset();
@@ -300,15 +300,15 @@ protected:
 		else {
 			auto it = this->coldComponentMap.find(typeId);
 			if(it != this->coldComponentMap.end()) {
-				if(componentsBuffer != nullptr) {
-					componentsBuffer->remove(component);
+				if(componentManager != nullptr) {
+					componentManager->remove(component);
 				}
 				it->second.reset();
 			}
 		}
 	}
 
-	void doSetComponentsBuffer(GComponentsBuffer * newComponentsBuffer, GComponentsBuffer * oldComponentsBuffer) {
+	void doSetComponentsBuffer(GComponentManager * newComponentsBuffer, GComponentManager * oldComponentsBuffer) {
 		if(oldComponentsBuffer != nullptr) {
 			for(auto & component : this->componentList) {
 				if(component) {

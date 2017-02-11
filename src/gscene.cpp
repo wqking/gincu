@@ -40,7 +40,7 @@ void GScene::renderScene()
 {
 	this->tweenList.tick((cpgf::GTweenNumber)GApplication::getInstance()->getRenderMilliseconds());
 
-	this->componentsBuffer.updateDuringRender();
+	this->componentManager.updateDuringRender();
 }
 
 void GScene::setTouchCapture(GEntity * touchCapture)
@@ -60,7 +60,7 @@ void GScene::handleTouchEvent(const GTouchEvent & touchEvent)
 {
 	std::vector<GComponentTouchHandler *> handlerList;
 
-	this->componentsBuffer.findTouchHandlers(touchEvent.position, &handlerList);
+	this->componentManager.findTouchHandlers(touchEvent.position, &handlerList);
 
 	GTouchEvent tempEvent = touchEvent;
 
@@ -90,7 +90,7 @@ GEntity * GScene::addEntity(GEntity * entity)
 {
 	if(entity != nullptr) {
 		this->entityList.push_back(EntityPointer(entity));
-		entity->setComponentsBuffer(&this->componentsBuffer);
+		entity->setComponentsBuffer(&this->componentManager);
 	}
 
 	return entity;

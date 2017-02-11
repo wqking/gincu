@@ -1,4 +1,4 @@
-#include "gincu/gcomponentsbuffer.h"
+#include "gincu/gcomponentmanager.h"
 #include "gincu/gcomponent.h"
 #include "gincu/gcomponenttransform.h"
 #include "gincu/gcomponentrender.h"
@@ -10,23 +10,23 @@
 
 namespace gincu {
 
-GComponentsBuffer::GComponentsBuffer()
-	: componentListBuffer(componentTypeId_PrimaryCount)
+GComponentManager::GComponentManager()
+	: componentListHotArray(componentTypeId_PrimaryCount)
 {
 }
 
-void GComponentsBuffer::add(GComponent * component)
+void GComponentManager::add(GComponent * component)
 {
 	this->doGetComponentList(component->getTypeId())->push_back(component);
 }
 
-void GComponentsBuffer::remove(GComponent * component)
+void GComponentManager::remove(GComponent * component)
 {
 	ComponentListType * componentList = this->doGetComponentList(component->getTypeId());
 	componentList->erase(std::remove(componentList->begin(), componentList->end(), component), componentList->end());
 }
 
-void GComponentsBuffer::updateAnimation()
+void GComponentManager::updateAnimation()
 {
 	ComponentListType * componentList = this->doGetComponentList(GComponentAnimation::getComponentType());
 	for(GComponent * component : *componentList) {
@@ -34,7 +34,7 @@ void GComponentsBuffer::updateAnimation()
 	}
 }
 
-void GComponentsBuffer::updateLocalTransforms()
+void GComponentManager::updateLocalTransforms()
 {
 	ComponentListType * componentList = this->doGetComponentList(GComponentLocalTransform::getComponentType());
 	for(GComponent * component : *componentList) {
@@ -44,7 +44,7 @@ void GComponentsBuffer::updateLocalTransforms()
 	}
 }
 
-void GComponentsBuffer::render()
+void GComponentManager::render()
 {
 	ComponentListType * componentList = this->doGetComponentList(GComponentRender::getComponentType());
 
@@ -53,7 +53,7 @@ void GComponentsBuffer::render()
 	}
 }
 
-void GComponentsBuffer::findTouchHandlers(const GPoint & position, std::vector<GComponentTouchHandler *> * outputResult)
+void GComponentManager::findTouchHandlers(const GPoint & position, std::vector<GComponentTouchHandler *> * outputResult)
 {
 	ComponentListType * componentList = this->doGetComponentList(GComponentTouchHandler::getComponentType());
 	for(GComponent * component : *componentList) {
@@ -63,13 +63,14 @@ void GComponentsBuffer::findTouchHandlers(const GPoint & position, std::vector<G
 	}
 }
 
-GComponentsBuffer::ComponentListType * GComponentsBuffer::doGetComponentList(const unsigned int typeId)
+GComponentManager::ComponentListType * GComponentManager::doGetComponentList(const unsigned int typeId)
 {
-	if(this->componentListBuffer.size() <= typeId) {
-		this->componentListBuffer.resize(typeId + 1);
+	if(typeId < this->componentListHotArray.size()) {
+		return &this->componentListHotArray[typeId];
 	}
-	
-	return &this->componentListBuffer[typeId];
+	else {
+		return &this->componentListColdMap[typeId];
+	}
 }
 
 

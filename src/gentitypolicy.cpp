@@ -12,37 +12,37 @@ GEntityDynamicArrayBase::~GEntityDynamicArrayBase()
 {
 }
 
-void GEntityDynamicArrayBase::doAddComponent(GComponent * component, GComponentsBuffer * componentsBuffer)
+void GEntityDynamicArrayBase::doAddComponent(GComponent * component, GComponentManager * componentManager)
 {
 	const unsigned int typeId = component->getTypeId();
 	if(this->componentList.size() <= typeId) {
 		this->componentList.resize(typeId + 1);
 	}
 
-	if(componentsBuffer != nullptr && this->componentList[typeId]) {
-		componentsBuffer->remove(this->componentList[typeId].get());
+	if(componentManager != nullptr && this->componentList[typeId]) {
+		componentManager->remove(this->componentList[typeId].get());
 	}
 
 	this->componentList[typeId].reset(component);
 
-	if(componentsBuffer != nullptr) {
-		componentsBuffer->add(component);
+	if(componentManager != nullptr) {
+		componentManager->add(component);
 	}
 }
 
-void GEntityDynamicArrayBase::doRemoveComponent(GComponent * component, GComponentsBuffer * componentsBuffer)
+void GEntityDynamicArrayBase::doRemoveComponent(GComponent * component, GComponentManager * componentManager)
 {
 	const unsigned int typeId = component->getTypeId();
 	if(typeId < this->componentList.size()) {
-		if(componentsBuffer != nullptr) {
-			componentsBuffer->remove(component);
+		if(componentManager != nullptr) {
+			componentManager->remove(component);
 		}
 
 		this->componentList[typeId].reset();
 	}
 }
 
-void GEntityDynamicArrayBase::doSetComponentsBuffer(GComponentsBuffer * newComponentsBuffer, GComponentsBuffer * oldComponentsBuffer)
+void GEntityDynamicArrayBase::doSetComponentsBuffer(GComponentManager * newComponentsBuffer, GComponentManager * oldComponentsBuffer)
 {
 	if(oldComponentsBuffer != nullptr) {
 		for(auto & component : this->componentList) {
@@ -72,14 +72,14 @@ GComponent * GEntityDynamicArrayBase::doGetComponentByTypeId(const unsigned int 
 }
 
 
-void GEntityDynamicMap::doAddComponent(GComponent * component, GComponentsBuffer * componentsBuffer)
+void GEntityDynamicMap::doAddComponent(GComponent * component, GComponentManager * componentManager)
 {
 	const unsigned int typeId = component->getTypeId();
 
 	auto it = this->componentMap.find(typeId);
 	if(it != this->componentMap.end()) {
-		if(componentsBuffer != nullptr) {
-			componentsBuffer->remove(it->second.get());
+		if(componentManager != nullptr) {
+			componentManager->remove(it->second.get());
 		}
 		it->second.reset(component);
 	}
@@ -87,25 +87,25 @@ void GEntityDynamicMap::doAddComponent(GComponent * component, GComponentsBuffer
 		this->componentMap.insert(std::make_pair(typeId, ComponentPointer(component)));
 	}
 
-	if(componentsBuffer != nullptr) {
-		componentsBuffer->add(component);
+	if(componentManager != nullptr) {
+		componentManager->add(component);
 	}
 
 }
 
-void GEntityDynamicMap::doRemoveComponent(GComponent * component, GComponentsBuffer * componentsBuffer)
+void GEntityDynamicMap::doRemoveComponent(GComponent * component, GComponentManager * componentManager)
 {
 	const unsigned int typeId = component->getTypeId();
 	auto it = this->componentMap.find(typeId);
 	if(it != this->componentMap.end()) {
-		if(componentsBuffer != nullptr) {
-			componentsBuffer->remove(component);
+		if(componentManager != nullptr) {
+			componentManager->remove(component);
 		}
 		it->second.reset();
 	}
 }
 
-void GEntityDynamicMap::doSetComponentsBuffer(GComponentsBuffer * newComponentsBuffer, GComponentsBuffer * oldComponentsBuffer)
+void GEntityDynamicMap::doSetComponentsBuffer(GComponentManager * newComponentsBuffer, GComponentManager * oldComponentsBuffer)
 {
 	if(oldComponentsBuffer != nullptr) {
 		for(auto & item : this->componentMap) {

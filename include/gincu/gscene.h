@@ -2,7 +2,7 @@
 #define GSCENE_H
 
 #include "gincu/ggeometry.h"
-#include "gincu/gcomponentsbuffer.h"
+#include "gincu/gcomponentmanager.h"
 
 #include "cpgf/tween/gtweenlist.h"
 
@@ -43,7 +43,7 @@ private:
 	virtual void doOnExit();
 
 private:
-	GComponentsBuffer componentsBuffer;
+	GComponentManager componentManager;
 	std::vector<EntityPointer> entityList;
 	GEntity * touchCapture;
 	cpgf::GTweenList tweenList;

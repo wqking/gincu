@@ -79,7 +79,7 @@ LOCAL_SRC_FILES := \
 	$(SRC_PATH)/gcomponentanchor.cpp \
 	$(SRC_PATH)/gcomponentanimation.cpp \
 	$(SRC_PATH)/gcomponentrender.cpp \
-	$(SRC_PATH)/gcomponentsbuffer.cpp \
+	$(SRC_PATH)/gcomponentmanager.cpp \
 	$(SRC_PATH)/gcomponenttouchhandler.cpp \
 	$(SRC_PATH)/gcomponenttransform.cpp \
 	$(SRC_PATH)/gentity.cpp \
