@@ -70,17 +70,22 @@ GComponentLocalTransform * TestCase_SceneGraph::createParentedObject(const GPoin
 	GEntity * entityA;
 	GEntity * entityB;
 	GEntity * entityD;
+
+	entityB = new GEntity();
 	this->getScene()->addEntity(
 		(entityA = new GEntity())
 		->addComponent(createComponent<GComponentTransform>())
 		->addComponent((result = createComponent<GComponentLocalTransform>(GPoint{x, y}))->setRotation(rotation)->setScale({ scale, scale }))
 		->addComponent(createComponent<GComponentAnchor>(anchor))
 		->addComponent(createAndLoadImageComponent(imageNameA))
-		->addComponent(createComponent<GComponentRendererTouchHandler>()->addOnTouch(createOnPressCallback([=](){ this->getTestBed()->print("clicked: imageA"); })))
+		->addComponent(createComponent<GComponentRendererTouchHandler>()->addOnTouch(createOnPressCallback([=](){
+			this->getTestBed()->print("clicked: imageA");
+			entityB->getComponentByType<GComponentLocalTransform>()->setVisible(! entityB->getComponentByType<GComponentLocalTransform>()->isVisible());
+		})))
 	);
 
 	this->getScene()->addEntity(
-		(entityB = new GEntity())
+		entityB
 		->addComponent(createComponent<GComponentTransform>())
 		->addComponent(createComponent<GComponentLocalTransform>(GPoint{0, yDelta})->setParent(entityA->getComponentByType<GComponentLocalTransform>()))
 		->addComponent(createComponent<GComponentAnchor>(anchor)->setFlipX(true))

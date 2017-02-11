@@ -99,10 +99,12 @@ void GComponentLocalTransform::applyGlobal()
 				GTransform parentTransform = parentGlobalTransform->getTransform();
 				parentTransform.translate(this->parent->getTransform().getOrigin());
 				globalTransform->setTransform(parentTransform.multiply(this->getTransform()));
+				globalTransform->setVisible(parentGlobalTransform->isVisible() && this->isVisible());
 			}
 		}
 		else {
 			globalTransform->setTransform(this->getTransform());
+			globalTransform->setVisible(this->isVisible());
 		}
 	}
 
