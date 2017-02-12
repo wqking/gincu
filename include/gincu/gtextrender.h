@@ -19,12 +19,11 @@ class GTextRender
 {
 public:
 	GTextRender();
-	explicit GTextRender(const int fontSize);
 	~GTextRender();
 
 	void setText(const std::string & text);
 	void setColor(const GColor textColor);
-	void setTextAndColor(const std::string & text, const GColor textColor);
+	void setFontSize(const int fontSize);
 
 	void draw(const GTransform & transform, const GRenderInfo * renderInfo);
 

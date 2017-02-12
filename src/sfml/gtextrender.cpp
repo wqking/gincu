@@ -12,15 +12,9 @@
 namespace gincu {
 
 GTextRender::GTextRender()
-	: GTextRender(16)
-{
-}
-
-GTextRender::GTextRender(const int fontSize)
 	:
 		data(std::make_shared<GTextRenderData>())
 {
-	this->data->text.setCharacterSize(fontSize);
 }
 
 GTextRender::~GTextRender()
@@ -40,10 +34,9 @@ void GTextRender::setColor(const GColor textColor)
 	this->data->text.setFillColor(gameColorToSfml(textColor));
 }
 
-void GTextRender::setTextAndColor(const std::string & text, const GColor textColor)
+void GTextRender::setFontSize(const int fontSize)
 {
-	this->setText(text);
-	this->setColor(textColor);
+	this->data->text.setCharacterSize(fontSize);
 }
 
 void GTextRender::draw(const GTransform & transform, const GRenderInfo * renderInfo)

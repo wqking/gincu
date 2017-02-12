@@ -11,6 +11,7 @@ class GFont
 {
 public:
 	GFont();
+	explicit GFont(const std::shared_ptr<GFontData> & data);
 	~GFont();
 
 	void setResource(const std::shared_ptr<GFontData> & data) { this->data = data; }

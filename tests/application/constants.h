@@ -14,6 +14,8 @@ constexpr int menuFontSize = 48;
 
 const std::string menuBackgroundImageName("matchthree/background.png");
 
+const std::string fontName("arialbd.ttf");
+
 } //namespace gincu
 
 #endif

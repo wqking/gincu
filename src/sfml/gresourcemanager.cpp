@@ -33,13 +33,13 @@ GResourceManager::~GResourceManager()
 GImage GResourceManager::getImage(const std::string & resourceName) const
 {
 	std::shared_ptr<GImageData> data;
-	auto it = this->imageResourceMap.find(resourceName);
-	if(it != this->imageResourceMap.end()) {
+	auto it = this->imageDataMap.find(resourceName);
+	if(it != this->imageDataMap.end()) {
 		data = it->second;
 	}
 	else {
 		data = std::make_shared<GImageData>();
-		this->imageResourceMap.insert(std::make_pair(resourceName, data));
+		this->imageDataMap.insert(std::make_pair(resourceName, data));
 		const std::string fileName = this->solveResourcePath(resourceName);
 		data->load(fileName);
 	}
@@ -51,14 +51,14 @@ GSpriteSheet GResourceManager::getSpriteSheet(const std::string & resourceName, 
 {
 	std::shared_ptr<GSpriteSheetData> data;
 
-	auto it = this->spriteSheetResourceMap.find(resourceName);
-	if(it != this->spriteSheetResourceMap.end()) {
+	auto it = this->spriteSheetDataMap.find(resourceName);
+	if(it != this->spriteSheetDataMap.end()) {
 		data = it->second;
 	}
 	else {
 		data = std::make_shared<GSpriteSheetData>();
 		data->load(resourceName, format);
-		this->spriteSheetResourceMap.insert(std::make_pair(resourceName, data));
+		this->spriteSheetDataMap.insert(std::make_pair(resourceName, data));
 	}
 
 	return GSpriteSheet(data);
@@ -71,14 +71,26 @@ GFileInputStream GResourceManager::getFileStream(const std::string & resourceNam
 	return stream;
 }
 
+GFont GResourceManager::getFont(const std::string & resourceName) const
+{
+	std::shared_ptr<GFontData> data;
+
+	auto it = this->fontDataMap.find(resourceName);
+	if(it != this->fontDataMap.end()) {
+		data = it->second;
+	}
+	else {
+		data = std::make_shared<GFontData>();
+		this->fontDataMap.insert(std::make_pair(resourceName, data));
+		data->font.loadFromFile(this->solveResourcePath(resourceName));
+	}
+
+	return GFont(data);
+}
+
 GFont GResourceManager::getFont() const
 {
-	if(! this->font) {
-		this->font.reset(new GFont());
-		this->font->getData()->font.loadFromFile(this->solveResourcePath("arialbd.ttf"));
-	}
-	
-	return *this->font.get();
+	return this->getFont(this->defaultFontName);
 }
 
 std::string GResourceManager::solveResourcePath(const std::string & resourceName) const

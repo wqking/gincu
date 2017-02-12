@@ -60,9 +60,9 @@ void MatchThreeInfoView::setRemainingSeconds(int seconds)
 	this->remainingSeconds = seconds;
 
 	const bool shouldWarn = (this->remainingSeconds <= 10);
-	this->timerEntity->getComponentByType<GComponentTextRender >()->getRender().setTextAndColor(
-		toString(this->remainingSeconds), (shouldWarn ? colorRed : colorBlack)
-	);
+	auto render = this->timerEntity->getComponentByType<GComponentTextRender >()->getRender();
+	render.setText(toString(this->remainingSeconds));
+	render.setColor(shouldWarn ? colorRed : colorBlack);
 
 	if(this->timerTimeLine != nullptr) {
 		getTweenListFromScene()->remove(*this->timerTimeLine);

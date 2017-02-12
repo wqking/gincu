@@ -1,5 +1,6 @@
 #include "mainapplication.h"
 #include "gincu/gscenemanager.h"
+#include "gincu/gresourcemanager.h"
 #include "scenelogo.h"
 #include "scenemenu.h"
 #include "constants.h"
@@ -34,6 +35,8 @@ MainApplication::~MainApplication()
 
 void MainApplication::doInitialize()
 {
+	GResourceManager::getInstance()->setDefaultFontName(fontName);
+
 	this->getSceneManager()->switchScene(new SceneLogo(true));
 }
 

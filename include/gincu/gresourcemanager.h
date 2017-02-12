@@ -15,6 +15,7 @@ namespace gincu {
 class GImage;
 class GImageData;
 class GSpriteSheetData;
+class GFontData;
 enum class GSpriteSheetFormat;
 
 class GResourceManager
@@ -33,17 +34,21 @@ public:
 
 	GFileInputStream getFileStream(const std::string & resourceName) const;
 
+	GFont getFont(const std::string & resourceName) const;
 	GFont getFont() const;
 
 	std::string solveResourcePath(const std::string & resourceName) const;
 
 	const std::string & getResourcePath() const { return this->resourcePath; }
 
+	void setDefaultFontName(const std::string & defaultFontName) { this->defaultFontName = defaultFontName; }
+
 private:
 	std::string resourcePath;
-	mutable std::map<std::string, std::shared_ptr<GImageData> > imageResourceMap;
-	mutable std::map<std::string, std::shared_ptr<GSpriteSheetData> > spriteSheetResourceMap;
-	mutable std::unique_ptr<GFont> font;
+	mutable std::map<std::string, std::shared_ptr<GImageData> > imageDataMap;
+	mutable std::map<std::string, std::shared_ptr<GSpriteSheetData> > spriteSheetDataMap;
+	mutable std::map<std::string, std::shared_ptr<GFontData> > fontDataMap;
+	std::string defaultFontName;
 };
 
 

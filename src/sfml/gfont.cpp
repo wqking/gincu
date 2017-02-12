@@ -9,6 +9,11 @@ GFont::GFont()
 {
 }
 
+GFont::GFont(const std::shared_ptr<GFontData> & data)
+	: data(data)
+{
+}
+
 GFont::~GFont()
 {
 }
