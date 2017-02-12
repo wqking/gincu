@@ -123,7 +123,7 @@ void * GHeapSizedPool::allocate(const std::size_t size)
 		ChunkHeader * chunkHeader = getChunkHeader(chunk);
 		chunkHeader->usedCount = 1;
 
-		G_LOG_DEBUG("Allocate new chunk: %p %p %u %u %p", chunk, (void *)this->chunkList.back().rawMemory.get(), size, this->blockTotalSize, this);
+//		G_LOG_DEBUG("Allocate new chunk: %p %p %u %u %p", chunk, (void *)this->chunkList.back().rawMemory.get(), size, this->blockTotalSize, this);
 
 		return setSize(chunk, size);
 	}
@@ -184,7 +184,7 @@ void GHeapSizedPool::doPurgeChunk(const int index)
 		}
 	}
 
-	G_LOG_DEBUG("Purged one chunk %d %p %d remain: %d", index, this->chunkList[index].start, this->blockTotalSize, this->chunkList.size() - 1);
+//	G_LOG_DEBUG("Purged one chunk %d %p %d remain: %d", index, this->chunkList[index].start, this->blockTotalSize, this->chunkList.size() - 1);
 
 	this->chunkList.erase(this->chunkList.begin() + index);
 }

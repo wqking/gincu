@@ -1,0 +1,8 @@
+animation_running_man 1 = 0 0 127 166
+animation_running_man 2 = 128 0 127 166
+animation_running_man 3 = 256 0 127 166
+animation_running_man 4 = 384 0 127 166
+animation_running_man 5 = 0 167 127 166
+animation_running_man 6 = 128 167 127 166
+animation_running_man 7 = 256 167 127 166
+animation_running_man 8 = 384 167 127 166

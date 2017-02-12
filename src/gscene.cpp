@@ -116,6 +116,15 @@ void GScene::removeEntity(GEntity * entity)
 	}
 }
 
+void GScene::removeAllEntities()
+{
+	this->componentManager.clear();
+	this->entityList.clear();
+	this->touchCapture = nullptr;
+	this->tweenList.clear();
+}
+
+
 cpgf::GTweenList * getTweenListFromScene()
 {
 	return GApplication::getInstance()->getSceneManager()->getCurrentScene()->getTweenList();

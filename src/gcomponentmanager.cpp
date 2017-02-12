@@ -42,6 +42,14 @@ void GComponentManager::remove(GComponent * component)
 	}
 }
 
+void GComponentManager::clear()
+{
+	this->componentListHotArray.clear();
+	this->componentListColdMap.clear();
+	this->rootTransformList.clear();
+	this->needSortRootTransformList = false;
+}
+
 void GComponentManager::parentChanged(GComponentLocalTransform * localTransform)
 {
 	GComponentTransform * transform = getComponentByTypeFromComponent<GComponentTransform>(localTransform);

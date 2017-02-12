@@ -23,6 +23,7 @@ public:
 
 	void add(GComponent * component);
 	void remove(GComponent * component);
+	void clear();
 
 	void parentChanged(GComponentLocalTransform * localTransform);
 	
