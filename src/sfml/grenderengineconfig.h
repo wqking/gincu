@@ -1,1 +1,1 @@
-#define GINCU_MULTI_THREAD_RENDER false
+#define GINCU_MULTI_THREAD_RENDER true

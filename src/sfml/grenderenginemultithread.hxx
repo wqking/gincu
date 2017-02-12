@@ -24,9 +24,7 @@ namespace {
 
 void threadMain(GRenderEngine * renderEngine)
 {
-//static int xxx = 0;
 	std::shared_ptr<GRenderEngineData> data = renderEngine->getData();
-	std::unique_lock<std::mutex> lock(data->updaterMutex);
 
 	data->processRenderCommands(); // just to draw background
 
@@ -35,14 +33,7 @@ void threadMain(GRenderEngine * renderEngine)
 			data->processRenderCommands();
 		}
 
-		data->renderReady = true;
-		data->renderReadySignal.notify_one();
-		while(! data->updaterReady && ! data->finished) {
-			data->updaterReadySignal.wait_for(lock, std::chrono::microseconds(1));
-//			data->updaterReadySignal.wait(lock);
-		}
-		data->renderReady = false;
-		data->updaterReady = false;
+		data->window->display();
 
 		{
 			std::lock_guard<std::mutex> lockGuard(data->updaterQueueMutex);
@@ -50,8 +41,9 @@ void threadMain(GRenderEngine * renderEngine)
 			data->updaterQueue->clear();
 		}
 
-		data->window->display();
-//printf("aaa %d\n", xxx++);
+		data->renderReadyLock.set();
+		data->updaterReadyLock.wait();
+		data->updaterReadyLock.reset();
 	}
 }
 
@@ -62,8 +54,6 @@ GRenderEngineData::GRenderEngineData()
 		window(),
 		view(),
 		finished(false),
-		updaterReady(false),
-		renderReady(false),
 		updaterQueue(nullptr),
 		renderQueue(nullptr)
 {
@@ -186,23 +176,19 @@ void GRenderEngine::doInitialize()
 void GRenderEngine::doFinalize()
 {
 	this->data->finished = true;
+	this->data->updaterReadyLock.set();
 }
 
 void GRenderEngine::render()
 {
 	{
 		std::lock_guard<std::mutex> lockGuard(this->data->updaterQueueMutex);
-
 		this->renderList();
 	}
 
-	std::unique_lock<std::mutex> lock(this->data->renderMutex);
-
-	this->data->updaterReady = true;
-	this->data->updaterReadySignal.notify_one();
-	while(! this->data->renderReady) {
-		this->data->renderReadySignal.wait(lock);
-	}
+	this->data->updaterReadyLock.set();
+	this->data->renderReadyLock.wait();
+	this->data->renderReadyLock.reset();
 }
 
 void GRenderEngine::draw(const GTextRender & text, const GTransform & transform, const GRenderInfo * renderInfo)

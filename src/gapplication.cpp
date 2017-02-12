@@ -70,7 +70,7 @@ void GApplication::finalize()
 
 void GApplication::processMainLoop()
 {
-	const unsigned int millisecondsPerFrame = 1000 / this->configInfo.framesPerSecond;
+	const unsigned int millisecondsPerFrame = (this->configInfo.framesPerSecond <= 0 ? 0 : 1000 / this->configInfo.framesPerSecond);
 	const unsigned int millisecondsPerRenderFrame = 1000 / this->configInfo.renderFramesPerSecond;
 
 	this->frameCount = 0;
@@ -100,7 +100,7 @@ void GApplication::processMainLoop()
 
 		this->updaterList();
 
-		if(this->configInfo.renderFramesPerSecond < 0
+		if(this->configInfo.renderFramesPerSecond <= 0
 			|| getMilliseconds() - lastRenderTime >= millisecondsPerRenderFrame) {
 			milliseconds = getMilliseconds();
 			this->renderMilliseconds = milliseconds - lastRenderTime;

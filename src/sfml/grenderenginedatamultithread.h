@@ -39,6 +39,31 @@ struct GRenderCommand
 	GRenderInfo renderInfo;
 };
 
+class GRenderEngineLock
+{
+public:
+	GRenderEngineLock() : value(false) {}
+
+	void set() {
+		this->value = true;
+		this->signal.notify_one();
+	}
+
+	void reset() {
+		this->value = false;
+	}
+
+	void wait() {
+		std::unique_lock<std::mutex> lock(this->mutex);
+		this->signal.wait(lock, [=]() { return (bool)this->value; });
+	}
+
+private:
+	std::atomic_bool value;
+	std::mutex mutex;
+	std::condition_variable signal;
+};
+
 class GRenderEngineData
 {
 private:
@@ -55,12 +80,8 @@ public:
 	sf::View view;
 
 	std::atomic_bool finished;
-	std::atomic_bool updaterReady;
-	std::atomic_bool renderReady;
-	std::mutex updaterMutex;
-	std::mutex renderMutex;
-	std::condition_variable updaterReadySignal;
-	std::condition_variable renderReadySignal;
+	GRenderEngineLock updaterReadyLock;
+	GRenderEngineLock renderReadyLock;
 	RenderCommandQueue queueStorage[2];
 	RenderCommandQueue * updaterQueue;
 	RenderCommandQueue * renderQueue;
