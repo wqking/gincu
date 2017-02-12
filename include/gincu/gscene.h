@@ -12,7 +12,7 @@
 namespace gincu {
 
 class GEntity;
-struct GTouchEvent;
+struct GEvent;
 
 class GScene
 {
@@ -28,7 +28,7 @@ public:
 
 	void renderScene();
 
-	void handleTouchEvent(const GTouchEvent & touchEvent);
+	void handleTouchEvent(const GEvent & touchEvent);
 
 	GEntity * addEntity(GEntity * entity);
 	void removeEntity(GEntity * entity);

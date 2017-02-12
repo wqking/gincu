@@ -9,6 +9,7 @@
 #include "gincu/gcomponenttransform.h"
 #include "gincu/gcomponenttouchhandler.h"
 #include "gincu/gcomponentanchor.h"
+#include "gincu/gevent.h"
 
 #include <algorithm>
 
@@ -51,8 +52,8 @@ void SceneMenu::doOnEnter()
 					->add(createRectRenderComponent(item.backgroundColor, tileSize))
 					->add(createAndLoadTextComponent(item.caption, colorBlue, menuFontSize))
 				)
-				->addComponent(createComponent<GComponentRendererTouchHandler>()->addOnTouch([=](const GTouchEvent & touchEvent) {
-					if(touchEvent.type == GTouchEventType::eventPressed) {
+				->addComponent(createComponent<GComponentRendererTouchHandler>()->addOnTouch([=](const GEvent & touchEvent) {
+					if(touchEvent.type == GEventType::touchPressed) {
 						item.callback();
 					}
 				}))

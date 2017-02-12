@@ -1,8 +1,8 @@
 #include "gincu/gapplication.h"
 #include "gincu/grenderengine.h"
 #include "gincu/gresourcemanager.h"
-#include "gincu/geventprocessor.h"
 #include "gincu/gscenemanager.h"
+#include "gincu/gevent.h"
 #include "gincu/gheappool.h"
 #include "gincu/gutil.h"
 #include "gincu/glog.h"
@@ -60,8 +60,6 @@ void GApplication::initialize()
 
 	this->sceneManager.reset(new GSceneManager());
 	
-	this->eventProcessor.reset(new GEventProcessor(this));
-	
 	this->doInitialize();
 }
 
@@ -96,7 +94,7 @@ void GApplication::processMainLoop()
 
 		const unsigned int frameBeginTime = getMilliseconds();
 
-		this->eventProcessor->processEvents();
+		this->processEvents();
 
 		cpgf::GTweenList::getInstance()->tick((cpgf::GTweenNumber)this->frameMilliseconds);
 
@@ -133,6 +131,27 @@ void GApplication::processMainLoop()
 
 			G_LOG_VERBOSE("FPS: %d RenderFPS: %d", this->frameRate, this->renderFrameRate);
 		}
+	}
+}
+
+void GApplication::processEvents()
+{
+	GEvent event;
+	while(this->renderEngine->peekEvent(&event)) {
+		switch(event.type) {
+		case GEventType::windowClosed:
+			this->finish();
+			break;
+
+		case GEventType::windowResized:
+			this->renderEngine->onWindowResized(GSize{ (GCoord)event.resize.width, (GCoord)event.resize.height });
+			break;
+
+		default:
+			break;
+		}
+
+		this->sceneManager->handleEvent(event);
 	}
 }
 

@@ -3,6 +3,7 @@
 #include "gincu/grenderengine.h"
 #include "gincu/gapplication.h"
 #include "gincu/gheappool.h"
+#include "gincu/gevent.h"
 
 namespace gincu {
 
@@ -75,10 +76,10 @@ void GSceneManager::render()
 	}
 }
 
-void GSceneManager::handleTouchEvent(const GTouchEvent & touchEvent)
+void GSceneManager::handleEvent(const GEvent & event)
 {
-	if(this->currentScene) {
-		this->currentScene->handleTouchEvent(touchEvent);
+	if(this->currentScene && isTouchEvent(event.type)) {
+		this->currentScene->handleTouchEvent(event);
 	}
 }
 

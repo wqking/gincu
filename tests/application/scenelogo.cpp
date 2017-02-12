@@ -9,6 +9,8 @@
 #include "gincu/gcomponenttransform.h"
 #include "gincu/gcomponenttouchhandler.h"
 #include "gincu/gcomponentanchor.h"
+#include "gincu/gevent.h"
+
 #include "cpgf/tween/gtimeline.h"
 #include "cpgf/tween/gtweenlist.h"
 #include "cpgf/tween/easing/quad.h"
@@ -158,9 +160,9 @@ void SceneLogo::doExitLogo()
 	SceneMenu::returnToMainMenu();
 }
 
-void SceneLogo::onPressAnyKey(const GTouchEvent & touchEvent)
+void SceneLogo::onPressAnyKey(const GEvent & touchEvent)
 {
-	if(touchEvent.type == GTouchEventType::eventPressed) {
+	if(touchEvent.type == GEventType::touchPressed) {
 		this->doExitLogo();
 	}
 }

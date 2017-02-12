@@ -10,8 +10,6 @@
 
 namespace gincu {
 
-struct GTouchEvent;
-
 class SceneMenu : public GScene
 {
 public:

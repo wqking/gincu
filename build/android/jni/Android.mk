@@ -66,7 +66,6 @@ LOCAL_SRC_FILES := \
 	$(SRC_PATH)/gspritesheetrender.cpp \
 	$(SRC_PATH)/grenderanchor.cpp \
 	$(SRC_PATH)/sfml/gengineutil.cpp \
-	$(SRC_PATH)/sfml/geventprocessor.cpp \
 	$(SRC_PATH)/sfml/gfont.cpp \
 	$(SRC_PATH)/sfml/gimage.cpp \
 	$(SRC_PATH)/sfml/ginputstream.cpp \

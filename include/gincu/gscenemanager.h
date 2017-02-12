@@ -10,7 +10,7 @@
 namespace gincu {
 
 class GScene;
-struct GTouchEvent;
+struct GEvent;
 
 class GSceneManager
 {
@@ -24,7 +24,7 @@ public:
 	void switchScene(GScene * scene);
 	void switchScene(const std::string & sceneName, const SceneCreator & creator);
 
-	void handleTouchEvent(const GTouchEvent & touchEvent);
+	void handleEvent(const GEvent & event);
 
 	GScene * getCurrentScene() const { return currentScene.get(); }
 

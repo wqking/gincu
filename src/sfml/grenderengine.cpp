@@ -6,6 +6,7 @@
 #include "gincu/grectrender.h"
 #include "gincu/gapplication.h"
 #include "gincu/grenderinfo.h"
+#include "gincu/gevent.h"
 #include "gsfmlutil.h"
 #include "gimagedata.h"
 #include "gtextrenderdata.h"
@@ -65,6 +66,68 @@ void GRenderEngine::inititialize()
 	this->doFitView();
 	
 	this->doInitialize();
+}
+
+bool GRenderEngine::peekEvent(GEvent * event)
+{
+	sf::Event e;
+
+	if(! GRenderEngine::getInstance()->getData()->window->pollEvent(e)) {
+		return false;
+	}
+
+	switch(e.type) {
+	case sf::Event::Closed:
+		event->type = GEventType::windowClosed;
+		break;
+
+	case sf::Event::MouseButtonPressed:
+	case sf::Event::MouseButtonReleased: {
+		event->touch = GTouchEvent();
+		event->type = (e.type == sf::Event::MouseButtonPressed ? GEventType::touchPressed : GEventType::touchReleased);
+		event->touch.down = (e.type == sf::Event::MouseButtonPressed);
+		event->touch.position = GRenderEngine::getInstance()->mapWindowToView({(GCoord)e.mouseButton.x, (GCoord)e.mouseButton.y});
+		break;
+	}
+
+	case sf::Event::MouseMoved: {
+		event->touch = GTouchEvent();
+		event->type = GEventType::touchMoved;
+		event->touch.down = sf::Mouse::isButtonPressed(sf::Mouse::Left);
+		event->touch.position = GRenderEngine::getInstance()->mapWindowToView({(GCoord)e.mouseMove.x, (GCoord)e.mouseMove.y});
+		break;
+	}
+
+	case sf::Event::TouchBegan:
+	case sf::Event::TouchEnded: {
+		event->touch = GTouchEvent();
+		event->type = (e.type == sf::Event::TouchBegan ? GEventType::touchPressed : GEventType::touchReleased);
+		event->touch.finger = e.touch.finger;
+		event->touch.down = (e.type == sf::Event::TouchBegan);
+		event->touch.position = GRenderEngine::getInstance()->mapWindowToView({(GCoord)e.touch.x, (GCoord)e.touch.y});
+
+		break;
+	}
+
+	case sf::Event::TouchMoved: {
+		event->touch = GTouchEvent();
+		event->type = GEventType::touchMoved;
+		event->touch.down = true;
+		event->touch.position = GRenderEngine::getInstance()->mapWindowToView({(GCoord)e.touch.x, (GCoord)e.touch.y});
+		break;
+	}
+
+	case sf::Event::Resized: {
+		event->type = GEventType::windowResized;
+		event->resize = GResizeEvent{ (GCoord)e.size.width, (GCoord)e.size.height };
+		break;
+	}
+
+	default:
+		break;
+	}
+
+	return true;
 }
 
 void GRenderEngine::appendRender(const cpgf::GCallback<void ()> & render)

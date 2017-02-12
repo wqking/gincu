@@ -7,7 +7,7 @@ namespace gincu {
 
 class SceneMatchThree;
 class GEntity;
-struct GTouchEvent;
+struct GEvent;
 
 class StateResult : public GState
 {
@@ -20,7 +20,7 @@ public:
 
 private:
 	void onBackgroundShown();
-	void onFinish(const GTouchEvent & touchEvent);
+	void onFinish(const GEvent & touchEvent);
 	void doCollectChesses();
 	void doShowMessage();
 

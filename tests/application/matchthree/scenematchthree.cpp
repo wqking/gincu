@@ -15,7 +15,6 @@
 #include "gincu/gscenemanager.h"
 #include "gincu/gutil.h"
 #include "gincu/gapplication.h"
-#include "gincu/gtouchevent.h"
 #include "cpgf/tween/gtweenlist.h"
 #include "cpgf/goutmain.h"
 
@@ -104,15 +103,15 @@ void SceneMatchThree::onQuitGameClicked()
 	this->roundStartMilliseconds = getMilliseconds() - secondsPerRound * 1000;
 }
 
-void SceneMatchThree::onChessTouched(const GTouchEvent & touchEvent)
+void SceneMatchThree::onChessTouched(const GEvent & touchEvent)
 {
 	if(this->stateMachine->getCurrentStateId() != stateMainLoop || isTimeUp()) {
 		return;
 	}
 
 	switch(touchEvent.type) {
-	case GTouchEventType::eventPressed:
-		if(touchEvent.touchedEntity == nullptr || touchEvent.touchedEntity->getComponentByType<ComponentChess>() == nullptr) {
+	case GEventType::touchPressed:
+		if(touchEvent.touch.touchedEntity == nullptr || touchEvent.touch.touchedEntity->getComponentByType<ComponentChess>() == nullptr) {
 			this->restoreTouchedChessList();
 			this->clearTouchedChessList();
 		}
@@ -120,55 +119,55 @@ void SceneMatchThree::onChessTouched(const GTouchEvent & touchEvent)
 			if(this->touchedChessList.size() == 1) {
 				GEntity * chessA = touchedChessList[0];
 				RowColumn cellA = board->getChessCell(chessA);
-				RowColumn cellB = board->getChessCell(touchEvent.touchedEntity);
+				RowColumn cellB = board->getChessCell(touchEvent.touch.touchedEntity);
 
-				if(chessA == touchEvent.touchedEntity || ! areCellsNeighbors(cellA, cellB)) {
+				if(chessA == touchEvent.touch.touchedEntity || ! areCellsNeighbors(cellA, cellB)) {
 					this->restoreTouchedChessList();
 					this->clearTouchedChessList();
 				}
 
-				if(chessA == touchEvent.touchedEntity) {
+				if(chessA == touchEvent.touch.touchedEntity) {
 					break;
 				}
 			}
 			if(this->touchedChessList.empty()) {
-				touchEvent.touchedEntity->getComponentByType<GComponentTransform>()->setScale(GScale { 1.2f, 1.2f });
+				touchEvent.touch.touchedEntity->getComponentByType<GComponentTransform>()->setScale(GScale { 1.2f, 1.2f });
 			}
 
-			this->touchedChessList.push_back(touchEvent.touchedEntity);
-			this->setTouchCapture(touchEvent.touchedEntity);
+			this->touchedChessList.push_back(touchEvent.touch.touchedEntity);
+			this->setTouchCapture(touchEvent.touch.touchedEntity);
 
-			this->previousTouchPosition = touchEvent.position;
+			this->previousTouchPosition = touchEvent.touch.position;
 		}
 		break;
 
-	case GTouchEventType::eventReleased:
+	case GEventType::touchReleased:
 		this->previousTouchPosition.x = -1;
-		if(touchEvent.touchedEntity == nullptr || touchEvent.touchedEntity->getComponentByType<ComponentChess>() == nullptr) {
+		if(touchEvent.touch.touchedEntity == nullptr || touchEvent.touch.touchedEntity->getComponentByType<ComponentChess>() == nullptr) {
 			this->restoreTouchedChessList();
 			this->clearTouchedChessList();
 		}
 		else {
 			if(! this->touchedChessList.empty()) {
-				if(this->touchedChessList.back() != touchEvent.touchedEntity) {
-					this->touchedChessList.push_back(touchEvent.touchedEntity);
+				if(this->touchedChessList.back() != touchEvent.touch.touchedEntity) {
+					this->touchedChessList.push_back(touchEvent.touch.touchedEntity);
 					this->setTouchCapture(nullptr);
 				}
 			}
 		}
 		break;
 
-	case GTouchEventType::eventMoved:
+	case GEventType::touchMoved:
 		if(this->previousTouchPosition.x > 0
 			&& this->touchedChessList.size() == 1
-			&& this->touchedChessList.back() != touchEvent.touchedEntity
+			&& this->touchedChessList.back() != touchEvent.touch.touchedEntity
 			) {
 			const RowColumn cell = this->board->getChessCell(this->touchedChessList.back());
-			const GCoord deltaX = fabs(touchEvent.position.x - this->previousTouchPosition.x);
-			const GCoord deltaY = fabs(touchEvent.position.y - this->previousTouchPosition.y);
+			const GCoord deltaX = fabs(touchEvent.touch.position.x - this->previousTouchPosition.x);
+			const GCoord deltaY = fabs(touchEvent.touch.position.y - this->previousTouchPosition.y);
 			RowColumn cellToSwap = cell;
 			if(deltaX > deltaY) {
-				if(touchEvent.position.x > this->previousTouchPosition.x) {
+				if(touchEvent.touch.position.x > this->previousTouchPosition.x) {
 					++cellToSwap.column;
 				}
 				else {
@@ -176,7 +175,7 @@ void SceneMatchThree::onChessTouched(const GTouchEvent & touchEvent)
 				}
 			}
 			else {
-				if(touchEvent.position.y > this->previousTouchPosition.y) {
+				if(touchEvent.touch.position.y > this->previousTouchPosition.y) {
 					++cellToSwap.row;
 				}
 				else {

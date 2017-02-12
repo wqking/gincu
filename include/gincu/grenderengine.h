@@ -20,6 +20,7 @@ class GTextRender;
 class GRectRender;
 class GSpriteSheetRender;
 struct GRenderInfo;
+struct GEvent;
 
 class GRenderEngine
 {
@@ -34,6 +35,8 @@ public:
 	void inititialize();
 
 	void render();
+
+	bool peekEvent(GEvent * event);
 
 	void appendRender(const cpgf::GCallback<void ()> & render);
 	void removeRender(const cpgf::GCallback<void ()> & render);

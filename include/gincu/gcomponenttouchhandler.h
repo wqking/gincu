@@ -2,7 +2,7 @@
 #define GCOMPONENTTOUCHHANDLER_H
 
 #include "gincu/gcomponent.h"
-#include "gincu/gtouchevent.h"
+#include "gincu/ggeometry.h"
 
 #include "cpgf/gcallbacklist.h"
 
@@ -10,14 +10,16 @@
 
 namespace gincu {
 
+struct GEvent;
+
 class GComponentTouchHandler : public GComponent
 {
 private:
 	typedef GComponent super;
 
 public:
-	typedef cpgf::GCallback<void (const GTouchEvent &)> OnTouched;
-	typedef cpgf::GCallbackList<void (const GTouchEvent &)> OnTouchedList;
+	typedef cpgf::GCallback<void (const GEvent &)> OnTouched;
+	typedef cpgf::GCallbackList<void (const GEvent &)> OnTouchedList;
 
 public:
 	inline static constexpr unsigned int getComponentType() {
@@ -31,7 +33,7 @@ public:
 	void removeOnTouch(const OnTouched & onTouch);
 
 	bool canHandle(const GPoint & point) const;
-	void handle(const GTouchEvent & touchEvent);
+	void handle(const GEvent & touchEvent);
 
 private:
 	virtual bool doCanHandle(const GPoint & point) const = 0;

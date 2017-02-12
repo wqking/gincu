@@ -14,9 +14,9 @@ enum class GTouchEventType
 
 class GEntity;
 
-struct GTouchEvent
+struct GTouchEventOld
 {
-	GTouchEvent()
+	GTouchEventOld()
 		:
 			type(GTouchEventType::eventMoved),
 			down(false),

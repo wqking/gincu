@@ -12,7 +12,7 @@ namespace gincu {
 class MatchThreeBoard;
 class MatchThreeInfoView;
 class GStateMachine;
-struct GTouchEvent;
+struct GEvent;
 
 class SceneMatchThree : public GScene
 {
@@ -20,7 +20,7 @@ public:
 	SceneMatchThree();
 	~SceneMatchThree();
 
-	void onChessTouched(const GTouchEvent & touchEvent);
+	void onChessTouched(const GEvent & touchEvent);
 
 	void clearTouchedChessList();
 

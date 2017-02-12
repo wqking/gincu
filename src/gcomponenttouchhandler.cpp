@@ -32,7 +32,7 @@ bool GComponentTouchHandler::canHandle(const GPoint & point) const
 	return doCanHandle(point);
 }
 
-void GComponentTouchHandler::handle(const GTouchEvent & touchEvent)
+void GComponentTouchHandler::handle(const GEvent & touchEvent)
 {
 	// The touch handler may be freed during event handling,
 	// so we have to cache the callback list in a local variable.

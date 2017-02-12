@@ -5,7 +5,7 @@
 #include "scenemenu.h"
 #include "matchthree/matchthreeconsts.h"
 #include "gincu/gapplication.h"
-#include "gincu/gtouchevent.h"
+#include "gincu/gevent.h"
 #include "gincu/gentity.h"
 #include "gincu/gcomponentrender.h"
 #include "gincu/gcomponenttransform.h"
@@ -54,9 +54,9 @@ void StateResult::onBackgroundShown()
 	this->scene->setTouchCapture(this->textEntity);
 }
 
-void StateResult::onFinish(const GTouchEvent & touchEvent)
+void StateResult::onFinish(const GEvent & touchEvent)
 {
-	if(touchEvent.type == GTouchEventType::eventPressed) {
+	if(touchEvent.type == GEventType::touchPressed) {
 		SceneMenu::returnToMainMenu();
 		this->gotoNext();
 	}

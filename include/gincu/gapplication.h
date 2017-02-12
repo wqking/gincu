@@ -15,7 +15,6 @@ namespace gincu {
 class GRenderEngine;
 class GResourceManager;
 class GSceneManager;
-class GEventProcessor;
 class GHeapPool;
 
 typedef cpgf::GCallback<void ()> FrameUpdater;
@@ -54,6 +53,7 @@ private:
 	void initialize();
 	void finalize();
 	void processMainLoop();
+	void processEvents();
 
 private:
 	virtual void doInitialize();
@@ -67,7 +67,6 @@ private:
 	std::unique_ptr<GRenderEngine> renderEngine;
 	std::unique_ptr<GResourceManager> resourceManager;
 	std::unique_ptr<GSceneManager> sceneManager;
-	std::unique_ptr<GEventProcessor> eventProcessor;
 
 	bool finished;
 	int64_t frameCount;

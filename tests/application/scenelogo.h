@@ -5,7 +5,7 @@
 
 namespace gincu {
 
-struct GTouchEvent;
+struct GEvent;
 
 class SceneLogo : public GScene
 {
@@ -15,7 +15,7 @@ public:
 
 private:
 	void doExitLogo();
-	void onPressAnyKey(const GTouchEvent & touchEvent);
+	void onPressAnyKey(const GEvent & touchEvent);
 
 private:
 	virtual void doOnEnter() override;

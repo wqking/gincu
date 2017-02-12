@@ -3,6 +3,7 @@
 #include "gincu/gcomponenttouchhandler.h"
 #include "gincu/gapplication.h"
 #include "gincu/gscenemanager.h"
+#include "gincu/gevent.h"
 
 namespace gincu {
 
@@ -56,31 +57,31 @@ GEntity * GScene::getTouchCapture() const
 	return touchCapture;
 }
 
-void GScene::handleTouchEvent(const GTouchEvent & touchEvent)
+void GScene::handleTouchEvent(const GEvent & touchEvent)
 {
 	std::vector<GComponentTouchHandler *> handlerList;
 
-	this->componentManager.findTouchHandlers(touchEvent.position, &handlerList);
+	this->componentManager.findTouchHandlers(touchEvent.touch.position, &handlerList);
 
-	GTouchEvent tempEvent = touchEvent;
+	GEvent tempEvent = touchEvent;
 
 	if(handlerList.empty()) {
 		if(this->touchCapture != nullptr) {
-			tempEvent.touchedEntity = nullptr;
-			tempEvent.target = this->touchCapture;
+			tempEvent.touch.touchedEntity = nullptr;
+			tempEvent.touch.target = this->touchCapture;
 			this->touchCapture->getComponentByType<GComponentTouchHandler>()->handle(tempEvent);
 		}
 	}
 	else {
 		for(auto it = handlerList.begin(); it != handlerList.end(); ++it) {
 			tempEvent.propagation = false;
-			tempEvent.touchedEntity = (*it)->getEntity();
+			tempEvent.touch.touchedEntity = (*it)->getEntity();
 			if(this->touchCapture == nullptr) {
-				tempEvent.target = tempEvent.touchedEntity;
+				tempEvent.touch.target = tempEvent.touch.touchedEntity;
 				(*it)->handle(tempEvent);
 			}
 			else {
-				tempEvent.target = this->touchCapture;
+				tempEvent.touch.target = this->touchCapture;
 				this->touchCapture->getComponentByType<GComponentTouchHandler>()->handle(tempEvent);
 			}
 
