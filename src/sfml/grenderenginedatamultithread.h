@@ -17,6 +17,7 @@ namespace gincu {
 enum class GRenderCommandType
 {
 	none,
+	vertexTexture,
 	image,
 	text,
 	rect
@@ -26,14 +27,35 @@ class GImageData;
 class GTextRenderData;
 class GRectRenderData;
 
+class GVertexData
+{
+public:
+	GVertexData() {}
+	explicit GVertexData(const std::shared_ptr<GImageData> & imageData)
+		: count(0), vertexList(), imageData(imageData)
+	{}
+
+	std::size_t count;
+	std::vector<sf::Vertex> vertexList;
+	std::shared_ptr<GImageData> imageData;
+};
+
 struct GRenderCommand
 {
 	GRenderCommand() {}
 
+	GRenderCommand(const std::shared_ptr<GVertexData> & vertexData, const sf::RenderStates & renderStates)
+		:
+			type(GRenderCommandType::vertexTexture),
+			renderData(vertexData),
+			sfmlRenderStates(renderStates)
+	{
+	}
+
 	GRenderCommand(const std::shared_ptr<GImageData> & imageData, const GRect & rect, const GTransform & transform, const GRenderInfo * renderInfo)
 		:
 			type(GRenderCommandType::image),
-			imageData(imageData),
+			renderData(imageData),
 			rect(rect),
 			sfmlRenderStates(transform.getSfmlTransform())
 	{
@@ -43,7 +65,7 @@ struct GRenderCommand
 	GRenderCommand(const std::shared_ptr<GTextRenderData> & textData, const GTransform & transform, const GRenderInfo * renderInfo)
 		:
 			type(GRenderCommandType::text),
-			textData(textData),
+			renderData(textData),
 			sfmlRenderStates(transform.getSfmlTransform())
 	{
 		copyBlendAndShaderToSfml(&this->sfmlRenderStates, renderInfo);
@@ -52,7 +74,7 @@ struct GRenderCommand
 	GRenderCommand(const std::shared_ptr<GRectRenderData> & rectData, const GTransform & transform, const GRenderInfo * renderInfo)
 		:
 			type(GRenderCommandType::rect),
-			rectData(rectData),
+			renderData(rectData),
 			sfmlRenderStates(transform.getSfmlTransform())
 	{
 		copyBlendAndShaderToSfml(&this->sfmlRenderStates, renderInfo);
@@ -60,9 +82,7 @@ struct GRenderCommand
 
 	GRenderCommandType type;
 
-	std::shared_ptr<GImageData> imageData;
-	std::shared_ptr<GTextRenderData> textData;
-	std::shared_ptr<GRectRenderData> rectData;
+	std::shared_ptr<void> renderData;
 
 	GRect rect;
 	sf::RenderStates sfmlRenderStates;
@@ -110,7 +130,6 @@ public:
 
 	std::atomic_bool finished;
 	GRenderEngineLock updaterReadyLock;
-	GRenderEngineLock renderReadyLock;
 	RenderCommandQueue queueStorage[2];
 	RenderCommandQueue * updaterQueue;
 	RenderCommandQueue * renderQueue;

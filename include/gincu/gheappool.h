@@ -84,6 +84,20 @@ private:
 	std::map<std::size_t, std::unique_ptr<GHeapSizedPool> > poolMap;
 };
 
+template <typename T, typename... Params>
+T * allocateObjectOnHeapPool(Params... params)
+{
+	void * p = GHeapPool::getInstance()->allocate(sizeof(T));
+	return new (p) T (std::forward<Params>(params)...);
+}
+
+template <typename T>
+void freeObjectOnHeapPool(T * obj)
+{
+	obj->~T();
+	GHeapPool::getInstance()->free(obj);
+}
+
 
 } //namespace gincu
 

@@ -13,7 +13,7 @@ ROOT_PATH := E:\projects\gincu
 SRC_PATH := $(ROOT_PATH)\src
 TESTS_PATH := $(ROOT_PATH)\tests
 
-LOCAL_CFLAGS += -fexceptions -std=c++11 \
+LOCAL_CFLAGS += -O3 -fexceptions -std=c++11 \
 #	-DGINCU_LOG_LEVEL=G_LOG_LEVEL_DEBUG \
 #	-DGINCU_ENTITY_STORAGE_POLICY=mixedArray \
 #	-DGINCU_ENTITY_STORAGE_POLICY_INITIAL_SIZE=componentTypeId_PrimaryCount \

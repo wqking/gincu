@@ -7,11 +7,10 @@ set(TESTS_PATH ${ROOT_PATH}/tests)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${BIN_PATH})
 
-set(GINCU_COMPILE_FLAGS "-Wall -Wextra -Wundef -O0")
 set(LIBS )
 
 if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-	set(GINCU_COMPILE_FLAGS "-Wall -Wextra -Wundef -O0")
+	set(GINCU_COMPILE_FLAGS "-Wall -Wextra -Wundef -O3")
 	if(MINGW)
 		set(GINCU_COMPILE_FLAGS "${GINCU_COMPILE_FLAGS} -std=gnu++0x")
 	else(MINGW)

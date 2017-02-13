@@ -6,6 +6,7 @@
 #include "gincu/grectrender.h"
 #include "gincu/gapplication.h"
 #include "gincu/grenderinfo.h"
+#include "gincu/gheappool.h"
 #include "gincu/glog.h"
 #include "gsfmlutil.h"
 #include "gimagedata.h"
@@ -29,22 +30,46 @@ void threadMain(GRenderEngine * renderEngine)
 	data->processRenderCommands(); // just to draw background
 
 	while(! data->finished) {
+		data->updaterReadyLock.wait();
+		data->updaterReadyLock.reset();
+
 		if(! data->renderQueue->empty()) {
 			data->processRenderCommands();
+			data->window->display();
+			data->renderQueue->clear();
 		}
-
-		data->window->display();
 
 		{
 			std::lock_guard<std::mutex> lockGuard(data->updaterQueueMutex);
 			std::swap(data->renderQueue, data->updaterQueue);
-			data->updaterQueue->clear();
 		}
-
-		data->renderReadyLock.set();
-		data->updaterReadyLock.wait();
-		data->updaterReadyLock.reset();
 	}
+}
+
+template <typename T>
+int putImageToVertexArray(T & vertexArray, int index, const sf::Transform & transform, const GRect & rect)
+{
+	vertexArray[index].position = transform.transformPoint({ 0, 0 });
+	vertexArray[index].texCoords = { rect.x, rect.y };
+	++index;
+	vertexArray[index].position = transform.transformPoint({ rect.width, 0 });
+	vertexArray[index].texCoords = { rect.x + rect.width, rect.y };
+	++index;
+	vertexArray[index].position = transform.transformPoint({ rect.width, rect.height });
+	vertexArray[index].texCoords = { rect.x + rect.width, rect.y + rect.height };
+	++index;
+
+	vertexArray[index].position = transform.transformPoint({ rect.width, rect.height });
+	vertexArray[index].texCoords = { rect.x + rect.width, rect.y + rect.height };
+	++index;
+	vertexArray[index].position = transform.transformPoint({ 0, rect.height });
+	vertexArray[index].texCoords = { rect.x, rect.y + rect.height };
+	++index;
+	vertexArray[index].position = transform.transformPoint({ 0, 0 });
+	vertexArray[index].texCoords = { rect.x, rect.y };
+	++index;
+	
+	return index;
 }
 
 } //unnamed namespace
@@ -81,7 +106,7 @@ void GRenderEngineData::processRenderCommands()
 			while(k < count) {
 				const GRenderCommand & nextCommand = this->renderQueue->at(k);
 				if(nextCommand.type != command.type
-					|| nextCommand.imageData != command.imageData
+					|| nextCommand.renderData != command.renderData
 					|| nextCommand.sfmlRenderStates.blendMode != command.sfmlRenderStates.blendMode
 					|| nextCommand.sfmlRenderStates.shader != command.sfmlRenderStates.shader
 				) {
@@ -96,21 +121,25 @@ void GRenderEngineData::processRenderCommands()
 				i = k;
 			}
 			else {
-				sf::Sprite sprite(command.imageData->texture, { (int)command.rect.x, (int)command.rect.y, (int)command.rect.width, (int)command.rect.height });
+				sf::Sprite sprite(static_cast<GImageData *>(command.renderData.get())->texture, { (int)command.rect.x, (int)command.rect.y, (int)command.rect.width, (int)command.rect.height });
 				this->window->draw(sprite, command.sfmlRenderStates);
 			}
 		}
 			break;
 
 		case GRenderCommandType::text: {
-			this->window->draw(command.textData->text, command.sfmlRenderStates);
+			this->window->draw(static_cast<GTextRenderData *>(command.renderData.get())->text, command.sfmlRenderStates);
 			break;
 		}
 
 		case GRenderCommandType::rect: {
-//			sf::RenderStates renderStates(command.sfmlTransform);
-//			copyBlendAndShaderToSfml(&renderStates, &command.renderInfo);
-			this->window->draw(command.rectData->rectangle, command.sfmlRenderStates);
+			this->window->draw(static_cast<GRectRenderData *>(command.renderData.get())->rectangle, command.sfmlRenderStates);
+			break;
+		}
+
+		case GRenderCommandType::vertexTexture: {
+			GVertexData * vertexData = static_cast<GVertexData *>(command.renderData.get());
+			this->window->draw(&vertexData->vertexList[0], vertexData->count, sf::Triangles, command.sfmlRenderStates);
 			break;
 		}
 
@@ -133,29 +162,11 @@ void GRenderEngineData::batchDrawImages(const int firstIndex, const int lastInde
 		const GRenderCommand & command = this->renderQueue->at(i + firstIndex);
 		const GRect & rect = command.rect;
 
-		vertexArray[index].position = command.sfmlRenderStates.transform.transformPoint({ 0, 0 });
-		vertexArray[index].texCoords = { rect.x, rect.y };
-		++index;
-		vertexArray[index].position = command.sfmlRenderStates.transform.transformPoint({ rect.width, 0 });
-		vertexArray[index].texCoords = { rect.x + rect.width, rect.y };
-		++index;
-		vertexArray[index].position = command.sfmlRenderStates.transform.transformPoint({ rect.width, rect.height });
-		vertexArray[index].texCoords = { rect.x + rect.width, rect.y + rect.height };
-		++index;
-
-		vertexArray[index].position = command.sfmlRenderStates.transform.transformPoint({ rect.width, rect.height });
-		vertexArray[index].texCoords = { rect.x + rect.width, rect.y + rect.height };
-		++index;
-		vertexArray[index].position = command.sfmlRenderStates.transform.transformPoint({ 0, rect.height });
-		vertexArray[index].texCoords = { rect.x, rect.y + rect.height };
-		++index;
-		vertexArray[index].position = command.sfmlRenderStates.transform.transformPoint({ 0, 0 });
-		vertexArray[index].texCoords = { rect.x, rect.y };
-		++index;
+		index = putImageToVertexArray(vertexArray, index, command.sfmlRenderStates.transform, rect);
 	}
 
 	const GRenderCommand & command = this->renderQueue->at(firstIndex);
-	sf::RenderStates renderStates(&command.imageData->texture);
+	sf::RenderStates renderStates(&static_cast<GImageData *>(command.renderData.get())->texture);
 	renderStates.blendMode = command.sfmlRenderStates.blendMode;
 	renderStates.shader = command.sfmlRenderStates.shader;
 	this->window->draw(vertexArray, renderStates);
@@ -180,12 +191,14 @@ void GRenderEngine::render()
 {
 	{
 		std::lock_guard<std::mutex> lockGuard(this->data->updaterQueueMutex);
+
+		// in case the render thread is too slow to render last frame, let's discard the old frame.
+		this->data->updaterQueue->clear();
+
 		this->renderList();
 	}
 
 	this->data->updaterReadyLock.set();
-	this->data->renderReadyLock.wait();
-	this->data->renderReadyLock.reset();
 }
 
 void GRenderEngine::draw(const GTextRender & text, const GTransform & transform, const GRenderInfo * renderInfo)
@@ -201,6 +214,44 @@ void GRenderEngine::draw(const GRectRender & rect, const GTransform & transform,
 void GRenderEngine::doDrawTexture(const std::shared_ptr<GImageData> & texture, const GRect & rect, const GTransform & transform, const GRenderInfo * renderInfo)
 {
 	this->data->updaterQueue->emplace_back(texture, rect, transform, renderInfo);
+return;
+
+	sf::RenderStates sfmlRenderStates;
+	copyBlendAndShaderToSfml(&sfmlRenderStates, renderInfo);
+	
+	bool needNew = false;
+	if(this->data->updaterQueue->empty()) {
+		needNew = true;
+	}
+	else {
+		GRenderCommand & command = this->data->updaterQueue->back();
+		if(command.type != GRenderCommandType::vertexTexture
+			|| static_cast<GVertexData *>(command.renderData.get())->imageData != texture
+			|| sfmlRenderStates.blendMode != command.sfmlRenderStates.blendMode
+			|| sfmlRenderStates.shader != command.sfmlRenderStates.shader
+		) {
+			needNew = true;
+		}
+		else {
+			GVertexData * vertexData = static_cast<GVertexData *>(command.renderData.get());
+			const int index = (int)vertexData->count;
+			if(vertexData->count + 6 >= vertexData->vertexList.size()) {
+				vertexData->vertexList.resize(vertexData->count + 64);
+			}
+			vertexData->count += 6;
+			putImageToVertexArray(vertexData->vertexList, index, transform.getSfmlTransform(), rect);
+		}
+	}
+	
+	if(needNew) {
+		std::shared_ptr<GVertexData> vertexData(new GVertexData{texture});
+//		std::shared_ptr<GVertexData> vertexData(allocateObjectOnHeapPool<GVertexData>(sf::VertexArray(sf::Triangles), texture), &freeObjectOnHeapPool<GVertexData>);
+		vertexData->count = 6;
+		vertexData->vertexList.resize(64);
+		putImageToVertexArray(vertexData->vertexList, 0, transform.getSfmlTransform(), rect);
+		sfmlRenderStates.texture = &texture->texture;
+		this->data->updaterQueue->emplace_back(vertexData, sfmlRenderStates);
+	}
 }
 
 
