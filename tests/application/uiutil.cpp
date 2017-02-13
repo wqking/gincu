@@ -19,7 +19,7 @@ gincu::GEntity * createBackButton(const cpgf::GCallback<void ()> & onClick)
 	return (new GEntity())
 		->addComponent(createComponent<GComponentTransform>(GPoint{ 40, 40 }))
 		->addComponent(createComponent<GComponentAnchor>(GRenderAnchor::center))
-		->addComponent(createSpriteSheetComponent(GResourceManager::getInstance()->getSpriteSheet("ui_spritesheet", GSpriteSheetFormat::spritePackText), "back_button"))
+		->addComponent(createAtlasRenderComponent(GResourceManager::getInstance()->getAtlas("ui_atlas", GAtlasFormat::spritePackText), "back_button"))
 		->addComponent(createComponent<GComponentRendererTouchHandler>()->addOnTouch(createOnPressCallback(onClick))
 	);
 }

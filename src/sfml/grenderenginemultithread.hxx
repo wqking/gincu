@@ -1,7 +1,7 @@
 #include "gincu/grenderengine.h"
 #include "gincu/gtransform.h"
 #include "gincu/gimage.h"
-#include "gincu/gspritesheetrender.h"
+#include "gincu/gatlasrender.h"
 #include "gincu/gtextrender.h"
 #include "gincu/grectrender.h"
 #include "gincu/gapplication.h"
@@ -94,9 +94,8 @@ void GRenderEngineData::processRenderCommands()
 				i = k;
 			}
 			else {
-				const sf::Transform & sfmlTransform = command.transform.getSfmlTransform();
 				sf::Sprite sprite(command.imageData->texture, { (int)command.rect.x, (int)command.rect.y, (int)command.rect.width, (int)command.rect.height });
-				sf::RenderStates renderStates(sfmlTransform);
+				sf::RenderStates renderStates(command.sfmlTransform);
 				copyBlendAndShaderToSfml(&renderStates, &command.renderInfo);
 				this->window->draw(sprite, renderStates);
 			}
@@ -104,14 +103,14 @@ void GRenderEngineData::processRenderCommands()
 			break;
 
 		case GRenderCommandType::text: {
-			sf::RenderStates renderStates(command.transform.getSfmlTransform());
+			sf::RenderStates renderStates(command.sfmlTransform);
 			copyBlendAndShaderToSfml(&renderStates, &command.renderInfo);
 			this->window->draw(command.textData->text, renderStates);
 			break;
 		}
 
 		case GRenderCommandType::rect: {
-			sf::RenderStates renderStates(command.transform.getSfmlTransform());
+			sf::RenderStates renderStates(command.sfmlTransform);
 			copyBlendAndShaderToSfml(&renderStates, &command.renderInfo);
 			this->window->draw(command.rectData->rectangle, renderStates);
 			break;
@@ -134,26 +133,25 @@ void GRenderEngineData::batchDrawImages(const int firstIndex, const int lastInde
 	int index = 0;
 	for(int i = 0; i < count; ++i) {
 		const GRenderCommand & command = this->renderQueue->at(i + firstIndex);
-		const sf::Transform & sfmlTransform = command.transform.getSfmlTransform();
 		const GRect & rect = command.rect;
 
-		vertexArray[index].position = sfmlTransform.transformPoint({ 0, 0 });
+		vertexArray[index].position = command.sfmlTransform.transformPoint({ 0, 0 });
 		vertexArray[index].texCoords = { rect.x, rect.y };
 		++index;
-		vertexArray[index].position = sfmlTransform.transformPoint({ rect.width, 0 });
+		vertexArray[index].position = command.sfmlTransform.transformPoint({ rect.width, 0 });
 		vertexArray[index].texCoords = { rect.x + rect.width, rect.y };
 		++index;
-		vertexArray[index].position = sfmlTransform.transformPoint({ rect.width, rect.height });
+		vertexArray[index].position = command.sfmlTransform.transformPoint({ rect.width, rect.height });
 		vertexArray[index].texCoords = { rect.x + rect.width, rect.y + rect.height };
 		++index;
 
-		vertexArray[index].position = sfmlTransform.transformPoint({ rect.width, rect.height });
+		vertexArray[index].position = command.sfmlTransform.transformPoint({ rect.width, rect.height });
 		vertexArray[index].texCoords = { rect.x + rect.width, rect.y + rect.height };
 		++index;
-		vertexArray[index].position = sfmlTransform.transformPoint({ 0, rect.height });
+		vertexArray[index].position = command.sfmlTransform.transformPoint({ 0, rect.height });
 		vertexArray[index].texCoords = { rect.x, rect.y + rect.height };
 		++index;
-		vertexArray[index].position = sfmlTransform.transformPoint({ 0, 0 });
+		vertexArray[index].position = command.sfmlTransform.transformPoint({ 0, 0 });
 		vertexArray[index].texCoords = { rect.x, rect.y };
 		++index;
 	}
@@ -196,7 +194,7 @@ void GRenderEngine::draw(const GTextRender & text, const GTransform & transform,
 	GRenderCommand command;
 	command.type = GRenderCommandType::text;
 	command.textData = text.getData();
-	command.transform = transform;
+	command.sfmlTransform = transform.getSfmlTransform();
 	command.renderInfo = *renderInfo;
 
 	this->data->updaterQueue->push_back(command);
@@ -207,7 +205,7 @@ void GRenderEngine::draw(const GRectRender & rect, const GTransform & transform,
 	GRenderCommand command;
 	command.type = GRenderCommandType::rect;
 	command.rectData = rect.getData();
-	command.transform = transform;
+	command.sfmlTransform = transform.getSfmlTransform();
 	command.renderInfo = *renderInfo;
 
 	this->data->updaterQueue->push_back(command);
@@ -223,7 +221,7 @@ void GRenderEngine::doDrawTexture(const std::shared_ptr<GImageData> & texture, c
 	command.type = GRenderCommandType::image;
 	command.imageData = texture;
 	command.rect = rect;
-	command.transform = transform;
+	command.sfmlTransform = transform.getSfmlTransform();
 	command.renderInfo = *renderInfo;
 
 	this->data->updaterQueue->push_back(command);

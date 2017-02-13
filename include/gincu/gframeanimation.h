@@ -84,9 +84,9 @@ private:
 	bool needInitialize;
 };
 
-class GSpriteSheet;
+class GAtlas;
 
-void buildFrameAnimationDataFromSpriteSheet(GFrameAnimationSetData * data, const GSpriteSheet & spriteSheet);
+void buildFrameAnimationDataFromAtlas(GFrameAnimationSetData * data, const GAtlas & atlas);
 
 
 } //namespace gincu

@@ -1,7 +1,7 @@
 #include "gincu/grenderengine.h"
 #include "gincu/gtransform.h"
 #include "gincu/gimage.h"
-#include "gincu/gspritesheetrender.h"
+#include "gincu/gatlasrender.h"
 #include "gincu/gtextrender.h"
 #include "gincu/grectrender.h"
 #include "gincu/gapplication.h"
@@ -150,9 +150,9 @@ void GRenderEngine::draw(const GImage & image, const GTransform & transform, con
 	this->doDrawTexture(image.getData(), image.getRect(), transform, renderInfo);
 }
 
-void GRenderEngine::draw(const GSpriteSheetRender & spriteSheetRender, const GTransform & transform, const GRenderInfo * renderInfo)
+void GRenderEngine::draw(const GAtlasRender & atlasRender, const GTransform & transform, const GRenderInfo * renderInfo)
 {
-	this->doDrawTexture(spriteSheetRender.getSpriteSheet().getImageData(), spriteSheetRender.getRect(), transform, renderInfo);
+	this->doDrawTexture(atlasRender.getAtlas().getImageData(), atlasRender.getRect(), transform, renderInfo);
 }
 
 GPoint GRenderEngine::mapWindowToView(const GPoint & point) const

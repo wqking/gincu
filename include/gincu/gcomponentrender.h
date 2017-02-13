@@ -7,7 +7,7 @@
 #include "gincu/gentity.h"
 #include "gincu/gentityutil.h"
 #include "gincu/gimage.h"
-#include "gincu/gspritesheetrender.h"
+#include "gincu/gatlasrender.h"
 #include "gincu/gtextrender.h"
 #include "gincu/grectrender.h"
 #include "gincu/grenderinfo.h"
@@ -115,13 +115,13 @@ private:
 };
 
 typedef GComponentRenderCommon<GImage> GComponentImageRender;
-typedef GComponentRenderCommon<GSpriteSheetRender> GComponentSpriteSheetRender;
+typedef GComponentRenderCommon<GAtlasRender> GComponentAtlasRender;
 typedef GComponentRenderCommon<GTextRender> GComponentTextRender;
 typedef GComponentRenderCommon<GRectRender> GComponentRectRender;
 
 GComponentImageRender * createAndLoadImageComponent(const std::string & resourceName);
 GComponentImageRender * createImageComponent(const GImage & image);
-GComponentSpriteSheetRender * createSpriteSheetComponent(const GSpriteSheet & spriteSheet, const std::string & name);
+GComponentAtlasRender * createAtlasRenderComponent(const GAtlas & atlas, const std::string & name);
 GComponentTextRender * createAndLoadTextComponent(const std::string & text, const GColor textColor, const int fontSize);
 GComponentRectRender * createRectRenderComponent(const GColor color, const GSize & size);
 

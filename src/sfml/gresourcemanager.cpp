@@ -1,5 +1,5 @@
 #include "gincu/gresourcemanager.h"
-#include "gincu/gspritesheet.h"
+#include "gincu/gatlas.h"
 #include "gimagedata.h"
 #include "gfontdata.h"
 
@@ -47,21 +47,21 @@ GImage GResourceManager::getImage(const std::string & resourceName) const
 	return GImage(data);
 }
 
-GSpriteSheet GResourceManager::getSpriteSheet(const std::string & resourceName, const GSpriteSheetFormat format) const
+GAtlas GResourceManager::getAtlas(const std::string & resourceName, const GAtlasFormat format) const
 {
-	std::shared_ptr<GSpriteSheetData> data;
+	std::shared_ptr<GAtlasData> data;
 
-	auto it = this->spriteSheetDataMap.find(resourceName);
-	if(it != this->spriteSheetDataMap.end()) {
+	auto it = this->atlasDataMap.find(resourceName);
+	if(it != this->atlasDataMap.end()) {
 		data = it->second;
 	}
 	else {
-		data = std::make_shared<GSpriteSheetData>();
+		data = std::make_shared<GAtlasData>();
 		data->load(resourceName, format);
-		this->spriteSheetDataMap.insert(std::make_pair(resourceName, data));
+		this->atlasDataMap.insert(std::make_pair(resourceName, data));
 	}
 
-	return GSpriteSheet(data);
+	return GAtlas(data);
 }
 
 GFileInputStream GResourceManager::getFileStream(const std::string & resourceName) const

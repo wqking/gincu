@@ -76,13 +76,13 @@ GComponentImageRender * createImageComponent(const GImage & image)
 	return createComponent<GComponentImageRender>(image);
 }
 
-GComponentSpriteSheetRender * createSpriteSheetComponent(const GSpriteSheet & spriteSheet, const std::string & name)
+GComponentAtlasRender * createAtlasRenderComponent(const GAtlas & atlas, const std::string & name)
 {
-	GSpriteSheetRender render(spriteSheet);
+	GAtlasRender render(atlas);
 	if(! name.empty()) {
-		render.setIndex(render.getSpriteSheet().getIndex(name));
+		render.setIndex(render.getAtlas().getIndex(name));
 	}
-	return createComponent<GComponentSpriteSheetRender>(render);
+	return createComponent<GComponentAtlasRender>(render);
 }
 
 GComponentTextRender * createAndLoadTextComponent(const std::string & text, const GColor textColor, const int fontSize)

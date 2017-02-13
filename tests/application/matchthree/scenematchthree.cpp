@@ -189,6 +189,9 @@ void SceneMatchThree::onChessTouched(const GEvent & touchEvent)
 			}
 		}
 		break;
+		
+	default:
+		break;
 	}
 
 	if(this->touchedChessList.size() == 2) {

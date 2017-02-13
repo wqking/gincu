@@ -35,7 +35,7 @@ struct GRenderCommand
 	std::shared_ptr<GRectRenderData> rectData;
 
 	GRect rect;
-	GTransform transform;
+	sf::Transform sfmlTransform;
 	GRenderInfo renderInfo;
 };
 

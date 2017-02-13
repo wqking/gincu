@@ -1,7 +1,7 @@
 #include "matchthree/matchthreechess.h"
 #include "gincu/gerrorhandler.h"
 #include "gincu/gresourcemanager.h"
-#include "gincu/gspritesheet.h"
+#include "gincu/gatlas.h"
 #include "gincu/gapplication.h"
 #include "gincu/gcomponentrender.h"
 #include "gincu/gutil.h"
@@ -35,7 +35,7 @@ std::string getChessResourceName(const ChessColor chessColor)
 
 GComponentRender * createChessRender(const ChessColor chessColor)
 {
-	return createSpriteSheetComponent(GResourceManager::getInstance()->getSpriteSheet("matchthree/chess_spritesheet", GSpriteSheetFormat::spritePackText), getChessResourceName(chessColor));
+	return createAtlasRenderComponent(GResourceManager::getInstance()->getAtlas("matchthree/chess_atlas", GAtlasFormat::spritePackText), getChessResourceName(chessColor));
 }
 
 ChessColor randomChessColor()

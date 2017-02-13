@@ -1,7 +1,7 @@
 #include "gincu/grenderengine.h"
 #include "gincu/gtransform.h"
 #include "gincu/gimage.h"
-#include "gincu/gspritesheetrender.h"
+#include "gincu/gatlasrender.h"
 #include "gincu/gtextrender.h"
 #include "gincu/grectrender.h"
 #include "gincu/gapplication.h"

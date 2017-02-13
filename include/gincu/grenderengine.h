@@ -18,7 +18,7 @@ class GTransform;
 class GImage;
 class GTextRender;
 class GRectRender;
-class GSpriteSheetRender;
+class GAtlasRender;
 struct GRenderInfo;
 struct GEvent;
 
@@ -44,7 +44,7 @@ public:
 	bool isAlive() const;
 
 	void draw(const GImage & image, const GTransform & transform, const GRenderInfo * renderInfo);
-	void draw(const GSpriteSheetRender & spriteSheetRender, const GTransform & transform, const GRenderInfo * renderInfo);
+	void draw(const GAtlasRender & atlasRender, const GTransform & transform, const GRenderInfo * renderInfo);
 	void draw(const GTextRender & text, const GTransform & transform, const GRenderInfo * renderInfo);
 	void draw(const GRectRender & rect, const GTransform & transform, const GRenderInfo * renderInfo);
 

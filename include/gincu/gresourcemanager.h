@@ -2,7 +2,7 @@
 #define GRESOURCEMANAGER_H
 
 #include "gincu/gimage.h"
-#include "gincu/gspritesheet.h"
+#include "gincu/gatlas.h"
 #include "gincu/gfont.h"
 #include "gincu/ginputstream.h"
 
@@ -14,9 +14,9 @@ namespace gincu {
 
 class GImage;
 class GImageData;
-class GSpriteSheetData;
+class GAtlasData;
 class GFontData;
-enum class GSpriteSheetFormat;
+enum class GAtlasFormat;
 
 class GResourceManager
 {
@@ -30,7 +30,7 @@ public:
 
 	GImage getImage(const std::string & resourceName) const;
 
-	GSpriteSheet getSpriteSheet(const std::string & resourceName, const GSpriteSheetFormat format) const;
+	GAtlas getAtlas(const std::string & resourceName, const GAtlasFormat format) const;
 
 	GFileInputStream getFileStream(const std::string & resourceName) const;
 
@@ -46,7 +46,7 @@ public:
 private:
 	std::string resourcePath;
 	mutable std::map<std::string, std::shared_ptr<GImageData> > imageDataMap;
-	mutable std::map<std::string, std::shared_ptr<GSpriteSheetData> > spriteSheetDataMap;
+	mutable std::map<std::string, std::shared_ptr<GAtlasData> > atlasDataMap;
 	mutable std::map<std::string, std::shared_ptr<GFontData> > fontDataMap;
 	std::string defaultFontName;
 };

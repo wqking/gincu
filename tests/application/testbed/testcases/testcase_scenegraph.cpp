@@ -39,13 +39,13 @@ void TestCase_SceneGraph::doInitialize()
 	this->doInitializeRotationAnimation({ 450, 350 });
 }
 
-GComponentTweenedFrameAnimation * createAnimation(GEntity * entity, const std::string & spriteSheetName)
+GComponentTweenedFrameAnimation * createAnimation(GEntity * entity, const std::string & atlasName)
 {
 	std::shared_ptr<GFrameAnimationSetData> data(std::make_shared<GFrameAnimationSetData>());
-	buildFrameAnimationDataFromSpriteSheet(data.get(), GResourceManager::getInstance()->getSpriteSheet(spriteSheetName, GSpriteSheetFormat::spritePackText));
+	buildFrameAnimationDataFromAtlas(data.get(), GResourceManager::getInstance()->getAtlas(atlasName, GAtlasFormat::spritePackText));
 	GTweenedFrameAnimation animation(data);
 	animation.setUpdater([=](const int index) {
-		GComponentSpriteSheetRender * render = entity->getComponentByType<GComponentSpriteSheetRender>();
+		GComponentAtlasRender * render = entity->getComponentByType<GComponentAtlasRender>();
 		render->getRender().setIndex(index);
 	});
 	animation.getTween().repeat(-1);
@@ -59,7 +59,7 @@ GComponentLocalTransform * TestCase_SceneGraph::createParentedObject(const GPoin
 	const std::string imageNameB("testbed/dog.png");
 	const std::string imageNameC("testbed/pig.png");
 	const std::string imageNameD("testbed/rabbit.png");
-	const std::string spriteSheetName("testbed/animation_yellow_boy");
+	const std::string atlasName("testbed/animation_yellow_boy");
 	const GCoord x = position.x;
 	const GCoord y = position.y;
 //	const GCoord xDelta = 150;
@@ -108,8 +108,8 @@ GComponentLocalTransform * TestCase_SceneGraph::createParentedObject(const GPoin
 		->addComponent(createComponent<GComponentTransform>())
 		->addComponent(createComponent<GComponentLocalTransform>(GPoint{0, yDelta * 2})->setParent(entityB->getComponentByType<GComponentLocalTransform>()))
 		->addComponent(createComponent<GComponentAnchor>(anchor)->setFlipX(true)->setFlipY(true))
-		->addComponent(createSpriteSheetComponent(GResourceManager::getInstance()->getSpriteSheet(spriteSheetName, GSpriteSheetFormat::spritePackText), ""))
-		->addComponent(createAnimation(entityD, spriteSheetName))
+		->addComponent(createAtlasRenderComponent(GResourceManager::getInstance()->getAtlas(atlasName, GAtlasFormat::spritePackText), ""))
+		->addComponent(createAnimation(entityD, atlasName))
 		->addComponent(createComponent<GComponentRendererTouchHandler>()->addOnTouch(createOnPressCallback([=](){ this->getTestBed()->print("clicked: imageD-B flip x/y"); })))
 	);
 

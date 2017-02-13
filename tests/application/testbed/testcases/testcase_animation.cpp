@@ -31,13 +31,13 @@ void TestCase_Animation::doInitialize()
 	this->doInitializeAnimation({ 100, 50 });
 }
 
-GComponentTweenedFrameAnimation * createAnimation(GEntity * entity, const std::string & spriteSheetName)
+GComponentTweenedFrameAnimation * createAnimation(GEntity * entity, const std::string & atlasName)
 {
 	std::shared_ptr<GFrameAnimationSetData> data(std::make_shared<GFrameAnimationSetData>());
-	buildFrameAnimationDataFromSpriteSheet(data.get(), GResourceManager::getInstance()->getSpriteSheet(spriteSheetName, GSpriteSheetFormat::spritePackText));
+	buildFrameAnimationDataFromAtlas(data.get(), GResourceManager::getInstance()->getAtlas(atlasName, GAtlasFormat::spritePackText));
 	GTweenedFrameAnimation animation(data);
 	animation.setUpdater([=](const int index) {
-		GComponentSpriteSheetRender * render = entity->getComponentByType<GComponentSpriteSheetRender>();
+		GComponentAtlasRender * render = entity->getComponentByType<GComponentAtlasRender>();
 		render->getRender().setIndex(index);
 	});
 	animation.getTween().repeat(-1);
@@ -47,7 +47,7 @@ GComponentTweenedFrameAnimation * createAnimation(GEntity * entity, const std::s
 
 void TestCase_Animation::doInitializeAnimation(const GPoint & position)
 {
-	const std::string spriteSheetName("testbed/animation_yellow_boy");
+	const std::string atlasName("testbed/animation_yellow_boy");
 	const GCoord x = position.x;
 	const GCoord y = position.y;
 	const GCoord xDelta = 180;
@@ -60,8 +60,8 @@ void TestCase_Animation::doInitializeAnimation(const GPoint & position)
 		entity
 		->addComponent(createComponent<GComponentTransform>(GPoint{x, y}))
 		->addComponent(createComponent<GComponentAnchor>(GRenderAnchor::leftTop))
-		->addComponent(createSpriteSheetComponent(GResourceManager::getInstance()->getSpriteSheet(spriteSheetName, GSpriteSheetFormat::spritePackText), ""))
-		->addComponent(createAnimation(entity, spriteSheetName))
+		->addComponent(createAtlasRenderComponent(GResourceManager::getInstance()->getAtlas(atlasName, GAtlasFormat::spritePackText), ""))
+		->addComponent(createAnimation(entity, atlasName))
 		->addComponent(createComponent<GComponentRendererTouchHandler>()->addOnTouch(createOnPressCallback([=](){ this->getTestBed()->print("clicked: animation LeftTop no flip"); })))
 	);
 
@@ -70,8 +70,8 @@ void TestCase_Animation::doInitializeAnimation(const GPoint & position)
 		entity
 		->addComponent(createComponent<GComponentTransform>(GPoint{x, y + yDelta}))
 		->addComponent(createComponent<GComponentAnchor>(GRenderAnchor::leftTop)->setFlipX(true))
-		->addComponent(createSpriteSheetComponent(GResourceManager::getInstance()->getSpriteSheet(spriteSheetName, GSpriteSheetFormat::spritePackText), ""))
-		->addComponent(createAnimation(entity, spriteSheetName))
+		->addComponent(createAtlasRenderComponent(GResourceManager::getInstance()->getAtlas(atlasName, GAtlasFormat::spritePackText), ""))
+		->addComponent(createAnimation(entity, atlasName))
 		->addComponent(createComponent<GComponentRendererTouchHandler>()->addOnTouch(createOnPressCallback([=](){ this->getTestBed()->print("clicked: animation LeftTop flip x"); })))
 	);
 
@@ -80,8 +80,8 @@ void TestCase_Animation::doInitializeAnimation(const GPoint & position)
 		entity
 		->addComponent(createComponent<GComponentTransform>(GPoint{x + xDelta, y}))
 		->addComponent(createComponent<GComponentAnchor>(GRenderAnchor::leftTop)->setFlipY(true))
-		->addComponent(createSpriteSheetComponent(GResourceManager::getInstance()->getSpriteSheet(spriteSheetName, GSpriteSheetFormat::spritePackText), ""))
-		->addComponent(createAnimation(entity, spriteSheetName))
+		->addComponent(createAtlasRenderComponent(GResourceManager::getInstance()->getAtlas(atlasName, GAtlasFormat::spritePackText), ""))
+		->addComponent(createAnimation(entity, atlasName))
 		->addComponent(createComponent<GComponentRendererTouchHandler>()->addOnTouch(createOnPressCallback([=](){ this->getTestBed()->print("clicked: animation LeftTop flip y"); })))
 	);
 
@@ -90,8 +90,8 @@ void TestCase_Animation::doInitializeAnimation(const GPoint & position)
 		entity
 		->addComponent(createComponent<GComponentTransform>(GPoint{x + xDelta, y + yDelta}))
 		->addComponent(createComponent<GComponentAnchor>(GRenderAnchor::leftTop)->setFlipX(true)->setFlipY(true))
-		->addComponent(createSpriteSheetComponent(GResourceManager::getInstance()->getSpriteSheet(spriteSheetName, GSpriteSheetFormat::spritePackText), ""))
-		->addComponent(createAnimation(entity, spriteSheetName))
+		->addComponent(createAtlasRenderComponent(GResourceManager::getInstance()->getAtlas(atlasName, GAtlasFormat::spritePackText), ""))
+		->addComponent(createAnimation(entity, atlasName))
 		->addComponent(createComponent<GComponentRendererTouchHandler>()->addOnTouch(createOnPressCallback([=](){ this->getTestBed()->print("clicked: animation LeftTop flip x/y"); })))
 	);
 
@@ -100,8 +100,8 @@ void TestCase_Animation::doInitializeAnimation(const GPoint & position)
 		entity
 		->addComponent(createComponent<GComponentTransform>(GPoint{x + xDelta * 2, y})->setRotation(30))
 		->addComponent(createComponent<GComponentAnchor>(GRenderAnchor::leftTop))
-		->addComponent(createSpriteSheetComponent(GResourceManager::getInstance()->getSpriteSheet(spriteSheetName, GSpriteSheetFormat::spritePackText), ""))
-		->addComponent(createAnimation(entity, spriteSheetName))
+		->addComponent(createAtlasRenderComponent(GResourceManager::getInstance()->getAtlas(atlasName, GAtlasFormat::spritePackText), ""))
+		->addComponent(createAnimation(entity, atlasName))
 		->addComponent(createComponent<GComponentRendererTouchHandler>()->addOnTouch(createOnPressCallback([=](){ this->getTestBed()->print("clicked: animation LeftTop rotate 30"); })))
 	);
 
@@ -110,8 +110,8 @@ void TestCase_Animation::doInitializeAnimation(const GPoint & position)
 		entity
 		->addComponent(createComponent<GComponentTransform>(GPoint{x + xDelta * 3, y})->setRotation(30))
 		->addComponent(createComponent<GComponentAnchor>(GRenderAnchor::center))
-		->addComponent(createSpriteSheetComponent(GResourceManager::getInstance()->getSpriteSheet(spriteSheetName, GSpriteSheetFormat::spritePackText), ""))
-		->addComponent(createAnimation(entity, spriteSheetName))
+		->addComponent(createAtlasRenderComponent(GResourceManager::getInstance()->getAtlas(atlasName, GAtlasFormat::spritePackText), ""))
+		->addComponent(createAnimation(entity, atlasName))
 		->addComponent(createComponent<GComponentRendererTouchHandler>()->addOnTouch(createOnPressCallback([=](){ this->getTestBed()->print("clicked: animation Center rotate 30"); })))
 	);
 }

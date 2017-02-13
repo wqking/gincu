@@ -33,8 +33,8 @@ private:
 	void doBenchmarkBatchedAnimation();
 	void doBenchmarkUnbatchedAnimation();
 
-	GComponentTweenedFrameAnimation * createAnimation(GEntity * entity, const std::string & spriteSheetName);
-	GEntity * createAnimationEntity(const GPoint & position, const std::string & spriteSheetName);
+	GComponentTweenedFrameAnimation * createAnimation(GEntity * entity, const std::string & atlasName);
+	GEntity * createAnimationEntity(const GPoint & position, const std::string & atlasName);
 	GPoint getRandomPosition() const;
 };
 
@@ -44,13 +44,13 @@ void TestCase_Benchmark::doInitialize()
 //	this->doBenchmarkUnbatchedAnimation();
 }
 
-GComponentTweenedFrameAnimation * TestCase_Benchmark::createAnimation(GEntity * entity, const std::string & spriteSheetName)
+GComponentTweenedFrameAnimation * TestCase_Benchmark::createAnimation(GEntity * entity, const std::string & atlasName)
 {
 	std::shared_ptr<GFrameAnimationSetData> data(std::make_shared<GFrameAnimationSetData>());
-	buildFrameAnimationDataFromSpriteSheet(data.get(), GResourceManager::getInstance()->getSpriteSheet(spriteSheetName, GSpriteSheetFormat::spritePackText));
+	buildFrameAnimationDataFromAtlas(data.get(), GResourceManager::getInstance()->getAtlas(atlasName, GAtlasFormat::spritePackText));
 	GTweenedFrameAnimation animation(data);
 	animation.setUpdater([=](const int index) {
-		GComponentSpriteSheetRender * render = entity->getComponentByType<GComponentSpriteSheetRender>();
+		GComponentAtlasRender * render = entity->getComponentByType<GComponentAtlasRender>();
 		render->getRender().setIndex(index);
 	});
 	animation.getTween().repeat(-1);
@@ -58,7 +58,7 @@ GComponentTweenedFrameAnimation * TestCase_Benchmark::createAnimation(GEntity * 
 	return createComponent<GComponentTweenedFrameAnimation>(animation);
 }
 
-GEntity * TestCase_Benchmark::createAnimationEntity(const GPoint & position, const std::string & spriteSheetName)
+GEntity * TestCase_Benchmark::createAnimationEntity(const GPoint & position, const std::string & atlasName)
 {
 	GEntity * entity;
 
@@ -67,8 +67,8 @@ GEntity * TestCase_Benchmark::createAnimationEntity(const GPoint & position, con
 		entity
 		->addComponent(createComponent<GComponentTransform>(position))
 		->addComponent(createComponent<GComponentAnchor>(GRenderAnchor::center))
-		->addComponent(createSpriteSheetComponent(GResourceManager::getInstance()->getSpriteSheet(spriteSheetName, GSpriteSheetFormat::spritePackText), ""))
-		->addComponent(createAnimation(entity, spriteSheetName))
+		->addComponent(createAtlasRenderComponent(GResourceManager::getInstance()->getAtlas(atlasName, GAtlasFormat::spritePackText), ""))
+		->addComponent(createAnimation(entity, atlasName))
 	);
 
 	return entity;

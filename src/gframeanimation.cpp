@@ -1,6 +1,6 @@
 #include "gincu/gframeanimation.h"
 #include "gincu/gapplication.h"
-#include "gincu/gspritesheet.h"
+#include "gincu/gatlas.h"
 #include "gincu/glog.h"
 
 #include "cpgf/accessor/gaccessor.h"
@@ -125,7 +125,7 @@ void extractAnimationNameAndIndex(const std::string & resourceName, std::string 
 
 } //unnamed namespace
 
-void buildFrameAnimationDataFromSpriteSheet(GFrameAnimationSetData * data, const GSpriteSheet & spriteSheet)
+void buildFrameAnimationDataFromAtlas(GFrameAnimationSetData * data, const GAtlas & atlas)
 {
 	struct Item {
 		int frameOrder;
@@ -134,7 +134,7 @@ void buildFrameAnimationDataFromSpriteSheet(GFrameAnimationSetData * data, const
 
 	std::map<std::string, std::vector<Item> > animationMap;
 
-	auto spriteNameList = spriteSheet.getNameList();
+	auto spriteNameList = atlas.getNameList();
 
 	for(const std::string & name : spriteNameList) {
 		std::string animationName;
@@ -146,7 +146,7 @@ void buildFrameAnimationDataFromSpriteSheet(GFrameAnimationSetData * data, const
 			continue;
 		}
 
-		animationMap[animationName].push_back({ frameOrder, spriteSheet.getIndex(name) });
+		animationMap[animationName].push_back({ frameOrder, atlas.getIndex(name) });
 	}
 
 	auto compare = [](const Item & a, const Item & b) { return a.frameOrder < b.frameOrder; };
