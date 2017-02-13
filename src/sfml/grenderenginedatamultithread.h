@@ -28,6 +28,36 @@ class GRectRenderData;
 
 struct GRenderCommand
 {
+	GRenderCommand() {}
+
+	GRenderCommand(const std::shared_ptr<GImageData> & imageData, const GRect & rect, const GTransform & transform, const GRenderInfo * renderInfo)
+		:
+			type(GRenderCommandType::image),
+			imageData(imageData),
+			rect(rect),
+			sfmlRenderStates(transform.getSfmlTransform())
+	{
+		copyBlendAndShaderToSfml(&this->sfmlRenderStates, renderInfo);
+	}
+
+	GRenderCommand(const std::shared_ptr<GTextRenderData> & textData, const GTransform & transform, const GRenderInfo * renderInfo)
+		:
+			type(GRenderCommandType::text),
+			textData(textData),
+			sfmlRenderStates(transform.getSfmlTransform())
+	{
+		copyBlendAndShaderToSfml(&this->sfmlRenderStates, renderInfo);
+	}
+
+	GRenderCommand(const std::shared_ptr<GRectRenderData> & rectData, const GTransform & transform, const GRenderInfo * renderInfo)
+		:
+			type(GRenderCommandType::rect),
+			rectData(rectData),
+			sfmlRenderStates(transform.getSfmlTransform())
+	{
+		copyBlendAndShaderToSfml(&this->sfmlRenderStates, renderInfo);
+	}
+
 	GRenderCommandType type;
 
 	std::shared_ptr<GImageData> imageData;
@@ -35,8 +65,7 @@ struct GRenderCommand
 	std::shared_ptr<GRectRenderData> rectData;
 
 	GRect rect;
-	sf::Transform sfmlTransform;
-	GRenderInfo renderInfo;
+	sf::RenderStates sfmlRenderStates;
 };
 
 class GRenderEngineLock

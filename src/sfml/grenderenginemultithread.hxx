@@ -82,7 +82,9 @@ void GRenderEngineData::processRenderCommands()
 				const GRenderCommand & nextCommand = this->renderQueue->at(k);
 				if(nextCommand.type != command.type
 					|| nextCommand.imageData != command.imageData
-					|| nextCommand.renderInfo != command.renderInfo) {
+					|| nextCommand.sfmlRenderStates.blendMode != command.sfmlRenderStates.blendMode
+					|| nextCommand.sfmlRenderStates.shader != command.sfmlRenderStates.shader
+				) {
 					break;
 				}
 				++k;
@@ -95,24 +97,20 @@ void GRenderEngineData::processRenderCommands()
 			}
 			else {
 				sf::Sprite sprite(command.imageData->texture, { (int)command.rect.x, (int)command.rect.y, (int)command.rect.width, (int)command.rect.height });
-				sf::RenderStates renderStates(command.sfmlTransform);
-				copyBlendAndShaderToSfml(&renderStates, &command.renderInfo);
-				this->window->draw(sprite, renderStates);
+				this->window->draw(sprite, command.sfmlRenderStates);
 			}
 		}
 			break;
 
 		case GRenderCommandType::text: {
-			sf::RenderStates renderStates(command.sfmlTransform);
-			copyBlendAndShaderToSfml(&renderStates, &command.renderInfo);
-			this->window->draw(command.textData->text, renderStates);
+			this->window->draw(command.textData->text, command.sfmlRenderStates);
 			break;
 		}
 
 		case GRenderCommandType::rect: {
-			sf::RenderStates renderStates(command.sfmlTransform);
-			copyBlendAndShaderToSfml(&renderStates, &command.renderInfo);
-			this->window->draw(command.rectData->rectangle, renderStates);
+//			sf::RenderStates renderStates(command.sfmlTransform);
+//			copyBlendAndShaderToSfml(&renderStates, &command.renderInfo);
+			this->window->draw(command.rectData->rectangle, command.sfmlRenderStates);
 			break;
 		}
 
@@ -135,30 +133,31 @@ void GRenderEngineData::batchDrawImages(const int firstIndex, const int lastInde
 		const GRenderCommand & command = this->renderQueue->at(i + firstIndex);
 		const GRect & rect = command.rect;
 
-		vertexArray[index].position = command.sfmlTransform.transformPoint({ 0, 0 });
+		vertexArray[index].position = command.sfmlRenderStates.transform.transformPoint({ 0, 0 });
 		vertexArray[index].texCoords = { rect.x, rect.y };
 		++index;
-		vertexArray[index].position = command.sfmlTransform.transformPoint({ rect.width, 0 });
+		vertexArray[index].position = command.sfmlRenderStates.transform.transformPoint({ rect.width, 0 });
 		vertexArray[index].texCoords = { rect.x + rect.width, rect.y };
 		++index;
-		vertexArray[index].position = command.sfmlTransform.transformPoint({ rect.width, rect.height });
+		vertexArray[index].position = command.sfmlRenderStates.transform.transformPoint({ rect.width, rect.height });
 		vertexArray[index].texCoords = { rect.x + rect.width, rect.y + rect.height };
 		++index;
 
-		vertexArray[index].position = command.sfmlTransform.transformPoint({ rect.width, rect.height });
+		vertexArray[index].position = command.sfmlRenderStates.transform.transformPoint({ rect.width, rect.height });
 		vertexArray[index].texCoords = { rect.x + rect.width, rect.y + rect.height };
 		++index;
-		vertexArray[index].position = command.sfmlTransform.transformPoint({ 0, rect.height });
+		vertexArray[index].position = command.sfmlRenderStates.transform.transformPoint({ 0, rect.height });
 		vertexArray[index].texCoords = { rect.x, rect.y + rect.height };
 		++index;
-		vertexArray[index].position = command.sfmlTransform.transformPoint({ 0, 0 });
+		vertexArray[index].position = command.sfmlRenderStates.transform.transformPoint({ 0, 0 });
 		vertexArray[index].texCoords = { rect.x, rect.y };
 		++index;
 	}
 
 	const GRenderCommand & command = this->renderQueue->at(firstIndex);
 	sf::RenderStates renderStates(&command.imageData->texture);
-	copyBlendAndShaderToSfml(&renderStates, &command.renderInfo);
+	renderStates.blendMode = command.sfmlRenderStates.blendMode;
+	renderStates.shader = command.sfmlRenderStates.shader;
 	this->window->draw(vertexArray, renderStates);
 }
 
@@ -191,40 +190,17 @@ void GRenderEngine::render()
 
 void GRenderEngine::draw(const GTextRender & text, const GTransform & transform, const GRenderInfo * renderInfo)
 {
-	GRenderCommand command;
-	command.type = GRenderCommandType::text;
-	command.textData = text.getData();
-	command.sfmlTransform = transform.getSfmlTransform();
-	command.renderInfo = *renderInfo;
-
-	this->data->updaterQueue->push_back(command);
+	this->data->updaterQueue->emplace_back(text.getData(), transform, renderInfo);
 }
 
 void GRenderEngine::draw(const GRectRender & rect, const GTransform & transform, const GRenderInfo * renderInfo)
 {
-	GRenderCommand command;
-	command.type = GRenderCommandType::rect;
-	command.rectData = rect.getData();
-	command.sfmlTransform = transform.getSfmlTransform();
-	command.renderInfo = *renderInfo;
-
-	this->data->updaterQueue->push_back(command);
+	this->data->updaterQueue->emplace_back(rect.getData(), transform, renderInfo);
 }
 
 void GRenderEngine::doDrawTexture(const std::shared_ptr<GImageData> & texture, const GRect & rect, const GTransform & transform, const GRenderInfo * renderInfo)
 {
-	if(! texture) {
-		return;
-	}
-
-	GRenderCommand command;
-	command.type = GRenderCommandType::image;
-	command.imageData = texture;
-	command.rect = rect;
-	command.sfmlTransform = transform.getSfmlTransform();
-	command.renderInfo = *renderInfo;
-
-	this->data->updaterQueue->push_back(command);
+	this->data->updaterQueue->emplace_back(texture, rect, transform, renderInfo);
 }
 
 
