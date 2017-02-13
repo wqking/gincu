@@ -60,7 +60,7 @@ void MatchThreeInfoView::setRemainingSeconds(int seconds)
 	this->remainingSeconds = seconds;
 
 	const bool shouldWarn = (this->remainingSeconds <= 10);
-	auto render = this->timerEntity->getComponentByType<GComponentTextRender >()->getRender();
+	auto & render = this->timerEntity->getComponentByType<GComponentTextRender >()->getRender();
 	render.setText(toString(this->remainingSeconds));
 	render.setColor(shouldWarn ? colorRed : colorBlack);
 

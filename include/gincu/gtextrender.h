@@ -32,6 +32,9 @@ public:
 	const std::shared_ptr<GTextRenderData> & getData() const { return this->data; }
 
 private:
+	void checkCopyOnWrite();
+
+private:
 	std::shared_ptr<GTextRenderData> data;
 };
 
