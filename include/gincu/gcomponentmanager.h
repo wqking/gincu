@@ -12,6 +12,7 @@ class GComponent;
 class GComponentTouchHandler;
 class GComponentTransform;
 class GComponentLocalTransform;
+class GComponentCamera;
 
 class GComponentManager
 {
@@ -26,6 +27,9 @@ public:
 	void clear();
 
 	void parentChanged(GComponentLocalTransform * localTransform);
+	void zOrderChanged(GComponentTransform * transform); // this can be either a global or local transform
+	void cameraIdChanged(GComponentTransform * transform);
+	void cameraMaskChanged(GComponentCamera * camera);
 	
 	void updateAnimation();
 	void updateLocalTransforms();

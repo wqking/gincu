@@ -3,6 +3,7 @@
 
 #include "gincu/gcomponent.h"
 #include "gincu/ggeometry.h"
+#include "gincu/gcamera.h"
 
 #include "cpgf/gflags.h"
 
@@ -25,8 +26,16 @@ public:
 public:
 	GComponentCamera();
 
+	void setViewport(const GRect & viewport) { this->camera.setViewport(viewport); }
+	const GRect & getViewport() const { return this->camera.getViewport(); }
+	
 	void setSize(const GSize & size);
-	const GSize & getSize() const { return this->size; }
+	const GSize & getSize() const { return this->camera.getSize(); }
+
+	void setMask(const uint32_t mask);
+	uint32_t getMask() const { return this->camera.getMask(); }
+
+	bool belongs(const unsigned int cameraId) const { return this->camera.belongs(cameraId); }
 
 private:
 	void onEntityEvent(GComponent * component, const GEntityEventType eventType);
@@ -36,7 +45,7 @@ private:
 	virtual void doAfterSetEntity() override;
 
 private:
-	GSize size;
+	GCamera camera;
 };
 
 

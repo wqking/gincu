@@ -38,6 +38,11 @@ void GCamera::apply(const GTransform & transform)
 	});
 }
 
+GPoint GCamera::mapScreenToCamera(const GPoint & point) const
+{
+	return point;
+}
+
 
 } //namespace gincu
 

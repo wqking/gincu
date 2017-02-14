@@ -9,14 +9,26 @@ namespace gincu {
 GComponentCamera::GComponentCamera()
 	:
 		super(this),
-		size(GApplication::getInstance()->getWindowSize())
+		camera()
 {
 }
 
 void GComponentCamera::setSize(const GSize & size)
 {
-	this->size = size;
+	this->camera.setSize(size);
 	this->doInitializeComponentTransform(getComponentByTypeFromComponent<GComponentTransform>(this));
+}
+
+void GComponentCamera::setMask(const uint32_t mask)
+{
+	if(mask != this->getMask()) {
+		this->camera.setMask(mask);
+
+		GComponentManager * componentManager = getComponentManagerFromEntity(this->getEntity());
+		if(componentManager != nullptr) {
+			componentManager->cameraMaskChanged(this);
+		}
+	}
 }
 
 void GComponentCamera::onEntityEvent(GComponent * component, const GEntityEventType eventType)
@@ -41,13 +53,15 @@ void GComponentCamera::doInitializeComponentTransform(GComponentTransform * comp
 {
 	if(componentTransform != nullptr) {
 		componentTransform->getTransform().setProjectionMode(true);
-		componentTransform->getTransform().setOrigin({ this->size.width, this->size.height });
+		const GSize & size = this->camera.getSize();
+		componentTransform->setOrigin({ size.width, size.height });
 	}
 }
 
 void GComponentCamera::doAfterSetEntity()
 {
 	this->getEntity()->addEventCallback(cpgf::makeCallback(this, &GComponentCamera::onEntityEvent));
+
 	this->doInitializeComponentTransform(getComponentByTypeFromComponent<GComponentTransform>(this));
 }
 

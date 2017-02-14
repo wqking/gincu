@@ -27,8 +27,12 @@ public:
 
 	uint32_t getMask() const { return this->mask; }
 	void setMask(const uint32_t mask) { this->mask = mask; }
+	
+	bool belongs(const unsigned int cameraId) const { return (this->mask & (1u << cameraId)) != 0; }
 
 	const std::shared_ptr<GCameraData> & getData() const { return this->data; }
+
+	GPoint mapScreenToCamera(const GPoint & point) const;
 
 private:
 	uint32_t mask;

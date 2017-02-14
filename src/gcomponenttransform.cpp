@@ -17,8 +17,9 @@ GComponentTransform::GComponentTransform(const GPoint & position, const GScale &
 	:
 		super(this),
 		transform(position, scale),
+		zOrder(0),
 		visible(visible),
-		zOrder(0)
+		cameraId(0)
 {
 }
 
@@ -26,20 +27,37 @@ GComponentTransform::~GComponentTransform()
 {
 }
 
+GComponentTransform * GComponentTransform::setCameraId(const unsigned int cameraId)
+{
+	if(this->cameraId != cameraId) {
+		this->cameraId = cameraId;
+
+		GComponentManager * componentManager = getComponentManagerFromEntity(this->getEntity());
+		if(componentManager != nullptr) {
+			componentManager->cameraIdChanged(this);
+		}
+	}
+	
+	return this;
+}
+
 GComponentTransform * GComponentTransform::setZOrder(const int zOrder)
 {
 	if(this->zOrder != zOrder) {
-		const int oldZOrder = this->zOrder;
-		
 		this->zOrder = zOrder;
 		
-		this->doAfterZOrderChanged(oldZOrder);
+		this->doAfterZOrderChanged();
+
+		GComponentManager * componentManager = getComponentManagerFromEntity(this->getEntity());
+		if(componentManager != nullptr) {
+			componentManager->zOrderChanged(this);
+		}
 	}
 
 	return this;
 }
 
-void GComponentTransform::doAfterZOrderChanged(const int /*oldZOrder*/)
+void GComponentTransform::doAfterZOrderChanged()
 {
 }
 
@@ -120,6 +138,8 @@ void GComponentLocalTransform::applyGlobal()
 			GComponentTransform * parentGlobalTransform = this->parent->getEntity()->getComponentByType<GComponentTransform>();
 			if(parentGlobalTransform != nullptr) {
 				globalTransform->setVisible(parentGlobalTransform->isVisible() && this->isVisible());
+				// don't call setCameraId to avoid trigger events.
+				globalTransform->cameraId = parentGlobalTransform->getCameraId();
 
 				GTransform parentTransform = parentGlobalTransform->getTransform();
 				parentTransform.translate(this->parent->getTransform().getOrigin());
@@ -150,7 +170,7 @@ const std::vector<GComponentLocalTransform *> & GComponentLocalTransform::getSor
 	return this->children;
 }
 
-void GComponentLocalTransform::doAfterZOrderChanged(const int /*oldZOrder*/)
+void GComponentLocalTransform::doAfterZOrderChanged()
 {
 	if(this->parent != nullptr) {
 		this->parent->needSortChildren = true;

@@ -26,6 +26,9 @@ public:
 	GPoint getPosition() const { return this->transform.getPosition(); }
 	GComponentTransform * setPosition(const GPoint & position) { this->transform.setPosition(position); return this; }
 
+	GPoint getOrigin() const { return this->transform.getOrigin(); }
+	GComponentTransform * setOrigin(const GPoint & origin) { this->transform.setOrigin(origin); return this; }
+
 	GScale getScale() const { return this->transform.getScale(); }
 	GComponentTransform * setScale(const GScale & scale) { this->transform.setScale(scale); return this; }
 
@@ -35,6 +38,9 @@ public:
 	bool isVisible() const { return this->visible; }
 	GComponentTransform * setVisible(const bool visible) { this->visible = visible; return this; }
 	
+	unsigned int getCameraId() const { return this->cameraId; }
+	GComponentTransform * setCameraId(const unsigned int cameraId);
+	
 	int getZOrder() const { return this->zOrder; }
 	GComponentTransform * setZOrder(const int zOrder);
 
@@ -43,12 +49,16 @@ public:
 	GComponentTransform * setTransform(const GTransform & transform) { this->transform = transform; return this; }
 
 private:
-	virtual void doAfterZOrderChanged(const int oldZOrder);
+	virtual void doAfterZOrderChanged();
 
 private:
 	GTransform transform;
-	bool visible;
 	int zOrder;
+	unsigned int visible : 1;
+	unsigned int cameraId : 8; // must between [0, 31]
+	
+private:
+	friend class GComponentLocalTransform;
 };
 
 class GComponentLocalTransform : public GComponentTransform
@@ -80,7 +90,7 @@ private:
 	void removeChild(GComponentLocalTransform * child);
 
 private:
-	virtual void doAfterZOrderChanged(const int oldZOrder) override;
+	virtual void doAfterZOrderChanged() override;
 
 private:
 	GComponentLocalTransform * parent;

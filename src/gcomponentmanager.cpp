@@ -77,6 +77,18 @@ void GComponentManager::parentChanged(GComponentLocalTransform * localTransform)
 	}
 }
 
+void GComponentManager::zOrderChanged(GComponentTransform * transform)
+{
+}
+
+void GComponentManager::cameraIdChanged(GComponentTransform * transform)
+{
+}
+
+void GComponentManager::cameraMaskChanged(GComponentCamera * camera)
+{
+}
+
 void GComponentManager::updateAnimation()
 {
 	ComponentListType * componentList = this->doGetComponentList(GComponentAnimation::getComponentType());
