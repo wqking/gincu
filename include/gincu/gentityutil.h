@@ -34,10 +34,8 @@ class GComponentRender;
 class GEntity;
 class GComponentManager;
 
-GTransform computeRenderableTransform(
-		GComponentTransform * transform,
-		GComponentRender * render = nullptr
-	);
+GTransform computeRenderableTransform(GComponentTransform * componentTransform, const GSize & size);
+GTransform computeRenderableTransform(GComponentTransform * componentTransform, GComponentRender * render = nullptr);
 
 GComponentManager * getComponentManagerFromEntity(const GEntity * entity);
 GComponentLocalTransform * getParentLocalTransform(const GEntity * entity);

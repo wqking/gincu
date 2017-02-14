@@ -34,7 +34,7 @@ GComponentAnchor * GComponentAnchor::setFlipX(const bool flipX)
 		const bool parentGlobalFlipX = this->isFlipX() ^ this->isGlobalFlipX();
 		const bool parentGlobalFlipY = this->isFlipY() ^ this->isGlobalFlipY();
 		
-		this->flags.setByBool(flagFlipX, flipX);
+		this->flags.setByBool(Flags::flagFlipX, flipX);
 		
 		this->doApplyGlobalFlipXy(parentGlobalFlipX, parentGlobalFlipY);
 	}
@@ -47,7 +47,7 @@ GComponentAnchor * GComponentAnchor::setFlipY(const bool flipY)
 		const bool parentGlobalFlipX = this->isFlipX() ^ this->isGlobalFlipX();
 		const bool parentGlobalFlipY = this->isFlipY() ^ this->isGlobalFlipY();
 		
-		this->flags.setByBool(flagFlipY, flipY);
+		this->flags.setByBool(Flags::flagFlipY, flipY);
 		
 		this->doApplyGlobalFlipXy(parentGlobalFlipX, parentGlobalFlipY);
 	}
@@ -96,8 +96,8 @@ void GComponentAnchor::apply(GTransform & transform, const GSize & size)
 
 void GComponentAnchor::doApplyGlobalFlipXy(const bool parentGlobalFlipX, const bool parentGlobalFlipY)
 {
-	this->flags.setByBool(flagGlobalFlipX, parentGlobalFlipX ^ this->isFlipX());
-	this->flags.setByBool(flagGlobalFlipY, parentGlobalFlipY ^ this->isFlipY());
+	this->flags.setByBool(Flags::flagGlobalFlipX, parentGlobalFlipX ^ this->isFlipX());
+	this->flags.setByBool(Flags::flagGlobalFlipY, parentGlobalFlipY ^ this->isFlipY());
 	
 	if(this->getEntity() == nullptr) {
 		return;
@@ -118,8 +118,8 @@ void GComponentAnchor::doAfterSetEntity()
 	if(localTransform != nullptr && localTransform->getParent() != nullptr) {
 		GComponentAnchor * parentAnchor = localTransform->getParent()->getEntity()->getComponentByType<GComponentAnchor>();
 		if(parentAnchor != nullptr) {
-			this->flags.setByBool(flagGlobalFlipX, parentAnchor->isGlobalFlipX() ^ this->isFlipX());
-			this->flags.setByBool(flagGlobalFlipY, parentAnchor->isGlobalFlipY() ^ this->isFlipY());
+			this->flags.setByBool(Flags::flagGlobalFlipX, parentAnchor->isGlobalFlipX() ^ this->isFlipX());
+			this->flags.setByBool(Flags::flagGlobalFlipY, parentAnchor->isGlobalFlipY() ^ this->isFlipY());
 		}
 	}
 }

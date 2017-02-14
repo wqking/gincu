@@ -19,6 +19,8 @@ class GImage;
 class GTextRender;
 class GRectRender;
 class GAtlasRender;
+class GCamera;
+
 struct GRenderInfo;
 struct GEvent;
 
@@ -43,12 +45,15 @@ public:
 	
 	bool isAlive() const;
 
+	void switchCamera(const GCamera & camera);
 	void draw(const GImage & image, const GTransform & transform, const GRenderInfo * renderInfo);
 	void draw(const GAtlasRender & atlasRender, const GTransform & transform, const GRenderInfo * renderInfo);
 	void draw(const GTextRender & text, const GTransform & transform, const GRenderInfo * renderInfo);
 	void draw(const GRectRender & rect, const GTransform & transform, const GRenderInfo * renderInfo);
 
 	GPoint mapWindowToView(const GPoint & point) const;
+	
+	GSize getWindowSize() const { return this->windowSize; }
 
 	const std::shared_ptr<GRenderEngineData> & getData() const { return this->data; }
 

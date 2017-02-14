@@ -73,6 +73,11 @@ inline GSize operator * (const GSize & a, const float b)
 typedef GVector2 GPoint;
 typedef GVector2 GScale;
 
+inline GRect createRect(const GPoint & position, const GSize & size)
+{
+	return GRect { position.x, position.y, size.width, size.height };
+}
+
 
 } //namespace gincu
 

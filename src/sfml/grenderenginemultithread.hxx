@@ -1,5 +1,6 @@
 #include "gincu/grenderengine.h"
 #include "gincu/gtransform.h"
+#include "gincu/gcamera.h"
 #include "gincu/gimage.h"
 #include "gincu/gatlasrender.h"
 #include "gincu/gtextrender.h"
@@ -9,6 +10,7 @@
 #include "gincu/gheappool.h"
 #include "gincu/glog.h"
 #include "gsfmlutil.h"
+#include "gcameradata.h"
 #include "gimagedata.h"
 #include "gtextrenderdata.h"
 #include "grectrenderdata.h"
@@ -143,6 +145,12 @@ void GRenderEngineData::processRenderCommands()
 			break;
 		}
 
+		case GRenderCommandType::switchCamera: {
+			GCameraData * cameraData = static_cast<GCameraData *>(command.renderData.get());
+			this->window->setView(cameraData->view);
+			break;
+		}
+
 		case GRenderCommandType::none:
 			break;
 		}
@@ -199,6 +207,11 @@ void GRenderEngine::render()
 	}
 
 	this->data->updaterReadyLock.set();
+}
+
+void GRenderEngine::switchCamera(const GCamera & camera)
+{
+	this->data->updaterQueue->emplace_back(std::make_shared<GCameraData>(*camera.getData()));
 }
 
 void GRenderEngine::draw(const GTextRender & text, const GTransform & transform, const GRenderInfo * renderInfo)

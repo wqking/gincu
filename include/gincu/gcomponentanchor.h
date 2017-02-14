@@ -16,7 +16,7 @@ class GComponentAnchor : public GComponent
 private:
 	typedef GComponent super;
 	
-	enum Flags {
+	enum class Flags {
 		flagFlipX = (1u << 0),
 		flagFlipY = (1u << 1),
 		flagGlobalFlipX = (1u << 2),
@@ -35,10 +35,10 @@ public:
 	GRenderAnchor getAnchor() const { return this->anchor; }
 	GComponentAnchor * setAnchor(const GRenderAnchor renderAnchor);
 
-	bool isFlipX() const { return this->flags.has(flagFlipX); }
+	bool isFlipX() const { return this->flags.has(Flags::flagFlipX); }
 	GComponentAnchor * setFlipX(const bool flipX);
 	
-	bool isFlipY() const { return this->flags.has(flagFlipY); }
+	bool isFlipY() const { return this->flags.has(Flags::flagFlipY); }
 	GComponentAnchor * setFlipY(const bool flipY);
 
 	void apply(GTransform & transform, const GSize & size);
@@ -46,8 +46,8 @@ public:
 private:
 	void doApplyGlobalFlipXy(const bool parentGlobalFlipX, const bool parentGlobalFlipY);
 
-	bool isGlobalFlipX() const { return this->flags.has(flagGlobalFlipX); }
-	bool isGlobalFlipY() const { return this->flags.has(flagGlobalFlipY); }
+	bool isGlobalFlipX() const { return this->flags.has(Flags::flagGlobalFlipX); }
+	bool isGlobalFlipY() const { return this->flags.has(Flags::flagGlobalFlipY); }
 
 private:
 	virtual void doAfterSetEntity() override;

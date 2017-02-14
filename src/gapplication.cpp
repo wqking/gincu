@@ -173,5 +173,10 @@ void GApplication::doFinalize()
 {
 }
 
+GSize GApplication::getWindowSize() const
+{
+	return this->renderEngine->getWindowSize();
+}
+
 
 } //namespace gincu

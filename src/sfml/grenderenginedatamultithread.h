@@ -20,12 +20,14 @@ enum class GRenderCommandType
 	vertexTexture,
 	image,
 	text,
-	rect
+	rect,
+	switchCamera
 };
 
 class GImageData;
 class GTextRenderData;
 class GRectRenderData;
+class GCameraData;
 
 class GVertexData
 {
@@ -43,6 +45,13 @@ public:
 struct GRenderCommand
 {
 	GRenderCommand() {}
+
+	GRenderCommand(const std::shared_ptr<GCameraData> & cameraData)
+		:
+			type(GRenderCommandType::switchCamera),
+			renderData(cameraData)
+	{
+	}
 
 	GRenderCommand(const std::shared_ptr<GVertexData> & vertexData, const sf::RenderStates & renderStates)
 		:

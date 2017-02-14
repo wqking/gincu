@@ -35,11 +35,12 @@ public:
 	bool isVisible() const { return this->visible; }
 	GComponentTransform * setVisible(const bool visible) { this->visible = visible; return this; }
 	
-	const GTransform & getTransform() const { return this->transform; }
-	GComponentTransform * setTransform(const GTransform & transform) { this->transform = transform; return this; }
-
 	int getZOrder() const { return this->zOrder; }
 	GComponentTransform * setZOrder(const int zOrder);
+
+	const GTransform & getTransform() const { return this->transform; }
+	GTransform & getTransform() { return this->transform; }
+	GComponentTransform * setTransform(const GTransform & transform) { this->transform = transform; return this; }
 
 private:
 	virtual void doAfterZOrderChanged(const int oldZOrder);

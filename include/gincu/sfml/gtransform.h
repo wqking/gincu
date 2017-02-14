@@ -4,12 +4,20 @@
 #include "gincu/ggeometry.h"
 #include "gincu/grenderanchor.h"
 
+#include "cpgf/gflags.h"
+
 #include <SFML/Graphics/Transform.hpp>
 
 namespace gincu {
 
 class GTransform
 {
+private:
+	enum class Flags {
+		flagDirty = 1 << 0,
+		flagProjection = 1 << 1
+	};
+
 public:
 	GTransform();
 	explicit GTransform(const GPoint & position, const GScale & scale = {1.0f, 1.0f});
@@ -35,16 +43,20 @@ public:
 	void scale(const GScale & scale);
 
 	GScale getDecompositedScale() const;
+	
+	void setProjectionMode(const bool projectionMode) const;
 
 private:
 	void doUpdateTransform() const;
+	
+	bool isProjectionMode() const { return this->flags.has(Flags::flagProjection); }
 
 private:
 	GPoint position;
 	GPoint origin;
 	GScale scaleValue;
 	float rotation; // degree
-	mutable bool needReloadTransform;
+	mutable cpgf::GFlags<Flags> flags;
 	mutable sf::Transform sfmlTransform;
 };
 

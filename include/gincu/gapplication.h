@@ -37,6 +37,7 @@ public:
 
 	const GConfigInfo & getConfigInfo() const { return this->configInfo; }
 	const GSize & getViewSize() const { return this->configInfo.viewSize; }
+	GSize getWindowSize() const;
 
 	GSceneManager * getSceneManager() const { return this->sceneManager.get(); }
 

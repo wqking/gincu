@@ -5,23 +5,25 @@
 
 namespace gincu {
 
-GTransform computeRenderableTransform(
-	GComponentTransform * transform,
-	GComponentRender * render
-)
+GTransform computeRenderableTransform(GComponentTransform * componentTransform, const GSize & size)
 {
-	GComponentAnchor * anchor = transform->getEntity()->template getComponentByType<GComponentAnchor>();
+	GComponentAnchor * anchor = componentTransform->getEntity()->template getComponentByType<GComponentAnchor>();
 	if(anchor != nullptr) {
-		GTransform t = transform->getTransform();
-		if(render == nullptr) {
-			render = transform->getEntity()->getComponentByType<GComponentRender>();
-		}
-		anchor->apply(t, render->getSize());
-		return t;
+		GTransform transform = componentTransform->getTransform();
+		anchor->apply(transform, size);
+		return transform;
 	}
 	else {
-		return transform->getTransform();
+		return componentTransform->getTransform();
 	}
+}
+
+GTransform computeRenderableTransform(GComponentTransform * componentTransform, GComponentRender * render)
+{
+	if(render == nullptr) {
+		render = componentTransform->getEntity()->getComponentByType<GComponentRender>();
+	}
+	return computeRenderableTransform(componentTransform, render->getSize());
 }
 
 GComponentManager * getComponentManagerFromEntity(const GEntity * entity)

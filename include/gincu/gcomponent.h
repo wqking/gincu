@@ -43,7 +43,8 @@ constexpr unsigned int componentTypeId_LocalTransform = 2;
 constexpr unsigned int componentTypeId_TouchHandler = 3;
 constexpr unsigned int componentTypeId_Anchor = 4;
 constexpr unsigned int componentTypeId_Animation = 5;
-constexpr unsigned int componentTypeId_PrimaryCount = 6;
+constexpr unsigned int componentTypeId_Camera = 6;
+constexpr unsigned int componentTypeId_PrimaryCount = 7;
 
 // Usually we should not use componentTypeId_User directly.
 // Use registerComponentId or GComponentIdRegister.

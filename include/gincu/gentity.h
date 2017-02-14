@@ -3,6 +3,8 @@
 
 #include "gincu/gentitypolicy.h"
 
+#include "cpgf/gcallbacklist.h"
+
 #include <memory>
 #include <vector>
 
@@ -11,8 +13,17 @@ namespace gincu {
 class GComponent;
 class GComponentManager;
 
+enum class GEntityEventType
+{
+	componentAdded,
+	componentRemoving
+};
+
 class GEntity : public EntityBase
 {
+public:
+	typedef cpgf::GCallback<void (GComponent *, GEntityEventType)> EventCallback;
+
 public:
 	void * operator new (const std::size_t size);
 	void operator delete(void * p);
@@ -22,6 +33,9 @@ public:
 
 	GEntity * addComponent(GComponent * component);
 	void removeComponent(GComponent * component);
+	
+	void addEventCallback(const EventCallback & callback);
+	void removeEventCallback(const EventCallback & callback);
 	
 	void setComponentManager(GComponentManager * componentManager);
 	GComponentManager * getComponentManager() const { return this->componentManager; }
@@ -35,6 +49,7 @@ public:
 	
 private:
 	GComponentManager * componentManager;
+	cpgf::GCallbackList<void (GComponent *, GEntityEventType)> eventCallbackList;
 };
 
 

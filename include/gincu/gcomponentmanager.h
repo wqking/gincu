@@ -47,6 +47,7 @@ private:
 	std::map<unsigned int, ComponentListType> componentListColdMap;
 	mutable std::vector<GComponentTransform *> rootTransformList;
 	mutable bool needSortRootTransformList;
+	mutable bool needSortCameraList;
 };
 
 

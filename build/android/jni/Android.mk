@@ -75,9 +75,11 @@ LOCAL_SRC_FILES := \
 	$(SRC_PATH)/sfml/grectrender.cpp \
 	$(SRC_PATH)/sfml/grenderengine.cpp \
 	$(SRC_PATH)/sfml/gresourcemanager.cpp \
+	$(SRC_PATH)/sfml/gcamera.cpp \
 	$(SRC_PATH)/gcomponent.cpp \
 	$(SRC_PATH)/gcomponentanchor.cpp \
 	$(SRC_PATH)/gcomponentanimation.cpp \
+	$(SRC_PATH)/gcomponentcamera.cpp \
 	$(SRC_PATH)/gcomponentrender.cpp \
 	$(SRC_PATH)/gcomponentmanager.cpp \
 	$(SRC_PATH)/gcomponenttouchhandler.cpp \

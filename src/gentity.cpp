@@ -31,12 +31,26 @@ GEntity * GEntity::addComponent(GComponent * component)
 
 	this->doAddComponent(component, this->componentManager);
 
+	this->eventCallbackList(component, GEntityEventType::componentAdded);
+
 	return this;
 }
 
 void GEntity::removeComponent(GComponent * component)
 {
+	this->eventCallbackList(component, GEntityEventType::componentRemoving);
+
 	this->doRemoveComponent(component, this->componentManager);
+}
+
+void GEntity::addEventCallback(const EventCallback & callback)
+{
+	this->eventCallbackList.add(callback);
+}
+
+void GEntity::removeEventCallback(const EventCallback & callback)
+{
+	this->eventCallbackList.remove(callback);
 }
 
 void GEntity::setComponentManager(GComponentManager * componentManager)

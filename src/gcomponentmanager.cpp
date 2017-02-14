@@ -2,6 +2,7 @@
 #include "gincu/gcomponent.h"
 #include "gincu/gcomponenttransform.h"
 #include "gincu/gcomponentrender.h"
+#include "gincu/gcomponentcamera.h"
 #include "gincu/gcomponentanimation.h"
 #include "gincu/gcomponenttouchhandler.h"
 #include "gincu/grenderengine.h"
@@ -9,12 +10,15 @@
 
 #include <algorithm>
 
+#include "gincu/gcamera.h" // test
+
 namespace gincu {
 
 GComponentManager::GComponentManager()
 	:
 		componentListHotArray(componentTypeId_PrimaryCount),
-		needSortRootTransformList(false)
+		needSortRootTransformList(false),
+		needSortCameraList(false)
 {
 }
 
@@ -27,6 +31,9 @@ void GComponentManager::add(GComponent * component)
 			this->rootTransformList.push_back(static_cast<GComponentTransform *>(component));
 			this->needSortRootTransformList = true;
 		}
+	}
+	if(component->getTypeId() == componentTypeId_Camera) {
+		this->needSortCameraList = true;
 	}
 }
 
@@ -57,6 +64,12 @@ void GComponentManager::parentChanged(GComponentLocalTransform * localTransform)
 		if(localTransform->getParent() == nullptr) {
 			this->rootTransformList.push_back(transform);
 			this->needSortRootTransformList = true;
+			
+			if(! this->needSortCameraList) {
+				if(getComponentByTypeFromComponent<GComponentCamera>(localTransform) != nullptr) {
+					this->needSortCameraList = true;
+				}
+			}
 		}
 		else {
 			removeValueFromContainer(this->rootTransformList, transform);
@@ -120,35 +133,54 @@ void doRenderEntity(GEntity * entity)
 	}
 }
 
+void doSortTransformList(std::vector<GComponentTransform *> & transformList)
+{
+	std::stable_sort(transformList.begin(), transformList.end(), [](const GComponentTransform * a, const GComponentTransform * b) {
+		int zOrderA, zOrderB;
+		GComponentLocalTransform * localTransform;
+
+		localTransform = a->getEntity()->getComponentByType<GComponentLocalTransform>();
+		if(localTransform != nullptr) {
+			zOrderA = localTransform->getZOrder();
+		}
+		else {
+			zOrderA = a->getZOrder();
+		}
+
+		localTransform = b->getEntity()->getComponentByType<GComponentLocalTransform>();
+		if(localTransform != nullptr) {
+			zOrderB = localTransform->getZOrder();
+		}
+		else {
+			zOrderB = b->getZOrder();
+		}
+
+		return zOrderA < zOrderB;
+	});
+}
+
 } //unnamed namespace
 
 void GComponentManager::render()
 {
+/*
+	const float w = 900, h = 600;
+	GCamera camera;
+	GTransform transform;
+	transform.setProjectionMode(true);
+	camera.setViewport({ 0, 0, w, h });
+	transform.setOrigin({ w, h });
+	GComponentAnchor anchor(GRenderAnchor::leftTop);
+	transform.setPosition({ w / 2, h / 2 });
+//	anchor.setFlipX(true);
+	anchor.apply(transform, { w, h });
+	camera.apply(transform);
+	GRenderEngine::getInstance()->switchCamera(camera);
+*/
+
 	if(this->needSortRootTransformList) {
 		this->needSortRootTransformList = false;
-
-		std::stable_sort(this->rootTransformList.begin(), this->rootTransformList.end(), [](const GComponentTransform * a, const GComponentTransform * b) {
-			int zOrderA, zOrderB;
-			GComponentLocalTransform * localTransform;
-
-			localTransform = a->getEntity()->getComponentByType<GComponentLocalTransform>();
-			if(localTransform != nullptr) {
-				zOrderA = localTransform->getZOrder();
-			}
-			else {
-				zOrderA = a->getZOrder();
-			}
-
-			localTransform = b->getEntity()->getComponentByType<GComponentLocalTransform>();
-			if(localTransform != nullptr) {
-				zOrderB = localTransform->getZOrder();
-			}
-			else {
-				zOrderB = b->getZOrder();
-			}
-
-			return zOrderA < zOrderB;
-		});
+		doSortTransformList(this->rootTransformList);
 	}
 
 	for(GComponentTransform * transform : this->rootTransformList) {
