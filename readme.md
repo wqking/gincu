@@ -17,7 +17,7 @@ Now there is a match-three game in the project. In the future we may add more ga
 
 ## Version
 
-1.0.1
+0.0.1
 
 ## Supported platform
 

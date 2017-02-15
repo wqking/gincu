@@ -24,9 +24,9 @@ GCamera::GCamera()
 void GCamera::apply(const GTransform & transform)
 {
 	transform.setProjectionMode(true);
-	const GMatrix44 & sfmlTransform = transform.getMatrix();
-	GINCU_ACCESS_HACK(this->data->view, sfmlView_m_transform) = matrixToSfml(sfmlTransform);
-	GINCU_ACCESS_HACK(this->data->view, sfmlView_m_inverseTransform) = matrixToSfml(inverseMatrix(sfmlTransform));
+	const GMatrix44 & matrix = transform.getMatrix();
+	GINCU_ACCESS_HACK(this->data->view, sfmlView_m_transform) = matrixToSfml(matrix);
+	GINCU_ACCESS_HACK(this->data->view, sfmlView_m_inverseTransform) = matrixToSfml(inverseMatrix(matrix));
 	GINCU_ACCESS_HACK(this->data->view, sfmlView_m_transformUpdated) = true;
 	GINCU_ACCESS_HACK(this->data->view, sfmlView_m_invTransformUpdated) = true;
 

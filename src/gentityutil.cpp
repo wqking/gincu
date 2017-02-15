@@ -5,7 +5,7 @@
 
 namespace gincu {
 
-GMatrix44 computeRenderableTransform(GComponentTransform * componentTransform, const GSize & size)
+GMatrix44 computeRenderableMatrix(GComponentTransform * componentTransform, const GSize & size)
 {
 	GComponentAnchor * anchor = componentTransform->getEntity()->template getComponentByType<GComponentAnchor>();
 	if(anchor != nullptr) {
@@ -18,12 +18,12 @@ GMatrix44 computeRenderableTransform(GComponentTransform * componentTransform, c
 	}
 }
 
-GMatrix44 computeRenderableTransform(GComponentTransform * componentTransform, GComponentRender * render)
+GMatrix44 computeRenderableMatrix(GComponentTransform * componentTransform, GComponentRender * render)
 {
 	if(render == nullptr) {
 		render = componentTransform->getEntity()->getComponentByType<GComponentRender>();
 	}
-	return computeRenderableTransform(componentTransform, render->getSize());
+	return computeRenderableMatrix(componentTransform, render->getSize());
 }
 
 GComponentManager * getComponentManagerFromEntity(const GEntity * entity)

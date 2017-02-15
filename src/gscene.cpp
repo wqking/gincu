@@ -1,14 +1,20 @@
 #include "gincu/gscene.h"
 #include "gincu/gentity.h"
 #include "gincu/gcomponenttouchhandler.h"
+#include "gincu/gcomponenttransform.h"
+#include "gincu/gcomponentcamera.h"
 #include "gincu/gapplication.h"
 #include "gincu/gscenemanager.h"
+#include "gincu/gcomponentmanager.h"
 #include "gincu/gevent.h"
 
 namespace gincu {
 
 GScene::GScene()
-	: touchCapture(nullptr)
+	: 
+		componentManager(new GComponentManager()),
+		primaryCamera(nullptr),
+		touchCapture(nullptr)
 {
 }
 
@@ -16,8 +22,22 @@ GScene::~GScene()
 {
 }
 
+void GScene::initializePrimaryCamera()
+{
+	if(this->primaryCamera != nullptr) {
+		this->removeEntity(this->primaryCamera);
+	}
+
+	this->primaryCamera = new GEntity();
+	this->primaryCamera->addComponent(createComponent<GComponentTransform>());
+	this->primaryCamera->addComponent(createComponent<GComponentCamera>());
+	this->addEntity(this->primaryCamera);
+}
+
 void GScene::onEnter()
 {
+	this->initializePrimaryCamera();
+
 	this->doOnEnter();
 }
 
@@ -41,7 +61,7 @@ void GScene::renderScene()
 {
 	this->tweenList.tick((cpgf::GTweenNumber)GApplication::getInstance()->getRenderMilliseconds());
 
-	this->componentManager.updateDuringRender();
+	this->componentManager->updateDuringRender();
 }
 
 void GScene::setTouchCapture(GEntity * touchCapture)
@@ -61,7 +81,7 @@ void GScene::handleTouchEvent(const GEvent & touchEvent)
 {
 	std::vector<GComponentTouchHandler *> handlerList;
 
-	this->componentManager.findTouchHandlers(touchEvent.touch.position, &handlerList);
+	this->componentManager->findTouchHandlers(touchEvent.touch.position, &handlerList);
 
 	GEvent tempEvent = touchEvent;
 
@@ -96,7 +116,7 @@ GEntity * GScene::addEntity(GEntity * entity)
 {
 	if(entity != nullptr) {
 		this->entityList.push_back(EntityPointer(entity));
-		entity->setComponentManager(&this->componentManager);
+		entity->setComponentManager(this->componentManager.get());
 	}
 
 	return entity;
@@ -118,7 +138,7 @@ void GScene::removeEntity(GEntity * entity)
 
 void GScene::removeAllEntities()
 {
-	this->componentManager.clear();
+	this->componentManager->clear();
 	this->entityList.clear();
 	this->touchCapture = nullptr;
 	this->tweenList.clear();

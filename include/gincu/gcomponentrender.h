@@ -102,7 +102,7 @@ private:
 	virtual void doDraw() override {
 		GComponentTransform * transform = this->getEntity()->template getComponentByType<GComponentTransform>();
 		if(transform->isVisible()) {
-			this->render.draw(computeRenderableTransform(transform, this), this->getRenderInfo());
+			this->render.draw(computeRenderableMatrix(transform, this), this->getRenderInfo());
 		}
 	}
 

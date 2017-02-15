@@ -2,7 +2,6 @@
 #define GSCENE_H
 
 #include "gincu/ggeometry.h"
-#include "gincu/gcomponentmanager.h"
 
 #include "cpgf/tween/gtweenlist.h"
 
@@ -11,6 +10,7 @@
 
 namespace gincu {
 
+class GComponentManager;
 class GEntity;
 struct GEvent;
 
@@ -40,12 +40,16 @@ public:
 	cpgf::GTweenList * getTweenList() { return &this->tweenList; }
 
 private:
+	void initializePrimaryCamera();
+
+private:
 	virtual void doOnEnter();
 	virtual void doOnExit();
 
 private:
-	GComponentManager componentManager;
+	std::unique_ptr<GComponentManager> componentManager;
 	std::vector<EntityPointer> entityList;
+	GEntity * primaryCamera;
 	GEntity * touchCapture;
 	cpgf::GTweenList tweenList;
 };

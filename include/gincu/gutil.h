@@ -34,6 +34,12 @@ void removeValueFromContainer(C & container, const V & value)
 	container.erase(std::remove(container.begin(), container.end(), value), container.end());
 }
 
+template <typename C, typename V>
+void removeIfValueFromContainer(C & container, const V & predication)
+{
+	container.erase(std::remove_if(container.begin(), container.end(), predication), container.end());
+}
+
 
 inline bool isEqual(const int a, const int b)
 {

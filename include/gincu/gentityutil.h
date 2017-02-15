@@ -19,7 +19,7 @@ void enumerateEntityChildren(GComponentLocalTransform * localTransform, const Ca
 }
 
 template <typename T>
-T * getComponentByTypeFromComponent(GComponent * component)
+T * getComponentByTypeFromComponent(const GComponent * component)
 {
 	if(component != nullptr) {
 		GEntity * entity = component->getEntity();
@@ -35,8 +35,8 @@ class GComponentRender;
 class GEntity;
 class GComponentManager;
 
-GMatrix44 computeRenderableTransform(GComponentTransform * componentTransform, const GSize & size);
-GMatrix44 computeRenderableTransform(GComponentTransform * componentTransform, GComponentRender * render = nullptr);
+GMatrix44 computeRenderableMatrix(GComponentTransform * componentTransform, const GSize & size);
+GMatrix44 computeRenderableMatrix(GComponentTransform * componentTransform, GComponentRender * render = nullptr);
 
 GComponentManager * getComponentManagerFromEntity(const GEntity * entity);
 GComponentLocalTransform * getParentLocalTransform(const GEntity * entity);

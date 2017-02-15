@@ -52,7 +52,7 @@ bool GComponentRendererTouchHandler::doCanHandle(const GPoint & point) const
 		return false;
 	}
 
-	const GMatrix44 matrix = computeRenderableTransform(transform);
+	const GMatrix44 matrix = computeRenderableMatrix(transform);
 	const GSize size = getEntity()->getComponentByType<GComponentRender>()->getSize();
 
 	auto normalizedPoint = transformPoint(inverseMatrix(matrix), { point.x, point.y });

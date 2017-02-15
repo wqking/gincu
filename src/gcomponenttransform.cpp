@@ -30,11 +30,13 @@ GComponentTransform::~GComponentTransform()
 GComponentTransform * GComponentTransform::setCameraId(const unsigned int cameraId)
 {
 	if(this->cameraId != cameraId) {
+		const unsigned int oldCameraId = this->cameraId;
+
 		this->cameraId = cameraId;
 
 		GComponentManager * componentManager = getComponentManagerFromEntity(this->getEntity());
 		if(componentManager != nullptr) {
-			componentManager->cameraIdChanged(this);
+			componentManager->cameraIdChanged(this, oldCameraId);
 		}
 	}
 	
@@ -148,7 +150,7 @@ void GComponentLocalTransform::applyGlobal()
 		}
 		else {
 			globalTransform->setVisible(this->isVisible());
-
+			globalTransform->setZOrder(this->getZOrder());
 			globalTransform->setTransform(this->getTransform());
 		}
 	}

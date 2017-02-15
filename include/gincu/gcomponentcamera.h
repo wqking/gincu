@@ -36,6 +36,7 @@ public:
 	uint32_t getMask() const { return this->camera.getMask(); }
 
 	bool belongs(const unsigned int cameraId) const { return this->camera.belongs(cameraId); }
+	const GCamera & getCamera() const { return this->camera; }
 
 private:
 	void onEntityEvent(GComponent * component, const GEntityEventType eventType);

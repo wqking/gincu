@@ -5,6 +5,7 @@
 
 #include <vector>
 #include <map>
+#include <memory>
 
 namespace gincu {
 
@@ -18,6 +19,35 @@ class GComponentManager
 {
 private:
 	typedef std::vector<GComponent *> ComponentListType;
+	
+	struct CameraInfo
+	{
+		CameraInfo();
+		explicit CameraInfo(GComponentCamera * camera);
+		
+		void loadRootTransformList(const std::vector<GComponentTransform *> & componentList);
+		void loadTouchHandlerList(const std::vector<GComponent *> & componentList);
+
+		void zOrderChanged(GComponentTransform * transform);
+		void cameraIdChanged(GComponentTransform * transform, const unsigned int oldCameraId);
+		
+		void addTransform(GComponentTransform * component);
+		void removeTransform(GComponentTransform * component);
+		void addTouchHandler(GComponent * component);
+		void removeTouchHandler(GComponent * component);
+
+		bool belongs(const GComponent * component);
+
+		void render();
+		void findTouchHandlers(const GPoint & position, std::vector<GComponentTouchHandler *> * outputResult);
+
+		GComponentCamera * camera;
+		std::vector<GComponentTransform *> rootTransformList;
+		bool needSortRootTransformList;
+		std::vector<GComponent *> touchHandlerList;
+	};
+	
+	typedef std::shared_ptr<CameraInfo> CameraInfoPointer;
 
 public:
 	GComponentManager();
@@ -28,7 +58,7 @@ public:
 
 	void parentChanged(GComponentLocalTransform * localTransform);
 	void zOrderChanged(GComponentTransform * transform); // this can be either a global or local transform
-	void cameraIdChanged(GComponentTransform * transform);
+	void cameraIdChanged(GComponentTransform * transform, const unsigned int oldCameraId);
 	void cameraMaskChanged(GComponentCamera * camera);
 	
 	void updateAnimation();
@@ -51,6 +81,7 @@ private:
 	std::map<unsigned int, ComponentListType> componentListColdMap;
 	mutable std::vector<GComponentTransform *> rootTransformList;
 	mutable bool needSortRootTransformList;
+	mutable std::vector<CameraInfoPointer> cameraInfoList;
 	mutable bool needSortCameraList;
 };
 
