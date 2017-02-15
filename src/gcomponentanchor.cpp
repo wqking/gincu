@@ -8,6 +8,19 @@
 
 namespace gincu {
 
+namespace {
+
+GScale getDecompositedScale(const GMatrix44 & matrix)
+{
+	const auto p1 = transformPoint(matrix, { 0, 0 });
+	const auto p2 = transformPoint(matrix, { 1, 0 });
+	const auto p3 = transformPoint(matrix, { 0, 1 });
+	return { p2.x - p1.x, p3.y - p1.y };
+}
+
+
+} //unnamed namespace
+
 GComponentAnchor::GComponentAnchor()
 	:
 		super(this),
@@ -54,30 +67,30 @@ GComponentAnchor * GComponentAnchor::setFlipY(const bool flipY)
 	return this;
 }
 
-void GComponentAnchor::apply(GTransform & transform, const GSize & size)
+void GComponentAnchor::apply(GMatrix44 & matrix, const GSize & size)
 {
 	const bool globalFlipX = this->isGlobalFlipX();
 	const bool globalFlipY = this->isGlobalFlipY();
 	
 	if(globalFlipX || globalFlipY) {
-		const GScale scale = transform.getDecompositedScale();
+		const GScale scale = getDecompositedScale(matrix);
 		if(! isEqual(scale.x, 0.0f) && ! isEqual(scale.y, 0.0f)) {
-			transform.scale({ 1.0f / scale.x, 1.0f / scale.y });
+			matrix = scaleMatrix(matrix, { 1.0f / scale.x, 1.0f / scale.y });
 		}
 		if(globalFlipX && ! globalFlipY) {
-			transform.scale({ -scale.x, scale.y });
+			matrix = scaleMatrix(matrix, { -scale.x, scale.y });
 			if((this->anchor & GRenderAnchor::hLeft) != GRenderAnchor::none) {
-				transform.translate({ -size.width, 0 });
+				matrix = translateMatrix(matrix, { -size.width, 0 });
 			}
 		}
 		else if(! globalFlipX && globalFlipY) {
-			transform.scale({ scale.x, -scale.y });
+			matrix = scaleMatrix(matrix, { scale.x, -scale.y });
 			if((this->anchor & GRenderAnchor::vTop) != GRenderAnchor::none) {
-				transform.translate({ 0, -size.height });
+				matrix = translateMatrix(matrix, { 0, -size.height });
 			}
 		}
 		else if(globalFlipX && globalFlipY) {
-			transform.scale({ -scale.x, -scale.y });
+			matrix = scaleMatrix(matrix, { -scale.x, -scale.y });
 			GPoint translate{ 0, 0 };
 			if((this->anchor & GRenderAnchor::hLeft) != GRenderAnchor::none) {
 				translate.x = -size.width;
@@ -85,12 +98,12 @@ void GComponentAnchor::apply(GTransform & transform, const GSize & size)
 			if((this->anchor & GRenderAnchor::vTop) != GRenderAnchor::none) {
 				translate.y = -size.height;
 			}
-			transform.translate(translate);
+			matrix = translateMatrix(matrix, translate);
 		}
 	}
 
 	if(this->anchor != GRenderAnchor::leftTop) {
-		transform.translate(-getOriginByRenderAnchor(this->anchor, size));
+		matrix = translateMatrix(matrix, -getOriginByRenderAnchor(this->anchor, size));
 	}
 }
 

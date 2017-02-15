@@ -214,21 +214,21 @@ void GRenderEngine::switchCamera(const GCamera & camera)
 	this->data->updaterQueue->emplace_back(std::make_shared<GCameraData>(*camera.getData()));
 }
 
-void GRenderEngine::draw(const GTextRender & text, const GTransform & transform, const GRenderInfo * renderInfo)
+void GRenderEngine::draw(const GTextRender & text, const GMatrix44 & transform, const GRenderInfo * renderInfo)
 {
 	this->data->updaterQueue->emplace_back(text.getData(), transform, renderInfo);
 }
 
-void GRenderEngine::draw(const GRectRender & rect, const GTransform & transform, const GRenderInfo * renderInfo)
+void GRenderEngine::draw(const GRectRender & rect, const GMatrix44 & transform, const GRenderInfo * renderInfo)
 {
 	this->data->updaterQueue->emplace_back(rect.getData(), transform, renderInfo);
 }
 
-void GRenderEngine::doDrawTexture(const std::shared_ptr<GImageData> & texture, const GRect & rect, const GTransform & transform, const GRenderInfo * renderInfo)
+void GRenderEngine::doDrawTexture(const std::shared_ptr<GImageData> & texture, const GRect & rect, const GMatrix44 & transform, const GRenderInfo * renderInfo)
 {
 	this->data->updaterQueue->emplace_back(texture, rect, transform, renderInfo);
 return;
-
+/*
 	sf::RenderStates sfmlRenderStates;
 	copyBlendAndShaderToSfml(&sfmlRenderStates, renderInfo);
 	
@@ -252,7 +252,7 @@ return;
 				vertexData->vertexList.resize(vertexData->count + 64);
 			}
 			vertexData->count += 6;
-			putImageToVertexArray(vertexData->vertexList, index, transform.getSfmlTransform(), rect);
+			putImageToVertexArray(vertexData->vertexList, index, transform.getMatrix(), rect);
 		}
 	}
 	
@@ -261,10 +261,11 @@ return;
 //		std::shared_ptr<GVertexData> vertexData(allocateObjectOnHeapPool<GVertexData>(sf::VertexArray(sf::Triangles), texture), &freeObjectOnHeapPool<GVertexData>);
 		vertexData->count = 6;
 		vertexData->vertexList.resize(64);
-		putImageToVertexArray(vertexData->vertexList, 0, transform.getSfmlTransform(), rect);
+		putImageToVertexArray(vertexData->vertexList, 0, transform.getMatrix(), rect);
 		sfmlRenderStates.texture = &texture->texture;
 		this->data->updaterQueue->emplace_back(vertexData, sfmlRenderStates);
 	}
+*/
 }
 
 

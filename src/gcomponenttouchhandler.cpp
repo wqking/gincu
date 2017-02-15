@@ -52,11 +52,10 @@ bool GComponentRendererTouchHandler::doCanHandle(const GPoint & point) const
 		return false;
 	}
 
-	const GTransform t = computeRenderableTransform(transform);
+	const GMatrix44 matrix = computeRenderableTransform(transform);
 	const GSize size = getEntity()->getComponentByType<GComponentRender>()->getSize();
-	const sf::Transform & sfmlTransform = t.getSfmlTransform();
 
-	auto normalizedPoint = sfmlTransform.getInverse().transformPoint({ point.x, point.y });
+	auto normalizedPoint = transformPoint(inverseMatrix(matrix), { point.x, point.y });
 	return isWithin(normalizedPoint.x, 0, size.width) && isWithin(normalizedPoint.y, 0, size.height);
 }
 

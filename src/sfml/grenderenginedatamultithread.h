@@ -61,30 +61,30 @@ struct GRenderCommand
 	{
 	}
 
-	GRenderCommand(const std::shared_ptr<GImageData> & imageData, const GRect & rect, const GTransform & transform, const GRenderInfo * renderInfo)
+	GRenderCommand(const std::shared_ptr<GImageData> & imageData, const GRect & rect, const GMatrix44 & matrix, const GRenderInfo * renderInfo)
 		:
 			type(GRenderCommandType::image),
 			renderData(imageData),
 			rect(rect),
-			sfmlRenderStates(transform.getSfmlTransform())
+			sfmlRenderStates(matrixToSfml(matrix))
 	{
 		copyBlendAndShaderToSfml(&this->sfmlRenderStates, renderInfo);
 	}
 
-	GRenderCommand(const std::shared_ptr<GTextRenderData> & textData, const GTransform & transform, const GRenderInfo * renderInfo)
+	GRenderCommand(const std::shared_ptr<GTextRenderData> & textData, const GMatrix44 & matrix, const GRenderInfo * renderInfo)
 		:
 			type(GRenderCommandType::text),
 			renderData(textData),
-			sfmlRenderStates(transform.getSfmlTransform())
+			sfmlRenderStates(matrixToSfml(matrix))
 	{
 		copyBlendAndShaderToSfml(&this->sfmlRenderStates, renderInfo);
 	}
 
-	GRenderCommand(const std::shared_ptr<GRectRenderData> & rectData, const GTransform & transform, const GRenderInfo * renderInfo)
+	GRenderCommand(const std::shared_ptr<GRectRenderData> & rectData, const GMatrix44 & matrix, const GRenderInfo * renderInfo)
 		:
 			type(GRenderCommandType::rect),
 			renderData(rectData),
-			sfmlRenderStates(transform.getSfmlTransform())
+			sfmlRenderStates(matrixToSfml(matrix))
 	{
 		copyBlendAndShaderToSfml(&this->sfmlRenderStates, renderInfo);
 	}

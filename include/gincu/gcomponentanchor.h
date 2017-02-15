@@ -3,6 +3,7 @@
 
 #include "gincu/gcomponent.h"
 #include "gincu/ggeometry.h"
+#include "gincu/gmatrix.h"
 
 #include "cpgf/gflags.h"
 
@@ -41,7 +42,7 @@ public:
 	bool isFlipY() const { return this->flags.has(Flags::flagFlipY); }
 	GComponentAnchor * setFlipY(const bool flipY);
 
-	void apply(GTransform & transform, const GSize & size);
+	void apply(GMatrix44 & matrix, const GSize & size);
 
 private:
 	void doApplyGlobalFlipXy(const bool parentGlobalFlipX, const bool parentGlobalFlipY);

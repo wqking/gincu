@@ -17,9 +17,9 @@ GRectRender::~GRectRender()
 
 }
 
-void GRectRender::draw(const GTransform & transform, const GRenderInfo * renderInfo)
+void GRectRender::draw(const GMatrix44 & matrix, const GRenderInfo * renderInfo)
 {
-	GRenderEngine::getInstance()->draw(*this, transform, renderInfo);
+	GRenderEngine::getInstance()->draw(*this, matrix, renderInfo);
 }
 
 void GRectRender::setColor(const GColor color)

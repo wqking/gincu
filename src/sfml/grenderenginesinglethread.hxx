@@ -34,7 +34,7 @@ void GRenderEngineData::clearBatchDrawState() {
 
 void GRenderEngineData::directDrawTexture(const std::shared_ptr<GImageData> & texture, const GRect & rect, const GTransform & transform, const GRenderInfo * renderInfo)
 {
-	const sf::Transform & sfmlTransform = transform.getSfmlTransform();
+	const sf::Transform & sfmlTransform = transform.getMatrix();
 
 	sf::Sprite sprite(texture->texture, { (int)rect.x, (int)rect.y, (int)rect.width, (int)rect.height });
 	sf::RenderStates renderStates(sfmlTransform);
@@ -44,7 +44,7 @@ void GRenderEngineData::directDrawTexture(const std::shared_ptr<GImageData> & te
 
 void GRenderEngineData::batchDrawTexture(const std::shared_ptr<GImageData> & texture, const GRect & rect, const GTransform & transform, const GRenderInfo * renderInfo)
 {
-	const sf::Transform & sfmlTransform = transform.getSfmlTransform();
+	const sf::Transform & sfmlTransform = transform.getMatrix();
 
 	this->batchDrawRenderInfo = *renderInfo;
 	this->batchDrawImageData = texture;
@@ -133,7 +133,7 @@ void GRenderEngine::draw(const GTextRender & text, const GTransform & transform,
 {
 	this->data->endBatchDraw();
 
-	sf::RenderStates renderStates(transform.getSfmlTransform());
+	sf::RenderStates renderStates(transform.getMatrix());
 	copyBlendAndShaderToSfml(&renderStates, renderInfo);
 	this->data->window->draw(text.getData()->text, renderStates);
 }
@@ -142,7 +142,7 @@ void GRenderEngine::draw(const GRectRender & rect, const GTransform & transform,
 {
 	this->data->endBatchDraw();
 
-	sf::RenderStates renderStates(transform.getSfmlTransform());
+	sf::RenderStates renderStates(transform.getMatrix());
 	copyBlendAndShaderToSfml(&renderStates, renderInfo);
 	this->data->window->draw(rect.getData()->rectangle, renderStates);
 }

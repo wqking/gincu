@@ -13,10 +13,10 @@ GAtlasRender::GAtlasRender(const GAtlas & atlas)
 {
 }
 
-void GAtlasRender::draw(const GTransform & transform, const GRenderInfo * renderInfo)
+void GAtlasRender::draw(const GMatrix44 & matrix, const GRenderInfo * renderInfo)
 {
 	if(this->index >= 0 && this->index < this->atlas.getImageCount()) {
-		GRenderEngine::getInstance()->draw(*this, transform, renderInfo);
+		GRenderEngine::getInstance()->draw(*this, matrix, renderInfo);
 	}
 }
 

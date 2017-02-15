@@ -2,6 +2,7 @@
 #define GATLASRENDER_H
 
 #include "gincu/gatlas.h"
+#include "gincu/gmatrix.h"
 
 namespace gincu {
 
@@ -13,7 +14,7 @@ public:
 	GAtlasRender();
 	explicit GAtlasRender(const GAtlas & atlas);
 
-	void draw(const GTransform & transform, const GRenderInfo * renderInfo);
+	void draw(const GMatrix44 & matrix, const GRenderInfo * renderInfo);
 
 	GSize getSize() const;
 

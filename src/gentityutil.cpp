@@ -5,20 +5,20 @@
 
 namespace gincu {
 
-GTransform computeRenderableTransform(GComponentTransform * componentTransform, const GSize & size)
+GMatrix44 computeRenderableTransform(GComponentTransform * componentTransform, const GSize & size)
 {
 	GComponentAnchor * anchor = componentTransform->getEntity()->template getComponentByType<GComponentAnchor>();
 	if(anchor != nullptr) {
-		GTransform transform = componentTransform->getTransform();
-		anchor->apply(transform, size);
-		return transform;
+		GMatrix44 matrix = componentTransform->getTransform().getMatrix();
+		anchor->apply(matrix, size);
+		return matrix;
 	}
 	else {
-		return componentTransform->getTransform();
+		return componentTransform->getTransform().getMatrix();
 	}
 }
 
-GTransform computeRenderableTransform(GComponentTransform * componentTransform, GComponentRender * render)
+GMatrix44 computeRenderableTransform(GComponentTransform * componentTransform, GComponentRender * render)
 {
 	if(render == nullptr) {
 		render = componentTransform->getEntity()->getComponentByType<GComponentRender>();

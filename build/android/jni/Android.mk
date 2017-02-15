@@ -71,11 +71,11 @@ LOCAL_SRC_FILES := \
 	$(SRC_PATH)/sfml/gimage.cpp \
 	$(SRC_PATH)/sfml/ginputstream.cpp \
 	$(SRC_PATH)/sfml/gtextrender.cpp \
-	$(SRC_PATH)/sfml/gtransform.cpp \
 	$(SRC_PATH)/sfml/grectrender.cpp \
 	$(SRC_PATH)/sfml/grenderengine.cpp \
 	$(SRC_PATH)/sfml/gresourcemanager.cpp \
 	$(SRC_PATH)/sfml/gcamera.cpp \
+	$(SRC_PATH)/gtransform.cpp \
 	$(SRC_PATH)/gcomponent.cpp \
 	$(SRC_PATH)/gcomponentanchor.cpp \
 	$(SRC_PATH)/gcomponentanimation.cpp \

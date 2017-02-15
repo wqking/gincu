@@ -45,9 +45,9 @@ void GTextRender::setFontSize(const int fontSize)
 	this->data->text.setCharacterSize(fontSize);
 }
 
-void GTextRender::draw(const GTransform & transform, const GRenderInfo * renderInfo)
+void GTextRender::draw(const GMatrix44 & matrix, const GRenderInfo * renderInfo)
 {
-	GRenderEngine::getInstance()->draw(*this, transform, renderInfo);
+	GRenderEngine::getInstance()->draw(*this, matrix, renderInfo);
 }
 
 GSize GTextRender::getSize() const

@@ -3,6 +3,7 @@
 #include "gincu/gtransform.h"
 #include "gincu/gaccesshack.h"
 #include "gcameradata.h"
+#include "gsfmlutil.h"
 
 GINCU_ENABLE_ACCESS_HACK(sfmlView_m_transform, ::sf::View, m_transform, sf::Transform);
 GINCU_ENABLE_ACCESS_HACK(sfmlView_m_inverseTransform, ::sf::View, m_inverseTransform, sf::Transform);
@@ -23,9 +24,9 @@ GCamera::GCamera()
 void GCamera::apply(const GTransform & transform)
 {
 	transform.setProjectionMode(true);
-	const sf::Transform & sfmlTransform = transform.getSfmlTransform();
-	GINCU_ACCESS_HACK(this->data->view, sfmlView_m_transform) = sfmlTransform;
-	GINCU_ACCESS_HACK(this->data->view, sfmlView_m_inverseTransform) = sfmlTransform.getInverse();
+	const GMatrix44 & sfmlTransform = transform.getMatrix();
+	GINCU_ACCESS_HACK(this->data->view, sfmlView_m_transform) = matrixToSfml(sfmlTransform);
+	GINCU_ACCESS_HACK(this->data->view, sfmlView_m_inverseTransform) = matrixToSfml(inverseMatrix(sfmlTransform));
 	GINCU_ACCESS_HACK(this->data->view, sfmlView_m_transformUpdated) = true;
 	GINCU_ACCESS_HACK(this->data->view, sfmlView_m_invTransformUpdated) = true;
 

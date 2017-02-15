@@ -145,14 +145,14 @@ bool GRenderEngine::isAlive() const
 	return this->data->window->isOpen();
 }
 
-void GRenderEngine::draw(const GImage & image, const GTransform & transform, const GRenderInfo * renderInfo)
+void GRenderEngine::draw(const GImage & image, const GMatrix44 & matrix, const GRenderInfo * renderInfo)
 {
-	this->doDrawTexture(image.getData(), image.getRect(), transform, renderInfo);
+	this->doDrawTexture(image.getData(), image.getRect(), matrix, renderInfo);
 }
 
-void GRenderEngine::draw(const GAtlasRender & atlasRender, const GTransform & transform, const GRenderInfo * renderInfo)
+void GRenderEngine::draw(const GAtlasRender & atlasRender, const GMatrix44 & matrix, const GRenderInfo * renderInfo)
 {
-	this->doDrawTexture(atlasRender.getAtlas().getImageData(), atlasRender.getRect(), transform, renderInfo);
+	this->doDrawTexture(atlasRender.getAtlas().getImageData(), atlasRender.getRect(), matrix, renderInfo);
 }
 
 GPoint GRenderEngine::mapWindowToView(const GPoint & point) const

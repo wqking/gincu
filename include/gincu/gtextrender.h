@@ -4,6 +4,7 @@
 #include "gincu/gcolor.h"
 #include "gincu/ggeometry.h"
 #include "gincu/grenderanchor.h"
+#include "gincu/gmatrix.h"
 
 #include <string>
 #include <memory>
@@ -25,7 +26,7 @@ public:
 	void setColor(const GColor textColor);
 	void setFontSize(const int fontSize);
 
-	void draw(const GTransform & transform, const GRenderInfo * renderInfo);
+	void draw(const GMatrix44 & matrix, const GRenderInfo * renderInfo);
 
 	GSize getSize() const;
 

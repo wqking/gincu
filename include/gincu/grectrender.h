@@ -4,6 +4,7 @@
 #include "gincu/gcolor.h"
 #include "gincu/ggeometry.h"
 #include "gincu/grenderanchor.h"
+#include "gincu/gmatrix.h"
 
 #include <memory>
 
@@ -20,7 +21,7 @@ public:
 	GRectRender();
 	~GRectRender();
 
-	void draw(const GTransform & transform, const GRenderInfo * renderInfo);
+	void draw(const GMatrix44 & matrix, const GRenderInfo * renderInfo);
 
 	void setColor(const GColor color);
 	GColor getColor() const;

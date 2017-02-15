@@ -5,6 +5,7 @@
 #include "gincu/ggeometry.h"
 #include "gincu/gblendmode.h"
 #include "gincu/grenderinfo.h"
+#include "gincu/gmatrix.h"
 
 #include <SFML/Graphics.hpp>
 
@@ -40,6 +41,13 @@ inline sf::BlendMode gameBlendModeToSfml(const GBlendMode & blendMode)
 inline void copyBlendAndShaderToSfml(sf::RenderStates * renderStates, const GRenderInfo * renderInfo)
 {
 	renderStates->blendMode = gameBlendModeToSfml(renderInfo->blendMode);
+}
+
+inline sf::Transform matrixToSfml(const glm::mat4 & matrix)
+{
+	sf::Transform transform;
+	memcpy((float *)(transform.getMatrix()), &matrix[0][0], 16 * sizeof(float));
+	return transform;
 }
 
 

@@ -141,9 +141,9 @@ void GComponentLocalTransform::applyGlobal()
 				// don't call setCameraId to avoid trigger events.
 				globalTransform->cameraId = parentGlobalTransform->getCameraId();
 
-				GTransform parentTransform = parentGlobalTransform->getTransform();
-				parentTransform.translate(this->parent->getTransform().getOrigin());
-				globalTransform->setTransform(parentTransform.multiply(this->getTransform()));
+				globalTransform->setTransform(
+					GTransform(translateMatrix(parentGlobalTransform->getTransform().getMatrix(), this->parent->getTransform().getOrigin()) * this->getTransform().getMatrix())
+				);
 			}
 		}
 		else {

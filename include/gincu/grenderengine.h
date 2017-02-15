@@ -3,6 +3,7 @@
 
 #include "gincu/ggeometry.h"
 #include "gincu/gcolor.h"
+#include "gincu/gmatrix.h"
 
 #include "cpgf/gcallbackList.h"
 
@@ -46,10 +47,10 @@ public:
 	bool isAlive() const;
 
 	void switchCamera(const GCamera & camera);
-	void draw(const GImage & image, const GTransform & transform, const GRenderInfo * renderInfo);
-	void draw(const GAtlasRender & atlasRender, const GTransform & transform, const GRenderInfo * renderInfo);
-	void draw(const GTextRender & text, const GTransform & transform, const GRenderInfo * renderInfo);
-	void draw(const GRectRender & rect, const GTransform & transform, const GRenderInfo * renderInfo);
+	void draw(const GImage & image, const GMatrix44 & matrix, const GRenderInfo * renderInfo);
+	void draw(const GAtlasRender & atlasRender, const GMatrix44 & matrix, const GRenderInfo * renderInfo);
+	void draw(const GTextRender & text, const GMatrix44 & matrix, const GRenderInfo * renderInfo);
+	void draw(const GRectRender & rect, const GMatrix44 & matrix, const GRenderInfo * renderInfo);
 
 	GPoint mapWindowToView(const GPoint & point) const;
 	
@@ -63,7 +64,7 @@ public: // for internal usage
 private:
 	void doInitialize();
 	void doFinalize();
-	void doDrawTexture(const std::shared_ptr<GImageData> & texture, const GRect & rect, const GTransform & transform, const GRenderInfo * renderInfo);
+	void doDrawTexture(const std::shared_ptr<GImageData> & texture, const GRect & rect, const GMatrix44 & matrix, const GRenderInfo * renderInfo);
 
 	void doFitView();
 

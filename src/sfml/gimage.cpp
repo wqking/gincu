@@ -32,9 +32,9 @@ void GImage::load(const std::string & fileName)
 	this->data->load(fileName);
 }
 
-void GImage::draw(const GTransform & transform, const GRenderInfo * renderInfo)
+void GImage::draw(const GMatrix44 & matrix, const GRenderInfo * renderInfo)
 {
-	GRenderEngine::getInstance()->draw(*this, transform, renderInfo);
+	GRenderEngine::getInstance()->draw(*this, matrix, renderInfo);
 }
 
 GSize GImage::getSize() const

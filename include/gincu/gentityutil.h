@@ -4,6 +4,7 @@
 #include "gincu/gtransform.h"
 #include "gincu/gcomponenttransform.h"
 #include "gincu/gentity.h"
+#include "gincu/gmatrix.h"
 
 namespace gincu {
 
@@ -34,8 +35,8 @@ class GComponentRender;
 class GEntity;
 class GComponentManager;
 
-GTransform computeRenderableTransform(GComponentTransform * componentTransform, const GSize & size);
-GTransform computeRenderableTransform(GComponentTransform * componentTransform, GComponentRender * render = nullptr);
+GMatrix44 computeRenderableTransform(GComponentTransform * componentTransform, const GSize & size);
+GMatrix44 computeRenderableTransform(GComponentTransform * componentTransform, GComponentRender * render = nullptr);
 
 GComponentManager * getComponentManagerFromEntity(const GEntity * entity);
 GComponentLocalTransform * getParentLocalTransform(const GEntity * entity);
