@@ -1,9 +1,11 @@
 #include "gincu/gcamera.h"
 #include "gincu/gapplication.h"
+#include "gincu/grenderengine.h"
 #include "gincu/gtransform.h"
 #include "gincu/gaccesshack.h"
 #include "gcameradata.h"
 #include "gsfmlutil.h"
+#include "grenderenginedata.h"
 
 GINCU_ENABLE_ACCESS_HACK(sfmlView_m_transform, ::sf::View, m_transform, sf::Transform);
 GINCU_ENABLE_ACCESS_HACK(sfmlView_m_inverseTransform, ::sf::View, m_inverseTransform, sf::Transform);
@@ -21,10 +23,8 @@ GCamera::GCamera()
 {
 }
 
-void GCamera::apply(const GTransform & transform)
+void GCamera::apply(const GMatrix44 & matrix)
 {
-	transform.setProjectionMode(true);
-	const GMatrix44 & matrix = transform.getMatrix();
 	GINCU_ACCESS_HACK(this->data->view, sfmlView_m_transform) = matrixToSfml(matrix);
 	GINCU_ACCESS_HACK(this->data->view, sfmlView_m_inverseTransform) = matrixToSfml(inverseMatrix(matrix));
 	GINCU_ACCESS_HACK(this->data->view, sfmlView_m_transformUpdated) = true;
@@ -41,8 +41,10 @@ void GCamera::apply(const GTransform & transform)
 
 GPoint GCamera::mapScreenToCamera(const GPoint & point) const
 {
-	return point;
+	auto pt = GRenderEngine::getInstance()->getData()->window->mapPixelToCoords({(int)point.x, (int)point.y}, this->data->view);
+	return {pt.x, pt.y};
 }
+
 
 
 } //namespace gincu

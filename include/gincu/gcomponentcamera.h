@@ -26,13 +26,13 @@ public:
 public:
 	GComponentCamera();
 
-	void setViewport(const GRect & viewport) { this->camera.setViewport(viewport); }
+	GComponentCamera * setViewport(const GRect & viewport) { this->camera.setViewport(viewport); return this; }
 	const GRect & getViewport() const { return this->camera.getViewport(); }
 	
-	void setSize(const GSize & size);
+	GComponentCamera * setSize(const GSize & size);
 	const GSize & getSize() const { return this->camera.getSize(); }
 
-	void setMask(const uint32_t mask);
+	GComponentCamera * setMask(const uint32_t mask);
 	uint32_t getMask() const { return this->camera.getMask(); }
 
 	bool belongs(const unsigned int cameraId) const { return this->camera.belongs(cameraId); }

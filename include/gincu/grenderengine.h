@@ -52,8 +52,6 @@ public:
 	void draw(const GTextRender & text, const GMatrix44 & matrix, const GRenderInfo * renderInfo);
 	void draw(const GRectRender & rect, const GMatrix44 & matrix, const GRenderInfo * renderInfo);
 
-	GPoint mapWindowToView(const GPoint & point) const;
-	
 	GSize getWindowSize() const { return this->windowSize; }
 
 	const std::shared_ptr<GRenderEngineData> & getData() const { return this->data; }

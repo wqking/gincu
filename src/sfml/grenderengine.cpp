@@ -86,7 +86,7 @@ bool GRenderEngine::peekEvent(GEvent * event)
 		event->touch = GTouchEvent();
 		event->type = (e.type == sf::Event::MouseButtonPressed ? GEventType::touchPressed : GEventType::touchReleased);
 		event->touch.down = (e.type == sf::Event::MouseButtonPressed);
-		event->touch.position = GRenderEngine::getInstance()->mapWindowToView({(GCoord)e.mouseButton.x, (GCoord)e.mouseButton.y});
+		event->touch.position = {(GCoord)e.mouseButton.x, (GCoord)e.mouseButton.y};
 		break;
 	}
 
@@ -94,7 +94,7 @@ bool GRenderEngine::peekEvent(GEvent * event)
 		event->touch = GTouchEvent();
 		event->type = GEventType::touchMoved;
 		event->touch.down = sf::Mouse::isButtonPressed(sf::Mouse::Left);
-		event->touch.position = GRenderEngine::getInstance()->mapWindowToView({(GCoord)e.mouseMove.x, (GCoord)e.mouseMove.y});
+		event->touch.position = {(GCoord)e.mouseMove.x, (GCoord)e.mouseMove.y};
 		break;
 	}
 
@@ -104,7 +104,7 @@ bool GRenderEngine::peekEvent(GEvent * event)
 		event->type = (e.type == sf::Event::TouchBegan ? GEventType::touchPressed : GEventType::touchReleased);
 		event->touch.finger = e.touch.finger;
 		event->touch.down = (e.type == sf::Event::TouchBegan);
-		event->touch.position = GRenderEngine::getInstance()->mapWindowToView({(GCoord)e.touch.x, (GCoord)e.touch.y});
+		event->touch.position = {(GCoord)e.touch.x, (GCoord)e.touch.y};
 
 		break;
 	}
@@ -113,7 +113,7 @@ bool GRenderEngine::peekEvent(GEvent * event)
 		event->touch = GTouchEvent();
 		event->type = GEventType::touchMoved;
 		event->touch.down = true;
-		event->touch.position = GRenderEngine::getInstance()->mapWindowToView({(GCoord)e.touch.x, (GCoord)e.touch.y});
+		event->touch.position = {(GCoord)e.touch.x, (GCoord)e.touch.y};
 		break;
 	}
 
@@ -153,12 +153,6 @@ void GRenderEngine::draw(const GImage & image, const GMatrix44 & matrix, const G
 void GRenderEngine::draw(const GAtlasRender & atlasRender, const GMatrix44 & matrix, const GRenderInfo * renderInfo)
 {
 	this->doDrawTexture(atlasRender.getAtlas().getImageData(), atlasRender.getRect(), matrix, renderInfo);
-}
-
-GPoint GRenderEngine::mapWindowToView(const GPoint & point) const
-{
-	auto pt = this->data->window->mapPixelToCoords({(int)point.x, (int)point.y});
-	return {pt.x, pt.y};
 }
 
 void GRenderEngine::onWindowResized(const GSize & newSize)

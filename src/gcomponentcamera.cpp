@@ -13,13 +13,14 @@ GComponentCamera::GComponentCamera()
 {
 }
 
-void GComponentCamera::setSize(const GSize & size)
+GComponentCamera * GComponentCamera::setSize(const GSize & size)
 {
 	this->camera.setSize(size);
 	this->doInitializeComponentTransform(getComponentByTypeFromComponent<GComponentTransform>(this));
+	return this;
 }
 
-void GComponentCamera::setMask(const uint32_t mask)
+GComponentCamera * GComponentCamera::setMask(const uint32_t mask)
 {
 	if(mask != this->getMask()) {
 		this->camera.setMask(mask);
@@ -29,6 +30,8 @@ void GComponentCamera::setMask(const uint32_t mask)
 			componentManager->cameraMaskChanged(this);
 		}
 	}
+	
+	return this;
 }
 
 void GComponentCamera::onEntityEvent(GComponent * component, const GEntityEventType eventType)

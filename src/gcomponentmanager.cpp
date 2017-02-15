@@ -166,6 +166,95 @@ void doFindTouchHandlers(
 	}
 }
 
+struct TouchFinderItem {
+	GComponentTouchHandler * touchHandler;
+	std::vector<int> zOrderList;
+};
+
+void doFindTouchHandlers(
+		const GComponentCamera * camera,
+		const std::vector<GComponent *> & touchHandlerList,
+		const GPoint & position,
+		std::vector<TouchFinderItem> * outputResult
+	)
+{
+	const GPoint cameraPosition = camera->getCamera().mapScreenToCamera(position);
+	for(GComponent * component : touchHandlerList) {
+		if(static_cast<GComponentTouchHandler *>(component)->canHandle(cameraPosition)) {
+			outputResult->push_back({ static_cast<GComponentTouchHandler *>(component), std::vector<int>() });
+		}
+	}
+}
+
+void doTransformTouchHandlers(
+		std::vector<TouchFinderItem> & itemList,
+		std::vector<GComponentTouchHandler *> * outputResult
+	)
+{
+	if(itemList.empty()) {
+		return;
+	}
+	else if(itemList.size() == 1) {
+		outputResult->push_back(itemList.front().touchHandler);
+		return;
+	}
+
+	for(TouchFinderItem & item : itemList) {
+		GEntity * entity = item.touchHandler->getEntity();
+
+		while(entity != nullptr) {
+			GComponentLocalTransform * localTransform = entity->getComponentByType<GComponentLocalTransform>();
+			if(localTransform != nullptr) {
+				item.zOrderList.push_back(localTransform->getZOrder());
+
+				GComponentLocalTransform * parentLocalTransform = localTransform->getParent();
+				if(parentLocalTransform != nullptr) {
+					entity = parentLocalTransform->getEntity();
+				}
+				else {
+					entity = nullptr;
+				}
+			}
+			else {
+				GComponentTransform * transform = entity->getComponentByType<GComponentTransform>();
+				if(transform != nullptr) {
+					item.zOrderList.push_back(transform->getZOrder());
+				}
+				else {
+					item.zOrderList.push_back(0);
+				}
+				entity = nullptr;
+			}
+		}
+	}
+
+	std::stable_sort(itemList.begin(), itemList.end(), [](const TouchFinderItem & a, const TouchFinderItem & b) {
+		int indexA = (int)a.zOrderList.size() - 1;
+		int indexB = (int)b.zOrderList.size() - 1;
+
+		while(indexA >= 0 && indexB >= 0) {
+			if(a.zOrderList[indexA--] < b.zOrderList[indexB--]) {
+				return true;
+			}
+		}
+
+		if(indexA >= 0) {
+			return a.zOrderList[indexA] < 0;
+		}
+		if(indexB >= 0) {
+			return b.zOrderList[indexB] < 0;
+		}
+
+		return false;
+	});
+
+	const int count = (int)itemList.size();
+	outputResult->resize(count);
+	for(int i =  count - 1; i >= 0; --i) {
+		outputResult->at(count - i - 1) = itemList[i].touchHandler;
+	}
+}
+
 
 } //unnamed namespace
 
@@ -284,7 +373,9 @@ void GComponentManager::CameraInfo::render()
 	GCamera c = this->camera->getCamera();
 	GComponentTransform * transform = getComponentByTypeFromComponent<GComponentTransform>(this->camera);
 	if(transform != nullptr) {
-		c.apply(transform->getTransform());
+		transform->getTransform().setProjectionMode(true);
+		const GRect viewport = c.getViewport();
+		c.apply(computeRenderableMatrix(transform, { viewport.width, viewport.height }));
 	}
 	GRenderEngine::getInstance()->switchCamera(c);
 
@@ -295,7 +386,7 @@ void GComponentManager::CameraInfo::render()
 
 void GComponentManager::CameraInfo::findTouchHandlers(const GPoint & position, std::vector<GComponentTouchHandler *> * outputResult)
 {
-	doFindTouchHandlers(this->touchHandlerList, position, outputResult);
+	doFindTouchHandlers(this->touchHandlerList, this->camera->getCamera().mapScreenToCamera(position), outputResult);
 }
 
 
@@ -453,7 +544,6 @@ void GComponentManager::render()
 		cameraInfo->render();
 	}
 	return;
-
 /*
 	const float w = 900, h = 600;
 	GCamera camera;
@@ -464,10 +554,10 @@ void GComponentManager::render()
 	GComponentAnchor anchor(GRenderAnchor::leftTop);
 	transform.setPosition({ w / 2, h / 2 });
 //	anchor.setFlipX(true);
-	anchor.apply(transform, { w, h });
-	camera.apply(transform);
+	GMatrix44 matrix = transform.getMatrix();
+	anchor.apply(matrix, { w, h });
+	camera.apply(matrix);
 	GRenderEngine::getInstance()->switchCamera(camera);
-*/
 
 	if(this->needSortRootTransformList) {
 		this->needSortRootTransformList = false;
@@ -477,6 +567,7 @@ void GComponentManager::render()
 	for(GComponentTransform * transform : this->rootTransformList) {
 		doRenderEntity(transform->getEntity());
 	}
+*/
 }
 
 void GComponentManager::findTouchHandlers(const GPoint & position, std::vector<GComponentTouchHandler *> * outputResult)
@@ -486,7 +577,7 @@ void GComponentManager::findTouchHandlers(const GPoint & position, std::vector<G
 	}
 	return;
 
-	doFindTouchHandlers(*this->doGetComponentList(GComponentTouchHandler::getComponentType()), position, outputResult);
+//	doFindTouchHandlers(*this->doGetComponentList(GComponentTouchHandler::getComponentType()), position, outputResult);
 }
 
 GComponentManager::ComponentListType * GComponentManager::doGetComponentList(const unsigned int typeId)

@@ -2,6 +2,7 @@
 #define GCAMERA_H
 
 #include "gincu/ggeometry.h"
+#include "gincu/gmatrix.h"
 
 #include <cstdint>
 #include <memory>
@@ -17,7 +18,7 @@ class GCamera
 public:
 	GCamera();
 	
-	void apply(const GTransform & transform);
+	void apply(const GMatrix44 & matrix);
 
 	void setViewport(const GRect & viewport) { this->viewport = viewport; }
 	const GRect & getViewport() const { return this->viewport; }

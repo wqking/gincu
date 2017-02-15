@@ -8,6 +8,8 @@
 #include "gincu/gcomponentmanager.h"
 #include "gincu/gevent.h"
 
+#include "gincu/gcomponentanchor.h" // for test
+
 namespace gincu {
 
 GScene::GScene()
@@ -29,8 +31,9 @@ void GScene::initializePrimaryCamera()
 	}
 
 	this->primaryCamera = new GEntity();
-	this->primaryCamera->addComponent(createComponent<GComponentTransform>());
+	this->primaryCamera->addComponent(createComponent<GComponentTransform>(GPoint{ 0, 0 }));
 	this->primaryCamera->addComponent(createComponent<GComponentCamera>());
+//	this->primaryCamera->addComponent(createComponent<GComponentAnchor>(GRenderAnchor::leftTop)->setFlipX(true)->setFlipY(true));
 	this->addEntity(this->primaryCamera);
 }
 

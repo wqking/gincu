@@ -126,7 +126,7 @@ void GTransform::doUpdateTransform() const
 			float angle  = degreeToRadian(this->rotation);
 			const float cosine = (float)(std::cos(angle));
 			const float sine = (float)(std::sin(angle));
-			GPoint pos = -this->position;
+			GPoint pos = this->position;
 			pos.x += this->origin.x / 2;
 			pos.y += this->origin.y / 2;
 			float tx     = -pos.x * cosine - pos.y * sine + pos.x;
