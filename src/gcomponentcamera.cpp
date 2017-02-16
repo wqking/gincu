@@ -13,9 +13,9 @@ GComponentCamera::GComponentCamera()
 {
 }
 
-GComponentCamera * GComponentCamera::setSize(const GSize & size)
+GComponentCamera * GComponentCamera::setWorldSize(const GSize & worldSize)
 {
-	this->camera.setSize(size);
+	this->camera.setWorldSize(worldSize);
 	this->doInitializeComponentTransform(getComponentByTypeFromComponent<GComponentTransform>(this));
 	return this;
 }
@@ -56,7 +56,7 @@ void GComponentCamera::doInitializeComponentTransform(GComponentTransform * comp
 {
 	if(componentTransform != nullptr) {
 		componentTransform->getTransform().setProjectionMode(true);
-		const GSize & size = this->camera.getSize();
+		const GSize & size = this->camera.getWorldSize();
 		componentTransform->setOrigin({ size.width, size.height });
 	}
 }

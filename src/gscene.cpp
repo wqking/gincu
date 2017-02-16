@@ -27,14 +27,15 @@ GScene::~GScene()
 void GScene::initializePrimaryCamera()
 {
 	if(this->primaryCamera != nullptr) {
-		this->removeEntity(this->primaryCamera);
+		this->removeEntity(this->primaryCamera->getEntity());
 	}
 
-	this->primaryCamera = new GEntity();
-	this->primaryCamera->addComponent(createComponent<GComponentTransform>(GPoint{ 0, 0 }));
-	this->primaryCamera->addComponent(createComponent<GComponentCamera>());
-//	this->primaryCamera->addComponent(createComponent<GComponentAnchor>(GRenderAnchor::leftTop)->setFlipX(true)->setFlipY(true));
-	this->addEntity(this->primaryCamera);
+	GEntity * cameraEntity = new GEntity();
+	cameraEntity->addComponent(createComponent<GComponentTransform>());
+	cameraEntity->addComponent((this->primaryCamera = createComponent<GComponentCamera>()
+		->setFitStrategy(GCameraFitStrategy::scaleFitFullScreen)));
+//cameraEntity->addComponent(createComponent<GComponentAnchor>(GRenderAnchor::leftTop)->setFlipX(true)->setFlipY(true));
+	this->addEntity(cameraEntity);
 }
 
 void GScene::onEnter()
@@ -82,9 +83,9 @@ GEntity * GScene::getTouchCapture() const
 
 void GScene::handleTouchEvent(const GEvent & touchEvent)
 {
-	std::vector<GComponentTouchHandler *> handlerList;
+	std::vector<GTouchHandlerFindResult> handlerList;
 
-	this->componentManager->findTouchHandlers(touchEvent.touch.position, &handlerList);
+	this->componentManager->findTouchHandlers(&handlerList, touchEvent.touch.screenPosition);
 
 	GEvent tempEvent = touchEvent;
 
@@ -98,10 +99,11 @@ void GScene::handleTouchEvent(const GEvent & touchEvent)
 	else {
 		for(auto it = handlerList.begin(); it != handlerList.end(); ++it) {
 			tempEvent.propagation = false;
-			tempEvent.touch.touchedEntity = (*it)->getEntity();
+			tempEvent.touch.touchedEntity = it->handler->getEntity();
+			tempEvent.touch.worldPosition = it->worldPosition;
 			if(this->touchCapture == nullptr) {
 				tempEvent.touch.target = tempEvent.touch.touchedEntity;
-				(*it)->handle(tempEvent);
+				it->handler->handle(tempEvent);
 			}
 			else {
 				tempEvent.touch.target = this->touchCapture;

@@ -36,8 +36,7 @@ public:
 	void removeUpdater(const FrameUpdater & updater);
 
 	const GConfigInfo & getConfigInfo() const { return this->configInfo; }
-	const GSize & getViewSize() const { return this->configInfo.viewSize; }
-	GSize getWindowSize() const;
+	GSize getScreenSize() const;
 
 	GSceneManager * getSceneManager() const { return this->sceneManager.get(); }
 
@@ -48,7 +47,7 @@ public:
 	unsigned int getRenderMilliseconds() const { return this->renderMilliseconds; }
 
 protected:
-	void setConfigInfo(const GConfigInfo & configInfo) { this->configInfo = configInfo; }
+	void setConfigInfo(const GConfigInfo & configInfo);
 
 private:
 	void initialize();
@@ -70,6 +69,8 @@ private:
 	std::unique_ptr<GSceneManager> sceneManager;
 
 	bool finished;
+
+	GSize screenSize;
 	int64_t frameCount;
 	int frameRate;
 	int renderFrameRate;

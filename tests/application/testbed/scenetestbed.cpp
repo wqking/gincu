@@ -10,6 +10,7 @@
 #include "gincu/gcomponenttransform.h"
 #include "gincu/gcomponenttouchhandler.h"
 #include "gincu/gcomponentanchor.h"
+#include "gincu/gcomponentcamera.h"
 
 #include "cpgf/goutmain.h"
 
@@ -33,11 +34,9 @@ void SceneTestBed::doOnEnter()
 
 	const std::vector<TestCaseItem> & itemList = TestBedRegister::getInstance()->getSortedItemList();
 
-	const GApplication * application = GApplication::getInstance();
-
 	const int itemCount = (int)itemList.size();
-	const GCoord viewWidth = application->getViewSize().width;
-	const GCoord viewHeight = application->getViewSize().height;
+	const GCoord viewWidth = this->getPrimaryCamera()->getWorldSize().width;
+	const GCoord viewHeight = this->getPrimaryCamera()->getWorldSize().height;
 	const GSize tileSize { 200, 60};
 	const GCoord xSpace = 10;
 	const GCoord ySpace = 10;
@@ -50,7 +49,7 @@ void SceneTestBed::doOnEnter()
 	const GCoord totalHeight = actualRowCount * tileSize.height + (actualRowCount - 1) * ySpace;
 	const GCoord yStart = (viewHeight - totalHeight) / 2;
 	const GCoord totalWidth = actualColumnCount * tileSize.width + (actualColumnCount - 1) * xSpace;
-	const GCoord xStart = (viewWidth - totalWidth) / 2;
+	const GCoord xStart = (viewWidth - totalWidth + tileSize.width) / 2;
 
 	for(int i = 0; i < itemCount; ++i) {
 		const auto item = itemList[i];

@@ -2,49 +2,120 @@
 #include "gincu/gapplication.h"
 #include "gincu/grenderengine.h"
 #include "gincu/gtransform.h"
-#include "gincu/gaccesshack.h"
+#include "gincu/gutil.h"
 #include "gcameradata.h"
 #include "gsfmlutil.h"
 #include "grenderenginedata.h"
-
-GINCU_ENABLE_ACCESS_HACK(sfmlView_m_transform, ::sf::View, m_transform, sf::Transform);
-GINCU_ENABLE_ACCESS_HACK(sfmlView_m_inverseTransform, ::sf::View, m_inverseTransform, sf::Transform);
-GINCU_ENABLE_ACCESS_HACK(sfmlView_m_transformUpdated, ::sf::View, m_transformUpdated, bool);
-GINCU_ENABLE_ACCESS_HACK(sfmlView_m_invTransformUpdated, ::sf::View, m_invTransformUpdated, bool);
 
 namespace gincu {
 
 GCamera::GCamera()
 	:
 		mask(1),
-		viewport(createRect(GPoint(), GApplication::getInstance()->getWindowSize())),
-		size(GApplication::getInstance()->getWindowSize()),
+		viewport{ 0.0f, 0.0f, 1.0f, 1.0f },
+		worldSize(GApplication::getInstance()->getScreenSize()),
+		fitStrategy(GCameraFitStrategy::none),
+		targetViewSize(GApplication::getInstance()->getScreenSize()),
+		cachedScreenSize{ -1, -1 },
 		data(std::make_shared<GCameraData>())
 {
 }
 
+void GCamera::setViewport(const GRect & viewport)
+{
+	this->viewport = viewport;
+	this->doRequireRefresh();
+}
+
+const GRect & GCamera::getViewport() const
+{
+	this->doRefresh();
+	return this->viewport;
+}
+
+void GCamera::setTargetViewSize(const GSize & size)
+{
+	this->targetViewSize = size;
+	this->doRequireRefresh();
+}
+
+GRect GCamera::getViewportPixels() const
+{
+	this->doRefresh();
+
+	const GSize screenSize = GApplication::getInstance()->getScreenSize();
+	return {
+		std::round(screenSize.width * this->viewport.x),
+		std::round(screenSize.height * this->viewport.y),
+		std::round(screenSize.width * this->viewport.width),
+		std::round(screenSize.height * this->viewport.height)
+	};
+}
+
+void GCamera::setFitStrategy(const GCameraFitStrategy strategy)
+{
+	this->fitStrategy = strategy;
+	this->doRequireRefresh();
+}
+
 void GCamera::apply(const GMatrix44 & matrix)
 {
-	GINCU_ACCESS_HACK(this->data->view, sfmlView_m_transform) = matrixToSfml(matrix);
-	GINCU_ACCESS_HACK(this->data->view, sfmlView_m_inverseTransform) = matrixToSfml(inverseMatrix(matrix));
-	GINCU_ACCESS_HACK(this->data->view, sfmlView_m_transformUpdated) = true;
-	GINCU_ACCESS_HACK(this->data->view, sfmlView_m_invTransformUpdated) = true;
+	this->doRefresh();
 
-	const GSize windowSize = GApplication::getInstance()->getWindowSize();
+	matrixToSfml(&this->data->view.getTransform(), matrix);
+	matrixToSfml(&this->data->view.getInverseTransform(), inverseMatrix(matrix));
+
 	this->data->view.setViewport({
-		this->viewport.x / windowSize.width,
-		this->viewport.y / windowSize.height,
-		this->viewport.width / windowSize.width,
-		this->viewport.height / windowSize.height
+		this->viewport.x,
+		this->viewport.y,
+		this->viewport.width,
+		this->viewport.height
 	});
 }
 
-GPoint GCamera::mapScreenToCamera(const GPoint & point) const
+GPoint GCamera::mapWindowToCamera(const GPoint & point) const
 {
 	auto pt = GRenderEngine::getInstance()->getData()->window->mapPixelToCoords({(int)point.x, (int)point.y}, this->data->view);
 	return {pt.x, pt.y};
 }
 
+void GCamera::doRequireRefresh()
+{
+	this->cachedScreenSize.width = -1;
+}
+
+void GCamera::doRefresh() const
+{
+	if(this->cachedScreenSize != GApplication::getInstance()->getScreenSize()) {
+		this->cachedScreenSize = GApplication::getInstance()->getScreenSize();
+		
+		switch(this->fitStrategy) {
+		case GCameraFitStrategy::none:
+			break;
+			
+		case GCameraFitStrategy::scaleFitFullScreen: {
+			const float cachedRatio = this->cachedScreenSize.width / this->cachedScreenSize.height;
+			const float targetRatio = this->targetViewSize.width / this->targetViewSize.height;
+			if(cachedRatio >= targetRatio) {
+				this->viewport.width = targetRatio / cachedRatio;
+				this->viewport.height = 1;
+			}
+			else {
+				this->viewport.width = 1;
+				this->viewport.height = cachedRatio / targetRatio;
+			}
+			this->viewport.x = (1.0f - this->viewport.width) / 2.0f;
+			this->viewport.y = (1.0f - this->viewport.height) / 2.0f;
+		}
+			break;
+			
+		case GCameraFitStrategy::fixed:
+			this->viewport.width = this->targetViewSize.width / this->cachedScreenSize.width;
+			this->viewport.height = this->targetViewSize.height / this->cachedScreenSize.height;
+			break;
+		}
+	}
+}
 
 
 } //namespace gincu

@@ -12,6 +12,7 @@ namespace gincu {
 
 class GComponentManager;
 class GEntity;
+class GComponentCamera;
 struct GEvent;
 
 class GScene
@@ -37,6 +38,8 @@ public:
 	void setTouchCapture(GEntity * touchCapture);
 	GEntity * getTouchCapture() const;
 
+	GComponentCamera * getPrimaryCamera() const { return this->primaryCamera; }
+
 	cpgf::GTweenList * getTweenList() { return &this->tweenList; }
 
 private:
@@ -49,7 +52,7 @@ private:
 private:
 	std::unique_ptr<GComponentManager> componentManager;
 	std::vector<EntityPointer> entityList;
-	GEntity * primaryCamera;
+	GComponentCamera * primaryCamera;
 	GEntity * touchCapture;
 	cpgf::GTweenList tweenList;
 };

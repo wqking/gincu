@@ -2,6 +2,7 @@
 #define GCOMPONENTMANAGER_H
 
 #include "gincu/ggeometry.h"
+#include "gincu/gcomponenttouchhandler.h"
 
 #include <vector>
 #include <map>
@@ -39,7 +40,7 @@ private:
 		bool belongs(const GComponent * component);
 
 		void render();
-		void findTouchHandlers(const GPoint & position, std::vector<GComponentTouchHandler *> * outputResult);
+		void findTouchHandlers(std::vector<GTouchHandlerFindResult> * outputResult, const GPoint & screenPosition);
 
 		GComponentCamera * camera;
 		std::vector<GComponentTransform *> rootTransformList;
@@ -65,7 +66,7 @@ public:
 	void updateLocalTransforms();
 	void render();
 
-	void findTouchHandlers(const GPoint & position, std::vector<GComponentTouchHandler *> * outputResult);
+	void findTouchHandlers(std::vector<GTouchHandlerFindResult> * outputResult, const GPoint & screenPosition);
 
 	void updateDuringRender() {
 		this->updateAnimation();

@@ -32,11 +32,11 @@ public:
 	GComponentTouchHandler * addOnTouch(const OnTouched & onTouch);
 	void removeOnTouch(const OnTouched & onTouch);
 
-	bool canHandle(const GPoint & point) const;
+	bool canHandle(const GPoint & worldPosition) const;
 	void handle(const GEvent & touchEvent);
 
 private:
-	virtual bool doCanHandle(const GPoint & point) const = 0;
+	virtual bool doCanHandle(const GPoint & worldPosition) const = 0;
 
 private:
 	std::shared_ptr<OnTouchedList> onTouchedList;
@@ -48,7 +48,13 @@ public:
 	GComponentRendererTouchHandler();
 
 private:
-	virtual bool doCanHandle(const GPoint & point) const;
+	virtual bool doCanHandle(const GPoint & worldPosition) const;
+};
+
+struct GTouchHandlerFindResult
+{
+	GComponentTouchHandler * handler;
+	GPoint worldPosition;
 };
 
 

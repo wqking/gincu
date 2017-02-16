@@ -26,6 +26,7 @@ GApplication * GApplication::getInstance()
 GApplication::GApplication()
 	:
 		finished(false),
+		screenSize(),
 		frameCount(0),
 		frameRate(60),
 		renderFrameRate(60),
@@ -144,7 +145,7 @@ void GApplication::processEvents()
 			break;
 
 		case GEventType::windowResized:
-			this->renderEngine->onWindowResized(GSize{ (GCoord)event.resize.width, (GCoord)event.resize.height });
+			this->screenSize = GSize{ (GCoord)event.resize.width, (GCoord)event.resize.height };
 			break;
 
 		default:
@@ -173,9 +174,15 @@ void GApplication::doFinalize()
 {
 }
 
-GSize GApplication::getWindowSize() const
+GSize GApplication::getScreenSize() const
 {
-	return this->renderEngine->getWindowSize();
+	return this->screenSize;
+}
+
+void GApplication::setConfigInfo(const GConfigInfo & configInfo)
+{
+	this->configInfo = configInfo;
+	this->screenSize = this->configInfo.windowSize;
 }
 
 

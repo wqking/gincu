@@ -36,7 +36,7 @@ public:
 
 	const GMatrix44 & getMatrix() const;
 	
-	void setProjectionMode(const bool projectionMode) const;
+	void setProjectionMode(const bool projectionMode);
 
 private:
 	void doUpdateTransform() const;

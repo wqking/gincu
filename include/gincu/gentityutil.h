@@ -35,12 +35,13 @@ class GComponentRender;
 class GEntity;
 class GComponentManager;
 
-GMatrix44 computeRenderableMatrix(GComponentTransform * componentTransform, const GSize & size);
-GMatrix44 computeRenderableMatrix(GComponentTransform * componentTransform, GComponentRender * render = nullptr);
+GMatrix44 computeRenderableMatrix(const GComponentTransform * componentTransform, const GSize & size);
+GMatrix44 computeRenderableMatrix(const GComponentTransform * componentTransform, const GComponentRender * render = nullptr);
 
 GComponentManager * getComponentManagerFromEntity(const GEntity * entity);
 GComponentLocalTransform * getParentLocalTransform(const GEntity * entity);
 GEntity * getAncestor(GEntity * entity);
+int getZOrder(GEntity * entity);
 
 
 } //namespace gincu

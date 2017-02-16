@@ -9,6 +9,7 @@
 #include "gincu/gcomponenttransform.h"
 #include "gincu/gcomponenttouchhandler.h"
 #include "gincu/gcomponentanchor.h"
+#include "gincu/gcomponentcamera.h"
 #include "gincu/gevent.h"
 
 #include <algorithm>
@@ -22,10 +23,8 @@ void SceneMenu::returnToMainMenu()
 
 void SceneMenu::doOnEnter()
 {
-	const GApplication * application = GApplication::getInstance();
-
-	const GCoord viewWidth = application->getViewSize().width;
-	const GCoord viewHeight = application->getViewSize().height;
+	const GCoord viewWidth = this->getPrimaryCamera()->getWorldSize().width;
+	const GCoord viewHeight = this->getPrimaryCamera()->getWorldSize().height;
 	const GSize tileSize { 400, 80};
 	const GCoord ySpace = 40;
 

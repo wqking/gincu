@@ -24,3 +24,20 @@ gincu::GEntity * createBackButton(const cpgf::GCallback<void ()> & onClick)
 	);
 }
 
+gincu::GEntity * createButton(
+		const std::string & text,
+		const gincu::GPoint & position,
+		const cpgf::GCallback<void ()> & onClick,
+		const gincu::GSize size
+	)
+{
+	return (new GEntity())
+		->addComponent(createComponent<GComponentTransform>(position))
+		->addComponent(createComponent<GComponentAnchor>(GRenderAnchor::leftTop))
+		->addComponent(createComponent<GComponentContainerRender>()
+			->add(createRectRenderComponent(0xffeeee77, size))
+			->add(createAndLoadTextComponent(text, colorBlue, 16))
+		)
+		->addComponent(createComponent<GComponentRendererTouchHandler>()->addOnTouch(createOnPressCallback(onClick))
+	);
+}

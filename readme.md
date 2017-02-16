@@ -44,6 +44,7 @@ Apache License, Version 2.0
  * Entity Component System (ECS).
  * Scene management.
  * ECS based scene graph (GComponentLocalTransform).
+ * Camera system.
  * Anchor and flip x/y (GComponentAnchor).
  * Sprite sheet.
  * Frame based animation.

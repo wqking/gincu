@@ -46,8 +46,13 @@ inline void copyBlendAndShaderToSfml(sf::RenderStates * renderStates, const GRen
 inline sf::Transform matrixToSfml(const glm::mat4 & matrix)
 {
 	sf::Transform transform;
-	memcpy((float *)(transform.getMatrix()), &matrix[0][0], 16 * sizeof(float));
+	memcpy(const_cast<float *>(transform.getMatrix()), &matrix[0][0], 16 * sizeof(float));
 	return transform;
+}
+
+inline void matrixToSfml(const sf::Transform * outputResult, const glm::mat4 & matrix)
+{
+	memcpy(const_cast<float *>(outputResult->getMatrix()), &matrix[0][0], 16 * sizeof(float));
 }
 
 

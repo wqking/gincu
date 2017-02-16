@@ -56,15 +56,12 @@ void GRenderEngine::inititialize()
 		}
 	}
 
-	this->windowSize = configInfo.windowSize;
 	this->data->window.reset(new sf::RenderWindow(
-		sf::VideoMode((int)this->windowSize.width, (int)this->windowSize.height),
+		sf::VideoMode((int)configInfo.windowSize.width, (int)configInfo.windowSize.height),
 		configInfo.caption,
 		flags
 	));
 
-	this->doFitView();
-	
 	this->doInitialize();
 }
 
@@ -86,7 +83,7 @@ bool GRenderEngine::peekEvent(GEvent * event)
 		event->touch = GTouchEvent();
 		event->type = (e.type == sf::Event::MouseButtonPressed ? GEventType::touchPressed : GEventType::touchReleased);
 		event->touch.down = (e.type == sf::Event::MouseButtonPressed);
-		event->touch.position = {(GCoord)e.mouseButton.x, (GCoord)e.mouseButton.y};
+		event->touch.screenPosition = {(GCoord)e.mouseButton.x, (GCoord)e.mouseButton.y};
 		break;
 	}
 
@@ -94,7 +91,7 @@ bool GRenderEngine::peekEvent(GEvent * event)
 		event->touch = GTouchEvent();
 		event->type = GEventType::touchMoved;
 		event->touch.down = sf::Mouse::isButtonPressed(sf::Mouse::Left);
-		event->touch.position = {(GCoord)e.mouseMove.x, (GCoord)e.mouseMove.y};
+		event->touch.screenPosition = {(GCoord)e.mouseMove.x, (GCoord)e.mouseMove.y};
 		break;
 	}
 
@@ -104,7 +101,7 @@ bool GRenderEngine::peekEvent(GEvent * event)
 		event->type = (e.type == sf::Event::TouchBegan ? GEventType::touchPressed : GEventType::touchReleased);
 		event->touch.finger = e.touch.finger;
 		event->touch.down = (e.type == sf::Event::TouchBegan);
-		event->touch.position = {(GCoord)e.touch.x, (GCoord)e.touch.y};
+		event->touch.screenPosition = {(GCoord)e.touch.x, (GCoord)e.touch.y};
 
 		break;
 	}
@@ -113,7 +110,7 @@ bool GRenderEngine::peekEvent(GEvent * event)
 		event->touch = GTouchEvent();
 		event->type = GEventType::touchMoved;
 		event->touch.down = true;
-		event->touch.position = {(GCoord)e.touch.x, (GCoord)e.touch.y};
+		event->touch.screenPosition = {(GCoord)e.touch.x, (GCoord)e.touch.y};
 		break;
 	}
 
@@ -155,46 +152,6 @@ void GRenderEngine::draw(const GAtlasRender & atlasRender, const GMatrix44 & mat
 	this->doDrawTexture(atlasRender.getAtlas().getImageData(), atlasRender.getRect(), matrix, renderInfo);
 }
 
-void GRenderEngine::onWindowResized(const GSize & newSize)
-{
-	this->windowSize = newSize;
-	this->doFitView();
-}
-
-void GRenderEngine::doFitView()
-{
-	const GConfigInfo & configInfo = GApplication::getInstance()->getConfigInfo();
-
-	switch(configInfo.viewFitStrategy) {
-	case GViewFitStrategy::scaleFit: {
-		this->data->view.reset(sf::FloatRect(0, 0, configInfo.viewSize.width, configInfo.viewSize.height));
-		float viewportX = 0;
-		float viewportY = 0;
-		const float xRatio = (float)configInfo.viewSize.width / (float)this->windowSize.width;
-		const float yRatio = (float)configInfo.viewSize.height / (float)this->windowSize.height;
-		if(xRatio > yRatio) {
-			viewportY = (1.0f - yRatio / xRatio) / 2.0f;
-		}
-		else {
-			viewportX = (1.0f - xRatio / yRatio) / 2.0f;
-		}
-		this->data->view.setViewport(sf::FloatRect(viewportX, viewportY, 1.0f - viewportX * 2.0f, 1.0f - viewportY * 2.0f));
-	}
-		break;
-
-	case GViewFitStrategy::fitWindow:
-		this->data->view.reset(sf::FloatRect(0, 0, this->windowSize.width, this->windowSize.height));
-		this->data->view.setViewport(sf::FloatRect(0, 0, 1, 1));
-		break;
-
-	case GViewFitStrategy::stretch:
-		this->data->view.reset(sf::FloatRect(0, 0, configInfo.viewSize.width, configInfo.viewSize.height));
-		this->data->view.setViewport(sf::FloatRect(0, 0, 1, 1));
-		break;
-	}
-
-	this->data->window->setView(this->data->view);
-}
 
 } //namespace gincu
 

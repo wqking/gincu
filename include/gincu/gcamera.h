@@ -13,6 +13,13 @@ class GTransform;
 
 class GCameraData;
 
+enum class GCameraFitStrategy
+{
+	none,
+	scaleFitFullScreen, // keep the ascpect ratio as targetViewSize
+	fixed, // use targetViewSize
+};
+
 class GCamera
 {
 public:
@@ -20,25 +27,40 @@ public:
 	
 	void apply(const GMatrix44 & matrix);
 
-	void setViewport(const GRect & viewport) { this->viewport = viewport; }
-	const GRect & getViewport() const { return this->viewport; }
+	// the size is between [0, 1]
+	void setViewport(const GRect & viewport);
+	const GRect & getViewport() const;
+	GRect getViewportPixels() const;
 	
-	void setSize(const GSize & size) { this->size = size; }
-	const GSize & getSize() const { return this->size; }
+	void setFitStrategy(const GCameraFitStrategy strategy);
+	GCameraFitStrategy getFitStrategy() const { return this->fitStrategy; }
+	
+	void setTargetViewSize(const GSize & size);
+	const GSize & getTargetViewSize() const { return this->targetViewSize; }
+	
+	void setWorldSize(const GSize & worldSize) { this->worldSize = worldSize; }
+	const GSize & getWorldSize() const { return this->worldSize; }
 
-	uint32_t getMask() const { return this->mask; }
 	void setMask(const uint32_t mask) { this->mask = mask; }
+	uint32_t getMask() const { return this->mask; }
 	
 	bool belongs(const unsigned int cameraId) const { return (this->mask & (1u << cameraId)) != 0; }
 
 	const std::shared_ptr<GCameraData> & getData() const { return this->data; }
 
-	GPoint mapScreenToCamera(const GPoint & point) const;
+	GPoint mapWindowToCamera(const GPoint & point) const;
+	
+private:
+	void doRequireRefresh();
+	void doRefresh() const;
 
 private:
 	uint32_t mask;
-	GRect viewport; // in pixels
-	GSize size;
+	mutable GRect viewport; // in percentage
+	GSize worldSize;
+	GCameraFitStrategy fitStrategy;
+	GSize targetViewSize; // in pixel
+	mutable GSize cachedScreenSize;
 	std::shared_ptr<GCameraData> data;
 };
 

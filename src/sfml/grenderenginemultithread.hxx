@@ -79,7 +79,6 @@ int putImageToVertexArray(T & vertexArray, int index, const sf::Transform & tran
 GRenderEngineData::GRenderEngineData()
 	:
 		window(),
-		view(),
 		finished(false),
 		updaterQueue(nullptr),
 		renderQueue(nullptr)

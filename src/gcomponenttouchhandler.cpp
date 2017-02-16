@@ -27,9 +27,9 @@ void GComponentTouchHandler::removeOnTouch(const GComponentTouchHandler::OnTouch
 	this->onTouchedList->remove(onTouch);
 }
 
-bool GComponentTouchHandler::canHandle(const GPoint & point) const
+bool GComponentTouchHandler::canHandle(const GPoint & worldPosition) const
 {
-	return doCanHandle(point);
+	return doCanHandle(worldPosition);
 }
 
 void GComponentTouchHandler::handle(const GEvent & touchEvent)
@@ -45,7 +45,7 @@ GComponentRendererTouchHandler::GComponentRendererTouchHandler()
 {
 }
 
-bool GComponentRendererTouchHandler::doCanHandle(const GPoint & point) const
+bool GComponentRendererTouchHandler::doCanHandle(const GPoint & worldPosition) const
 {
 	GComponentTransform * transform = getEntity()->getComponentByType<GComponentTransform>();
 	if(! transform->isVisible()) {
@@ -55,8 +55,8 @@ bool GComponentRendererTouchHandler::doCanHandle(const GPoint & point) const
 	const GMatrix44 matrix = computeRenderableMatrix(transform);
 	const GSize size = getEntity()->getComponentByType<GComponentRender>()->getSize();
 
-	auto normalizedPoint = transformPoint(inverseMatrix(matrix), { point.x, point.y });
-	return isWithin(normalizedPoint.x, 0, size.width) && isWithin(normalizedPoint.y, 0, size.height);
+	const GPoint normalizedPoint = transformPoint(inverseMatrix(matrix), { worldPosition.x, worldPosition.y });
+	return isInRect(normalizedPoint, createRect(GPoint(), size));
 }
 
 

@@ -52,24 +52,16 @@ public:
 	void draw(const GTextRender & text, const GMatrix44 & matrix, const GRenderInfo * renderInfo);
 	void draw(const GRectRender & rect, const GMatrix44 & matrix, const GRenderInfo * renderInfo);
 
-	GSize getWindowSize() const { return this->windowSize; }
-
 	const std::shared_ptr<GRenderEngineData> & getData() const { return this->data; }
-
-public: // for internal usage
-	void onWindowResized(const GSize & newSize);
 
 private:
 	void doInitialize();
 	void doFinalize();
 	void doDrawTexture(const std::shared_ptr<GImageData> & texture, const GRect & rect, const GMatrix44 & matrix, const GRenderInfo * renderInfo);
 
-	void doFitView();
-
 private:
 	std::shared_ptr<GRenderEngineData> data;
 	cpgf::GCallbackList<void ()> renderList;
-	GSize windowSize;
 };
 
 

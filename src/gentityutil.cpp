@@ -5,7 +5,7 @@
 
 namespace gincu {
 
-GMatrix44 computeRenderableMatrix(GComponentTransform * componentTransform, const GSize & size)
+GMatrix44 computeRenderableMatrix(const GComponentTransform * componentTransform, const GSize & size)
 {
 	GComponentAnchor * anchor = componentTransform->getEntity()->template getComponentByType<GComponentAnchor>();
 	if(anchor != nullptr) {
@@ -18,7 +18,7 @@ GMatrix44 computeRenderableMatrix(GComponentTransform * componentTransform, cons
 	}
 }
 
-GMatrix44 computeRenderableMatrix(GComponentTransform * componentTransform, GComponentRender * render)
+GMatrix44 computeRenderableMatrix(const GComponentTransform * componentTransform, const GComponentRender * render)
 {
 	if(render == nullptr) {
 		render = componentTransform->getEntity()->getComponentByType<GComponentRender>();
@@ -39,7 +39,7 @@ GComponentManager * getComponentManagerFromEntity(const GEntity * entity)
 GComponentLocalTransform * getParentLocalTransform(const GEntity * entity)
 {
 	if(entity != nullptr) {
-		GComponentLocalTransform * localTransform = entity->getComponentByType<GComponentLocalTransform>();
+		const GComponentLocalTransform * localTransform = entity->getComponentByType<GComponentLocalTransform>();
 		if(localTransform != nullptr) {
 			return localTransform->getParent();
 		}
@@ -63,6 +63,21 @@ GEntity * getAncestor(GEntity * entity)
 	}
 
 	return ancestor;
+}
+
+int getZOrder(GEntity * entity)
+{
+	GComponentLocalTransform * localTransform = entity->getComponentByType<GComponentLocalTransform>();
+	if(localTransform != nullptr) {
+		return localTransform->getZOrder();
+	}
+	
+	GComponentTransform * transform = entity->getComponentByType<GComponentTransform>();
+	if(transform != nullptr) {
+		return transform->getZOrder();
+	}
+	
+	return 0;
 }
 
 

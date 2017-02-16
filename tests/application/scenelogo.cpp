@@ -9,6 +9,7 @@
 #include "gincu/gcomponenttransform.h"
 #include "gincu/gcomponenttouchhandler.h"
 #include "gincu/gcomponentanchor.h"
+#include "gincu/gcomponentcamera.h"
 #include "gincu/gevent.h"
 
 #include "cpgf/tween/gtimeline.h"
@@ -60,11 +61,9 @@ SceneLogo::~SceneLogo()
 
 void SceneLogo::doOnEnter()
 {
-	const GApplication * application = GApplication::getInstance();
-
 	const int itemCount = (int)logoItemList.size();
-	const GCoord viewWidth = application->getViewSize().width;
-	const GCoord viewHeight = application->getViewSize().height;
+	const GCoord viewWidth = this->getPrimaryCamera()->getWorldSize().width;
+	const GCoord viewHeight = this->getPrimaryCamera()->getWorldSize().height;
 	const GCoord xSpace = 40;
 	const GCoord ySize = xSpace;
 	const GCoord startX = viewWidth / 2 - (itemCount -1) * xSpace / 2;

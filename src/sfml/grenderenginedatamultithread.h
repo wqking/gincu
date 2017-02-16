@@ -135,7 +135,6 @@ public:
 	void batchDrawImages(const int firstIndex, const int lastIndex);
 
 	std::unique_ptr<sf::RenderWindow> window;
-	sf::View view;
 
 	std::atomic_bool finished;
 	GRenderEngineLock updaterReadyLock;

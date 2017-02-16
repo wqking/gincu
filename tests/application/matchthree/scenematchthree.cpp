@@ -137,7 +137,7 @@ void SceneMatchThree::onChessTouched(const GEvent & touchEvent)
 			this->touchedChessList.push_back(touchEvent.touch.touchedEntity);
 			this->setTouchCapture(touchEvent.touch.touchedEntity);
 
-			this->previousTouchPosition = touchEvent.touch.position;
+			this->previousTouchPosition = touchEvent.touch.worldPosition;
 		}
 		break;
 
@@ -163,11 +163,11 @@ void SceneMatchThree::onChessTouched(const GEvent & touchEvent)
 			&& this->touchedChessList.back() != touchEvent.touch.touchedEntity
 			) {
 			const RowColumn cell = this->board->getChessCell(this->touchedChessList.back());
-			const GCoord deltaX = fabs(touchEvent.touch.position.x - this->previousTouchPosition.x);
-			const GCoord deltaY = fabs(touchEvent.touch.position.y - this->previousTouchPosition.y);
+			const GCoord deltaX = fabs(touchEvent.touch.worldPosition.x - this->previousTouchPosition.x);
+			const GCoord deltaY = fabs(touchEvent.touch.worldPosition.y - this->previousTouchPosition.y);
 			RowColumn cellToSwap = cell;
 			if(deltaX > deltaY) {
-				if(touchEvent.touch.position.x > this->previousTouchPosition.x) {
+				if(touchEvent.touch.worldPosition.x > this->previousTouchPosition.x) {
 					++cellToSwap.column;
 				}
 				else {
@@ -175,7 +175,7 @@ void SceneMatchThree::onChessTouched(const GEvent & touchEvent)
 				}
 			}
 			else {
-				if(touchEvent.touch.position.y > this->previousTouchPosition.y) {
+				if(touchEvent.touch.worldPosition.y > this->previousTouchPosition.y) {
 					++cellToSwap.row;
 				}
 				else {

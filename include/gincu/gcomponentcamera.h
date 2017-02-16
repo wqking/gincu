@@ -29,8 +29,14 @@ public:
 	GComponentCamera * setViewport(const GRect & viewport) { this->camera.setViewport(viewport); return this; }
 	const GRect & getViewport() const { return this->camera.getViewport(); }
 	
-	GComponentCamera * setSize(const GSize & size);
-	const GSize & getSize() const { return this->camera.getSize(); }
+	GComponentCamera * setFitStrategy(const GCameraFitStrategy strategy) { this->camera.setFitStrategy(strategy); return this; }
+	GCameraFitStrategy getFitStrategy() const { return this->camera.getFitStrategy(); }
+	
+	GComponentCamera * setTargetViewSize(const GSize & size) { this->camera.setTargetViewSize(size); return this; }
+	const GSize & getTargetViewSize() const { return this->camera.getTargetViewSize(); }
+	
+	GComponentCamera * setWorldSize(const GSize & worldSize);
+	const GSize & getWorldSize() const { return this->camera.getWorldSize(); }
 
 	GComponentCamera * setMask(const uint32_t mask);
 	uint32_t getMask() const { return this->camera.getMask(); }

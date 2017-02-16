@@ -20,10 +20,8 @@ MainApplication::MainApplication()
 			gameFramesPerSecond,
 			gameRenderFramesPerSecond,
 			{ (GCoord)gameViewWidth, (GCoord)gameViewHeight },
-			{ (GCoord)gameViewWidth, (GCoord)gameViewHeight },
 			false,
 			true,
-			GViewFitStrategy::scaleFit,
 			0xffeeeeee
 		}
 	);

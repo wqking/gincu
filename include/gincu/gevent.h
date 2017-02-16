@@ -21,7 +21,8 @@ struct GTouchEvent
 {
 	int finger;
 	bool down;
-	GPoint position;
+	GPoint screenPosition;
+	GPoint worldPosition;
 	GEntity * target;
 	GEntity * touchedEntity;
 };

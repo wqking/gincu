@@ -11,6 +11,7 @@
 #include "gincu/gcomponenttransform.h"
 #include "gincu/gcomponenttouchhandler.h"
 #include "gincu/gcomponentanchor.h"
+#include "gincu/gcomponentcamera.h"
 #include "gincu/gscenemanager.h"
 #include "gincu/gutil.h"
 #include "cpgf/tween/gtweenlist.h"
@@ -66,8 +67,6 @@ void StateResult::doCollectChesses()
 {
 	MatchThreeBoard * board = this->scene->getBoard();
 
-	const GApplication * application = GApplication::getInstance();
-
 	cpgf::GTween & tween = getTweenListFromScene()->tween()
 		.duration(600)
 		.ease(cpgf::QuadEase::easeIn())
@@ -76,6 +75,8 @@ void StateResult::doCollectChesses()
 
 	const int rowCount = board->getRowCount();
 	const int columnCount = board->getColumnCount();
+	
+	const GSize viewSize = this->scene->getPrimaryCamera()->getWorldSize();
 
 	for(int row = 0; row < rowCount; ++row) {
 		for(int column = 0; column < columnCount; ++column) {
@@ -88,12 +89,12 @@ void StateResult::doCollectChesses()
 			GCoord x = 0;
 			GCoord y = 0;
 			if(getRand(2) == 0) {
-				x = (getRand(2) == 0 ? -getRand(50, 100) : application->getViewSize().width + getRand(50, 100));
-				y = (GCoord)getRand((int)application->getViewSize().height);
+				x = (getRand(2) == 0 ? -getRand(50, 100) : viewSize.width + getRand(50, 100));
+				y = (GCoord)getRand((int)viewSize.height);
 			}
 			else {
-				x = (GCoord)getRand((int)application->getViewSize().width);
-				y = (GCoord)(getRand(2) == 0 ? -getRand(50, 100) : application->getViewSize().height + getRand(50, 100));
+				x = (GCoord)getRand((int)viewSize.width);
+				y = (GCoord)(getRand(2) == 0 ? -getRand(50, 100) : viewSize.height + getRand(50, 100));
 			}
 			tween.target(cpgf::createAccessor(transform, &GComponentTransform::getPosition, &GComponentTransform::setPosition), GPoint{x, y});
 		}
@@ -102,12 +103,12 @@ void StateResult::doCollectChesses()
 
 void StateResult::doShowMessage()
 {
-	const GApplication * application = GApplication::getInstance();
+	const GSize viewSize = this->scene->getPrimaryCamera()->getWorldSize();
 
 	this->backgroundEntity = this->scene->addEntity(
 		(new GEntity())
 		->addComponent(createComponent<GComponentTransform>())
-		->addComponent(createComponent<GComponentLocalTransform>(GPoint { application->getViewSize().width / 2, application->getViewSize().height / 2 }, GScale { 0.1f, 0.1f }))
+		->addComponent(createComponent<GComponentLocalTransform>(GPoint { viewSize.width / 2, viewSize.height / 2 }, GScale { 0.1f, 0.1f }))
 		->addComponent(createComponent<GComponentAnchor>(GRenderAnchor::center))
 		->addComponent(createRectRenderComponent(gameColorSetAlpha(colorGreen, 127), GSize { 450, 200}))
 		);

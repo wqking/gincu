@@ -8,6 +8,7 @@
 #include "gincu/gcomponenttransform.h"
 #include "gincu/gcomponenttouchhandler.h"
 #include "gincu/gcomponentanchor.h"
+#include "gincu/gcomponentcamera.h"
 #include "gincu/gcomponentanimation.h"
 #include "gincu/gresourcemanager.h"
 #include "gincu/gapplication.h"
@@ -76,14 +77,14 @@ GEntity * TestCase_Benchmark::createAnimationEntity(const GPoint & position, con
 
 GPoint TestCase_Benchmark::getRandomPosition() const
 {
-	const GSize viewSize = GApplication::getInstance()->getViewSize();
+	const GSize viewSize = this->getScene()->getPrimaryCamera()->getWorldSize();
 
 	return { (GCoord)getRand((int)viewSize.width), (GCoord)getRand((int)viewSize.height) };
 }
 
 void TestCase_Benchmark::doBenchmarkBatchedAnimation()
 {
-	constexpr int iterateCount = 50000;
+	constexpr int iterateCount = 1000;
 	const int animationCount = (int)animationNames.size();
 
 	for(int a = 0; a < animationCount; ++a) {

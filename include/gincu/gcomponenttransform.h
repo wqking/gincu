@@ -45,6 +45,7 @@ public:
 	GComponentTransform * setZOrder(const int zOrder);
 
 	const GTransform & getTransform() const { return this->transform; }
+	GTransform & getTransform() { return this->transform; }
 	GComponentTransform * setTransform(const GTransform & transform) { this->transform = transform; return this; }
 
 private:
