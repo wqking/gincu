@@ -13,9 +13,9 @@ GCamera::GCamera()
 	:
 		mask(1),
 		viewport{ 0.0f, 0.0f, 1.0f, 1.0f },
-		worldSize(GApplication::getInstance()->getScreenSize()),
+		worldSize(GApplication::getInstance()->getConfigInfo().targetViewSize),
 		fitStrategy(GCameraFitStrategy::none),
-		targetViewSize(GApplication::getInstance()->getScreenSize()),
+		targetViewSize(GApplication::getInstance()->getConfigInfo().targetViewSize),
 		cachedScreenSize{ -1, -1 },
 		data(std::make_shared<GCameraData>())
 {
@@ -88,7 +88,7 @@ void GCamera::doRefresh() const
 {
 	if(this->cachedScreenSize != GApplication::getInstance()->getScreenSize()) {
 		this->cachedScreenSize = GApplication::getInstance()->getScreenSize();
-		
+
 		switch(this->fitStrategy) {
 		case GCameraFitStrategy::none:
 			break;

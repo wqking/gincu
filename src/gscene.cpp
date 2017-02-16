@@ -33,7 +33,8 @@ void GScene::initializePrimaryCamera()
 	GEntity * cameraEntity = new GEntity();
 	cameraEntity->addComponent(createComponent<GComponentTransform>());
 	cameraEntity->addComponent((this->primaryCamera = createComponent<GComponentCamera>()
-		->setFitStrategy(GCameraFitStrategy::scaleFitFullScreen)));
+		->setFitStrategy(GCameraFitStrategy::scaleFitFullScreen)
+	));
 //cameraEntity->addComponent(createComponent<GComponentAnchor>(GRenderAnchor::leftTop)->setFlipX(true)->setFlipY(true));
 	this->addEntity(cameraEntity);
 }

@@ -20,6 +20,7 @@ MainApplication::MainApplication()
 			gameFramesPerSecond,
 			gameRenderFramesPerSecond,
 			{ (GCoord)gameViewWidth, (GCoord)gameViewHeight },
+			{ (GCoord)gameViewWidth, (GCoord)gameViewHeight },
 			false,
 			true,
 			0xffeeeeee

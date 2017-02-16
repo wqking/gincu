@@ -14,6 +14,7 @@ struct GConfigInfo
 	int framesPerSecond;
 	int renderFramesPerSecond; // -1 will use framesPerSecond
 	GSize windowSize; // the initial window size
+	GSize targetViewSize;
 	bool fullScreenMode;
 	bool resizable;
 	GColor backgroundColor;
@@ -25,6 +26,7 @@ inline GConfigInfo createDefaultConfigInfo()
 		"",
 		60,
 		-1,
+		{ 800, 600 },
 		{ 800, 600 },
 		false,
 		true,
