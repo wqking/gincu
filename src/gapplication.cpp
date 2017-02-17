@@ -139,13 +139,13 @@ void GApplication::processEvents()
 {
 	GEvent event;
 	while(this->renderEngine->peekEvent(&event)) {
-		switch(event.type) {
+		switch(event.getType()) {
 		case GEventType::windowClosed:
 			this->finish();
 			break;
 
 		case GEventType::windowResized:
-			this->screenSize = GSize{ (GCoord)event.resize.width, (GCoord)event.resize.height };
+			this->screenSize = GSize{ (GCoord)event.getResize().width, (GCoord)event.getResize().height };
 			break;
 
 		case GEventType::windowActivated:

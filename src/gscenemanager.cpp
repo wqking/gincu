@@ -78,7 +78,7 @@ void GSceneManager::render()
 
 void GSceneManager::handleEvent(const GEvent & event)
 {
-	if(this->currentScene && isTouchEvent(event.type)) {
+	if(this->currentScene && isTouchEvent(event.getType())) {
 		this->currentScene->handleTouchEvent(event);
 	}
 }

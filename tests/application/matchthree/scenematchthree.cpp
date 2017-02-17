@@ -109,9 +109,9 @@ void SceneMatchThree::onChessTouched(const GEvent & touchEvent)
 		return;
 	}
 
-	switch(touchEvent.type) {
+	switch(touchEvent.getType()) {
 	case GEventType::touchPressed:
-		if(touchEvent.touch.touchedEntity == nullptr || touchEvent.touch.touchedEntity->getComponentByType<ComponentChess>() == nullptr) {
+		if(touchEvent.getTouch().touchedEntity == nullptr || touchEvent.getTouch().touchedEntity->getComponentByType<ComponentChess>() == nullptr) {
 			this->restoreTouchedChessList();
 			this->clearTouchedChessList();
 		}
@@ -119,38 +119,38 @@ void SceneMatchThree::onChessTouched(const GEvent & touchEvent)
 			if(this->touchedChessList.size() == 1) {
 				GEntity * chessA = touchedChessList[0];
 				RowColumn cellA = board->getChessCell(chessA);
-				RowColumn cellB = board->getChessCell(touchEvent.touch.touchedEntity);
+				RowColumn cellB = board->getChessCell(touchEvent.getTouch().touchedEntity);
 
-				if(chessA == touchEvent.touch.touchedEntity || ! areCellsNeighbors(cellA, cellB)) {
+				if(chessA == touchEvent.getTouch().touchedEntity || ! areCellsNeighbors(cellA, cellB)) {
 					this->restoreTouchedChessList();
 					this->clearTouchedChessList();
 				}
 
-				if(chessA == touchEvent.touch.touchedEntity) {
+				if(chessA == touchEvent.getTouch().touchedEntity) {
 					break;
 				}
 			}
 			if(this->touchedChessList.empty()) {
-				touchEvent.touch.touchedEntity->getComponentByType<GComponentTransform>()->setScale(GScale { 1.2f, 1.2f });
+				touchEvent.getTouch().touchedEntity->getComponentByType<GComponentTransform>()->setScale(GScale { 1.2f, 1.2f });
 			}
 
-			this->touchedChessList.push_back(touchEvent.touch.touchedEntity);
-			this->setTouchCapture(touchEvent.touch.touchedEntity);
+			this->touchedChessList.push_back(touchEvent.getTouch().touchedEntity);
+			this->setTouchCapture(touchEvent.getTouch().touchedEntity);
 
-			this->previousTouchPosition = touchEvent.touch.worldPosition;
+			this->previousTouchPosition = touchEvent.getTouch().worldPosition;
 		}
 		break;
 
 	case GEventType::touchReleased:
 		this->previousTouchPosition.x = -1;
-		if(touchEvent.touch.touchedEntity == nullptr || touchEvent.touch.touchedEntity->getComponentByType<ComponentChess>() == nullptr) {
+		if(touchEvent.getTouch().touchedEntity == nullptr || touchEvent.getTouch().touchedEntity->getComponentByType<ComponentChess>() == nullptr) {
 			this->restoreTouchedChessList();
 			this->clearTouchedChessList();
 		}
 		else {
 			if(! this->touchedChessList.empty()) {
-				if(this->touchedChessList.back() != touchEvent.touch.touchedEntity) {
-					this->touchedChessList.push_back(touchEvent.touch.touchedEntity);
+				if(this->touchedChessList.back() != touchEvent.getTouch().touchedEntity) {
+					this->touchedChessList.push_back(touchEvent.getTouch().touchedEntity);
 					this->setTouchCapture(nullptr);
 				}
 			}
@@ -160,14 +160,14 @@ void SceneMatchThree::onChessTouched(const GEvent & touchEvent)
 	case GEventType::touchMoved:
 		if(this->previousTouchPosition.x > 0
 			&& this->touchedChessList.size() == 1
-			&& this->touchedChessList.back() != touchEvent.touch.touchedEntity
+			&& this->touchedChessList.back() != touchEvent.getTouch().touchedEntity
 			) {
 			const RowColumn cell = this->board->getChessCell(this->touchedChessList.back());
-			const GCoord deltaX = fabs(touchEvent.touch.worldPosition.x - this->previousTouchPosition.x);
-			const GCoord deltaY = fabs(touchEvent.touch.worldPosition.y - this->previousTouchPosition.y);
+			const GCoord deltaX = fabs(touchEvent.getTouch().worldPosition.x - this->previousTouchPosition.x);
+			const GCoord deltaY = fabs(touchEvent.getTouch().worldPosition.y - this->previousTouchPosition.y);
 			RowColumn cellToSwap = cell;
 			if(deltaX > deltaY) {
-				if(touchEvent.touch.worldPosition.x > this->previousTouchPosition.x) {
+				if(touchEvent.getTouch().worldPosition.x > this->previousTouchPosition.x) {
 					++cellToSwap.column;
 				}
 				else {
@@ -175,7 +175,7 @@ void SceneMatchThree::onChessTouched(const GEvent & touchEvent)
 				}
 			}
 			else {
-				if(touchEvent.touch.worldPosition.y > this->previousTouchPosition.y) {
+				if(touchEvent.getTouch().worldPosition.y > this->previousTouchPosition.y) {
 					++cellToSwap.row;
 				}
 				else {

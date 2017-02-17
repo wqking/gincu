@@ -10,7 +10,7 @@
 
 namespace gincu {
 
-struct GEvent;
+class GEvent;
 
 class GComponentTouchHandler : public GComponent
 {

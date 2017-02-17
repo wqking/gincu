@@ -31,26 +31,53 @@ struct GTouchEvent
 
 typedef GSize GResizeEvent;
 
-struct GEvent
+class GEvent
 {
-	GEvent()
+public:
+	GEvent() : GEvent(GEventType::none) {}
+
+	explicit GEvent(const GEventType type)
 		:
-			type(),
+			type(type),
 			touch(),
 			resize(),
 			propagation(false)
 	{}
 
+	explicit GEvent(const GEventType type, const GTouchEvent & touch)
+		:
+			type(type),
+			touch(touch),
+			resize(),
+			propagation(false)
+	{}
+
+	explicit GEvent(const GEventType type, const GResizeEvent & resize)
+		:
+			type(type),
+			touch(),
+			resize(resize),
+			propagation(false)
+	{}
+	
+	GEventType getType() const { return this->type; }
+	void setType(const GEventType type) { this->type = type; }
+	
+	const GTouchEvent & getTouch() const { return this->touch; }
+	void setTouch(const GTouchEvent & touch) { this->touch = touch; }
+	
+	const GResizeEvent & getResize() const { return this->resize; }
+	
+	bool doesAllowPropagate() const { return this->propagation; }
+	void setAllowPropagate(const bool allow) const { this->propagation = allow; }
+
+private:
 	GEventType type;
 
 	GTouchEvent touch;
 	GResizeEvent resize;
 
 	mutable bool propagation;
-
-	void allowPropagation() const {
-		this->propagation = true;
-	}
 };
 
 inline bool isTouchEvent(const GEventType type)

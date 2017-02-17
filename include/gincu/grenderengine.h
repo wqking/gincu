@@ -23,7 +23,7 @@ class GAtlasRender;
 class GCamera;
 
 struct GRenderInfo;
-struct GEvent;
+class GEvent;
 
 class GRenderEngine
 {

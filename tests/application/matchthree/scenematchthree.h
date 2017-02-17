@@ -12,7 +12,7 @@ namespace gincu {
 class MatchThreeBoard;
 class MatchThreeInfoView;
 class GStateMachine;
-struct GEvent;
+class GEvent;
 
 class SceneMatchThree : public GScene
 {

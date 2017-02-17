@@ -9,7 +9,7 @@ using namespace gincu;
 cpgf::GCallback<void (const gincu::GEvent &)> createOnPressCallback(const cpgf::GCallback<void ()> & onPress)
 {
 	return [=](const GEvent & e) {
-		if(e.type == GEventType::touchPressed) {
+		if(e.getType() == GEventType::touchPressed) {
 			onPress();
 		}
 	};

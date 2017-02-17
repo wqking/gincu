@@ -53,7 +53,7 @@ void SceneMenu::doOnEnter()
 					->add(createAndLoadTextComponent(item.caption, colorBlue, menuFontSize))
 				)
 				->addComponent(createComponent<GComponentRendererTouchHandler>()->addOnTouch([=](const GEvent & touchEvent) {
-					if(touchEvent.type == GEventType::touchPressed) {
+					if(touchEvent.getType() == GEventType::touchPressed) {
 						item.callback();
 					}
 				}))

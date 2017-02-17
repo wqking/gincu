@@ -5,7 +5,7 @@
 
 namespace gincu {
 
-struct GEvent;
+class GEvent;
 
 class SceneLogo : public GScene
 {

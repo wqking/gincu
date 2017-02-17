@@ -66,7 +66,7 @@ void SceneTestBed::doOnEnter()
 				->add(createAndLoadTextComponent(item.caption, colorBlue, fontSize))
 			)
 			->addComponent(createComponent<GComponentRendererTouchHandler>()->addOnTouch([=](const GEvent & touchEvent) {
-			if(touchEvent.type == GEventType::touchPressed) {
+			if(touchEvent.getType() == GEventType::touchPressed) {
 				this->testBed->executeTestCase(item.creator());
 			}
 		}))

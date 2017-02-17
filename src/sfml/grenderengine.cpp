@@ -75,51 +75,54 @@ bool GRenderEngine::peekEvent(GEvent * event)
 
 	switch(e.type) {
 	case sf::Event::Closed:
-		event->type = GEventType::windowClosed;
+		*event = GEvent(GEventType::windowClosed);
 		break;
 
 	case sf::Event::MouseButtonPressed:
-	case sf::Event::MouseButtonReleased:
-		event->touch = GTouchEvent();
-		event->type = (e.type == sf::Event::MouseButtonPressed ? GEventType::touchPressed : GEventType::touchReleased);
-		event->touch.down = (e.type == sf::Event::MouseButtonPressed);
-		event->touch.screenPosition = {(GCoord)e.mouseButton.x, (GCoord)e.mouseButton.y};
+	case sf::Event::MouseButtonReleased: {
+		GTouchEvent touchEvent = GTouchEvent();
+		touchEvent.down = (e.type == sf::Event::MouseButtonPressed);
+		touchEvent.screenPosition = {(GCoord)e.mouseButton.x, (GCoord)e.mouseButton.y};
+		*event = GEvent((e.type == sf::Event::MouseButtonPressed ? GEventType::touchPressed : GEventType::touchReleased), touchEvent);
+	}
 		break;
 
-	case sf::Event::MouseMoved:
-		event->touch = GTouchEvent();
-		event->type = GEventType::touchMoved;
-		event->touch.down = sf::Mouse::isButtonPressed(sf::Mouse::Left);
-		event->touch.screenPosition = {(GCoord)e.mouseMove.x, (GCoord)e.mouseMove.y};
+	case sf::Event::MouseMoved: {
+		GTouchEvent touchEvent = GTouchEvent();
+		touchEvent.down = sf::Mouse::isButtonPressed(sf::Mouse::Left);
+		touchEvent.screenPosition = {(GCoord)e.mouseMove.x, (GCoord)e.mouseMove.y};
+		*event = GEvent(GEventType::touchMoved, touchEvent);
+	}
 		break;
 
 	case sf::Event::TouchBegan:
-	case sf::Event::TouchEnded:
-		event->touch = GTouchEvent();
-		event->type = (e.type == sf::Event::TouchBegan ? GEventType::touchPressed : GEventType::touchReleased);
-		event->touch.finger = e.touch.finger;
-		event->touch.down = (e.type == sf::Event::TouchBegan);
-		event->touch.screenPosition = {(GCoord)e.touch.x, (GCoord)e.touch.y};
+	case sf::Event::TouchEnded: {
+		GTouchEvent touchEvent = GTouchEvent();
+		touchEvent.finger = e.touch.finger;
+		touchEvent.down = (e.type == sf::Event::TouchBegan);
+		touchEvent.screenPosition = {(GCoord)e.touch.x, (GCoord)e.touch.y};
+		*event = GEvent((e.type == sf::Event::TouchBegan ? GEventType::touchPressed : GEventType::touchReleased), touchEvent);
+	}
 		break;
 
-	case sf::Event::TouchMoved:
-		event->touch = GTouchEvent();
-		event->type = GEventType::touchMoved;
-		event->touch.down = true;
-		event->touch.screenPosition = {(GCoord)e.touch.x, (GCoord)e.touch.y};
+	case sf::Event::TouchMoved: {
+		GTouchEvent touchEvent = GTouchEvent();
+		touchEvent.down = true;
+		touchEvent.screenPosition = {(GCoord)e.touch.x, (GCoord)e.touch.y};
+		*event = GEvent(GEventType::touchMoved, touchEvent);
+	}
 		break;
 
 	case sf::Event::Resized:
-		event->type = GEventType::windowResized;
-		event->resize = GResizeEvent{ (GCoord)e.size.width, (GCoord)e.size.height };
+		*event = GEvent(GEventType::windowResized, GResizeEvent{ (GCoord)e.size.width, (GCoord)e.size.height });
 		break;
 
 	case sf::Event::GainedFocus:
-		event->type = GEventType::windowActivated;
+		*event = GEvent(GEventType::windowActivated);
 		break;
 
 	case sf::Event::LostFocus:
-		event->type = GEventType::windowDeactivated;
+		*event = GEvent(GEventType::windowDeactivated);
 		break;
 
 	default:

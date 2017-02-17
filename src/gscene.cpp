@@ -82,36 +82,40 @@ GEntity * GScene::getTouchCapture() const
 	return touchCapture;
 }
 
-void GScene::handleTouchEvent(const GEvent & touchEvent)
+void GScene::handleTouchEvent(const GEvent & event)
 {
 	std::vector<GTouchHandlerFindResult> handlerList;
 
-	this->componentManager->findTouchHandlers(&handlerList, touchEvent.touch.screenPosition);
+	this->componentManager->findTouchHandlers(&handlerList, event.getTouch().screenPosition);
 
-	GEvent tempEvent = touchEvent;
+	GEvent tempEvent = event;
+	GTouchEvent touchEvent = tempEvent.getTouch();
 
 	if(handlerList.empty()) {
 		if(this->touchCapture != nullptr) {
-			tempEvent.touch.touchedEntity = nullptr;
-			tempEvent.touch.target = this->touchCapture;
+			touchEvent.touchedEntity = nullptr;
+			touchEvent.target = this->touchCapture;
+			tempEvent.setTouch(touchEvent);
 			this->touchCapture->getComponentByType<GComponentTouchHandler>()->handle(tempEvent);
 		}
 	}
 	else {
 		for(auto it = handlerList.begin(); it != handlerList.end(); ++it) {
-			tempEvent.propagation = false;
-			tempEvent.touch.touchedEntity = it->handler->getEntity();
-			tempEvent.touch.worldPosition = it->worldPosition;
+			tempEvent.setAllowPropagate(false);
+			touchEvent.touchedEntity = it->handler->getEntity();
+			touchEvent.worldPosition = it->worldPosition;
 			if(this->touchCapture == nullptr) {
-				tempEvent.touch.target = tempEvent.touch.touchedEntity;
+				touchEvent.target = tempEvent.getTouch().touchedEntity;
+				tempEvent.setTouch(touchEvent);
 				it->handler->handle(tempEvent);
 			}
 			else {
-				tempEvent.touch.target = this->touchCapture;
+				touchEvent.target = this->touchCapture;
+				tempEvent.setTouch(touchEvent);
 				this->touchCapture->getComponentByType<GComponentTouchHandler>()->handle(tempEvent);
 			}
 
-			if(! tempEvent.propagation) {
+			if(! tempEvent.doesAllowPropagate()) {
 				break;
 			}
 		}

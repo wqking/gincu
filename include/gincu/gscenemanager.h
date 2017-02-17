@@ -10,7 +10,7 @@
 namespace gincu {
 
 class GScene;
-struct GEvent;
+class GEvent;
 
 class GSceneManager
 {

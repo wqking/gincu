@@ -13,7 +13,7 @@ namespace gincu {
 class GComponentManager;
 class GEntity;
 class GComponentCamera;
-struct GEvent;
+class GEvent;
 
 class GScene
 {

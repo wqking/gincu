@@ -162,7 +162,7 @@ void SceneLogo::doExitLogo()
 
 void SceneLogo::onPressAnyKey(const GEvent & touchEvent)
 {
-	if(touchEvent.type == GEventType::touchPressed) {
+	if(touchEvent.getType() == GEventType::touchPressed) {
 		this->doExitLogo();
 	}
 }

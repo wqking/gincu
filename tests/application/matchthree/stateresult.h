@@ -7,7 +7,7 @@ namespace gincu {
 
 class SceneMatchThree;
 class GEntity;
-struct GEvent;
+class GEvent;
 
 class StateResult : public GState
 {
