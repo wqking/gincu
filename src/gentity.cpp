@@ -61,9 +61,9 @@ void GEntity::setComponentManager(GComponentManager * componentManager)
 	}
 }
 
-GComponent * GEntity::getComponentByTypeId(const unsigned int typeId) const
+GComponent * GEntity::getComponentByTypeId(const GComponentType typeId) const
 {
-	return this->doGetComponentByTypeId(typeId);
+	return this->doGetComponentByTypeId((unsigned int)typeId);
 }
 
 

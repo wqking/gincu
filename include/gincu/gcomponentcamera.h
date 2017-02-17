@@ -19,8 +19,8 @@ private:
 	typedef GComponent super;
 
 public:
-	inline static constexpr unsigned int getComponentType() {
-		return componentTypeId_Camera;
+	inline static constexpr GComponentType getComponentType() {
+		return GComponentType::camera;
 	}
 
 public:

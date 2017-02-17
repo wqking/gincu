@@ -75,11 +75,11 @@ public:
 	}
 	
 private:
-	ComponentListType * doGetComponentList(const unsigned int typeId);
+	ComponentListType * doGetComponentList(const GComponentType typeId);
 
 private:
 	std::vector<ComponentListType> componentListHotArray;
-	std::map<unsigned int, ComponentListType> componentListColdMap;
+	std::map<GComponentType, ComponentListType> componentListColdMap;
 	mutable std::vector<GComponentTransform *> rootTransformList;
 	mutable bool needSortRootTransformList;
 	mutable std::vector<CameraInfoPointer> cameraInfoList;

@@ -12,8 +12,8 @@ private:
 	typedef GComponent super;
 
 public:
-	inline static constexpr unsigned int getComponentType() {
-		return componentTypeId_Animation;
+	inline static constexpr GComponentType getComponentType() {
+		return GComponentType::animation;
 	}
 
 public:

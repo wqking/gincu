@@ -288,7 +288,7 @@ void GComponentManager::CameraInfo::findTouchHandlers(std::vector<GTouchHandlerF
 
 GComponentManager::GComponentManager()
 	:
-		componentListHotArray(componentTypeId_PrimaryCount),
+		componentListHotArray(componentTypePrimaryCount),
 		needSortRootTransformList(false),
 		needSortCameraList(false)
 {
@@ -299,7 +299,7 @@ void GComponentManager::add(GComponent * component)
 	this->doGetComponentList(component->getTypeId())->push_back(component);
 
 	switch(component->getTypeId()) {
-	case componentTypeId_Transform:
+	case GComponentType::transform:
 		if(getParentLocalTransform(component->getEntity()) == nullptr) {
 			this->rootTransformList.push_back(static_cast<GComponentTransform *>(component));
 			this->needSortRootTransformList = true;
@@ -310,18 +310,22 @@ void GComponentManager::add(GComponent * component)
 		}
 		break;
 	
-	case componentTypeId_TouchHandler:
+	case GComponentType::touchHandler:
 		for(CameraInfoPointer & cameraInfo : this->cameraInfoList) {
 			cameraInfo->addTouchHandler(component);
 		}
 		break;
 		
-	case componentTypeId_Camera:
+	case GComponentType::camera: {
 		this->needSortCameraList = true;
 		GComponentCamera * camera = static_cast<GComponentCamera *>(component);
 		this->cameraInfoList.push_back(std::make_shared<CameraInfo>(camera));
 		this->cameraInfoList.back()->loadRootTransformList(this->rootTransformList);
 		this->cameraInfoList.back()->loadTouchHandlerList(*this->doGetComponentList(GComponentTouchHandler::getComponentType()));
+	}
+		break;
+		
+	default:
 		break;
 	}
 }
@@ -332,7 +336,7 @@ void GComponentManager::remove(GComponent * component)
 	removeValueFromContainer(*componentList, component);
 
 	switch(component->getTypeId()) {
-	case componentTypeId_Transform:
+	case GComponentType::transform:
 		if(getParentLocalTransform(component->getEntity()) == nullptr) {
 			removeValueFromContainer(this->rootTransformList, component);
 
@@ -342,16 +346,19 @@ void GComponentManager::remove(GComponent * component)
 		}
 		break;
 		
-	case componentTypeId_TouchHandler:
+	case GComponentType::touchHandler:
 		for(CameraInfoPointer & cameraInfo : this->cameraInfoList) {
 			cameraInfo->removeTouchHandler(component);
 		}
 		break;
 		
-	case componentTypeId_Camera:
+	case GComponentType::camera:
 		removeIfValueFromContainer(this->cameraInfoList, [=](const CameraInfoPointer & a) {
 			return a->camera == component;
 		});
+		break;
+		
+	default:
 		break;
 	}
 }
@@ -451,10 +458,10 @@ void GComponentManager::findTouchHandlers(std::vector<GTouchHandlerFindResult> *
 	}
 }
 
-GComponentManager::ComponentListType * GComponentManager::doGetComponentList(const unsigned int typeId)
+GComponentManager::ComponentListType * GComponentManager::doGetComponentList(const GComponentType typeId)
 {
-	if(typeId < this->componentListHotArray.size()) {
-		return &this->componentListHotArray[typeId];
+	if((unsigned int)typeId < this->componentListHotArray.size()) {
+		return &this->componentListHotArray[(unsigned int)typeId];
 	}
 	else {
 		return &this->componentListColdMap[typeId];

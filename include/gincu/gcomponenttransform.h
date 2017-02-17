@@ -75,8 +75,8 @@ private:
 	typedef GComponentTransformBase<GComponentTransform> super;
 
 public:
-	inline static constexpr unsigned int getComponentType() {
-		return componentTypeId_Transform;
+	inline static constexpr GComponentType getComponentType() {
+		return GComponentType::transform;
 	}
 
 public:
@@ -103,8 +103,8 @@ private:
 	typedef GComponentTransformBase<GComponentLocalTransform> super;
 
 public:
-	inline static constexpr int getComponentType() {
-		return componentTypeId_LocalTransform;
+	inline static constexpr GComponentType getComponentType() {
+		return GComponentType::localTransform;
 	}
 	
 public:

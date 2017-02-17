@@ -8,13 +8,24 @@ namespace gincu {
 
 class GEntity;
 
+enum class GComponentType
+{
+	render = 0,
+	transform = 1,
+	localTransform = 2,
+	touchHandler = 3,
+	anchor = 4,
+	animation = 5,
+	camera = 6
+};
+
 class GComponent
 {
 public:
 	void * operator new (const std::size_t size);
 	void operator delete(void * p);
 
-	explicit GComponent(const unsigned int typeId);
+	explicit GComponent(const GComponentType typeId);
 	virtual ~GComponent();
 
 	template <typename T>
@@ -23,36 +34,29 @@ public:
 
 	void setEntity(GEntity * entity);
 
-	unsigned int getTypeId() const { return typeId; }
+	GComponentType getTypeId() const { return typeId; }
 	GEntity * getEntity() const { return entity; }
 
 protected:
-	void setTypeId(const unsigned int typeId) { this->typeId = typeId; }
+	void setTypeId(const GComponentType typeId) { this->typeId = typeId; }
 
 private:
 	virtual void doAfterSetEntity();
 
 private:
-	int typeId;
+	GComponentType typeId;
 	GEntity * entity;
 };
 
-constexpr unsigned int componentTypeId_Render = 0;
-constexpr unsigned int componentTypeId_Transform = 1;
-constexpr unsigned int componentTypeId_LocalTransform = 2;
-constexpr unsigned int componentTypeId_TouchHandler = 3;
-constexpr unsigned int componentTypeId_Anchor = 4;
-constexpr unsigned int componentTypeId_Animation = 5;
-constexpr unsigned int componentTypeId_Camera = 6;
-constexpr unsigned int componentTypeId_PrimaryCount = 7;
+constexpr unsigned int componentTypePrimaryCount = 7;
 
-// Usually we should not use componentTypeId_User directly.
+// Usually we should not use componentTypeUser directly.
 // Use registerComponentId or GComponentIdRegister.
-constexpr int componentTypeId_User = componentTypeId_PrimaryCount;
+constexpr GComponentType componentTypeUser = (GComponentType)componentTypePrimaryCount;
 
 // Return a unique component id for name.
 // Same name returns the same id.
-unsigned int registerComponentId(const std::string & name);
+GComponentType registerComponentId(const std::string & name);
 
 // A utility class to register type id automatically.
 // This should be singleton.
@@ -63,10 +67,10 @@ public:
 		: componentId(registerComponentId(name))
 	{}
 	
-	unsigned int getComponentId() const { return this->componentId; }
+	GComponentType getComponentId() const { return this->componentId; }
 	
 private:
-	unsigned int componentId;
+	GComponentType componentId;
 };
 
 // In current implementation, component can be created by "new" directly.

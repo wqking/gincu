@@ -13,7 +13,7 @@ private:
 	typedef GComponent super;
 
 public:
-	inline static unsigned int getComponentType() {
+	inline static GComponentType getComponentType() {
 		return componentIdRegister.getComponentId();
 	}
 

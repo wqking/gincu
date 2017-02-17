@@ -14,7 +14,7 @@ GEntityDynamicArrayBase::~GEntityDynamicArrayBase()
 
 void GEntityDynamicArrayBase::doAddComponent(GComponent * component, GComponentManager * componentManager)
 {
-	const unsigned int typeId = component->getTypeId();
+	const unsigned int typeId = (unsigned int)component->getTypeId();
 	if(this->componentList.size() <= typeId) {
 		this->componentList.resize(typeId + 1);
 	}
@@ -32,7 +32,7 @@ void GEntityDynamicArrayBase::doAddComponent(GComponent * component, GComponentM
 
 void GEntityDynamicArrayBase::doRemoveComponent(GComponent * component, GComponentManager * componentManager)
 {
-	const unsigned int typeId = component->getTypeId();
+	const unsigned int typeId = (unsigned int)component->getTypeId();
 	if(typeId < this->componentList.size()) {
 		if(componentManager != nullptr) {
 			componentManager->remove(component);
@@ -74,7 +74,7 @@ GComponent * GEntityDynamicArrayBase::doGetComponentByTypeId(const unsigned int 
 
 void GEntityDynamicMap::doAddComponent(GComponent * component, GComponentManager * componentManager)
 {
-	const unsigned int typeId = component->getTypeId();
+	const unsigned int typeId = (unsigned int)component->getTypeId();
 
 	auto it = this->componentMap.find(typeId);
 	if(it != this->componentMap.end()) {
@@ -95,7 +95,7 @@ void GEntityDynamicMap::doAddComponent(GComponent * component, GComponentManager
 
 void GEntityDynamicMap::doRemoveComponent(GComponent * component, GComponentManager * componentManager)
 {
-	const unsigned int typeId = component->getTypeId();
+	const unsigned int typeId = (unsigned int)component->getTypeId();
 	auto it = this->componentMap.find(typeId);
 	if(it != this->componentMap.end()) {
 		if(componentManager != nullptr) {

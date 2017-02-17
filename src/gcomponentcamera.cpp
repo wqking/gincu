@@ -38,7 +38,7 @@ void GComponentCamera::onEntityEvent(GComponent * component, const GEntityEventT
 {
 	switch(eventType) {
 	case GEntityEventType::componentAdded:
-		if(component->getTypeId() == componentTypeId_Transform) {
+		if(component->getTypeId() == GComponentType::transform) {
 			this->doInitializeComponentTransform(static_cast<GComponentTransform *>(component));
 		}
 		break;

@@ -40,7 +40,7 @@ public:
 	void setComponentManager(GComponentManager * componentManager);
 	GComponentManager * getComponentManager() const { return this->componentManager; }
 
-	GComponent * getComponentByTypeId(const unsigned int typeId) const;
+	GComponent * getComponentByTypeId(const GComponentType typeId) const;
 	
 	template <typename T>
 	T * getComponentByType() const {

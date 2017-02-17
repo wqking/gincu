@@ -99,7 +99,7 @@ private:
 
 protected:
 	void doAddComponent(GComponent * component, GComponentManager * componentManager) {
-		const unsigned int typeId = component->getTypeId();
+		const unsigned int typeId = (unsigned int)component->getTypeId();
 		if(typeId >= ArraySize) {
 			return;
 		}
@@ -116,7 +116,7 @@ protected:
 	}
 
 	void doRemoveComponent(GComponent * component, GComponentManager * componentManager) {
-		const unsigned int typeId = component->getTypeId();
+		const unsigned int typeId = (unsigned int)component->getTypeId();
 		if(typeId < ArraySize) {
 			if(componentManager != nullptr) {
 				componentManager->remove(component);
@@ -167,7 +167,7 @@ private:
 protected:
 	void doAddComponent(GComponent * component, GComponentManager * componentManager) {
 		ComponentPointer * componentSlot;
-		const unsigned int typeId = component->getTypeId();
+		const unsigned int typeId = (unsigned int)component->getTypeId();
 		if(typeId < ArraySize) {
 			componentSlot = &this->componentList[typeId];
 		}
@@ -191,7 +191,7 @@ protected:
 	}
 
 	void doRemoveComponent(GComponent * component, GComponentManager * componentManager) {
-		const unsigned int typeId = component->getTypeId();
+		const unsigned int typeId = (unsigned int)component->getTypeId();
 		if(typeId < ArraySize) {
 			if(componentManager != nullptr) {
 				componentManager->remove(component);
@@ -269,7 +269,7 @@ private:
 protected:
 	void doAddComponent(GComponent * component, GComponentManager * componentManager) {
 		ComponentPointer * componentSlot;
-		const unsigned int typeId = component->getTypeId();
+		const unsigned int typeId = (unsigned int)component->getTypeId();
 		if(typeId < ArraySize) {
 			componentSlot = &this->componentList[typeId];
 		}
@@ -289,7 +289,7 @@ protected:
 	}
 
 	void doRemoveComponent(GComponent * component, GComponentManager * componentManager) {
-		const unsigned int typeId = component->getTypeId();
+		const unsigned int typeId = (unsigned int)component->getTypeId();
 		if(typeId < ArraySize) {
 			if(componentManager != nullptr) {
 				componentManager->remove(component);
@@ -398,7 +398,7 @@ struct GEntityStoragePolicySelector <GEntityStoragePolicy::mixedMap, InitialSize
 #endif
 
 #ifndef GINCU_ENTITY_STORAGE_POLICY_INITIAL_SIZE
-#define GINCU_ENTITY_STORAGE_POLICY_INITIAL_SIZE componentTypeId_PrimaryCount
+#define GINCU_ENTITY_STORAGE_POLICY_INITIAL_SIZE componentTypePrimaryCount
 #endif
 
 typedef GEntityStoragePolicySelector<GEntityStoragePolicy:: GINCU_ENTITY_STORAGE_POLICY, GINCU_ENTITY_STORAGE_POLICY_INITIAL_SIZE>::Result EntityBase;

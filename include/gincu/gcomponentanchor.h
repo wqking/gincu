@@ -25,8 +25,8 @@ private:
 	};
 
 public:
-	inline static constexpr unsigned int getComponentType() {
-		return componentTypeId_Anchor;
+	inline static constexpr GComponentType getComponentType() {
+		return GComponentType::anchor;
 	}
 
 public:

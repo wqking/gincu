@@ -7,7 +7,7 @@ namespace gincu {
 
 namespace {
 
-unsigned int availableComponentId = componentTypeId_User;
+unsigned int availableComponentId = (unsigned int)componentTypeUser;
 
 std::map<std::string, unsigned int> * getComponentNameIdMap()
 {
@@ -28,7 +28,7 @@ void GComponent::operator delete(void * p)
 	GHeapPool::getInstance()->free(p);
 }
 
-GComponent::GComponent(const unsigned int typeId)
+GComponent::GComponent(const GComponentType typeId)
 	:
 		typeId(typeId),
 		entity(nullptr)
@@ -51,7 +51,7 @@ void GComponent::doAfterSetEntity()
 }
 
 
-unsigned int registerComponentId(const std::string & name)
+GComponentType registerComponentId(const std::string & name)
 {
 	unsigned int id = 0;
 
@@ -66,7 +66,7 @@ unsigned int registerComponentId(const std::string & name)
 		componentNameIdMap->insert(std::make_pair(name, id));
 	}
 	
-	return id;
+	return (GComponentType)id;
 }
 
 
