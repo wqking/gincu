@@ -33,7 +33,6 @@ public:
 
 	GEntity * addEntity(GEntity * entity);
 	void removeEntity(GEntity * entity);
-	void removeAllEntities();
 
 	void setTouchCapture(GEntity * touchCapture);
 	GEntity * getTouchCapture() const;

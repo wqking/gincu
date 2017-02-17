@@ -40,7 +40,7 @@ public:
 		:
 			type(type),
 			touch(),
-			resize(),
+			//resize(),
 			propagation(false)
 	{}
 
@@ -48,14 +48,14 @@ public:
 		:
 			type(type),
 			touch(touch),
-			resize(),
+			//resize(),
 			propagation(false)
 	{}
 
 	explicit GEvent(const GEventType type, const GResizeEvent & resize)
 		:
 			type(type),
-			touch(),
+			//touch(),
 			resize(resize),
 			propagation(false)
 	{}
@@ -74,8 +74,10 @@ public:
 private:
 	GEventType type;
 
-	GTouchEvent touch;
-	GResizeEvent resize;
+	union {
+		GTouchEvent touch;
+		GResizeEvent resize;
+	};
 
 	mutable bool propagation;
 };
