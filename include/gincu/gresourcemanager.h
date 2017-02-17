@@ -38,6 +38,8 @@ public:
 	GFont getFont() const;
 
 	std::string solveResourcePath(const std::string & resourceName) const;
+	
+	void reloadResources();
 
 	const std::string & getResourcePath() const { return this->resourcePath; }
 

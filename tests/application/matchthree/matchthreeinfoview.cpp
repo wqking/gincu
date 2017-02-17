@@ -5,7 +5,9 @@
 #include "gincu/gcomponentrender.h"
 #include "gincu/gcomponenttransform.h"
 #include "gincu/gcomponentanchor.h"
+#include "gincu/grenderanchor.h"
 #include "gincu/gutil.h"
+
 #include "cpgf/tween/gtweenlist.h"
 #include "cpgf/tween/easing/quad.h"
 #include "cpgf/accessor/gaccessor.h"

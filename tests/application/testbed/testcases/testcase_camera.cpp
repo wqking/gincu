@@ -11,6 +11,7 @@
 #include "gincu/gcomponentcamera.h"
 #include "gincu/gcomponentanimation.h"
 #include "gincu/gresourcemanager.h"
+#include "gincu/grenderanchor.h"
 
 #include "cpgf/goutmain.h"
 
@@ -85,7 +86,10 @@ void TestCase_Camera::doInitializeCameras()
 {
 	const unsigned int defaultMask = (1u << 1) | (1u << 2);
 	const GPoint position{ 0, 0 };
-	const GSize worldSize{ 420, 280 };
+	const GSize worldSize{ 360, 240 };
+	const float viewportSize = 0.3f;
+	const float viewportX = 0.1f;
+	const float viewportY = 0.1f;
 
 	this->cameraList.push_back(
 	this->getScene()->addEntity(
@@ -93,7 +97,7 @@ void TestCase_Camera::doInitializeCameras()
 		->addComponent(createComponent<GComponentTransform>(position))
 		->addComponent(createComponent<GComponentCamera>()
 			->setMask(defaultMask)
-			->setViewport({ 0.1f, 0.1f, 0.4f, 0.4f })
+			->setViewport({ viewportX, viewportY, viewportSize, viewportSize })
 			->setWorldSize(worldSize)
 		)
 		->addComponent(createComponent<GComponentAnchor>(GRenderAnchor::leftTop))
@@ -105,7 +109,7 @@ void TestCase_Camera::doInitializeCameras()
 		->addComponent(createComponent<GComponentTransform>(position))
 		->addComponent(createComponent<GComponentCamera>()
 			->setMask(defaultMask)
-			->setViewport({ 0.5f, 0.1f, 0.4f, 0.4f })
+			->setViewport({ viewportX + viewportSize, viewportY, viewportSize, viewportSize })
 			->setWorldSize(worldSize)
 		)
 		->addComponent(createComponent<GComponentAnchor>(GRenderAnchor::leftTop)->setFlipX(true))
@@ -117,7 +121,7 @@ void TestCase_Camera::doInitializeCameras()
 		->addComponent(createComponent<GComponentTransform>(position)->setScale({ 2.0f, 2.0f }))
 		->addComponent(createComponent<GComponentCamera>()
 			->setMask(defaultMask)
-			->setViewport({ 0.5f, 0.5f, 0.4f, 0.4f })
+			->setViewport({ viewportX + viewportSize, viewportY + viewportSize, viewportSize, viewportSize })
 			->setWorldSize(worldSize)
 		)
 		->addComponent(createComponent<GComponentAnchor>(GRenderAnchor::center)->setFlipY(true))
@@ -132,7 +136,7 @@ void TestCase_Camera::doInitializeCameras()
 		)
 		->addComponent(createComponent<GComponentCamera>()
 			->setMask(defaultMask)
-			->setViewport({ 0.7f, 0.7f, 0.4f, 0.4f })
+			->setViewport({ viewportX + viewportSize * 1.5f, viewportY + viewportSize * 1.5f, viewportSize, viewportSize })
 			->setWorldSize(worldSize)
 		)
 		->addComponent(createComponent<GComponentAnchor>(GRenderAnchor::center)->setFlipX(true)->setFlipY(true))
@@ -143,7 +147,7 @@ void TestCase_Camera::doInitializeButtons()
 {
 	const float startX = 10;
 	const float startY = 100;
-	const float deltaY = defaultButtonSize.height + 10;
+//	const float deltaY = defaultButtonSize.height + 10;
 
 	this->getScene()->addEntity(
 		createButton("Turn on/off", GPoint{startX, startY}, [=]() {

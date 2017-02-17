@@ -98,5 +98,12 @@ std::string GResourceManager::solveResourcePath(const std::string & resourceName
 	return this->resourcePath + resourceName;
 }
 
+void GResourceManager::reloadResources()
+{
+	for(auto it = this->imageDataMap.begin(); it != this->imageDataMap.end(); ++it) {
+		it->second->reload();
+	}
+}
+
 
 } //namespace gincu

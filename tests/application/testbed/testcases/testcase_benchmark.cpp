@@ -13,6 +13,7 @@
 #include "gincu/gresourcemanager.h"
 #include "gincu/gapplication.h"
 #include "gincu/gscenemanager.h"
+#include "gincu/grenderanchor.h"
 #include "gincu/gutil.h"
 
 #include "cpgf/goutmain.h"
@@ -84,7 +85,7 @@ GPoint TestCase_Benchmark::getRandomPosition() const
 
 void TestCase_Benchmark::doBenchmarkBatchedAnimation()
 {
-	constexpr int iterateCount = 1000;
+	constexpr int iterateCount = 10000;
 	const int animationCount = (int)animationNames.size();
 
 	for(int a = 0; a < animationCount; ++a) {

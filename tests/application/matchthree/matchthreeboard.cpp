@@ -8,6 +8,7 @@
 #include "gincu/gcomponenttransform.h"
 #include "gincu/gcomponenttouchhandler.h"
 #include "gincu/gcomponentanchor.h"
+#include "gincu/grenderanchor.h"
 
 namespace gincu {
 

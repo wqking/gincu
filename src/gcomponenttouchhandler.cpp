@@ -4,7 +4,6 @@
 #include "gincu/gentity.h"
 #include "gincu/gentityutil.h"
 #include "gincu/gutil.h"
-#include "gincu/grenderanchor.h"
 
 namespace gincu {
 

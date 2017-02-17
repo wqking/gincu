@@ -13,7 +13,9 @@
 #include "gincu/gcomponentanchor.h"
 #include "gincu/gcomponentcamera.h"
 #include "gincu/gscenemanager.h"
+#include "gincu/grenderanchor.h"
 #include "gincu/gutil.h"
+
 #include "cpgf/tween/gtweenlist.h"
 #include "cpgf/tween/easing/elastic.h"
 #include "cpgf/tween/easing/quad.h"

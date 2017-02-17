@@ -2,7 +2,6 @@
 #define GIMAGE_H
 
 #include "gincu/ggeometry.h"
-#include "gincu/grenderanchor.h"
 #include "gincu/gmatrix.h"
 
 #include <string>

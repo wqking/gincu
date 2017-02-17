@@ -10,6 +10,7 @@
 #include "gincu/gcomponenttouchhandler.h"
 #include "gincu/gcomponentanchor.h"
 #include "gincu/gcomponentcamera.h"
+#include "gincu/grenderanchor.h"
 #include "gincu/gevent.h"
 
 #include <algorithm>

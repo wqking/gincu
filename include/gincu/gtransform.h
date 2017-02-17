@@ -2,7 +2,6 @@
 #define GTRANSFORM_H
 
 #include "gincu/ggeometry.h"
-#include "gincu/grenderanchor.h"
 #include "gincu/gmatrix.h"
 
 #include "cpgf/gflags.h"

@@ -10,6 +10,7 @@
 #include "gincu/gcomponentanchor.h"
 #include "gincu/gcomponentanimation.h"
 #include "gincu/gresourcemanager.h"
+#include "gincu/grenderanchor.h"
 
 #include "cpgf/accessor/gaccessor.h"
 #include "cpgf/tween/easing/elastic.h"

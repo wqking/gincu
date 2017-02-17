@@ -2,6 +2,7 @@
 #include "gincu/gresourcemanager.h"
 #include "gincu/gcomponentrender.h"
 #include "gincu/gcomponenttouchhandler.h"
+#include "gincu/grenderanchor.h"
 
 using namespace gincu;
 

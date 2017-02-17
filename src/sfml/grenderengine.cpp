@@ -79,46 +79,48 @@ bool GRenderEngine::peekEvent(GEvent * event)
 		break;
 
 	case sf::Event::MouseButtonPressed:
-	case sf::Event::MouseButtonReleased: {
+	case sf::Event::MouseButtonReleased:
 		event->touch = GTouchEvent();
 		event->type = (e.type == sf::Event::MouseButtonPressed ? GEventType::touchPressed : GEventType::touchReleased);
 		event->touch.down = (e.type == sf::Event::MouseButtonPressed);
 		event->touch.screenPosition = {(GCoord)e.mouseButton.x, (GCoord)e.mouseButton.y};
 		break;
-	}
 
-	case sf::Event::MouseMoved: {
+	case sf::Event::MouseMoved:
 		event->touch = GTouchEvent();
 		event->type = GEventType::touchMoved;
 		event->touch.down = sf::Mouse::isButtonPressed(sf::Mouse::Left);
 		event->touch.screenPosition = {(GCoord)e.mouseMove.x, (GCoord)e.mouseMove.y};
 		break;
-	}
 
 	case sf::Event::TouchBegan:
-	case sf::Event::TouchEnded: {
+	case sf::Event::TouchEnded:
 		event->touch = GTouchEvent();
 		event->type = (e.type == sf::Event::TouchBegan ? GEventType::touchPressed : GEventType::touchReleased);
 		event->touch.finger = e.touch.finger;
 		event->touch.down = (e.type == sf::Event::TouchBegan);
 		event->touch.screenPosition = {(GCoord)e.touch.x, (GCoord)e.touch.y};
-
 		break;
-	}
 
-	case sf::Event::TouchMoved: {
+	case sf::Event::TouchMoved:
 		event->touch = GTouchEvent();
 		event->type = GEventType::touchMoved;
 		event->touch.down = true;
 		event->touch.screenPosition = {(GCoord)e.touch.x, (GCoord)e.touch.y};
 		break;
-	}
 
-	case sf::Event::Resized: {
+	case sf::Event::Resized:
 		event->type = GEventType::windowResized;
 		event->resize = GResizeEvent{ (GCoord)e.size.width, (GCoord)e.size.height };
 		break;
-	}
+
+	case sf::Event::GainedFocus:
+		event->type = GEventType::windowActivated;
+		break;
+
+	case sf::Event::LostFocus:
+		event->type = GEventType::windowDeactivated;
+		break;
 
 	default:
 		break;

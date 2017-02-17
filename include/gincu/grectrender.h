@@ -3,7 +3,6 @@
 
 #include "gincu/gcolor.h"
 #include "gincu/ggeometry.h"
-#include "gincu/grenderanchor.h"
 #include "gincu/gmatrix.h"
 
 #include <memory>

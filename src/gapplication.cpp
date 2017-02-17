@@ -148,6 +148,15 @@ void GApplication::processEvents()
 			this->screenSize = GSize{ (GCoord)event.resize.width, (GCoord)event.resize.height };
 			break;
 
+		case GEventType::windowActivated:
+			G_LOG_INFO("Application is activated.");
+//			this->resourceManager->reloadResources();
+			break;
+
+		case GEventType::windowDeactivated:
+			G_LOG_INFO("Application is deactivated.");
+			break;
+
 		default:
 			break;
 		}

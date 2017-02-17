@@ -11,6 +11,7 @@
 #include "gincu/gcomponentanchor.h"
 #include "gincu/gcomponentcamera.h"
 #include "gincu/gevent.h"
+#include "gincu/grenderanchor.h"
 
 #include "cpgf/tween/gtimeline.h"
 #include "cpgf/tween/gtweenlist.h"

@@ -12,11 +12,19 @@ class GImageData
 public:
 	void load(const std::string & fileName)
 	{
-		this->texture.loadFromFile(fileName);
+		this->fileName = fileName;
+		this->reload();
+	}
+
+	void reload()
+	{
+		this->texture = sf::Texture();
+		this->texture.loadFromFile(this->fileName);
 		this->texture.setSmooth(true);
 	}
 
 	sf::Texture texture;
+	std::string fileName;
 };
 
 } //namespace gincu
