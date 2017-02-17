@@ -386,8 +386,7 @@ void GComponentManager::parentChanged(GComponentLocalTransform * localTransform)
 
 void GComponentManager::zOrderChanged(GComponentTransform * transform)
 {
-	if(transform->getTypeId() == componentTypeId_Transform
-		&& getParentLocalTransform(transform->getEntity()) == nullptr) {
+	if(getParentLocalTransform(transform->getEntity()) == nullptr) {
 		for(CameraInfoPointer & cameraInfo : this->cameraInfoList) {
 			cameraInfo->zOrderChanged(transform);
 		}

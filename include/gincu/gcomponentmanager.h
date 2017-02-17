@@ -58,7 +58,7 @@ public:
 	void clear();
 
 	void parentChanged(GComponentLocalTransform * localTransform);
-	void zOrderChanged(GComponentTransform * transform); // this can be either a global or local transform
+	void zOrderChanged(GComponentTransform * transform);
 	void cameraIdChanged(GComponentTransform * transform, const unsigned int oldCameraId);
 	void cameraMaskChanged(GComponentCamera * camera);
 	

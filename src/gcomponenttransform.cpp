@@ -15,10 +15,7 @@ GComponentTransform::GComponentTransform()
 
 GComponentTransform::GComponentTransform(const GPoint & position, const GScale & scale, const bool visible)
 	:
-		super(this),
-		transform(position, scale),
-		zOrder(0),
-		visible(visible),
+		super(position, scale, visible),
 		cameraId(0)
 {
 }
@@ -43,35 +40,19 @@ GComponentTransform * GComponentTransform::setCameraId(const unsigned int camera
 	return this;
 }
 
-GComponentTransform * GComponentTransform::setZOrder(const int zOrder)
-{
-	if(this->zOrder != zOrder) {
-		this->zOrder = zOrder;
-		
-		this->doAfterZOrderChanged();
-
-		GComponentManager * componentManager = getComponentManagerFromEntity(this->getEntity());
-		if(componentManager != nullptr) {
-			componentManager->zOrderChanged(this);
-		}
-	}
-
-	return this;
-}
-
 void GComponentTransform::doAfterZOrderChanged()
 {
+	GComponentManager * componentManager = getComponentManagerFromEntity(this->getEntity());
+	if(componentManager != nullptr) {
+		componentManager->zOrderChanged(this);
+	}
 }
 
 
 GComponentLocalTransform::GComponentLocalTransform()
 	:
-		super(),
-		parent(nullptr),
-		needSortChildren(false)
+		GComponentLocalTransform(GPoint())
 {
-	// must set explicitly because the super is another component.
-	this->setTypeId(GComponentLocalTransform::getComponentType());
 }
 
 GComponentLocalTransform::GComponentLocalTransform(const GPoint & position, const GScale & scale, const bool visible)
@@ -80,8 +61,6 @@ GComponentLocalTransform::GComponentLocalTransform(const GPoint & position, cons
 		parent(nullptr),
 		needSortChildren(false)
 {
-	// must set explicitly because the super is another component.
-	this->setTypeId(GComponentLocalTransform::getComponentType());
 }
 
 GComponentLocalTransform::~GComponentLocalTransform()
