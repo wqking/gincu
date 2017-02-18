@@ -35,7 +35,8 @@ public:
 	GRenderEngine();
 	~GRenderEngine();
 
-	void inititialize();
+	void initialize();
+	void finalize();
 
 	void render();
 

@@ -28,6 +28,9 @@ public:
 	GResourceManager();
 	~GResourceManager();
 
+	void initialize();
+	void finalize();
+
 	GImage getImage(const std::string & resourceName) const;
 
 	GAtlas getAtlas(const std::string & resourceName, const GAtlasFormat format) const;

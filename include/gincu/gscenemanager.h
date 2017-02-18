@@ -21,10 +21,11 @@ public:
 	GSceneManager();
 	~GSceneManager();
 
+	void initialize();
+	void finalize();
+
 	void switchScene(GScene * scene);
 	void switchScene(const std::string & sceneName, const SceneCreator & creator);
-
-	void handleEvent(const GEvent & event);
 
 	GScene * getCurrentScene() const { return currentScene.get(); }
 

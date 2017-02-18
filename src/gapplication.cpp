@@ -3,6 +3,7 @@
 #include "gincu/gresourcemanager.h"
 #include "gincu/gscenemanager.h"
 #include "gincu/gevent.h"
+#include "gincu/geventqueue.h"
 #include "gincu/gheappool.h"
 #include "gincu/gutil.h"
 #include "gincu/glog.h"
@@ -54,18 +55,31 @@ void GApplication::finish()
 
 void GApplication::initialize()
 {
+	this->eventQueue.reset(new GEventQueue());
+
 	this->renderEngine.reset(new GRenderEngine());
-	this->renderEngine->inititialize();
 
 	this->resourceManager.reset(new GResourceManager());
 
 	this->sceneManager.reset(new GSceneManager());
-	
+
+	this->eventQueue->addListener(cpgf::makeCallback(this, &GApplication::onEvent));
+
+	this->renderEngine->initialize();
+	this->resourceManager->initialize();
+	this->sceneManager->initialize();
+
 	this->doInitialize();
 }
 
 void GApplication::finalize()
 {
+	this->eventQueue->removeListener(cpgf::makeCallback(this, &GApplication::onEvent));
+	
+	this->renderEngine->finalize();
+	this->resourceManager->finalize();
+	this->sceneManager->finalize();
+
 	this->doFinalize();
 }
 
@@ -139,29 +153,34 @@ void GApplication::processEvents()
 {
 	GEvent event;
 	while(this->renderEngine->peekEvent(&event)) {
-		switch(event.getType()) {
-		case GEventType::windowClosed:
-			this->finish();
-			break;
+		this->eventQueue->post(event);
+	}
 
-		case GEventType::windowResized:
-			this->screenSize = GSize{ (GCoord)event.getResize().width, (GCoord)event.getResize().height };
-			break;
+	GEventQueue::dispatchAll();
+}
 
-		case GEventType::windowActivated:
-			G_LOG_INFO("Application is activated.");
-//			this->resourceManager->reloadResources();
-			break;
+void GApplication::onEvent(const GEvent & event)
+{
+	switch(event.getType()) {
+	case GEventType::windowClosed:
+		this->finish();
+		break;
 
-		case GEventType::windowDeactivated:
-			G_LOG_INFO("Application is deactivated.");
-			break;
+	case GEventType::windowResized:
+		this->screenSize = GSize{ (GCoord)event.getResize().width, (GCoord)event.getResize().height };
+		break;
 
-		default:
-			break;
-		}
+	case GEventType::windowActivated:
+		G_LOG_INFO("Application is activated.");
+//		this->resourceManager->reloadResources();
+		break;
 
-		this->sceneManager->handleEvent(event);
+	case GEventType::windowDeactivated:
+		G_LOG_INFO("Application is deactivated.");
+		break;
+
+	default:
+		break;
 	}
 }
 

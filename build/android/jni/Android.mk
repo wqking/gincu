@@ -88,6 +88,8 @@ LOCAL_SRC_FILES := \
 	$(SRC_PATH)/gentity.cpp \
 	$(SRC_PATH)/gentitypolicy.cpp \
 	$(SRC_PATH)/gentityutil.cpp \
+	$(SRC_PATH)/gevent.cpp \
+	$(SRC_PATH)/geventqueue.cpp \
 	$(SRC_PATH)/gapplication.cpp \
 	$(SRC_PATH)/gheappool.cpp \
 	$(SRC_PATH)/gscene.cpp \

@@ -201,7 +201,7 @@ GRenderEngine::~GRenderEngine()
 {
 }
 
-void GRenderEngine::inititialize()
+void GRenderEngine::initialize()
 {
 	const GConfigInfo & configInfo = GApplication::getInstance()->getConfigInfo();
 
@@ -223,6 +223,10 @@ void GRenderEngine::inititialize()
 	));
 
 	this->doInitialize();
+}
+
+void GRenderEngine::finalize()
+{
 }
 
 bool GRenderEngine::peekEvent(GEvent * event)

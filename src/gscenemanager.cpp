@@ -4,16 +4,25 @@
 #include "gincu/gapplication.h"
 #include "gincu/gheappool.h"
 #include "gincu/gevent.h"
+#include "gincu/geventqueue.h"
 
 namespace gincu {
 
 GSceneManager::GSceneManager()
 	: keepCurrentScene(false)
 {
-	GRenderEngine::getInstance()->appendRender(cpgf::makeCallback(this, &GSceneManager::render));
 }
 
 GSceneManager::~GSceneManager()
+{
+}
+
+void GSceneManager::initialize()
+{
+	GRenderEngine::getInstance()->appendRender(cpgf::makeCallback(this, &GSceneManager::render));
+}
+
+void GSceneManager::finalize()
 {
 	this->doSwitchScene(nullptr, false);
 
@@ -73,13 +82,6 @@ void GSceneManager::render()
 {
 	if(this->currentScene) {
 		this->currentScene->renderScene();
-	}
-}
-
-void GSceneManager::handleEvent(const GEvent & event)
-{
-	if(this->currentScene && isTouchEvent(event.getType())) {
-		this->currentScene->handleTouchEvent(event);
 	}
 }
 

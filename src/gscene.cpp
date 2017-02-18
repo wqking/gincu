@@ -7,6 +7,7 @@
 #include "gincu/gscenemanager.h"
 #include "gincu/gcomponentmanager.h"
 #include "gincu/gevent.h"
+#include "gincu/geventqueue.h"
 
 #include "gincu/gcomponentanchor.h" // for test
 
@@ -42,12 +43,15 @@ void GScene::initializePrimaryCamera()
 void GScene::onEnter()
 {
 	this->initializePrimaryCamera();
+	GApplication::getInstance()->getEventQueue()->addListener(cpgf::makeCallback(this, &GScene::onEvent));
 
 	this->doOnEnter();
 }
 
 void GScene::onExit()
 {
+	GApplication::getInstance()->getEventQueue()->removeListener(cpgf::makeCallback(this, &GScene::onEvent));
+	
 	this->doOnExit();
 
 	this->tweenList.clear();
@@ -82,8 +86,12 @@ GEntity * GScene::getTouchCapture() const
 	return touchCapture;
 }
 
-void GScene::handleTouchEvent(const GEvent & event)
+void GScene::onEvent(const GEvent & event)
 {
+	if(! isTouchEvent(event.getType())) {
+		return;
+	}
+
 	std::vector<GTouchHandlerFindResult> handlerList;
 
 	this->componentManager->findTouchHandlers(&handlerList, event.getTouch().screenPosition);
@@ -94,7 +102,6 @@ void GScene::handleTouchEvent(const GEvent & event)
 	if(handlerList.empty()) {
 		if(this->touchCapture != nullptr) {
 			touchEvent.touchedEntity = nullptr;
-			touchEvent.target = this->touchCapture;
 			tempEvent.setTouch(touchEvent);
 			this->touchCapture->getComponentByType<GComponentTouchHandler>()->handle(tempEvent);
 		}
@@ -105,12 +112,10 @@ void GScene::handleTouchEvent(const GEvent & event)
 			touchEvent.touchedEntity = it->handler->getEntity();
 			touchEvent.worldPosition = it->worldPosition;
 			if(this->touchCapture == nullptr) {
-				touchEvent.target = tempEvent.getTouch().touchedEntity;
 				tempEvent.setTouch(touchEvent);
 				it->handler->handle(tempEvent);
 			}
 			else {
-				touchEvent.target = this->touchCapture;
 				tempEvent.setTouch(touchEvent);
 				this->touchCapture->getComponentByType<GComponentTouchHandler>()->handle(tempEvent);
 			}

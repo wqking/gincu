@@ -30,6 +30,14 @@ GResourceManager::~GResourceManager()
 {
 }
 
+void GResourceManager::initialize()
+{
+}
+
+void GResourceManager::finalize()
+{
+}
+
 GImage GResourceManager::getImage(const std::string & resourceName) const
 {
 	std::shared_ptr<GImageData> data;

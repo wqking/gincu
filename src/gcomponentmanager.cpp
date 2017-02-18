@@ -353,7 +353,7 @@ void GComponentManager::remove(GComponent * component)
 		break;
 		
 	case GComponentType::camera:
-		removeIfValueFromContainer(this->cameraInfoList, [=](const CameraInfoPointer & a) {
+		removeIfFromContainer(this->cameraInfoList, [=](const CameraInfoPointer & a) {
 			return a->camera == component;
 		});
 		break;

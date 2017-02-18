@@ -29,8 +29,6 @@ public:
 
 	void renderScene();
 
-	void handleTouchEvent(const GEvent & touchEvent);
-
 	GEntity * addEntity(GEntity * entity);
 	void removeEntity(GEntity * entity);
 
@@ -43,6 +41,7 @@ public:
 
 private:
 	void initializePrimaryCamera();
+	void onEvent(const GEvent & event);
 
 private:
 	virtual void doOnEnter();

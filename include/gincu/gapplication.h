@@ -16,6 +16,8 @@ class GRenderEngine;
 class GResourceManager;
 class GSceneManager;
 class GHeapPool;
+class GEvent;
+class GEventQueue;
 
 typedef cpgf::GCallback<void ()> FrameUpdater;
 
@@ -39,6 +41,7 @@ public:
 	GSize getScreenSize() const;
 
 	GSceneManager * getSceneManager() const { return this->sceneManager.get(); }
+	GEventQueue * getEventQueue() const { return this->eventQueue.get(); }
 
 	int64_t getFrameCount() const { return this->frameCount; }
 	int getFrameRate() const { return this->frameRate; }
@@ -54,6 +57,7 @@ private:
 	void finalize();
 	void processMainLoop();
 	void processEvents();
+	void onEvent(const GEvent & event);
 
 private:
 	virtual void doInitialize();
@@ -67,6 +71,7 @@ private:
 	std::unique_ptr<GRenderEngine> renderEngine;
 	std::unique_ptr<GResourceManager> resourceManager;
 	std::unique_ptr<GSceneManager> sceneManager;
+	std::unique_ptr<GEventQueue> eventQueue;
 
 	bool finished;
 

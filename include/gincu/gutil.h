@@ -35,7 +35,7 @@ void removeValueFromContainer(C & container, const V & value)
 }
 
 template <typename C, typename V>
-void removeIfValueFromContainer(C & container, const V & predication)
+void removeIfFromContainer(C & container, const V & predication)
 {
 	container.erase(std::remove_if(container.begin(), container.end(), predication), container.end());
 }
