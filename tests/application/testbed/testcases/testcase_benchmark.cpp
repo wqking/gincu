@@ -85,7 +85,7 @@ GPoint TestCase_Benchmark::getRandomPosition() const
 
 void TestCase_Benchmark::doBenchmarkBatchedAnimation()
 {
-	constexpr int iterateCount = 10000;
+	constexpr int iterateCount = 50000;
 	const int animationCount = (int)animationNames.size();
 
 	for(int a = 0; a < animationCount; ++a) {

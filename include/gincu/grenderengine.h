@@ -42,9 +42,6 @@ public:
 
 	bool peekEvent(GEvent * event);
 
-	void appendRender(const cpgf::GCallback<void ()> & render);
-	void removeRender(const cpgf::GCallback<void ()> & render);
-	
 	bool isAlive() const;
 
 	void switchCamera(const GCamera & camera);
@@ -62,7 +59,6 @@ private:
 
 private:
 	std::shared_ptr<GRenderEngineData> data;
-	cpgf::GCallbackList<void ()> renderList;
 };
 
 

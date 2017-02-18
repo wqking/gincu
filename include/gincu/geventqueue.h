@@ -42,11 +42,30 @@ public:
 	~GEventQueue();
 
 	void addListener(const GEventType type, const EventListener & listener, const GEvent::TagType tag = nullptr);
-	// add a "catch all" listener
+	
+	// add a "catch all" listener, be careful to use it, it may hit performance.
 	void addListener(const EventListener & listener, const GEvent::TagType tag = nullptr);
 
+	template <typename Iterator>
+	void addListeners(Iterator begin, const Iterator end, const EventListener & listener, const GEvent::TagType tag = nullptr) {
+		while(begin != end) {
+			this->addListener(*begin, listener, tag);
+			++begin;
+		}
+	}
+
 	void removeListener(const GEventType type, const EventListener & listener, const GEvent::TagType tag = nullptr);
+
+	// remove a "catch all" listener
 	void removeListener(const EventListener & listener, const GEvent::TagType tag = nullptr);
+
+	template <typename Iterator>
+	void removeListeners(Iterator begin, const Iterator end, const EventListener & listener, const GEvent::TagType tag = nullptr) {
+		while(begin != end) {
+			this->removeListener(*begin, listener, tag);
+			++begin;
+		}
+	}
 
 	void send(const GEvent & event);
 	void post(const GEvent & event);

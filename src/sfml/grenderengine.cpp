@@ -7,6 +7,7 @@
 #include "gincu/gapplication.h"
 #include "gincu/grenderinfo.h"
 #include "gincu/gevent.h"
+#include "gincu/geventqueue.h"
 #include "gincu/gcamera.h"
 #include "gsfmlutil.h"
 #include "gimagedata.h"
@@ -296,16 +297,6 @@ bool GRenderEngine::peekEvent(GEvent * event)
 	return true;
 }
 
-void GRenderEngine::appendRender(const cpgf::GCallback<void ()> & render)
-{
-	this->renderList.add(render);
-}
-
-void GRenderEngine::removeRender(const cpgf::GCallback<void ()> & render)
-{
-	this->renderList.remove(render);
-}
-
 bool GRenderEngine::isAlive() const
 {
 	return this->data->window->isOpen();
@@ -343,7 +334,7 @@ void GRenderEngine::render()
 		// in case the render thread is too slow to render last frame, let's discard the old frame.
 		this->data->updaterQueue->clear();
 
-		this->renderList();
+		GApplication::getInstance()->getEventQueue()->send(GEvent(GEventType::render));
 	}
 
 	this->data->updaterReadyLock.set();

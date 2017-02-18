@@ -8,9 +8,13 @@ namespace gincu {
 enum class GEventType
 {
 	none,
+
+	render,
+
 	touchMoved,
 	touchPressed,
 	touchReleased,
+
 	windowClosed,
 	windowResized,
 	windowActivated,

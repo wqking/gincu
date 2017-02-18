@@ -1,7 +1,7 @@
 #ifndef GHEAPPOOL_H
 #define GHEAPPOOL_H
 
-#include <vector>
+#include <deque>
 #include <map>
 #include <memory>
 
@@ -53,8 +53,8 @@ private:
 	std::size_t chunkSize;
 	GHeapPoolPurgeStrategy purgeStrategy;
 	
-	std::vector<Chunk> chunkList;
-	std::vector<IdleIndex> idleList;
+	std::deque<Chunk> chunkList;
+	std::deque<IdleIndex> idleList;
 };
 
 class GHeapPool

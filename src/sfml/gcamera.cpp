@@ -73,7 +73,7 @@ void GCamera::apply(const GMatrix44 & matrix)
 	});
 }
 
-GPoint GCamera::mapWindowToCamera(const GPoint & point) const
+GPoint GCamera::mapScreenToCamera(const GPoint & point) const
 {
 	auto pt = GRenderEngine::getInstance()->getData()->window->mapPixelToCoords({(int)point.x, (int)point.y}, this->data->view);
 	return {pt.x, pt.y};

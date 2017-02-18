@@ -48,7 +48,7 @@ public:
 
 	const std::shared_ptr<GCameraData> & getData() const { return this->data; }
 
-	GPoint mapWindowToCamera(const GPoint & point) const;
+	GPoint mapScreenToCamera(const GPoint & point) const;
 	
 private:
 	void doRequireRefresh();

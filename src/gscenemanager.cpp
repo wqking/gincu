@@ -19,14 +19,11 @@ GSceneManager::~GSceneManager()
 
 void GSceneManager::initialize()
 {
-	GRenderEngine::getInstance()->appendRender(cpgf::makeCallback(this, &GSceneManager::render));
 }
 
 void GSceneManager::finalize()
 {
 	this->doSwitchScene(nullptr, false);
-
-	GRenderEngine::getInstance()->removeRender(cpgf::makeCallback(this, &GSceneManager::render));
 }
 
 void GSceneManager::switchScene(GScene * scene)
@@ -75,13 +72,6 @@ void GSceneManager::doSwitchScene(GScene * scene, const bool keepScene)
 		if(GHeapPool::getInstance()->getPurgeStrategy() == GHeapPoolPurgeStrategy::onSceneSwitched) {
 			GHeapPool::getInstance()->purge();
 		}
-	}
-}
-
-void GSceneManager::render()
-{
-	if(this->currentScene) {
-		this->currentScene->renderScene();
 	}
 }
 

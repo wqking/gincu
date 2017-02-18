@@ -10,13 +10,23 @@
 
 #include "cpgf/tween/gtweenlist.h"
 
+#include <vector>
 #include <chrono>
 #include <thread>
 
 namespace gincu {
 
 namespace {
-	GApplication * instance = nullptr;
+
+GApplication * instance = nullptr;
+
+const std::vector<GEventType> interestedEventTypes {
+	GEventType::windowClosed,
+	GEventType::windowResized,
+	GEventType::windowActivated,
+	GEventType::windowDeactivated,
+};
+
 }
 
 GApplication * GApplication::getInstance()
@@ -63,7 +73,7 @@ void GApplication::initialize()
 
 	this->sceneManager.reset(new GSceneManager());
 
-	this->eventQueue->addListener(cpgf::makeCallback(this, &GApplication::onEvent));
+	this->eventQueue->addListeners(interestedEventTypes.begin(), interestedEventTypes.end(), cpgf::makeCallback(this, &GApplication::onEvent));
 
 	this->renderEngine->initialize();
 	this->resourceManager->initialize();
@@ -74,7 +84,7 @@ void GApplication::initialize()
 
 void GApplication::finalize()
 {
-	this->eventQueue->removeListener(cpgf::makeCallback(this, &GApplication::onEvent));
+	this->eventQueue->removeListeners(interestedEventTypes.begin(), interestedEventTypes.end(), cpgf::makeCallback(this, &GApplication::onEvent));
 	
 	this->renderEngine->finalize();
 	this->resourceManager->finalize();

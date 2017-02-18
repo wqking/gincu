@@ -42,6 +42,7 @@ public:
 private:
 	void initializePrimaryCamera();
 	void onEvent(const GEvent & event);
+	void doHandleTouchEvent(const GEvent & event);
 
 private:
 	virtual void doOnEnter();

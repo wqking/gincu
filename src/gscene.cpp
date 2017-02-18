@@ -13,6 +13,17 @@
 
 namespace gincu {
 
+namespace {
+
+const std::vector<GEventType> interestedEventTypes {
+	GEventType::render,
+	GEventType::touchMoved,
+	GEventType::touchPressed,
+	GEventType::touchReleased,
+};
+
+} //unnamed namespace
+
 GScene::GScene()
 	: 
 		componentManager(new GComponentManager()),
@@ -43,15 +54,15 @@ void GScene::initializePrimaryCamera()
 void GScene::onEnter()
 {
 	this->initializePrimaryCamera();
-	GApplication::getInstance()->getEventQueue()->addListener(cpgf::makeCallback(this, &GScene::onEvent));
+	GApplication::getInstance()->getEventQueue()->addListeners(interestedEventTypes.begin(), interestedEventTypes.end(), cpgf::makeCallback(this, &GScene::onEvent));
 
 	this->doOnEnter();
 }
 
 void GScene::onExit()
 {
-	GApplication::getInstance()->getEventQueue()->removeListener(cpgf::makeCallback(this, &GScene::onEvent));
-	
+	GApplication::getInstance()->getEventQueue()->removeListeners(interestedEventTypes.begin(), interestedEventTypes.end(), cpgf::makeCallback(this, &GScene::onEvent));
+
 	this->doOnExit();
 
 	this->tweenList.clear();
@@ -68,9 +79,6 @@ void GScene::doOnExit()
 
 void GScene::renderScene()
 {
-	this->tweenList.tick((cpgf::GTweenNumber)GApplication::getInstance()->getRenderMilliseconds());
-
-	this->componentManager->updateDuringRender();
 }
 
 void GScene::setTouchCapture(GEntity * touchCapture)
@@ -88,10 +96,20 @@ GEntity * GScene::getTouchCapture() const
 
 void GScene::onEvent(const GEvent & event)
 {
-	if(! isTouchEvent(event.getType())) {
-		return;
+	if(isTouchEvent(event.getType())) {
+		this->doHandleTouchEvent(event);
 	}
+	else {
+		if(event.getType() == GEventType::render) {
+			this->tweenList.tick((cpgf::GTweenNumber)GApplication::getInstance()->getRenderMilliseconds());
+			this->componentManager->updateDuringRender();
+		}
+	}
+	
+}
 
+void GScene::doHandleTouchEvent(const GEvent & event)
+{
 	std::vector<GTouchHandlerFindResult> handlerList;
 
 	this->componentManager->findTouchHandlers(&handlerList, event.getTouch().screenPosition);
