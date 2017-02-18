@@ -18,6 +18,7 @@ class GSceneManager;
 class GHeapPool;
 class GEvent;
 class GEventQueue;
+class GWorker;
 
 typedef cpgf::GCallback<void ()> FrameUpdater;
 
@@ -33,6 +34,8 @@ public:
 	void run();
 	
 	void finish();
+
+	void executeWorkerTask(const cpgf::GCallback<void ()> & task);
 
 	const GConfigInfo & getConfigInfo() const { return this->configInfo; }
 	GSize getScreenSize() const;
@@ -67,6 +70,7 @@ private:
 	std::unique_ptr<GResourceManager> resourceManager;
 	std::unique_ptr<GSceneManager> sceneManager;
 	std::unique_ptr<GEventQueue> eventQueue;
+	std::unique_ptr<GWorker> worker;
 
 	bool finished;
 

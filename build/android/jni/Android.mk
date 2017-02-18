@@ -97,6 +97,7 @@ LOCAL_SRC_FILES := \
 	$(SRC_PATH)/gstate.cpp \
 	$(SRC_PATH)/gstatemachine.cpp \
 	$(SRC_PATH)/gutil.cpp \
+	$(SRC_PATH)/gworker.cpp \
 	$(ROOT_PATH)/thirdparty/zf_log.cpp \
 
 LOCAL_SHARED_LIBRARIES := sfml-system

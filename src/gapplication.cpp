@@ -7,6 +7,7 @@
 #include "gincu/gutil.h"
 #include "gincu/glog.h"
 #include "grenderengine.h"
+#include "gworker.h"
 
 #include "cpgf/tween/gtweenlist.h"
 
@@ -156,7 +157,7 @@ void GApplication::processMainLoop()
 			fps = 0;
 			renderFps = 0;
 
-			G_LOG_VERBOSE("FPS: %d RenderFPS: %d", this->frameRate, this->renderFrameRate);
+//			G_LOG_VERBOSE("FPS: %d RenderFPS: %d", this->frameRate, this->renderFrameRate);
 		}
 	}
 }
@@ -213,6 +214,15 @@ void GApplication::setConfigInfo(const GConfigInfo & configInfo)
 {
 	this->configInfo = configInfo;
 	this->screenSize = this->configInfo.windowSize;
+}
+
+void GApplication::executeWorkerTask(const cpgf::GCallback<void ()> & task)
+{
+	if(! this->worker) {
+		this->worker.reset(new GWorker());
+	}
+
+	this->worker->addTask(task);
 }
 
 

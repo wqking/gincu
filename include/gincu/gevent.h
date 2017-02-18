@@ -3,6 +3,8 @@
 
 #include "gincu/ggeometry.h"
 
+#include <memory>
+
 namespace gincu {
 
 enum class GEventType
@@ -47,12 +49,16 @@ public:
 	GEvent(const GEventType type, const GTouchEvent & touch);
 	GEvent(const GEventType type, const GResizeEvent & resize);
 	GEvent(const GEventType type, GRenderContext * renderContext);
+	GEvent(const GEventType type, const std::shared_ptr<void *> & sharedData);
 
 	GEventType getType() const { return this->type; }
 	void setType(const GEventType type) { this->type = type; }
 	
 	const GTouchEvent & getTouch() const { return this->touch; }
 	void setTouch(const GTouchEvent & touch) { this->touch = touch; }
+
+	const std::shared_ptr<void *> & getSharedData() const { return this->sharedData; }
+	void setSharedData(const std::shared_ptr<void *> & sharedData) { this->sharedData = sharedData; }
 
 	TagType getTag() const { return this->tag; }
 	void setTag(const TagType tag) { this->tag = tag; }
@@ -72,6 +78,8 @@ private:
 		GResizeEvent resize;
 		GRenderContext * renderContext;
 	};
+
+	std::shared_ptr<void *> sharedData;
 
 	TagType tag;
 

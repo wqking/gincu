@@ -12,6 +12,10 @@
 #include "gincu/gresourcemanager.h"
 #include "gincu/grenderanchor.h"
 
+#include "gincu/gapplication.h"
+#include "gincu/glog.h"
+#include "gincu/gutil.h"
+
 #include "cpgf/accessor/gaccessor.h"
 #include "cpgf/tween/easing/elastic.h"
 #include "cpgf/goutmain.h"
@@ -19,6 +23,23 @@
 namespace {
 
 using namespace gincu;
+
+void testWorker()
+{
+	for(int i = 0; i < 100; ++i) {
+		G_LOG_INFO("Start worker %d", i);
+		GApplication::getInstance()->executeWorkerTask(
+			[=]() {
+				sleepMilliseconds(i * 10);
+				G_LOG_INFO("Finished worker %d", i);
+		}
+		);
+		if(i % 10 == 0) {
+			sleepMilliseconds(100 - i);
+		}
+	}
+}
+
 
 class TestCase_SceneGraph : public TestCase
 {
@@ -38,6 +59,8 @@ void TestCase_SceneGraph::doInitialize()
 	this->doInitializeStatic({ 150, 50 });
 	this->doInitializeRotation({ 300, 50 });
 	this->doInitializeRotationAnimation({ 450, 350 });
+
+//	testWorker();
 }
 
 GComponentTweenedFrameAnimation * createAnimation(GEntity * entity, const std::string & atlasName)

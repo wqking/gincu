@@ -44,6 +44,16 @@ GEvent::GEvent(const GEventType type, GRenderContext * renderContext)
 {
 }
 
+GEvent::GEvent(const GEventType type, const std::shared_ptr<void *> & sharedData)
+	:
+		type(type),
+		touch(),
+		sharedData(sharedData),
+		tag(),
+		propagation(false)
+{
+}
+
 bool isTouchEvent(const GEventType type)
 {
 	switch(type) {
