@@ -1,5 +1,5 @@
 #include "gincu/gimage.h"
-#include "gincu/grenderengine.h"
+#include "gincu/grendercontext.h"
 #include "gincu/gerrorhandler.h"
 #include "gincu/gtransform.h"
 #include "gincu/grenderinfo.h"
@@ -32,9 +32,9 @@ void GImage::load(const std::string & fileName)
 	this->data->load(fileName);
 }
 
-void GImage::draw(const GMatrix44 & matrix, const GRenderInfo * renderInfo)
+void GImage::draw(GRenderContext * renderContext, const GMatrix44 & matrix, const GRenderInfo * renderInfo)
 {
-	GRenderEngine::getInstance()->draw(*this, matrix, renderInfo);
+	renderContext->draw(*this, matrix, renderInfo);
 }
 
 GSize GImage::getSize() const

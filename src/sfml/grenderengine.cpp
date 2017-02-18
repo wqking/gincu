@@ -1,4 +1,4 @@
-#include "gincu/grenderengine.h"
+#include "../grenderengine.h"
 #include "gincu/gtransform.h"
 #include "gincu/gimage.h"
 #include "gincu/gatlasrender.h"
@@ -334,7 +334,7 @@ void GRenderEngine::render()
 		// in case the render thread is too slow to render last frame, let's discard the old frame.
 		this->data->updaterQueue->clear();
 
-		GApplication::getInstance()->getEventQueue()->send(GEvent(GEventType::render));
+		GApplication::getInstance()->getEventQueue()->send(GEvent(GEventType::render, this));
 	}
 
 	this->data->updaterReadyLock.set();

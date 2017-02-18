@@ -30,10 +30,10 @@ GComponentContainerRender * GComponentContainerRender::add(GComponentRender * re
 	return this;
 }
 
-void GComponentContainerRender::doDraw()
+void GComponentContainerRender::doDraw(GRenderContext * renderContext)
 {
 	for(const ComponentRenderPointer & render : this->renderList) {
-		render->draw();
+		render->draw(renderContext);
 	}
 }
 

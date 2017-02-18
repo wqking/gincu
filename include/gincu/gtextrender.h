@@ -14,6 +14,7 @@ class GTransform;
 struct GRenderInfo;
 class GTextRenderData;
 class GImageData;
+class GRenderContext;
 
 class GTextRender
 {
@@ -25,7 +26,7 @@ public:
 	void setColor(const GColor textColor);
 	void setFontSize(const int fontSize);
 
-	void draw(const GMatrix44 & matrix, const GRenderInfo * renderInfo);
+	void draw(GRenderContext * renderContext, const GMatrix44 & matrix, const GRenderInfo * renderInfo);
 
 	GSize getSize() const;
 

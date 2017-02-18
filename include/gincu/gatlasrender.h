@@ -7,6 +7,7 @@
 namespace gincu {
 
 class GImageData;
+class GRenderContext;
 
 class GAtlasRender
 {
@@ -14,7 +15,7 @@ public:
 	GAtlasRender();
 	explicit GAtlasRender(const GAtlas & atlas);
 
-	void draw(const GMatrix44 & matrix, const GRenderInfo * renderInfo);
+	void draw(GRenderContext * renderContext, const GMatrix44 & matrix, const GRenderInfo * renderInfo);
 
 	GSize getSize() const;
 

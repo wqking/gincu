@@ -1,5 +1,5 @@
 #include "gincu/gtextrender.h"
-#include "gincu/grenderengine.h"
+#include "gincu/grendercontext.h"
 #include "gincu/gerrorhandler.h"
 #include "gincu/gresourcemanager.h"
 #include "gincu/gtransform.h"
@@ -45,9 +45,9 @@ void GTextRender::setFontSize(const int fontSize)
 	this->data->text.setCharacterSize(fontSize);
 }
 
-void GTextRender::draw(const GMatrix44 & matrix, const GRenderInfo * renderInfo)
+void GTextRender::draw(GRenderContext * renderContext, const GMatrix44 & matrix, const GRenderInfo * renderInfo)
 {
-	GRenderEngine::getInstance()->draw(*this, matrix, renderInfo);
+	renderContext->draw(*this, matrix, renderInfo);
 }
 
 GSize GTextRender::getSize() const

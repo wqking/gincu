@@ -4,7 +4,7 @@
 #include "gincu/gcomponentrender.h"
 #include "gincu/gcomponentcamera.h"
 #include "gincu/gcomponentanimation.h"
-#include "gincu/grenderengine.h"
+#include "gincu/grendercontext.h"
 #include "gincu/gentityutil.h"
 #include "gincu/gutil.h"
 
@@ -17,38 +17,38 @@ namespace gincu {
 
 namespace {
 
-void doRenderEntity(GEntity * entity);
+void doRenderEntity(GRenderContext * renderContext, GEntity * entity);
 
-void doRenderLocalTransformList(const std::vector<GComponentLocalTransform *> & transformList, GComponentRender * parentRender)
+void doRenderLocalTransformList(GRenderContext * renderContext, const std::vector<GComponentLocalTransform *> & transformList, GComponentRender * parentRender)
 {
 	const int count = (int)transformList.size();
 	int index = 0;
 
 	while(index < count && transformList[index]->getZOrder() < 0) {
-		doRenderEntity(transformList[index]->getEntity());
+		doRenderEntity(renderContext, transformList[index]->getEntity());
 		++index;
 	}
 
 	if(parentRender != nullptr) {
-		parentRender->draw();
+		parentRender->draw(renderContext);
 	}
 
 	while(index < count) {
-		doRenderEntity(transformList[index]->getEntity());
+		doRenderEntity(renderContext, transformList[index]->getEntity());
 		++index;
 	}
 }
 
-void doRenderEntity(GEntity * entity)
+void doRenderEntity(GRenderContext * renderContext, GEntity * entity)
 {
 	GComponentRender * render = entity->getComponentByType<GComponentRender>();
 	GComponentLocalTransform * localTransform = entity->getComponentByType<GComponentLocalTransform>();
 	if(localTransform != nullptr) {
-		doRenderLocalTransformList(localTransform->getSortedChildren(), render);
+		doRenderLocalTransformList(renderContext, localTransform->getSortedChildren(), render);
 	}
 	else {
 		if(render != nullptr) {
-			render->draw();
+			render->draw(renderContext);
 		}
 	}
 }
@@ -254,7 +254,7 @@ bool GComponentManager::CameraInfo::belongs(const GComponent * component)
 	}
 }
 
-void GComponentManager::CameraInfo::render()
+void GComponentManager::CameraInfo::render(GRenderContext * renderContext)
 {
 	if(this->needSortRootTransformList) {
 		this->needSortRootTransformList = false;
@@ -270,10 +270,10 @@ void GComponentManager::CameraInfo::render()
 		const GRect viewport = c.getViewportPixels();
 		c.apply(computeRenderableMatrix(componentTransform, getSize(viewport)));
 	}
-	GRenderEngine::getInstance()->switchCamera(c);
+	renderContext->switchCamera(c);
 
 	for(GComponentTransform * transform : this->rootTransformList) {
-		doRenderEntity(transform->getEntity());
+		doRenderEntity(renderContext, transform->getEntity());
 	}
 }
 
@@ -436,7 +436,7 @@ void GComponentManager::updateLocalTransforms()
 	}
 }
 
-void GComponentManager::render()
+void GComponentManager::render(GRenderContext * renderContext)
 {
 	if(this->needSortCameraList) {
 		this->needSortCameraList = false;
@@ -447,7 +447,7 @@ void GComponentManager::render()
 		});
 	}
 	for(CameraInfoPointer & cameraInfo : this->cameraInfoList) {
-		cameraInfo->render();
+		cameraInfo->render(renderContext);
 	}
 }
 

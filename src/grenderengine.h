@@ -4,6 +4,7 @@
 #include "gincu/ggeometry.h"
 #include "gincu/gcolor.h"
 #include "gincu/gmatrix.h"
+#include "gincu/grendercontext.h"
 
 #include "cpgf/gcallbackList.h"
 
@@ -25,9 +26,9 @@ class GCamera;
 struct GRenderInfo;
 class GEvent;
 
-class GRenderEngine
+class GRenderEngine : public GRenderContext
 {
-public:
+private: // make it private for now, may remove it later.
 	// Not singleton. It must be created somewhere, the default is created by GApplication
 	static GRenderEngine * getInstance();
 
@@ -44,13 +45,14 @@ public:
 
 	bool isAlive() const;
 
-	void switchCamera(const GCamera & camera);
-	void draw(const GImage & image, const GMatrix44 & matrix, const GRenderInfo * renderInfo);
-	void draw(const GAtlasRender & atlasRender, const GMatrix44 & matrix, const GRenderInfo * renderInfo);
-	void draw(const GTextRender & text, const GMatrix44 & matrix, const GRenderInfo * renderInfo);
-	void draw(const GRectRender & rect, const GMatrix44 & matrix, const GRenderInfo * renderInfo);
-
 	const std::shared_ptr<GRenderEngineData> & getData() const { return this->data; }
+
+private: // implement GRenderContext
+	virtual void switchCamera(const GCamera & camera) override;
+	virtual void draw(const GImage & image, const GMatrix44 & matrix, const GRenderInfo * renderInfo) override;
+	virtual void draw(const GAtlasRender & atlasRender, const GMatrix44 & matrix, const GRenderInfo * renderInfo) override;
+	virtual void draw(const GTextRender & text, const GMatrix44 & matrix, const GRenderInfo * renderInfo) override;
+	virtual void draw(const GRectRender & rect, const GMatrix44 & matrix, const GRenderInfo * renderInfo) override;
 
 private:
 	void doInitialize();

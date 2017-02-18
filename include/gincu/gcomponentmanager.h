@@ -15,6 +15,7 @@ class GComponentTouchHandler;
 class GComponentTransform;
 class GComponentLocalTransform;
 class GComponentCamera;
+class GRenderContext;
 
 class GComponentManager
 {
@@ -39,7 +40,7 @@ private:
 
 		bool belongs(const GComponent * component);
 
-		void render();
+		void render(GRenderContext * renderContext);
 		void findTouchHandlers(std::vector<GTouchHandlerFindResult> * outputResult, const GPoint & screenPosition);
 
 		GComponentCamera * camera;
@@ -64,14 +65,14 @@ public:
 	
 	void updateAnimation();
 	void updateLocalTransforms();
-	void render();
+	void render(GRenderContext * renderContext);
 
 	void findTouchHandlers(std::vector<GTouchHandlerFindResult> * outputResult, const GPoint & screenPosition);
 
-	void updateDuringRender() {
+	void updateDuringRender(GRenderContext * renderContext) {
 		this->updateAnimation();
 		this->updateLocalTransforms();
-		this->render();
+		this->render(renderContext);
 	}
 	
 private:

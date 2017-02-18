@@ -17,6 +17,7 @@
 namespace gincu {
 
 class GImageData;
+class GRenderContext;
 
 class GComponentRender : public GComponent
 {
@@ -31,8 +32,8 @@ public:
 public:
 	GComponentRender();
 
-	void draw() {
-		this->doDraw();
+	void draw(GRenderContext * renderContext) {
+		this->doDraw(renderContext);
 	}
 
 	GSize getSize() const {
@@ -48,7 +49,7 @@ protected:
 	GRenderInfo * getRenderInfo() { return &this->renderInfo; }
 
 private:
-	virtual void doDraw() = 0;
+	virtual void doDraw(GRenderContext * renderContext) = 0;
 	virtual GSize doGetSize() const = 0;
 
 private:
@@ -67,7 +68,7 @@ public:
 	GComponentContainerRender * add(GComponentRender * render);
 
 private:
-	virtual void doDraw() override;
+	virtual void doDraw(GRenderContext * renderContext) override;
 	virtual GSize doGetSize() const override;
 	virtual void doAfterSetEntity() override;
 
@@ -99,10 +100,10 @@ public:
 	}
 
 private:
-	virtual void doDraw() override {
+	virtual void doDraw(GRenderContext * renderContext) override {
 		GComponentTransform * transform = this->getEntity()->template getComponentByType<GComponentTransform>();
 		if(transform->isVisible()) {
-			this->render.draw(computeRenderableMatrix(transform, this), this->getRenderInfo());
+			this->render.draw(renderContext, computeRenderableMatrix(transform, this), this->getRenderInfo());
 		}
 	}
 

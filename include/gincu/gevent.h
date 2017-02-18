@@ -21,6 +21,7 @@ enum class GEventType
 	windowDeactivated,
 };
 
+class GRenderContext;
 class GEntity;
 
 struct GTouchEvent
@@ -43,8 +44,9 @@ public:
 	GEvent();
 	explicit GEvent(const GEventType type);
 	GEvent(const GEventType type, const GTouchEvent & touch);
-	explicit GEvent(const GEventType type, const GResizeEvent & resize);
-	
+	GEvent(const GEventType type, const GResizeEvent & resize);
+	GEvent(const GEventType type, GRenderContext * renderContext);
+
 	GEventType getType() const { return this->type; }
 	void setType(const GEventType type) { this->type = type; }
 	
@@ -55,6 +57,8 @@ public:
 	void setTag(const TagType tag) { this->tag = tag; }
 	
 	const GResizeEvent & getResize() const { return this->resize; }
+
+	GRenderContext * getRenderContext() const { return this->renderContext; }
 	
 	bool doesAllowPropagate() const { return this->propagation; }
 	void setAllowPropagate(const bool allow) const { this->propagation = allow; }
@@ -65,6 +69,7 @@ private:
 	union {
 		GTouchEvent touch;
 		GResizeEvent resize;
+		GRenderContext * renderContext;
 	};
 
 	TagType tag;

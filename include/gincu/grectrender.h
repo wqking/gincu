@@ -13,6 +13,7 @@ class GTransform;
 struct GRenderInfo;
 class GRectRenderData;
 class GImageData;
+class GRenderContext;
 
 class GRectRender
 {
@@ -20,7 +21,7 @@ public:
 	GRectRender();
 	~GRectRender();
 
-	void draw(const GMatrix44 & matrix, const GRenderInfo * renderInfo);
+	void draw(GRenderContext * renderContext, const GMatrix44 & matrix, const GRenderInfo * renderInfo);
 
 	void setColor(const GColor color);
 	GColor getColor() const;

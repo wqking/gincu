@@ -1,6 +1,6 @@
 #include "gincu/gcamera.h"
 #include "gincu/gapplication.h"
-#include "gincu/grenderengine.h"
+#include "gincu/grendercontext.h"
 #include "gincu/gtransform.h"
 #include "gincu/gutil.h"
 #include "gcameradata.h"
@@ -75,7 +75,11 @@ void GCamera::apply(const GMatrix44 & matrix)
 
 GPoint GCamera::mapScreenToCamera(const GPoint & point) const
 {
-	auto pt = GRenderEngine::getInstance()->getData()->window->mapPixelToCoords({(int)point.x, (int)point.y}, this->data->view);
+	const GRect viewportPixels = this->getViewportPixels();
+	sf::Vector2f normalized;
+	normalized.x = -1.f + 2.f * (point.x - viewportPixels.x) / viewportPixels.width;
+	normalized.y =  1.f - 2.f * (point.y - viewportPixels.y)  / viewportPixels.height;
+	auto pt = this->data->view.getInverseTransform().transformPoint(normalized);
 	return {pt.x, pt.y};
 }
 

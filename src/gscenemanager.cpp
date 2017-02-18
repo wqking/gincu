@@ -1,6 +1,5 @@
 #include "gincu/gscenemanager.h"
 #include "gincu/gscene.h"
-#include "gincu/grenderengine.h"
 #include "gincu/gapplication.h"
 #include "gincu/gheappool.h"
 #include "gincu/gevent.h"

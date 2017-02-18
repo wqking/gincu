@@ -1,5 +1,4 @@
 #include "gincu/gapplication.h"
-#include "gincu/grenderengine.h"
 #include "gincu/gresourcemanager.h"
 #include "gincu/gscenemanager.h"
 #include "gincu/gevent.h"
@@ -7,6 +6,7 @@
 #include "gincu/gheappool.h"
 #include "gincu/gutil.h"
 #include "gincu/glog.h"
+#include "grenderengine.h"
 
 #include "cpgf/tween/gtweenlist.h"
 

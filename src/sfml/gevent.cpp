@@ -21,7 +21,6 @@ GEvent::GEvent(const GEventType type, const GTouchEvent & touch)
 	:
 		type(type),
 		touch(touch),
-		//resize(),
 		tag(),
 		propagation(false)
 {
@@ -30,13 +29,20 @@ GEvent::GEvent(const GEventType type, const GTouchEvent & touch)
 GEvent::GEvent(const GEventType type, const GResizeEvent & resize)
 	:
 		type(type),
-		//touch(),
 		resize(resize),
 		tag(),
 		propagation(false)
 {
 }
 
+GEvent::GEvent(const GEventType type, GRenderContext * renderContext)
+	:
+		type(type),
+		renderContext(renderContext),
+		tag(),
+		propagation(false)
+{
+}
 
 bool isTouchEvent(const GEventType type)
 {

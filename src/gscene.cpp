@@ -102,7 +102,7 @@ void GScene::onEvent(const GEvent & event)
 	else {
 		if(event.getType() == GEventType::render) {
 			this->tweenList.tick((cpgf::GTweenNumber)GApplication::getInstance()->getRenderMilliseconds());
-			this->componentManager->updateDuringRender();
+			this->componentManager->updateDuringRender(event.getRenderContext());
 		}
 	}
 	

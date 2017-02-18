@@ -12,6 +12,7 @@ namespace gincu {
 class GTransform;
 struct GRenderInfo;
 class GImageData;
+class GRenderContext;
 
 class GImage
 {
@@ -23,7 +24,7 @@ public:
 
 	void load(const std::string & fileName);
 
-	void draw(const GMatrix44 & matrix, const GRenderInfo * renderInfo);
+	void draw(GRenderContext * renderContext, const GMatrix44 & matrix, const GRenderInfo * renderInfo);
 
 	GSize getSize() const;
 

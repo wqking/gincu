@@ -1,5 +1,5 @@
 #include "gincu/grectrender.h"
-#include "gincu/grenderengine.h"
+#include "gincu/grendercontext.h"
 #include "gincu/gtransform.h"
 #include "gsfmlutil.h"
 #include "grectrenderdata.h"
@@ -17,9 +17,9 @@ GRectRender::~GRectRender()
 
 }
 
-void GRectRender::draw(const GMatrix44 & matrix, const GRenderInfo * renderInfo)
+void GRectRender::draw(GRenderContext * renderContext, const GMatrix44 & matrix, const GRenderInfo * renderInfo)
 {
-	GRenderEngine::getInstance()->draw(*this, matrix, renderInfo);
+	renderContext->draw(*this, matrix, renderInfo);
 }
 
 void GRectRender::setColor(const GColor color)

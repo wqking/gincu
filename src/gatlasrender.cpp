@@ -1,5 +1,5 @@
 #include "gincu/gatlasrender.h"
-#include "gincu/grenderengine.h"
+#include "gincu/grendercontext.h"
 
 namespace gincu {
 
@@ -13,10 +13,10 @@ GAtlasRender::GAtlasRender(const GAtlas & atlas)
 {
 }
 
-void GAtlasRender::draw(const GMatrix44 & matrix, const GRenderInfo * renderInfo)
+void GAtlasRender::draw(GRenderContext * renderContext, const GMatrix44 & matrix, const GRenderInfo * renderInfo)
 {
 	if(this->index >= 0 && this->index < this->atlas.getImageCount()) {
-		GRenderEngine::getInstance()->draw(*this, matrix, renderInfo);
+		renderContext->draw(*this, matrix, renderInfo);
 	}
 }
 
