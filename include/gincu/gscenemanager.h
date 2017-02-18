@@ -31,7 +31,7 @@ public:
 
 private:
 	void doSwitchScene(GScene * scene, const bool keepScene);
-	void lazySwitchScene();
+	void lazySwitchScene(const GEvent & event);
 
 private:
 	std::unique_ptr<GScene> currentScene;

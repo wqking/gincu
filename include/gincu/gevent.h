@@ -10,6 +10,7 @@ enum class GEventType
 	none,
 
 	render,
+	update,
 
 	touchMoved,
 	touchPressed,

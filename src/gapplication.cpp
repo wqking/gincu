@@ -114,6 +114,8 @@ void GApplication::processMainLoop()
 
 	unsigned int milliseconds;
 
+	const GEvent updateEvent(GEventType::update);
+
 	while(! this->finished && this->renderEngine->isAlive()) {
 		++this->frameCount;
 
@@ -123,7 +125,7 @@ void GApplication::processMainLoop()
 
 		cpgf::GTweenList::getInstance()->tick((cpgf::GTweenNumber)this->frameMilliseconds);
 
-		this->updaterList();
+		this->eventQueue->send(updateEvent);
 
 		if(this->configInfo.renderFramesPerSecond <= 0
 			|| getMilliseconds() - lastRenderTime >= millisecondsPerRenderFrame) {
@@ -192,16 +194,6 @@ void GApplication::onEvent(const GEvent & event)
 	default:
 		break;
 	}
-}
-
-void GApplication::addUpdater(const FrameUpdater & updater)
-{
-	this->updaterList.add(updater);
-}
-
-void GApplication::removeUpdater(const FrameUpdater & updater)
-{
-	this->updaterList.remove(updater);
 }
 
 void GApplication::doInitialize()

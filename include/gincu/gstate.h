@@ -7,8 +7,6 @@ const int invalidStateId = -1;
 
 class GStateMachine;
 
-// we don't provide update() function here,
-// we can always use GApplication::addUpdater to add an updater.
 class GState
 {
 public:

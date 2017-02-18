@@ -13,6 +13,7 @@
 #include "gincu/gcomponenttransform.h"
 #include "gincu/gcomponenttouchhandler.h"
 #include "gincu/gscenemanager.h"
+#include "gincu/geventqueue.h"
 #include "gincu/gutil.h"
 #include "gincu/gapplication.h"
 #include "cpgf/tween/gtweenlist.h"
@@ -63,7 +64,7 @@ void SceneMatchThree::doOnEnter()
 
 	this->roundStartMilliseconds = getMilliseconds();
 
-	GApplication::getInstance()->addUpdater(cpgf::makeCallback(this, &SceneMatchThree::onUpdate));
+	GApplication::getInstance()->getEventQueue()->addListener(GEventType::update, cpgf::makeCallback(this, &SceneMatchThree::onUpdate));
 
 	this->infoView->setRemainingSeconds(secondsPerRound);
 
@@ -72,7 +73,7 @@ void SceneMatchThree::doOnEnter()
 
 void SceneMatchThree::doOnExit()
 {
-	GApplication::getInstance()->removeUpdater(cpgf::makeCallback(this, &SceneMatchThree::onUpdate));
+	GApplication::getInstance()->getEventQueue()->removeListener(GEventType::update, cpgf::makeCallback(this, &SceneMatchThree::onUpdate));
 }
 
 void SceneMatchThree::clearTouchedChessList()
@@ -87,7 +88,7 @@ void SceneMatchThree::restoreTouchedChessList()
 	}
 }
 
-void SceneMatchThree::onUpdate()
+void SceneMatchThree::onUpdate(const GEvent & /*event*/)
 {
 	this->infoView->setRemainingSeconds(secondsPerRound - (getMilliseconds() - this->roundStartMilliseconds) / 1000);
 

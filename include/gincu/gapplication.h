@@ -34,9 +34,6 @@ public:
 	
 	void finish();
 
-	void addUpdater(const FrameUpdater & updater);
-	void removeUpdater(const FrameUpdater & updater);
-
 	const GConfigInfo & getConfigInfo() const { return this->configInfo; }
 	GSize getScreenSize() const;
 
@@ -65,8 +62,6 @@ private:
 
 private:
 	GConfigInfo configInfo;
-
-	cpgf::GCallbackList<void ()> updaterList;
 
 	std::unique_ptr<GRenderEngine> renderEngine;
 	std::unique_ptr<GResourceManager> resourceManager;

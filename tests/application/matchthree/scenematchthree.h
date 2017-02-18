@@ -32,7 +32,7 @@ public:
 	const std::vector<GEntity *> & getTouchedChessList() const { return touchedChessList; }
 
 private:
-	void onUpdate();
+	void onUpdate(const GEvent & event);
 	void onQuitGameClicked();
 	void restoreTouchedChessList();
 	bool isTimeUp() const;
