@@ -23,10 +23,6 @@ public:
 	explicit GImage(const GTexture & texture);
 	GImage(const GTexture & texture, const GRect & rect);
 
-	void draw(GRenderContext * renderContext, const GMatrix44 & matrix, const GRenderInfo * renderInfo);
-
-	GSize getSize() const;
-
 	const GTexture & getTexture() const { return this->texture; }
 
 	void setRect(const GRect & rect) { this->rect = rect; }
@@ -38,6 +34,9 @@ private:
 	GTexture texture;
 	mutable GRect rect;
 };
+
+void drawRender(const GImage & render, GRenderContext * renderContext, const GMatrix44 & matrix, const GRenderInfo * renderInfo);
+GSize getRenderSize(const GImage & render);
 
 
 } //namespace gincu

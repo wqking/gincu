@@ -127,7 +127,7 @@ void SceneLogo::doOnEnter()
 			(new GEntity())
 				->addComponent(createComponent<GComponentTransform>(startPosition))
 				->addComponent(createComponent<GComponentAnchor>(GRenderAnchor::hLeft | GRenderAnchor::vCenter))
-				->addComponent(createRectRenderComponent(0x770000aa, GSize { 0.0f, progressBarHeight }))
+				->addComponent(createRectRenderComponent(0x770000aa, GSize { progressBarWidth, progressBarHeight }))
 			);
 		GEntity * chessEntity = this->addEntity(
 			(new GEntity())
@@ -136,13 +136,14 @@ void SceneLogo::doOnEnter()
 				->addComponent(createChessRender(ChessColor::normal3))
 		);
 
-		GRectRender & rectRender = progressBarEntity->getComponentByType<GComponentRectRender>()->getRender();
+		GComponentTransform * rectTransform = progressBarEntity->getComponentByType<GComponentTransform>();
+		rectTransform->setScale({ 0, 1 });
 		GComponentTransform * transform = chessEntity->getComponentByType<GComponentTransform>();
 		timeline.setAt(0,
 			timeline.tween()
 				.duration(timeline.getDuration())
 				.ease(cpgf::LinearEase::easeIn())
-				.target(cpgf::createAccessor(&rectRender, &GRectRender::getSize, &GRectRender::setSize), GSize{progressBarWidth, rectRender.getSize().height} )
+				.target(cpgf::createAccessor(rectTransform, &GComponentTransform::getScale, &GComponentTransform::setScale), GScale{ 1, 1 } )
 				.target(cpgf::createAccessor(transform, &GComponentTransform::getPosition, &GComponentTransform::setPosition),   GPoint{startPosition.x + progressBarWidth, transform->getPosition().y})
 		);
 	}
@@ -168,7 +169,7 @@ void SceneLogo::onPressAnyKey(const GEvent & touchEvent)
 }
 
 
-G_AUTO_RUN_BEFORE_MAIN()
+G_AUTO_RUN_BEFORE_MAIN(SceneLogo)
 {
 	MenuRegister::getInstance()->registerItem("about", 9999999, [](){
 			GApplication::getInstance()->getSceneManager()->switchScene(new SceneLogo(false));

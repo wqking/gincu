@@ -20,14 +20,12 @@ enum class GRenderCommandType
 	none,
 	image,
 	text,
-	rect,
 	vertexArray,
 	switchCamera
 };
 
 class GTextureData;
 class GTextRenderData;
-class GRectRenderData;
 class GCameraData;
 class GVertexArrayData;
 enum class GPrimitive;
@@ -64,15 +62,6 @@ struct GRenderCommand
 		:
 			type(GRenderCommandType::text),
 			renderData(textData),
-			sfmlRenderStates(matrixToSfml(matrix))
-	{
-		copyBlendAndShaderToSfml(&this->sfmlRenderStates, renderInfo);
-	}
-
-	GRenderCommand(const std::shared_ptr<GRectRenderData> & rectData, const GMatrix44 & matrix, const GRenderInfo * renderInfo)
-		:
-			type(GRenderCommandType::rect),
-			renderData(rectData),
 			sfmlRenderStates(matrixToSfml(matrix))
 	{
 		copyBlendAndShaderToSfml(&this->sfmlRenderStates, renderInfo);

@@ -13,17 +13,17 @@ GAtlasRender::GAtlasRender(const GAtlas & atlas)
 {
 }
 
-void GAtlasRender::draw(GRenderContext * renderContext, const GMatrix44 & matrix, const GRenderInfo * renderInfo)
+void drawRender(const GAtlasRender & render, GRenderContext * renderContext, const GMatrix44 & matrix, const GRenderInfo * renderInfo)
 {
-	if(this->index >= 0 && this->index < this->atlas.getImageCount()) {
-		renderContext->draw(*this, matrix, renderInfo);
+	const int index = render.getIndex();
+	if(index >= 0 && index < render.getImageCount()) {
+		renderContext->draw(render.getTexture(), render.getRect(),  matrix, renderInfo);
 	}
 }
 
-GSize GAtlasRender::getSize() const
+GSize getRenderSize(const GAtlasRender & render)
 {
-	const GRect & rect = this->getRect();
-	return { rect.width, rect.height };
+	return getSize(render.getRect());
 }
 
 

@@ -45,17 +45,6 @@ void GTextRender::setFontSize(const int fontSize)
 	this->data->text.setCharacterSize(fontSize);
 }
 
-void GTextRender::draw(GRenderContext * renderContext, const GMatrix44 & matrix, const GRenderInfo * renderInfo)
-{
-	renderContext->draw(*this, matrix, renderInfo);
-}
-
-GSize GTextRender::getSize() const
-{
-	auto rect = this->data->text.getLocalBounds();
-	return { rect.width, rect.height };
-}
-
 void GTextRender::checkCopyOnWrite()
 {
 	// if use_count > 1 means the data is used by render engine, so we can't modify it because multi thread conflict,
@@ -63,6 +52,17 @@ void GTextRender::checkCopyOnWrite()
 	if(this->data.use_count() != 1) {
 		this->data = std::make_shared<GTextRenderData>(*this->data);
 	}
+}
+
+void drawRender(const GTextRender & render, GRenderContext * renderContext, const GMatrix44 & matrix, const GRenderInfo * renderInfo)
+{
+	renderContext->draw(render, matrix, renderInfo);
+}
+
+GSize getRenderSize(const GTextRender & render)
+{
+	auto rect = render.getData()->text.getLocalBounds();
+	return { rect.width, rect.height };
 }
 
 

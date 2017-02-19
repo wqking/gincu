@@ -3,7 +3,6 @@
 #include "gincu/gimage.h"
 #include "gincu/gatlasrender.h"
 #include "gincu/gtextrender.h"
-#include "gincu/grectrender.h"
 #include "gincu/gapplication.h"
 #include "gincu/grenderinfo.h"
 #include "gincu/gevent.h"
@@ -15,7 +14,6 @@
 #include "gsfmlutil.h"
 #include "gtexturedata.h"
 #include "gtextrenderdata.h"
-#include "grectrenderdata.h"
 #include "grenderenginedata.h"
 #include "gcameradata.h"
 #include "gvertexarraydata.h"
@@ -138,11 +136,6 @@ void GRenderEngineData::processRenderCommands()
 			break;
 		}
 
-		case GRenderCommandType::rect: {
-			this->window->draw(static_cast<GRectRenderData *>(command.renderData.get())->rectangle, command.sfmlRenderStates);
-			break;
-		}
-
 		case GRenderCommandType::vertexArray: {
 			const GVertexCommand * vertexCommand = static_cast<GVertexCommand *>(command.renderData.get());
 			this->window->draw(
@@ -238,6 +231,34 @@ void GRenderEngine::finalize()
 {
 }
 
+void GRenderEngine::doInitialize()
+{
+	this->data->initialize();
+
+	std::thread thread(&threadMain, this->data);
+	thread.detach();
+}
+
+void GRenderEngine::doFinalize()
+{
+	this->data->finished = true;
+	this->data->updaterReadyLock.set();
+}
+
+void GRenderEngine::render()
+{
+	{
+		std::lock_guard<std::mutex> lockGuard(this->data->updaterQueueMutex);
+
+		// in case the render thread is too slow to render last frame, let's discard the old frame.
+		this->data->updaterQueue->clear();
+
+		GApplication::getInstance()->getEventQueue()->send(GEvent(GEventType::render, this));
+	}
+
+	this->data->updaterReadyLock.set();
+}
+
 bool GRenderEngine::peekEvent(GEvent * event)
 {
 	sf::Event e;
@@ -310,14 +331,14 @@ bool GRenderEngine::isAlive() const
 	return this->data->window->isOpen();
 }
 
-void GRenderEngine::draw(const GImage & image, const GMatrix44 & matrix, const GRenderInfo * renderInfo)
+void GRenderEngine::switchCamera(const GCamera & camera)
 {
-	this->doDrawTexture(image.getTexture(), image.getRect(), matrix, renderInfo);
+	this->data->updaterQueue->emplace_back(std::make_shared<GCameraData>(*camera.getData()));
 }
 
-void GRenderEngine::draw(const GAtlasRender & atlasRender, const GMatrix44 & matrix, const GRenderInfo * renderInfo)
+void GRenderEngine::draw(const GTexture & texture, const GRect & rect, const GMatrix44 & matrix, const GRenderInfo * renderInfo)
 {
-	this->doDrawTexture(atlasRender.getAtlas().getTexture(), atlasRender.getRect(), matrix, renderInfo);
+	this->data->updaterQueue->emplace_back(texture.getData(), rect, matrix, renderInfo);
 }
 
 void GRenderEngine::draw(const GVertexArray & vertexArray, const GPrimitive type, const GTexture & texture, const GMatrix44 & matrix, const GRenderInfo * renderInfo)
@@ -329,53 +350,11 @@ void GRenderEngine::draw(const GVertexArray & vertexArray, const GPrimitive type
 	);
 }
 
-void GRenderEngine::doInitialize()
-{
-	this->data->initialize();
-
-	std::thread thread(&threadMain, this->data);
-	thread.detach();
-}
-
-void GRenderEngine::doFinalize()
-{
-	this->data->finished = true;
-	this->data->updaterReadyLock.set();
-}
-
-void GRenderEngine::render()
-{
-	{
-		std::lock_guard<std::mutex> lockGuard(this->data->updaterQueueMutex);
-
-		// in case the render thread is too slow to render last frame, let's discard the old frame.
-		this->data->updaterQueue->clear();
-
-		GApplication::getInstance()->getEventQueue()->send(GEvent(GEventType::render, this));
-	}
-
-	this->data->updaterReadyLock.set();
-}
-
-void GRenderEngine::switchCamera(const GCamera & camera)
-{
-	this->data->updaterQueue->emplace_back(std::make_shared<GCameraData>(*camera.getData()));
-}
-
 void GRenderEngine::draw(const GTextRender & text, const GMatrix44 & matrix, const GRenderInfo * renderInfo)
 {
 	this->data->updaterQueue->emplace_back(text.getData(), matrix, renderInfo);
 }
 
-void GRenderEngine::draw(const GRectRender & rect, const GMatrix44 & matrix, const GRenderInfo * renderInfo)
-{
-	this->data->updaterQueue->emplace_back(rect.getData(), matrix, renderInfo);
-}
-
-void GRenderEngine::doDrawTexture(const GTexture & texture, const GRect & rect, const GMatrix44 & matrix, const GRenderInfo * renderInfo)
-{
-	this->data->updaterQueue->emplace_back(texture.getData(), rect, matrix, renderInfo);
-}
 
 
 } //namespace gincu

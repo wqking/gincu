@@ -26,10 +26,6 @@ public:
 	void setColor(const GColor textColor);
 	void setFontSize(const int fontSize);
 
-	void draw(GRenderContext * renderContext, const GMatrix44 & matrix, const GRenderInfo * renderInfo);
-
-	GSize getSize() const;
-
 	const std::shared_ptr<GTextRenderData> & getData() const { return this->data; }
 
 private:
@@ -38,6 +34,9 @@ private:
 private:
 	std::shared_ptr<GTextRenderData> data;
 };
+
+void drawRender(const GTextRender & render, GRenderContext * renderContext, const GMatrix44 & matrix, const GRenderInfo * renderInfo);
+GSize getRenderSize(const GTextRender & render);
 
 
 } //namespace gincu

@@ -25,11 +25,6 @@ GImage::~GImage()
 {
 }
 
-void GImage::draw(GRenderContext * renderContext, const GMatrix44 & matrix, const GRenderInfo * renderInfo)
-{
-	renderContext->draw(*this, matrix, renderInfo);
-}
-
 const GRect & GImage::getRect() const
 {
 	if(this->rect.width <= 0) {
@@ -40,11 +35,14 @@ const GRect & GImage::getRect() const
 	return this->rect;
 }
 
-GSize GImage::getSize() const
+void drawRender(const GImage & render, GRenderContext * renderContext, const GMatrix44 & matrix, const GRenderInfo * renderInfo)
 {
-	const GRect tempRect = this->getRect();
+	renderContext->draw(render.getTexture(), render.getRect(), matrix, renderInfo);
+}
 
-	return { tempRect.width, tempRect.height };
+GSize getRenderSize(const GImage & render)
+{
+	return getSize(render.getRect());
 }
 
 

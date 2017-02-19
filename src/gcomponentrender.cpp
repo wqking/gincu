@@ -96,10 +96,16 @@ GComponentTextRender * createAndLoadTextComponent(const std::string & text, cons
 
 GComponentRectRender * createRectRenderComponent(const GColor color, const GSize & size)
 {
-	GRectRender render;
-	render.setColor(color);
-	render.setSize(size);
-	return createComponent<GComponentRectRender>(render);
+	GVertexArray vertexArray;
+
+	vertexArray.append(GPoint{ 0, 0 }, color);
+	vertexArray.append(GPoint{ size.width, 0 }, color);
+	vertexArray.append(GPoint{ size.width, size.height }, color);
+	vertexArray.append(GPoint{ size.width, size.height }, color);
+	vertexArray.append(GPoint{ 0, size.height }, color);
+	vertexArray.append(GPoint{ 0, 0 }, color);
+
+	return createComponent<GComponentRectRender>(GVertexArrayRender(GPrimitive::triangleStrip, vertexArray));
 }
 
 

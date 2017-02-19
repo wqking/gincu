@@ -40,16 +40,13 @@ public:
 
 private: // implement GRenderContext
 	virtual void switchCamera(const GCamera & camera) override;
-	virtual void draw(const GImage & image, const GMatrix44 & matrix, const GRenderInfo * renderInfo) override;
-	virtual void draw(const GAtlasRender & atlasRender, const GMatrix44 & matrix, const GRenderInfo * renderInfo) override;
+	virtual void draw(const GTexture & texture, const GRect & rect, const GMatrix44 & matrix, const GRenderInfo * renderInfo) override;
 	virtual void draw(const GTextRender & text, const GMatrix44 & matrix, const GRenderInfo * renderInfo) override;
-	virtual void draw(const GRectRender & rect, const GMatrix44 & matrix, const GRenderInfo * renderInfo) override;
 	virtual void draw(const GVertexArray & vertexArray, const GPrimitive type, const GTexture & texture, const GMatrix44 & matrix, const GRenderInfo * renderInfo) override;
 
 private:
 	void doInitialize();
 	void doFinalize();
-	void doDrawTexture(const GTexture & texture, const GRect & rect, const GMatrix44 & matrix, const GRenderInfo * renderInfo);
 
 private:
 	std::shared_ptr<GRenderEngineData> data;

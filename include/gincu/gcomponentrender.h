@@ -9,7 +9,7 @@
 #include "gincu/gimage.h"
 #include "gincu/gatlasrender.h"
 #include "gincu/gtextrender.h"
-#include "gincu/grectrender.h"
+#include "gincu/gvertexarrayrender.h"
 #include "gincu/grenderinfo.h"
 
 #include <memory>
@@ -103,12 +103,12 @@ private:
 	virtual void doDraw(GRenderContext * renderContext) override {
 		GComponentTransform * transform = this->getEntity()->template getComponentByType<GComponentTransform>();
 		if(transform->isVisible()) {
-			this->render.draw(renderContext, computeRenderableMatrix(transform, this), this->getRenderInfo());
+			drawRender(this->render, renderContext, computeRenderableMatrix(transform, this), this->getRenderInfo());
 		}
 	}
 
 	virtual GSize doGetSize() const override {
-		return this->render.getSize();
+		return getRenderSize(this->render);
 	}
 
 private:
@@ -118,7 +118,8 @@ private:
 typedef GComponentRenderCommon<GImage> GComponentImageRender;
 typedef GComponentRenderCommon<GAtlasRender> GComponentAtlasRender;
 typedef GComponentRenderCommon<GTextRender> GComponentTextRender;
-typedef GComponentRenderCommon<GRectRender> GComponentRectRender;
+typedef GComponentRenderCommon<GVertexArrayRender> GComponentVertexArrayRender;
+typedef GComponentVertexArrayRender GComponentRectRender;
 
 GComponentImageRender * createAndLoadImageComponent(const std::string & resourceName);
 GComponentImageRender * createImageComponent(const GImage & image);

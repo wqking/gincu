@@ -15,13 +15,10 @@ public:
 	GAtlasRender();
 	explicit GAtlasRender(const GAtlas & atlas);
 
-	void draw(GRenderContext * renderContext, const GMatrix44 & matrix, const GRenderInfo * renderInfo);
-
-	GSize getSize() const;
-
 	const GAtlas & getAtlas() const { return this->atlas; }
 	int getIndex() const { return this->index; }
 	void setIndex(const int index) { this->index = index; }
+	int getImageCount() const { return this->atlas.getImageCount(); }
 
 	const GRect & getRect() const { return this->atlas.getRectList()[this->index]; }
 
@@ -31,6 +28,9 @@ private:
 	GAtlas atlas;
 	int index;
 };
+
+void drawRender(const GAtlasRender & render, GRenderContext * renderContext, const GMatrix44 & matrix, const GRenderInfo * renderInfo);
+GSize getRenderSize(const GAtlasRender & render);
 
 
 } //namespace gincu
