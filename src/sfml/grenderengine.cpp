@@ -8,6 +8,8 @@
 #include "gincu/grenderinfo.h"
 #include "gincu/gevent.h"
 #include "gincu/geventqueue.h"
+#include "gincu/gvertexarray.h"
+#include "gincu/gprimitive.h"
 #include "gincu/gcamera.h"
 #include "gincu/glog.h"
 #include "gsfmlutil.h"
@@ -16,6 +18,7 @@
 #include "grectrenderdata.h"
 #include "grenderenginedata.h"
 #include "gcameradata.h"
+#include "gvertexarraydata.h"
 
 #include <thread>
 #include <mutex>
@@ -140,9 +143,14 @@ void GRenderEngineData::processRenderCommands()
 			break;
 		}
 
-		case GRenderCommandType::vertexTexture: {
-			GVertexData * vertexData = static_cast<GVertexData *>(command.renderData.get());
-			this->window->draw(&vertexData->vertexList[0], vertexData->count, sf::Triangles, command.sfmlRenderStates);
+		case GRenderCommandType::vertexArray: {
+			const GVertexCommand * vertexCommand = static_cast<GVertexCommand *>(command.renderData.get());
+			this->window->draw(
+				&vertexCommand->vertexArrayData->vertexArray[0],
+				vertexCommand->vertexArrayData->vertexArray.size(),
+				gamePrimitiveToSfml(vertexCommand->primitive),
+				command.sfmlRenderStates
+		);
 			break;
 		}
 
@@ -304,12 +312,21 @@ bool GRenderEngine::isAlive() const
 
 void GRenderEngine::draw(const GImage & image, const GMatrix44 & matrix, const GRenderInfo * renderInfo)
 {
-	this->doDrawTexture(image.getTexture().getData(), image.getRect(), matrix, renderInfo);
+	this->doDrawTexture(image.getTexture(), image.getRect(), matrix, renderInfo);
 }
 
 void GRenderEngine::draw(const GAtlasRender & atlasRender, const GMatrix44 & matrix, const GRenderInfo * renderInfo)
 {
-	this->doDrawTexture(atlasRender.getAtlas().getTexture().getData(), atlasRender.getRect(), matrix, renderInfo);
+	this->doDrawTexture(atlasRender.getAtlas().getTexture(), atlasRender.getRect(), matrix, renderInfo);
+}
+
+void GRenderEngine::draw(const GVertexArray & vertexArray, const GPrimitive type, const GTexture & texture, const GMatrix44 & matrix, const GRenderInfo * renderInfo)
+{
+	this->data->updaterQueue->emplace_back(
+		std::make_shared<GVertexCommand>(GVertexCommand { vertexArray.getData(), type, texture.getData() }),
+		matrix,
+		renderInfo
+	);
 }
 
 void GRenderEngine::doInitialize()
@@ -345,58 +362,19 @@ void GRenderEngine::switchCamera(const GCamera & camera)
 	this->data->updaterQueue->emplace_back(std::make_shared<GCameraData>(*camera.getData()));
 }
 
-void GRenderEngine::draw(const GTextRender & text, const GMatrix44 & transform, const GRenderInfo * renderInfo)
+void GRenderEngine::draw(const GTextRender & text, const GMatrix44 & matrix, const GRenderInfo * renderInfo)
 {
-	this->data->updaterQueue->emplace_back(text.getData(), transform, renderInfo);
+	this->data->updaterQueue->emplace_back(text.getData(), matrix, renderInfo);
 }
 
-void GRenderEngine::draw(const GRectRender & rect, const GMatrix44 & transform, const GRenderInfo * renderInfo)
+void GRenderEngine::draw(const GRectRender & rect, const GMatrix44 & matrix, const GRenderInfo * renderInfo)
 {
-	this->data->updaterQueue->emplace_back(rect.getData(), transform, renderInfo);
+	this->data->updaterQueue->emplace_back(rect.getData(), matrix, renderInfo);
 }
 
-void GRenderEngine::doDrawTexture(const std::shared_ptr<GTextureData> & texture, const GRect & rect, const GMatrix44 & transform, const GRenderInfo * renderInfo)
+void GRenderEngine::doDrawTexture(const GTexture & texture, const GRect & rect, const GMatrix44 & matrix, const GRenderInfo * renderInfo)
 {
-	this->data->updaterQueue->emplace_back(texture, rect, transform, renderInfo);
-return;
-/*
-	sf::RenderStates sfmlRenderStates;
-	copyBlendAndShaderToSfml(&sfmlRenderStates, renderInfo);
-	
-	bool needNew = false;
-	if(this->data->updaterQueue->empty()) {
-		needNew = true;
-	}
-	else {
-		GRenderCommand & command = this->data->updaterQueue->back();
-		if(command.type != GRenderCommandType::vertexTexture
-			|| static_cast<GVertexData *>(command.renderData.get())->imageData != texture
-			|| sfmlRenderStates.blendMode != command.sfmlRenderStates.blendMode
-			|| sfmlRenderStates.shader != command.sfmlRenderStates.shader
-		) {
-			needNew = true;
-		}
-		else {
-			GVertexData * vertexData = static_cast<GVertexData *>(command.renderData.get());
-			const int index = (int)vertexData->count;
-			if(vertexData->count + 6 >= vertexData->vertexList.size()) {
-				vertexData->vertexList.resize(vertexData->count + 64);
-			}
-			vertexData->count += 6;
-			putImageToVertexArray(vertexData->vertexList, index, transform.getMatrix(), rect);
-		}
-	}
-	
-	if(needNew) {
-		std::shared_ptr<GVertexData> vertexData(new GVertexData{texture});
-//		std::shared_ptr<GVertexData> vertexData(allocateObjectOnHeapPool<GVertexData>(sf::VertexArray(sf::Triangles), texture), &freeObjectOnHeapPool<GVertexData>);
-		vertexData->count = 6;
-		vertexData->vertexList.resize(64);
-		putImageToVertexArray(vertexData->vertexList, 0, transform.getMatrix(), rect);
-		sfmlRenderStates.texture = &texture->texture;
-		this->data->updaterQueue->emplace_back(vertexData, sfmlRenderStates);
-	}
-*/
+	this->data->updaterQueue->emplace_back(texture.getData(), rect, matrix, renderInfo);
 }
 
 

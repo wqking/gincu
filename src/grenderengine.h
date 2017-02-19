@@ -15,15 +15,6 @@
 namespace gincu {
 
 class GRenderEngineData;
-class GTextureData;
-class GTransform;
-class GImage;
-class GTextRender;
-class GRectRender;
-class GAtlasRender;
-class GCamera;
-
-struct GRenderInfo;
 class GEvent;
 
 class GRenderEngine : public GRenderContext
@@ -53,11 +44,12 @@ private: // implement GRenderContext
 	virtual void draw(const GAtlasRender & atlasRender, const GMatrix44 & matrix, const GRenderInfo * renderInfo) override;
 	virtual void draw(const GTextRender & text, const GMatrix44 & matrix, const GRenderInfo * renderInfo) override;
 	virtual void draw(const GRectRender & rect, const GMatrix44 & matrix, const GRenderInfo * renderInfo) override;
+	virtual void draw(const GVertexArray & vertexArray, const GPrimitive type, const GTexture & texture, const GMatrix44 & matrix, const GRenderInfo * renderInfo) override;
 
 private:
 	void doInitialize();
 	void doFinalize();
-	void doDrawTexture(const std::shared_ptr<GTextureData> & texture, const GRect & rect, const GMatrix44 & matrix, const GRenderInfo * renderInfo);
+	void doDrawTexture(const GTexture & texture, const GRect & rect, const GMatrix44 & matrix, const GRenderInfo * renderInfo);
 
 private:
 	std::shared_ptr<GRenderEngineData> data;

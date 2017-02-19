@@ -76,6 +76,7 @@ LOCAL_SRC_FILES := \
 	$(SRC_PATH)/sfml/gresourcemanager.cpp \
 	$(SRC_PATH)/sfml/gcamera.cpp \
 	$(SRC_PATH)/sfml/gtexture.cpp \
+	$(SRC_PATH)/sfml/gvertexarray.cpp \
 	$(SRC_PATH)/gimage.cpp \
 	$(SRC_PATH)/gtransform.cpp \
 	$(SRC_PATH)/gcomponent.cpp \

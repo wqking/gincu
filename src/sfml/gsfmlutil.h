@@ -6,6 +6,7 @@
 #include "gincu/gblendmode.h"
 #include "gincu/grenderinfo.h"
 #include "gincu/gmatrix.h"
+#include "gincu/gprimitive.h"
 
 #include <SFML/Graphics.hpp>
 
@@ -53,6 +54,11 @@ inline sf::Transform matrixToSfml(const glm::mat4 & matrix)
 inline void matrixToSfml(const sf::Transform * outputResult, const glm::mat4 & matrix)
 {
 	memcpy(const_cast<float *>(outputResult->getMatrix()), &matrix[0][0], 16 * sizeof(float));
+}
+
+inline sf::PrimitiveType gamePrimitiveToSfml(const GPrimitive primitive)
+{
+	return (sf::PrimitiveType)primitive;
 }
 
 

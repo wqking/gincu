@@ -3,6 +3,7 @@
 
 #include "gincu/grenderinfo.h"
 #include "gincu/gtransform.h"
+#include "gtexturedata.h"
 
 #include <SFML/Graphics.hpp>
 
@@ -17,10 +18,10 @@ namespace gincu {
 enum class GRenderCommandType
 {
 	none,
-	vertexTexture,
 	image,
 	text,
 	rect,
+	vertexArray,
 	switchCamera
 };
 
@@ -28,18 +29,14 @@ class GTextureData;
 class GTextRenderData;
 class GRectRenderData;
 class GCameraData;
+class GVertexArrayData;
+enum class GPrimitive;
 
-class GVertexData
+struct GVertexCommand
 {
-public:
-	GVertexData() {}
-	explicit GVertexData(const std::shared_ptr<GTextureData> & imageData)
-		: count(0), vertexList(), imageData(imageData)
-	{}
-
-	std::size_t count;
-	std::vector<sf::Vertex> vertexList;
-	std::shared_ptr<GTextureData> imageData;
+	std::shared_ptr<GVertexArrayData> vertexArrayData;
+	GPrimitive primitive;
+	std::shared_ptr<GTextureData> textureData;
 };
 
 struct GRenderCommand
@@ -53,18 +50,10 @@ struct GRenderCommand
 	{
 	}
 
-	GRenderCommand(const std::shared_ptr<GVertexData> & vertexData, const sf::RenderStates & renderStates)
-		:
-			type(GRenderCommandType::vertexTexture),
-			renderData(vertexData),
-			sfmlRenderStates(renderStates)
-	{
-	}
-
-	GRenderCommand(const std::shared_ptr<GTextureData> & imageData, const GRect & rect, const GMatrix44 & matrix, const GRenderInfo * renderInfo)
+	GRenderCommand(const std::shared_ptr<GTextureData> & textureData, const GRect & rect, const GMatrix44 & matrix, const GRenderInfo * renderInfo)
 		:
 			type(GRenderCommandType::image),
-			renderData(imageData),
+			renderData(textureData),
 			rect(rect),
 			sfmlRenderStates(matrixToSfml(matrix))
 	{
@@ -87,6 +76,18 @@ struct GRenderCommand
 			sfmlRenderStates(matrixToSfml(matrix))
 	{
 		copyBlendAndShaderToSfml(&this->sfmlRenderStates, renderInfo);
+	}
+
+	GRenderCommand(const std::shared_ptr<GVertexCommand> & vertexCommand, const GMatrix44 & matrix, const GRenderInfo * renderInfo)
+		:
+		type(GRenderCommandType::vertexArray),
+		renderData(vertexCommand),
+		sfmlRenderStates(matrixToSfml(matrix))
+	{
+		copyBlendAndShaderToSfml(&this->sfmlRenderStates, renderInfo);
+		if(vertexCommand->textureData) {
+			this->sfmlRenderStates.texture = &vertexCommand->textureData->texture;
+		}
 	}
 
 	GRenderCommandType type;
