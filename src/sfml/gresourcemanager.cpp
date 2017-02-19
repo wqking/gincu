@@ -2,7 +2,8 @@
 #include "gincu/gapplication.h"
 #include "gincu/geventqueue.h"
 #include "gincu/gatlas.h"
-#include "gimagedata.h"
+#include "gincu/gtexture.h"
+#include "gtexturedata.h"
 #include "gfontdata.h"
 
 #include <cassert>
@@ -42,13 +43,13 @@ void GResourceManager::finalize()
 
 GImage GResourceManager::getImage(const std::string & resourceName) const
 {
-	std::shared_ptr<GImageData> data;
+	std::shared_ptr<GTextureData> data;
 	auto it = this->imageDataMap.find(resourceName);
 	if(it != this->imageDataMap.end()) {
 		data = it->second;
 	}
 	else {
-		data = std::make_shared<GImageData>();
+		data = std::make_shared<GTextureData>();
 		this->imageDataMap.insert(std::make_pair(resourceName, data));
 		const std::string fileName = this->solveResourcePath(resourceName);
 		{
@@ -57,18 +58,18 @@ GImage GResourceManager::getImage(const std::string & resourceName) const
 		}
 	}
 
-	return GImage(data);
+	return GImage(GTexture(data));
 }
 
 GImage GResourceManager::asyncGetImage(const std::string & resourceName, const LoaderCallback & callback) const
 {
-	std::shared_ptr<GImageData> data;
+	std::shared_ptr<GTextureData> data;
 	auto it = this->imageDataMap.find(resourceName);
 	if(it != this->imageDataMap.end()) {
 		data = it->second;
 	}
 	else {
-		data = std::make_shared<GImageData>();
+		data = std::make_shared<GTextureData>();
 		this->imageDataMap.insert(std::make_pair(resourceName, data));
 		const std::string fileName = this->solveResourcePath(resourceName);
 		GApplication::getInstance()->executeWorkerTask(
@@ -84,7 +85,7 @@ GImage GResourceManager::asyncGetImage(const std::string & resourceName, const L
 		);
 	}
 
-	return GImage(data);
+	return GImage(GTexture(data));
 }
 
 GAtlas GResourceManager::getAtlas(const std::string & resourceName, const GAtlasFormat format) const

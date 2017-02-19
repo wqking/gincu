@@ -3,6 +3,7 @@
 #include "gincu/gresourcemanager.h"
 #include "gincu/ginputstream.h"
 #include "gincu/gapplication.h"
+
 #include "cpgf/goutmain.h"
 
 #include <cstring>
@@ -13,7 +14,7 @@ GImage GAtlasData::getImage(const std::string & name) const
 {
 	auto it = this->indexMap.find(name);
 	if(it != this->indexMap.end()) {
-		return GImage(this->imageData, this->rectList[it->second]);
+		return GImage(this->texture, this->rectList[it->second]);
 	}
 	else {
 		return GImage();
@@ -42,7 +43,7 @@ void GAtlasData::load(const std::string & resourceName, const GAtlasFormat forma
 
 	it->second(resourceName,this);
 
-	this->imageData = GResourceManager::getInstance()->getImage(this->imageName).getData();
+	this->texture = GResourceManager::getInstance()->getImage(this->imageName).getTexture();
 
 	for(std::size_t i = 0; i < this->nameList.size(); ++i) {
 		this->indexMap.insert(std::make_pair(std::reference_wrapper<const std::string>(this->nameList[i]), i));

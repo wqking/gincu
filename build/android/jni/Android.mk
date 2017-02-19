@@ -69,13 +69,14 @@ LOCAL_SRC_FILES := \
 	$(SRC_PATH)/grenderanchor.cpp \
 	$(SRC_PATH)/sfml/gengineutil.cpp \
 	$(SRC_PATH)/sfml/gfont.cpp \
-	$(SRC_PATH)/sfml/gimage.cpp \
 	$(SRC_PATH)/sfml/ginputstream.cpp \
 	$(SRC_PATH)/sfml/gtextrender.cpp \
 	$(SRC_PATH)/sfml/grectrender.cpp \
 	$(SRC_PATH)/sfml/grenderengine.cpp \
 	$(SRC_PATH)/sfml/gresourcemanager.cpp \
 	$(SRC_PATH)/sfml/gcamera.cpp \
+	$(SRC_PATH)/sfml/gtexture.cpp \
+	$(SRC_PATH)/gimage.cpp \
 	$(SRC_PATH)/gtransform.cpp \
 	$(SRC_PATH)/gcomponent.cpp \
 	$(SRC_PATH)/gcomponentanchor.cpp \

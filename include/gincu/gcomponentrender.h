@@ -16,7 +16,7 @@
 
 namespace gincu {
 
-class GImageData;
+class GTextureData;
 class GRenderContext;
 
 class GComponentRender : public GComponent

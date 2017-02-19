@@ -1,5 +1,5 @@
-#ifndef GIMAGEDATA_H
-#define GIMAGEDATA_H
+#ifndef GTEXTUREDATA_H
+#define GTEXTUREDATA_H
 
 #include <SFML/Graphics.hpp>
 
@@ -7,7 +7,7 @@
 
 namespace gincu {
 
-class GImageData
+class GTextureData
 {
 public:
 	void load(const std::string & fileName)

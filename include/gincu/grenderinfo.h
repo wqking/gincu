@@ -5,7 +5,7 @@
 
 namespace gincu {
 
-class GImageData;
+class GTextureData;
 
 struct GRenderInfo
 {

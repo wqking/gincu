@@ -11,7 +11,7 @@
 #include "gincu/gcamera.h"
 #include "gincu/glog.h"
 #include "gsfmlutil.h"
-#include "gimagedata.h"
+#include "gtexturedata.h"
 #include "gtextrenderdata.h"
 #include "grectrenderdata.h"
 #include "grenderenginedata.h"
@@ -28,10 +28,8 @@ namespace {
 
 GRenderEngine * instance = nullptr;
 
-void threadMain(GRenderEngine * renderEngine)
+void threadMain(std::shared_ptr<GRenderEngineData> data)
 {
-	std::shared_ptr<GRenderEngineData> data = renderEngine->getData();
-
 	data->processRenderCommands(); // just to draw background
 
 	while(! data->finished) {
@@ -126,7 +124,7 @@ void GRenderEngineData::processRenderCommands()
 				i = k;
 			}
 			else {
-				sf::Sprite sprite(static_cast<GImageData *>(command.renderData.get())->texture, { (int)command.rect.x, (int)command.rect.y, (int)command.rect.width, (int)command.rect.height });
+				sf::Sprite sprite(static_cast<GTextureData *>(command.renderData.get())->texture, { (int)command.rect.x, (int)command.rect.y, (int)command.rect.width, (int)command.rect.height });
 				this->window->draw(sprite, command.sfmlRenderStates);
 			}
 		}
@@ -177,7 +175,7 @@ void GRenderEngineData::batchDrawImages(const int firstIndex, const int lastInde
 	}
 
 	const GRenderCommand & command = this->renderQueue->at(firstIndex);
-	sf::RenderStates renderStates(&static_cast<GImageData *>(command.renderData.get())->texture);
+	sf::RenderStates renderStates(&static_cast<GTextureData *>(command.renderData.get())->texture);
 	renderStates.blendMode = command.sfmlRenderStates.blendMode;
 	renderStates.shader = command.sfmlRenderStates.shader;
 	this->window->draw(vertexArray, renderStates);
@@ -236,7 +234,7 @@ bool GRenderEngine::peekEvent(GEvent * event)
 {
 	sf::Event e;
 
-	if(! GRenderEngine::getInstance()->getData()->window->pollEvent(e)) {
+	if(! this->data->window->pollEvent(e)) {
 		return false;
 	}
 
@@ -306,19 +304,19 @@ bool GRenderEngine::isAlive() const
 
 void GRenderEngine::draw(const GImage & image, const GMatrix44 & matrix, const GRenderInfo * renderInfo)
 {
-	this->doDrawTexture(image.getData(), image.getRect(), matrix, renderInfo);
+	this->doDrawTexture(image.getTexture().getData(), image.getRect(), matrix, renderInfo);
 }
 
 void GRenderEngine::draw(const GAtlasRender & atlasRender, const GMatrix44 & matrix, const GRenderInfo * renderInfo)
 {
-	this->doDrawTexture(atlasRender.getAtlas().getImageData(), atlasRender.getRect(), matrix, renderInfo);
+	this->doDrawTexture(atlasRender.getAtlas().getTexture().getData(), atlasRender.getRect(), matrix, renderInfo);
 }
 
 void GRenderEngine::doInitialize()
 {
 	this->data->initialize();
 
-	std::thread thread(&threadMain, this);
+	std::thread thread(&threadMain, this->data);
 	thread.detach();
 }
 
@@ -357,7 +355,7 @@ void GRenderEngine::draw(const GRectRender & rect, const GMatrix44 & transform, 
 	this->data->updaterQueue->emplace_back(rect.getData(), transform, renderInfo);
 }
 
-void GRenderEngine::doDrawTexture(const std::shared_ptr<GImageData> & texture, const GRect & rect, const GMatrix44 & transform, const GRenderInfo * renderInfo)
+void GRenderEngine::doDrawTexture(const std::shared_ptr<GTextureData> & texture, const GRect & rect, const GMatrix44 & transform, const GRenderInfo * renderInfo)
 {
 	this->data->updaterQueue->emplace_back(texture, rect, transform, renderInfo);
 return;

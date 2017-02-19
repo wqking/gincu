@@ -16,7 +16,7 @@
 namespace gincu {
 
 class GImage;
-class GImageData;
+class GTextureData;
 class GAtlasData;
 class GFontData;
 enum class GAtlasFormat;
@@ -64,7 +64,7 @@ private:
 	std::string resourcePath;
 
 	mutable MutexType imageMutex;
-	mutable std::map<std::string, std::shared_ptr<GImageData> > imageDataMap;
+	mutable std::map<std::string, std::shared_ptr<GTextureData> > imageDataMap;
 	mutable std::map<std::string, std::shared_ptr<GAtlasData> > atlasDataMap;
 	mutable MutexType fontMutex;
 	mutable std::map<std::string, std::shared_ptr<GFontData> > fontDataMap;

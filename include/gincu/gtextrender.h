@@ -13,7 +13,7 @@ namespace gincu{
 class GTransform;
 struct GRenderInfo;
 class GTextRenderData;
-class GImageData;
+class GTextureData;
 class GRenderContext;
 
 class GTextRender

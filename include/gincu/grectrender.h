@@ -12,7 +12,7 @@ namespace gincu {
 class GTransform;
 struct GRenderInfo;
 class GRectRenderData;
-class GImageData;
+class GTextureData;
 class GRenderContext;
 
 class GRectRender

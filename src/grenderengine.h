@@ -15,7 +15,7 @@
 namespace gincu {
 
 class GRenderEngineData;
-class GImageData;
+class GTextureData;
 class GTransform;
 class GImage;
 class GTextRender;
@@ -57,7 +57,7 @@ private: // implement GRenderContext
 private:
 	void doInitialize();
 	void doFinalize();
-	void doDrawTexture(const std::shared_ptr<GImageData> & texture, const GRect & rect, const GMatrix44 & matrix, const GRenderInfo * renderInfo);
+	void doDrawTexture(const std::shared_ptr<GTextureData> & texture, const GRect & rect, const GMatrix44 & matrix, const GRenderInfo * renderInfo);
 
 private:
 	std::shared_ptr<GRenderEngineData> data;

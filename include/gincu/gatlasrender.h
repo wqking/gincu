@@ -6,7 +6,7 @@
 
 namespace gincu {
 
-class GImageData;
+class GTexture;
 class GRenderContext;
 
 class GAtlasRender
@@ -25,7 +25,7 @@ public:
 
 	const GRect & getRect() const { return this->atlas.getRectList()[this->index]; }
 
-	const GImageData * getTexture() const { return this->atlas.getImageData().get(); }
+	const GTexture & getTexture() const { return this->atlas.getTexture(); }
 
 private:
 	GAtlas atlas;

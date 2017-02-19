@@ -3,6 +3,7 @@
 
 #include "gincu/ggeometry.h"
 #include "gincu/gmatrix.h"
+#include "gincu/gtexture.h"
 
 #include <string>
 #include <memory>
@@ -11,7 +12,7 @@ namespace gincu {
 
 class GTransform;
 struct GRenderInfo;
-class GImageData;
+class GTextureData;
 class GRenderContext;
 
 class GImage
@@ -19,25 +20,22 @@ class GImage
 public:
 	GImage();
 	~GImage();
-	explicit GImage(const std::shared_ptr<GImageData> & data);
-	GImage(const std::shared_ptr<GImageData> & data, const GRect & rect);
+	explicit GImage(const GTexture & texture);
+	GImage(const GTexture & texture, const GRect & rect);
 
 	void draw(GRenderContext * renderContext, const GMatrix44 & matrix, const GRenderInfo * renderInfo);
 
 	GSize getSize() const;
 
-	const std::shared_ptr<GImageData> & getData() const { return this->data; }
+	const GTexture & getTexture() const { return this->texture; }
 
 	void setRect(const GRect & rect) { this->rect = rect; }
 	const GRect & getRect() const;
 
-	bool isValid() const { return this->data.get() != nullptr; }
+	bool isValid() const { return this->texture.isValid(); }
 
 private:
-	void doSetData(const std::shared_ptr<GImageData> & data);
-
-private:
-	std::shared_ptr<GImageData> data;
+	GTexture texture;
 	mutable GRect rect;
 };
 
