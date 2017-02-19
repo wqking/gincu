@@ -44,13 +44,18 @@ GEvent::GEvent(const GEventType type, GRenderContext * renderContext)
 {
 }
 
-GEvent::GEvent(const GEventType type, const std::shared_ptr<void *> & sharedData)
+GEvent::GEvent(const GEventType type, const std::shared_ptr<void> & sharedData)
 	:
 		type(type),
 		touch(),
 		sharedData(sharedData),
 		tag(),
 		propagation(false)
+{
+}
+
+GEvent::GEvent(const GEventType type, const cpgf::GCallback<void ()> & callback)
+	: GEvent(type, std::static_pointer_cast<void>(std::make_shared<cpgf::GCallback<void ()> >(callback)))
 {
 }
 

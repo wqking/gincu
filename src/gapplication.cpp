@@ -22,6 +22,7 @@ namespace {
 GApplication * instance = nullptr;
 
 const std::vector<GEventType> interestedEventTypes {
+	GEventType::execute,
 	GEventType::windowClosed,
 	GEventType::windowResized,
 	GEventType::windowActivated,
@@ -66,6 +67,8 @@ void GApplication::finish()
 
 void GApplication::initialize()
 {
+	G_LOG_INFO("Application start initialization");
+
 	this->eventQueue.reset(new GEventQueue());
 
 	this->renderEngine.reset(new GRenderEngine());
@@ -81,6 +84,8 @@ void GApplication::initialize()
 	this->sceneManager->initialize();
 
 	this->doInitialize();
+
+	G_LOG_INFO("Application finished initialization");
 }
 
 void GApplication::finalize()
@@ -157,7 +162,7 @@ void GApplication::processMainLoop()
 			fps = 0;
 			renderFps = 0;
 
-//			G_LOG_VERBOSE("FPS: %d RenderFPS: %d", this->frameRate, this->renderFrameRate);
+			G_LOG_VERBOSE("FPS: %d RenderFPS: %d", this->frameRate, this->renderFrameRate);
 		}
 	}
 }
@@ -175,6 +180,14 @@ void GApplication::processEvents()
 void GApplication::onEvent(const GEvent & event)
 {
 	switch(event.getType()) {
+	case GEventType::execute: {
+		auto callback = event.getCallback();
+		if(! callback.empty()) {
+			callback();
+		}
+	}
+		break;
+
 	case GEventType::windowClosed:
 		this->finish();
 		break;

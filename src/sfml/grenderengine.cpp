@@ -9,6 +9,7 @@
 #include "gincu/gevent.h"
 #include "gincu/geventqueue.h"
 #include "gincu/gcamera.h"
+#include "gincu/glog.h"
 #include "gsfmlutil.h"
 #include "gimagedata.h"
 #include "gtextrenderdata.h"
@@ -221,6 +222,8 @@ void GRenderEngine::initialize()
 		configInfo.caption,
 		flags
 	));
+
+	G_LOG_INFO("Render window is created.");
 
 	this->doInitialize();
 }

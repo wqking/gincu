@@ -8,6 +8,11 @@ namespace gincu {
 class GFontData
 {
 public:
+	void load(const std::string & fileName)
+	{
+		this->font.loadFromFile(fileName);
+	}
+
 	sf::Font font;
 };
 

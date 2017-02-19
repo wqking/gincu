@@ -41,6 +41,7 @@ Apache License, Version 2.0
 ## Core system and features
 
  * Multi threaded OpenGL rendering.
+ * Multi threaded task processing and resource loading.
  * Entity Component System (ECS).
  * Scene management.
  * ECS based scene graph (GComponentLocalTransform).

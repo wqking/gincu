@@ -36,7 +36,9 @@ void MainApplication::doInitialize()
 {
 	GResourceManager::getInstance()->setDefaultFontName(fontName);
 
-	this->getSceneManager()->switchScene(new SceneLogo(true));
+	GResourceManager::getInstance()->asyncGetFont(GResourceManager::getInstance()->getDefaultFontName(), [=]() {
+		this->getSceneManager()->switchScene(new SceneLogo(true));
+	});
 }
 
 void MainApplication::doFinalize()

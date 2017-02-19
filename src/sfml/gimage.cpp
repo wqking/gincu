@@ -8,13 +8,13 @@
 namespace gincu {
 
 GImage::GImage()
-	: data()
+	: data(), rect()
 {
 }
 
 GImage::GImage(const std::shared_ptr<GImageData> & data)
+	: data(data), rect()
 {
-	this->setResource(data);
 }
 
 GImage::GImage(const std::shared_ptr<GImageData> & data, const GRect & rect)
@@ -26,23 +26,31 @@ GImage::~GImage()
 {
 }
 
-void GImage::load(const std::string & fileName)
-{
-	this->data.reset(new GImageData());
-	this->data->load(fileName);
-}
-
 void GImage::draw(GRenderContext * renderContext, const GMatrix44 & matrix, const GRenderInfo * renderInfo)
 {
 	renderContext->draw(*this, matrix, renderInfo);
 }
 
-GSize GImage::getSize() const
+const GRect & GImage::getRect() const
 {
-	return { this->rect.width, this->rect.height };
+	if(this->rect.width <= 0) {
+		if(this->data) {
+			auto size = this->data->texture.getSize();
+			this->rect = GRect{ 0, 0, (GCoord)size.x, (GCoord)size.y };
+		}
+	}
+
+	return this->rect;
 }
 
-void GImage::setResource(const std::shared_ptr<GImageData> & data)
+GSize GImage::getSize() const
+{
+	const GRect tempRect = this->getRect();
+
+	return { tempRect.width, tempRect.height };
+}
+
+void GImage::doSetData(const std::shared_ptr<GImageData> & data)
 {
 	this->data = data;
 	if(this->data) {

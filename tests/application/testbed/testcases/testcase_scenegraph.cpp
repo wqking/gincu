@@ -13,6 +13,7 @@
 #include "gincu/grenderanchor.h"
 
 #include "gincu/gapplication.h"
+#include "gincu/geventqueue.h"
 #include "gincu/glog.h"
 #include "gincu/gutil.h"
 
@@ -30,13 +31,10 @@ void testWorker()
 		G_LOG_INFO("Start worker %d", i);
 		GApplication::getInstance()->executeWorkerTask(
 			[=]() {
+				GApplication::getInstance()->getEventQueue()->post(GEvent((GEventType)0xbeadfeed));
 				sleepMilliseconds(i * 10);
 				G_LOG_INFO("Finished worker %d", i);
-		}
-		);
-		if(i % 10 == 0) {
-			sleepMilliseconds(100 - i);
-		}
+		});
 	}
 }
 
@@ -60,7 +58,7 @@ void TestCase_SceneGraph::doInitialize()
 	this->doInitializeRotation({ 300, 50 });
 	this->doInitializeRotationAnimation({ 450, 350 });
 
-//	testWorker();
+	testWorker();
 }
 
 GComponentTweenedFrameAnimation * createAnimation(GEntity * entity, const std::string & atlasName)

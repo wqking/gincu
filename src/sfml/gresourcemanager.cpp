@@ -1,4 +1,6 @@
 #include "gincu/gresourcemanager.h"
+#include "gincu/gapplication.h"
+#include "gincu/geventqueue.h"
 #include "gincu/gatlas.h"
 #include "gimagedata.h"
 #include "gfontdata.h"
@@ -49,7 +51,37 @@ GImage GResourceManager::getImage(const std::string & resourceName) const
 		data = std::make_shared<GImageData>();
 		this->imageDataMap.insert(std::make_pair(resourceName, data));
 		const std::string fileName = this->solveResourcePath(resourceName);
-		data->load(fileName);
+		{
+			LockType lock(this->imageMutex);
+			data->load(fileName);
+		}
+	}
+
+	return GImage(data);
+}
+
+GImage GResourceManager::asyncGetImage(const std::string & resourceName, const LoaderCallback & callback) const
+{
+	std::shared_ptr<GImageData> data;
+	auto it = this->imageDataMap.find(resourceName);
+	if(it != this->imageDataMap.end()) {
+		data = it->second;
+	}
+	else {
+		data = std::make_shared<GImageData>();
+		this->imageDataMap.insert(std::make_pair(resourceName, data));
+		const std::string fileName = this->solveResourcePath(resourceName);
+		GApplication::getInstance()->executeWorkerTask(
+			[=]() {
+				{
+					LockType lock(this->imageMutex);
+					data->load(fileName);
+				}
+				if(! callback.empty()) {
+					GApplication::getInstance()->getEventQueue()->post(GEvent(GEventType::execute, callback));
+				}
+			}
+		);
 	}
 
 	return GImage(data);
@@ -90,7 +122,39 @@ GFont GResourceManager::getFont(const std::string & resourceName) const
 	else {
 		data = std::make_shared<GFontData>();
 		this->fontDataMap.insert(std::make_pair(resourceName, data));
-		data->font.loadFromFile(this->solveResourcePath(resourceName));
+		const std::string fileName = this->solveResourcePath(resourceName);
+		{
+			LockType lock(this->fontMutex);
+			data->load(fileName);
+		}
+	}
+
+	return GFont(data);
+}
+
+GFont GResourceManager::asyncGetFont(const std::string & resourceName, const LoaderCallback & callback) const
+{
+	std::shared_ptr<GFontData> data;
+
+	auto it = this->fontDataMap.find(resourceName);
+	if(it != this->fontDataMap.end()) {
+		data = it->second;
+	}
+	else {
+		data = std::make_shared<GFontData>();
+		this->fontDataMap.insert(std::make_pair(resourceName, data));
+		const std::string fileName = this->solveResourcePath(resourceName);
+		GApplication::getInstance()->executeWorkerTask(
+			[=]() {
+				{
+					LockType lock(this->fontMutex);
+					data->load(fileName);
+				}
+				if(! callback.empty()) {
+					GApplication::getInstance()->getEventQueue()->post(GEvent(GEventType::execute, callback));
+				}
+		}
+		);
 	}
 
 	return GFont(data);
