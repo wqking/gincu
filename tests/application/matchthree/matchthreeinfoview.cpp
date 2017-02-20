@@ -67,14 +67,14 @@ void MatchThreeInfoView::setRemainingSeconds(int seconds)
 	render.setColor(shouldWarn ? colorRed : colorBlack);
 
 	if(this->timerTimeLine != nullptr) {
-		getTweenListFromScene()->remove(*this->timerTimeLine);
+		this->scene->getTweenList()->remove(*this->timerTimeLine);
 	}
 
 	GComponentTransform * transform = this->timerEntity->getComponentByType<GComponentTransform>();
 	transform->setScale(GScale { 1.0f, 1.0f });
 
 	if(shouldWarn && this->remainingSeconds > 0) {
-		this->timerTimeLine = &getTweenListFromScene()->timeline();
+		this->timerTimeLine = &this->scene->getTweenList()->timeline();
 		this->timerTimeLine->append(
 			this->timerTimeLine->tween()
 				.duration(300.0f)
@@ -112,7 +112,7 @@ void MatchThreeInfoView::addScore(const int score)
 	GComponentTransform * incrementTransform = this->scoreIncrementEntity->getComponentByType<GComponentTransform>();
 	incrementTransform->setVisible(true);
 	incrementTransform->setPosition(GPoint { targetPosition.x + 50, targetPosition.y - 50 });
-	this->scoreTween = &getTweenListFromScene()->tween()
+	this->scoreTween = &this->scene->getTweenList()->tween()
 		.duration(500.0f)
 		.ease(cpgf::QuadEase::easeIn())
 		.onComplete(cpgf::makeCallback(this, &MatchThreeInfoView::onScoreTweenFinish))
@@ -125,7 +125,7 @@ void MatchThreeInfoView::applyScoreDisplay()
 	if(this->scoreTween != nullptr) {
 		cpgf::GTween * tempTween = this->scoreTween;
 		scoreTween = nullptr;
-		getTweenListFromScene()->remove(*tempTween);
+		this->scene->getTweenList()->remove(*tempTween);
 	}
 	this->scoreIncrementEntity->getComponentByType<GComponentTransform>()->setVisible(false);
 	this->scoreEntity->getComponentByType<GComponentTextRender >()->getRender().setText(toString(totalScore));

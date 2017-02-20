@@ -170,10 +170,4 @@ void GScene::removeEntity(GEntity * entity)
 }
 
 
-cpgf::GTweenList * getTweenListFromScene()
-{
-	return GApplication::getInstance()->getSceneManager()->getCurrentScene()->getTweenList();
-}
-
-
 } //namespace gincu

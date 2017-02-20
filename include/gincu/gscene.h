@@ -63,8 +63,6 @@ T * sceneCreator()
 	return new T();
 }
 
-cpgf::GTweenList * getTweenListFromScene();
-
 
 } //namespace gincu
 

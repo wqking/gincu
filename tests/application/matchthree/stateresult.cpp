@@ -70,7 +70,7 @@ void StateResult::doCollectChesses()
 {
 	MatchThreeBoard * board = this->scene->getBoard();
 
-	cpgf::GTween & tween = getTweenListFromScene()->tween()
+	cpgf::GTween & tween = this->scene->getTweenList()->tween()
 		.duration(600)
 		.ease(cpgf::QuadEase::easeIn())
 		.onComplete(cpgf::makeCallback(this, &StateResult::doShowMessage))
@@ -133,7 +133,7 @@ void StateResult::doShowMessage()
 		);
 
 	GComponentLocalTransform * transform = backgroundEntity->getComponentByType<GComponentLocalTransform>();
-	getTweenListFromScene()->tween()
+	this->scene->getTweenList()->tween()
 		.duration(1000)
 		.ease(cpgf::ElasticEase::easeOut())
 		.onComplete(cpgf::makeCallback(this, &StateResult::onBackgroundShown))

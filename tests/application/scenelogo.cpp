@@ -77,7 +77,7 @@ void SceneLogo::doOnEnter()
 	);
 
 
-	cpgf::GTimeline & timeline = getTweenListFromScene()->timeline();
+	cpgf::GTimeline & timeline = this->getTweenList()->timeline();
 	timeline.onComplete(cpgf::makeCallback(this, &SceneLogo::doExitLogo));
 
 	GCoord x = startX - xSpace;
