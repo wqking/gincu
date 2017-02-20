@@ -4,11 +4,14 @@
 #include "gincu/gheappool.h"
 #include "gincu/gevent.h"
 #include "gincu/geventqueue.h"
+#include "gincu/transition/gtransition.h"
 
 namespace gincu {
 
 GSceneManager::GSceneManager()
-	: keepCurrentScene(false)
+	:
+		keepCurrentScene(false),
+		transition(nullptr)
 {
 }
 
@@ -22,30 +25,49 @@ void GSceneManager::initialize()
 
 void GSceneManager::finalize()
 {
-	this->doSwitchScene(nullptr, false);
+	this->doTransiteScene(nullptr, false);
 }
 
-void GSceneManager::switchScene(GScene * scene)
+void GSceneManager::switchScene(GScene * scene, GTransition * transition)
 {
+	this->doSetTransition(transition);
+
 	this->sceneToSwitchTo.reset(scene);
 
-	GApplication::getInstance()->getEventQueue()->addListener(GEventType::update, cpgf::makeCallback(this, &GSceneManager::lazySwitchScene));
+	GApplication::getInstance()->getEventQueue()->addListener(GEventType::update, cpgf::makeCallback(this, &GSceneManager::deferSwitchScene));
 }
 
-void GSceneManager::switchScene(const std::string & sceneName, const SceneCreator & creator)
+void GSceneManager::switchScene(const std::string & sceneName, const SceneCreator & creator, GTransition * transition)
 {
 	if(sceneName.empty()) {
-		this->switchScene(creator());
+		this->switchScene(creator(), transition);
 	}
 	else {
+		this->doSetTransition(transition);
+		
 		this->sceneNameToSwitchTo = sceneName;
 		this->sceneCreatorToSwitchTo = creator;
 
-		GApplication::getInstance()->getEventQueue()->addListener(GEventType::update, cpgf::makeCallback(this, &GSceneManager::lazySwitchScene));
+		GApplication::getInstance()->getEventQueue()->addListener(GEventType::update, cpgf::makeCallback(this, &GSceneManager::deferSwitchScene));
 	}
 }
 
-void GSceneManager::doSwitchScene(GScene * scene, const bool keepScene)
+void GSceneManager::doTransiteScene(GScene * scene, const bool keepScene)
+{
+	if(this->transition == nullptr || scene == nullptr || !this->currentScene) {
+		this->doSwitchScene(scene, keepScene, true);
+	}
+	else {
+		scene->onEnter();
+		this->transition->addOnComplete([=]() {
+			this->transition = nullptr;
+			this->doSwitchScene(scene, keepScene, false);
+		});
+		this->transition->transite(this->currentScene.get(), scene);
+	}
+}
+
+void GSceneManager::doSwitchScene(GScene * scene, const bool keepScene, const bool enterNewScene)
 {
 	if(this->currentScene) {
 		this->currentScene->onExit();
@@ -66,7 +88,9 @@ void GSceneManager::doSwitchScene(GScene * scene, const bool keepScene)
 	if(this->currentScene) {
 		this->keepCurrentScene = keepScene;
 
-		this->currentScene->onEnter();
+		if(enterNewScene) {
+			this->currentScene->onEnter();
+		}
 		
 		if(GHeapPool::getInstance()->getPurgeStrategy() == GHeapPoolPurgeStrategy::onSceneSwitched) {
 			GHeapPool::getInstance()->purge();
@@ -74,12 +98,12 @@ void GSceneManager::doSwitchScene(GScene * scene, const bool keepScene)
 	}
 }
 
-void GSceneManager::lazySwitchScene(const GEvent & /*event*/)
+void GSceneManager::deferSwitchScene(const GEvent & /*event*/)
 {
-	GApplication::getInstance()->getEventQueue()->removeListener(GEventType::update, cpgf::makeCallback(this, &GSceneManager::lazySwitchScene));
+	GApplication::getInstance()->getEventQueue()->removeListener(GEventType::update, cpgf::makeCallback(this, &GSceneManager::deferSwitchScene));
 
 	if(this->sceneToSwitchTo) {
-		this->doSwitchScene(this->sceneToSwitchTo.release(), false);
+		this->doTransiteScene(this->sceneToSwitchTo.release(), false);
 	}
 	else if(! this->sceneNameToSwitchTo.empty()) {
 		auto it = this->sceneNameMap.find(this->sceneNameToSwitchTo);
@@ -90,13 +114,23 @@ void GSceneManager::lazySwitchScene(const GEvent & /*event*/)
 		this->sceneCreatorToSwitchTo = SceneCreator();
 		
 		if(it != this->sceneNameMap.end()) {
-			this->doSwitchScene(it->second.get(), true);
+			this->doTransiteScene(it->second.get(), true);
 		}
 		else {
 			GScene * scene = tempCreator();
 			this->sceneNameMap.insert(std::make_pair(tempName, std::unique_ptr<GScene>(scene)));
-			this->doSwitchScene(scene, true);
+			this->doTransiteScene(scene, true);
 		}
+	}
+}
+
+void GSceneManager::doSetTransition(GTransition * transition)
+{
+	if(this->transition != transition) {
+		if(this->transition != nullptr) {
+			this->transition->cancel();
+		}
+		this->transition = transition;
 	}
 }
 

@@ -53,7 +53,7 @@ void GComponentFrameAnimation::doRestartTween()
 
 	this->tween->onDestroy([=](){ this->tween = nullptr; });
 	this->tween->useFrames(false);
-	this->tween->target(cpgf::createAccessor(this, 0.0f, &GComponentFrameAnimation::doSetRatio), 0.0f, 1.0f);
+	this->tween->target(cpgf::createAccessor(this, 0, &GComponentFrameAnimation::doSetRatio), 0.0f, 1.0f);
 	this->tween->duration((cpgf::GTweenNumber)this->currentAnimation->getDurationMilliseconds());
 }
 

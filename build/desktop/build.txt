@@ -66,6 +66,7 @@ globAndAppendFiles(fileList
 	
 	${SRC_PATH}/*.cpp
 	${SRC_PATH}/ecs/*.cpp
+	${SRC_PATH}/transition/*.cpp
 	${SRC_PATH}/sfml/*.cpp
 	${ROOT_PATH}/thirdparty/*.cpp
 	

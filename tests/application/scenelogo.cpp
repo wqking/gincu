@@ -12,6 +12,7 @@
 #include "gincu/ecs/gcomponentcamera.h"
 #include "gincu/gevent.h"
 #include "gincu/grenderanchor.h"
+#include "gincu/transition/gtransitionmovein.h"
 
 #include "cpgf/tween/gtimeline.h"
 #include "cpgf/tween/gtweenlist.h"
@@ -172,7 +173,7 @@ void SceneLogo::onPressAnyKey(const GEvent & touchEvent)
 G_AUTO_RUN_BEFORE_MAIN(SceneLogo)
 {
 	MenuRegister::getInstance()->registerItem("about", 9999999, [](){
-			GApplication::getInstance()->getSceneManager()->switchScene(new SceneLogo(false));
+			GApplication::getInstance()->getSceneManager()->switchScene(new SceneLogo(false), new GTransitionMoveIn());
 		},
 		0xffaaaaff);
 }
