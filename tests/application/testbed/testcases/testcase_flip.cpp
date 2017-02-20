@@ -3,11 +3,11 @@
 #include "testbed/scenetestcase.h"
 #include "uiutil.h"
 
-#include "gincu/gentity.h"
-#include "gincu/gcomponentrender.h"
-#include "gincu/gcomponenttransform.h"
-#include "gincu/gcomponenttouchhandler.h"
-#include "gincu/gcomponentanchor.h"
+#include "gincu/ecs/gentity.h"
+#include "gincu/ecs/gcomponentrender.h"
+#include "gincu/ecs/gcomponenttransform.h"
+#include "gincu/ecs/gcomponenttouchhandler.h"
+#include "gincu/ecs/gcomponentanchor.h"
 #include "gincu/grenderanchor.h"
 
 #include "cpgf/goutmain.h"

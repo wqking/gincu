@@ -65,6 +65,7 @@ globAndAppendFiles(fileList
 	${CPGF_PATH}/src/gmemorypool.cpp
 	
 	${SRC_PATH}/*.cpp
+	${SRC_PATH}/ecs/*.cpp
 	${SRC_PATH}/sfml/*.cpp
 	${ROOT_PATH}/thirdparty/*.cpp
 	

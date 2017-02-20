@@ -3,13 +3,13 @@
 #include "testbed/scenetestcase.h"
 #include "uiutil.h"
 
-#include "gincu/gentity.h"
-#include "gincu/gcomponentrender.h"
-#include "gincu/gcomponenttransform.h"
-#include "gincu/gcomponenttouchhandler.h"
-#include "gincu/gcomponentanchor.h"
-#include "gincu/gcomponentcamera.h"
-#include "gincu/gcomponentanimation.h"
+#include "gincu/ecs/gentity.h"
+#include "gincu/ecs/gcomponentrender.h"
+#include "gincu/ecs/gcomponenttransform.h"
+#include "gincu/ecs/gcomponenttouchhandler.h"
+#include "gincu/ecs/gcomponentanchor.h"
+#include "gincu/ecs/gcomponentcamera.h"
+#include "gincu/ecs/gcomponentanimation.h"
 #include "gincu/gresourcemanager.h"
 #include "gincu/gapplication.h"
 #include "gincu/gscenemanager.h"
@@ -35,7 +35,6 @@ private:
 	void doBenchmarkBatchedAnimation();
 	void doBenchmarkUnbatchedAnimation();
 
-	GComponentTweenedFrameAnimation * createAnimation(GEntity * entity, const std::string & atlasName);
 	GEntity * createAnimationEntity(const GPoint & position, const std::string & atlasName);
 	GPoint getRandomPosition() const;
 };
@@ -46,34 +45,15 @@ void TestCase_Benchmark::doInitialize()
 //	this->doBenchmarkUnbatchedAnimation();
 }
 
-GComponentTweenedFrameAnimation * TestCase_Benchmark::createAnimation(GEntity * entity, const std::string & atlasName)
-{
-	std::shared_ptr<GFrameAnimationSetData> data(std::make_shared<GFrameAnimationSetData>());
-	buildFrameAnimationDataFromAtlas(data.get(), GResourceManager::getInstance()->getAtlas(atlasName, GAtlasFormat::spritePackText));
-	GTweenedFrameAnimation animation(data);
-	animation.setUpdater([=](const int index) {
-		GComponentAtlasRender * render = entity->getComponentByType<GComponentAtlasRender>();
-		render->getRender().setIndex(index);
-	});
-	animation.getTween().repeat(-1);
-	animation.getTween().timeScale(0.2f);
-	return createComponent<GComponentTweenedFrameAnimation>(animation);
-}
-
 GEntity * TestCase_Benchmark::createAnimationEntity(const GPoint & position, const std::string & atlasName)
 {
-	GEntity * entity;
-
-	entity = new GEntity();
-	this->getScene()->addEntity(
-		entity
+	return this->getScene()->addEntity(
+		(new GEntity())
 		->addComponent(createComponent<GComponentTransform>(position))
 		->addComponent(createComponent<GComponentAnchor>(GRenderAnchor::center))
 		->addComponent(createAtlasRenderComponent(GResourceManager::getInstance()->getAtlas(atlasName, GAtlasFormat::spritePackText), ""))
-		->addComponent(createAnimation(entity, atlasName))
+		->addComponent(createAnimation(atlasName))
 	);
-
-	return entity;
 }
 
 GPoint TestCase_Benchmark::getRandomPosition() const

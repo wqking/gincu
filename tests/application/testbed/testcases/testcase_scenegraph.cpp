@@ -3,12 +3,13 @@
 #include "testbed/scenetestcase.h"
 #include "uiutil.h"
 
-#include "gincu/gentity.h"
-#include "gincu/gcomponentrender.h"
-#include "gincu/gcomponenttransform.h"
-#include "gincu/gcomponenttouchhandler.h"
-#include "gincu/gcomponentanchor.h"
-#include "gincu/gcomponentanimation.h"
+#include "gincu/ecs/gentity.h"
+#include "gincu/ecs/gcomponentrender.h"
+#include "gincu/ecs/gcomponenttransform.h"
+#include "gincu/ecs/gcomponentlocaltransform.h"
+#include "gincu/ecs/gcomponenttouchhandler.h"
+#include "gincu/ecs/gcomponentanchor.h"
+#include "gincu/ecs/gcomponentanimation.h"
 #include "gincu/gresourcemanager.h"
 #include "gincu/grenderanchor.h"
 
@@ -58,21 +59,7 @@ void TestCase_SceneGraph::doInitialize()
 	this->doInitializeRotation({ 300, 50 });
 	this->doInitializeRotationAnimation({ 450, 350 });
 
-	testWorker();
-}
-
-GComponentTweenedFrameAnimation * createAnimation(GEntity * entity, const std::string & atlasName)
-{
-	std::shared_ptr<GFrameAnimationSetData> data(std::make_shared<GFrameAnimationSetData>());
-	buildFrameAnimationDataFromAtlas(data.get(), GResourceManager::getInstance()->getAtlas(atlasName, GAtlasFormat::spritePackText));
-	GTweenedFrameAnimation animation(data);
-	animation.setUpdater([=](const int index) {
-		GComponentAtlasRender * render = entity->getComponentByType<GComponentAtlasRender>();
-		render->getRender().setIndex(index);
-	});
-	animation.getTween().repeat(-1);
-	animation.getTween().timeScale(0.2f);
-	return createComponent<GComponentTweenedFrameAnimation>(animation);
+//	testWorker();
 }
 
 GComponentLocalTransform * TestCase_SceneGraph::createParentedObject(const GPoint & position, const GRenderAnchor anchor, const float rotation, const float scale)
@@ -131,7 +118,7 @@ GComponentLocalTransform * TestCase_SceneGraph::createParentedObject(const GPoin
 		->addComponent(createComponent<GComponentLocalTransform>(GPoint{0, yDelta * 2})->setParent(entityB->getComponentByType<GComponentLocalTransform>()))
 		->addComponent(createComponent<GComponentAnchor>(anchor)->setFlipX(true)->setFlipY(true))
 		->addComponent(createAtlasRenderComponent(GResourceManager::getInstance()->getAtlas(atlasName, GAtlasFormat::spritePackText), ""))
-		->addComponent(createAnimation(entityD, atlasName))
+		->addComponent(createAnimation(atlasName))
 		->addComponent(createComponent<GComponentRendererTouchHandler>()->addOnTouch(createOnPressCallback([=](){ this->getTestBed()->print("clicked: imageD-B flip x/y"); })))
 	);
 

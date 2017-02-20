@@ -6,7 +6,7 @@
 #include "matchthree/componentchess.h"
 #include "matchthree/scenematchthree.h"
 #include "gincu/gstatemachine.h"
-#include "gincu/gentity.h"
+#include "gincu/ecs/gentity.h"
 
 #include <vector>
 

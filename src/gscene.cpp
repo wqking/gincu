@@ -1,15 +1,15 @@
 #include "gincu/gscene.h"
-#include "gincu/gentity.h"
-#include "gincu/gcomponenttouchhandler.h"
-#include "gincu/gcomponenttransform.h"
-#include "gincu/gcomponentcamera.h"
+#include "gincu/ecs/gentity.h"
+#include "gincu/ecs/gcomponenttouchhandler.h"
+#include "gincu/ecs/gcomponenttransform.h"
+#include "gincu/ecs/gcomponentcamera.h"
 #include "gincu/gapplication.h"
 #include "gincu/gscenemanager.h"
-#include "gincu/gcomponentmanager.h"
+#include "gincu/ecs/gcomponentmanager.h"
 #include "gincu/gevent.h"
 #include "gincu/geventqueue.h"
 
-#include "gincu/gcomponentanchor.h" // for test
+#include "gincu/ecs/gcomponentanchor.h" // for test
 
 namespace gincu {
 

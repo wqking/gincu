@@ -1,7 +1,7 @@
 #include "uiutil.h"
 #include "gincu/gresourcemanager.h"
-#include "gincu/gcomponentrender.h"
-#include "gincu/gcomponenttouchhandler.h"
+#include "gincu/ecs/gcomponentrender.h"
+#include "gincu/ecs/gcomponenttouchhandler.h"
 #include "gincu/grenderanchor.h"
 
 using namespace gincu;
@@ -42,3 +42,13 @@ gincu::GEntity * createButton(
 		->addComponent(createComponent<GComponentRendererTouchHandler>()->addOnTouch(createOnPressCallback(onClick))
 	);
 }
+
+gincu::GComponentFrameAnimation * createAnimation(const std::string & atlasName)
+{
+	std::shared_ptr<GFrameAnimationSetData> data(std::make_shared<GFrameAnimationSetData>());
+	buildFrameAnimationDataFromAtlas(data.get(), GResourceManager::getInstance()->getAtlas(atlasName, GAtlasFormat::spritePackText));
+	GComponentFrameAnimation * component = createComponent<GComponentFrameAnimation>(data);
+	component->getTween().repeat(-1).timeScale(0.2f);
+	return component;
+}
+

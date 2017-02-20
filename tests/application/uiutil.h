@@ -2,8 +2,9 @@
 #define UIUTIL_H
 
 #include "gincu/ggeometry.h"
-#include "gincu/gentity.h"
+#include "gincu/ecs/gentity.h"
 #include "gincu/gevent.h"
+#include "gincu/ecs/gcomponentframeanimation.h"
 
 #include "cpgf/gcallback.h"
 
@@ -21,6 +22,8 @@ gincu::GEntity * createButton(
 		const cpgf::GCallback<void ()> & onClick,
 		const gincu::GSize size = defaultButtonSize
 	);
+
+gincu::GComponentFrameAnimation * createAnimation(const std::string & atlasName);
 
 
 #endif

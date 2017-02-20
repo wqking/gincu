@@ -78,17 +78,19 @@ LOCAL_SRC_FILES := \
 	$(SRC_PATH)/sfml/gvertexarray.cpp \
 	$(SRC_PATH)/gimage.cpp \
 	$(SRC_PATH)/gtransform.cpp \
-	$(SRC_PATH)/gcomponent.cpp \
-	$(SRC_PATH)/gcomponentanchor.cpp \
-	$(SRC_PATH)/gcomponentanimation.cpp \
-	$(SRC_PATH)/gcomponentcamera.cpp \
-	$(SRC_PATH)/gcomponentrender.cpp \
-	$(SRC_PATH)/gcomponentmanager.cpp \
-	$(SRC_PATH)/gcomponenttouchhandler.cpp \
-	$(SRC_PATH)/gcomponenttransform.cpp \
-	$(SRC_PATH)/gentity.cpp \
-	$(SRC_PATH)/gentitypolicy.cpp \
-	$(SRC_PATH)/gentityutil.cpp \
+	$(SRC_PATH)/ecs/gcomponent.cpp \
+	$(SRC_PATH)/ecs/gcomponentanchor.cpp \
+	$(SRC_PATH)/ecs/gcomponentanimation.cpp \
+	$(SRC_PATH)/ecs/gcomponentcamera.cpp \
+	$(SRC_PATH)/ecs/gcomponentframeanimation.cpp \
+	$(SRC_PATH)/ecs/gcomponentlocaltransform.cpp \
+	$(SRC_PATH)/ecs/gcomponentmanager.cpp \
+	$(SRC_PATH)/ecs/gcomponenttouchhandler.cpp \
+	$(SRC_PATH)/ecs/gcomponenttransform.cpp \
+	$(SRC_PATH)/ecs/gcomponentrender.cpp \
+	$(SRC_PATH)/ecs/gentity.cpp \
+	$(SRC_PATH)/ecs/gentitypolicy.cpp \
+	$(SRC_PATH)/ecs/gentityutil.cpp \
 	$(SRC_PATH)/gevent.cpp \
 	$(SRC_PATH)/geventqueue.cpp \
 	$(SRC_PATH)/gapplication.cpp \

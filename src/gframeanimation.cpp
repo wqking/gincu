@@ -30,60 +30,6 @@ const GFrameAnimationData * GFrameAnimationSetData::getAnimationData(const std::
 }
 
 
-GTweenedFrameAnimation::GTweenedFrameAnimation()
-	: GTweenedFrameAnimation(std::shared_ptr<GFrameAnimationSetData>())
-{
-}
-
-GTweenedFrameAnimation::GTweenedFrameAnimation(const std::shared_ptr<GFrameAnimationSetData> & data)
-	:
-		data(data),
-		currentAnimation(nullptr),
-		tween(std::make_shared<cpgf::GTween>()),
-		needInitialize(true)
-{
-	this->tween->useFrames(true);
-
-	if(this->data && this->data->getAnimationCount() > 0) {
-		this->setAnimation(this->data->getAnimationNameAt(0));
-	}
-}
-
-GTweenedFrameAnimation::~GTweenedFrameAnimation()
-{
-}
-
-void GTweenedFrameAnimation::update()
-{
-	if(this->needInitialize) {
-		this->needInitialize = false;
-		this->tween->target(cpgf::createAccessor(this, 0.0f, &GTweenedFrameAnimation::doSetRatio), 0.0f, 1.0f);
-	}
-
-	this->tween->tick((cpgf::GTweenNumber)GApplication::getInstance()->getFrameMilliseconds());
-}
-
-void GTweenedFrameAnimation::setAnimation(const std::string & name)
-{
-	this->currentAnimation = this->data->getAnimationData(name);
-	if(this->currentAnimation != nullptr) {
-		this->tween->duration((cpgf::GTweenNumber)this->currentAnimation->getFrameIndexList().size());
-		this->tween->restart();
-	}
-}
-
-void GTweenedFrameAnimation::doSetRatio(const float ratio)
-{
-	if(this->currentAnimation != nullptr) {
-		auto frameIndexList = this->currentAnimation->getFrameIndexList();
-		const int frameCount = (int)frameIndexList.size();
-		const int index = (int)((float)frameCount * ratio);
-		if(index < frameCount && this->updater) {
-			this->updater(index);
-		}
-	}
-}
-
 namespace {
 
 void extractAnimationNameAndIndex(const std::string & resourceName, std::string & animationName, int & frameOrder)
@@ -125,7 +71,7 @@ void extractAnimationNameAndIndex(const std::string & resourceName, std::string 
 
 } //unnamed namespace
 
-void buildFrameAnimationDataFromAtlas(GFrameAnimationSetData * data, const GAtlas & atlas)
+void buildFrameAnimationDataFromAtlas(GFrameAnimationSetData * data, const GAtlas & atlas, const int millsecondsBetweenFrame)
 {
 	struct Item {
 		int frameOrder;
@@ -157,7 +103,8 @@ void buildFrameAnimationDataFromAtlas(GFrameAnimationSetData * data, const GAtla
 		for(std::size_t i = 0; i < indexList.size(); ++i) {
 			indexList[i] = itemPair.second[i].frameIndex;
 		}
-		data->append(itemPair.first, GFrameAnimationData(std::move(indexList)));
+		const int duration = indexList.size() * millsecondsBetweenFrame;
+		data->append(itemPair.first, GFrameAnimationData(std::move(indexList), duration));
 	}
 }
 

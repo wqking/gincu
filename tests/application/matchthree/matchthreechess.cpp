@@ -3,7 +3,7 @@
 #include "gincu/gresourcemanager.h"
 #include "gincu/gatlas.h"
 #include "gincu/gapplication.h"
-#include "gincu/gcomponentrender.h"
+#include "gincu/ecs/gcomponentrender.h"
 #include "gincu/gutil.h"
 
 #include <map>

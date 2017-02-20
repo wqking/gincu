@@ -1,7 +1,7 @@
-#include "gincu/gcomponentcamera.h"
-#include "gincu/gcomponenttransform.h"
-#include "gincu/gentity.h"
-#include "gincu/gentityutil.h"
+#include "gincu/ecs/gcomponentcamera.h"
+#include "gincu/ecs/gcomponenttransform.h"
+#include "gincu/ecs/gentity.h"
+#include "gincu/ecs/gentityutil.h"
 #include "gincu/gapplication.h"
 
 namespace gincu {
@@ -38,7 +38,7 @@ void GComponentCamera::onEntityEvent(GComponent * component, const GEntityEventT
 {
 	switch(eventType) {
 	case GEntityEventType::componentAdded:
-		if(component->getTypeId() == GComponentType::transform) {
+		if(component->getType() == GComponentType::transform) {
 			this->doInitializeComponentTransform(static_cast<GComponentTransform *>(component));
 		}
 		break;

@@ -1,7 +1,7 @@
 #ifndef GCOMPONENTCAMERA_H
 #define GCOMPONENTCAMERA_H
 
-#include "gincu/gcomponent.h"
+#include "gincu/ecs/gcomponent.h"
 #include "gincu/ggeometry.h"
 #include "gincu/gcamera.h"
 

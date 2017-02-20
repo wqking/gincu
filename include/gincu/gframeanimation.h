@@ -19,12 +19,16 @@ class GFrameAnimationData
 {
 public:
 	GFrameAnimationData() {}
-	explicit GFrameAnimationData(std::vector<int> && frameIndexList) : frameIndexList(frameIndexList) {}
+	GFrameAnimationData(std::vector<int> && frameIndexList, const int durationMilliseconds)
+		: frameIndexList(frameIndexList), durationMilliseconds(durationMilliseconds)
+	{}
 
 	const std::vector<int> & getFrameIndexList() const { return this->frameIndexList; }
+	int getDurationMilliseconds() const { return this->durationMilliseconds; }
 
 private:
 	std::vector<int> frameIndexList;
+	int durationMilliseconds;
 };
 
 
@@ -55,38 +59,9 @@ private:
 };
 
 
-class GTweenedFrameAnimation
-{
-public:
-	typedef cpgf::GCallback<void (int)> AnimationUpdater;
-
-public:
-	GTweenedFrameAnimation();
-	explicit GTweenedFrameAnimation(const std::shared_ptr<GFrameAnimationSetData> & data);
-	~GTweenedFrameAnimation();
-
-	void update();
-
-	void setAnimation(const std::string & name);
-
-	cpgf::GTween & getTween() { return *this->tween.get(); }
-	
-	void setUpdater(const AnimationUpdater & updater) { this->updater = updater; }
-
-private:
-	void doSetRatio(const float ratio);
-
-private:
-	std::shared_ptr<GFrameAnimationSetData> data;
-	const GFrameAnimationData * currentAnimation;
-	std::shared_ptr<cpgf::GTween> tween;
-	AnimationUpdater updater;
-	bool needInitialize;
-};
-
 class GAtlas;
 
-void buildFrameAnimationDataFromAtlas(GFrameAnimationSetData * data, const GAtlas & atlas);
+void buildFrameAnimationDataFromAtlas(GFrameAnimationSetData * data, const GAtlas & atlas, const int millsecondsBetweenFrame = 30);
 
 
 } //namespace gincu

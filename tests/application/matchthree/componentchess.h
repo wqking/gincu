@@ -1,7 +1,7 @@
 #ifndef COMPONENTCHESS_H
 #define COMPONENTCHESS_H
 
-#include "gincu/gcomponent.h"
+#include "gincu/ecs/gcomponent.h"
 
 namespace gincu {
 
