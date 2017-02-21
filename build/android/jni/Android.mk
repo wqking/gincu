@@ -91,6 +91,9 @@ LOCAL_SRC_FILES := \
 	$(SRC_PATH)/ecs/gentity.cpp \
 	$(SRC_PATH)/ecs/gentitypolicy.cpp \
 	$(SRC_PATH)/ecs/gentityutil.cpp \
+	$(SRC_PATH)/transition/gtransition.cpp \
+	$(SRC_PATH)/transition/gtransitionmovein.cpp \
+	$(SRC_PATH)/transition/gtransitionfadeinout.cpp \
 	$(SRC_PATH)/gevent.cpp \
 	$(SRC_PATH)/geventqueue.cpp \
 	$(SRC_PATH)/gapplication.cpp \

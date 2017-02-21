@@ -19,7 +19,7 @@ inline sf::Color gameColorToSfml(const GColor color)
 
 inline GColor sfmlColorToGame(const sf::Color & color)
 {
-	return gameColorMakeARGB(color.a, color.r, color.g, color.b);
+	return colorMakeARGB(color.a, color.r, color.g, color.b);
 }
 
 inline sf::Vector2f gameVector2ToSfml(const GVector2 & v)

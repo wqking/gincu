@@ -98,6 +98,53 @@ void freeObjectOnHeapPool(T * obj)
 	GHeapPool::getInstance()->free(obj);
 }
 
+template <class T>
+struct GHeapPoolAllocator
+{
+	typedef T value_type;
+	typedef T * pointer;
+
+	GHeapPoolAllocator()
+		: heapPool(GHeapPool::getInstance())
+	{}
+
+	template <class U>
+	GHeapPoolAllocator(const GHeapPoolAllocator<U> & other)
+		: heapPool(other.heapPool)
+	{
+	}
+	
+	T * allocate(std::size_t n)
+	{
+		return (T *)(this->heapPool->allocate(n));
+	}
+	
+	void deallocate(T * p, std::size_t /*n*/)
+	{
+		this->heapPool->free(p);
+	}
+	
+	GHeapPool * heapPool;
+};
+
+template <class T, class U>
+bool operator == (const GHeapPoolAllocator<T> & a, const GHeapPoolAllocator<U> & b)
+{
+	return a.heapPool == b.heapPool;
+}
+
+template <class T, class U>
+bool operator != (const GHeapPoolAllocator<T> & a, const GHeapPoolAllocator<U> & b)
+{
+	return ! operator == (a, b);
+}
+
+template <typename T, typename... Params>
+std::shared_ptr<T>  createPooledSharedPtr(Params... params)
+{
+	return std::allocate_shared<T>(GHeapPoolAllocator<T>(), std::forward<Params>(params)...);
+}
+
 
 } //namespace gincu
 

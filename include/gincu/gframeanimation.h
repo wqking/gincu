@@ -18,7 +18,10 @@ namespace gincu {
 class GFrameAnimationData
 {
 public:
-	GFrameAnimationData() {}
+	GFrameAnimationData()
+		: frameIndexList(), durationMilliseconds(0)
+	{}
+
 	GFrameAnimationData(std::vector<int> && frameIndexList, const int durationMilliseconds)
 		: frameIndexList(frameIndexList), durationMilliseconds(durationMilliseconds)
 	{}

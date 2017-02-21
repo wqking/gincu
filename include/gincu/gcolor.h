@@ -13,9 +13,17 @@ const GColor colorPurple = 0xff800080;
 const GColor colorBlack = 0xff000000;
 const GColor colorWhite = 0xffffffff;
 
-GColor gameColorSetAlpha(const GColor color, const int alpha);
+inline GColor colorSetAlpha(const GColor color, const unsigned int alpha)
+{
+	return (color & 0x00ffffff) | ((alpha & 0xff) << 24);
+}
 
-inline GColor gameColorMakeARGB(const int a, const int r, const int g, const int b)
+inline unsigned int colorGetAlpha(const GColor color)
+{
+	return (color & 0xff000000) >> 24;
+}
+
+inline GColor colorMakeARGB(const int a, const int r, const int g, const int b)
 {
 	return ((GColor)a << 24)
 		+ ((GColor)r << 16)

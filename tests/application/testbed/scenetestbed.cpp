@@ -13,6 +13,7 @@
 #include "gincu/ecs/gcomponentanchor.h"
 #include "gincu/ecs/gcomponentcamera.h"
 #include "gincu/grenderanchor.h"
+#include "gincu/transition/gtransitionfadeinout.h"
 
 #include "cpgf/goutmain.h"
 
@@ -20,7 +21,7 @@ using namespace gincu;
 
 void SceneTestBed::switchToScene()
 {
-	GApplication::getInstance()->getSceneManager()->switchScene("SceneTestBed", &sceneCreator<SceneTestBed>);
+	GApplication::getInstance()->getSceneManager()->switchScene("SceneTestBed", &sceneCreator<SceneTestBed>, new GTransitionFadeInOut(2000, colorWhite));
 }
 
 SceneTestBed::SceneTestBed()

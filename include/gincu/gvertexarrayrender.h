@@ -29,6 +29,9 @@ public:
 	const GTexture & getTexture() const { return this->texture; }
 	void setTexture(const GTexture & texture) { this->texture = texture; }
 
+	GColor getColor() const { return this->vertexArray.getColor(); }
+	void setColor(const GColor color) { this->vertexArray.setColor(color); }
+
 private:
 	GPrimitive primitive;
 	GVertexArray vertexArray;

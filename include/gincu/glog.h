@@ -23,6 +23,9 @@
 #define G_LOG_ERROR		ZF_LOGE
 #define G_LOG_FATAL		ZF_LOGF
 
+// G_LOG_IF(2 > 1, G_LOG_DEBUG("haha"))
+#define G_LOG_IF ZF_LOG_IF
+
 #include "zf_log.h"
 
 #endif

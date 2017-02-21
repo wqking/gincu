@@ -132,6 +132,7 @@ public:
 	RenderCommandQueue * updaterQueue;
 	RenderCommandQueue * renderQueue;
 	std::mutex updaterQueueMutex;
+	std::vector<RenderCommandQueue> commandQueueDeleter;
 };
 
 

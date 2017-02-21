@@ -10,6 +10,7 @@
 #include "gincu/gvertexarray.h"
 #include "gincu/gprimitive.h"
 #include "gincu/gcamera.h"
+#include "gincu/gheappool.h"
 #include "gincu/glog.h"
 #include "gsfmlutil.h"
 #include "gtexturedata.h"
@@ -23,6 +24,8 @@
 
 #include <cassert>
 
+//#define TEMP_SINGLE_THREAD
+
 namespace gincu {
 
 namespace {
@@ -31,6 +34,10 @@ GRenderEngine * instance = nullptr;
 
 void threadMain(std::shared_ptr<GRenderEngineData> data)
 {
+#ifdef TEMP_SINGLE_THREAD
+return;
+#endif
+
 	data->processRenderCommands(); // just to draw background
 
 	while(! data->finished) {
@@ -40,11 +47,21 @@ void threadMain(std::shared_ptr<GRenderEngineData> data)
 		if(! data->renderQueue->empty()) {
 			data->processRenderCommands();
 			data->window->display();
-			data->renderQueue->clear();
+			
+			// don't free in render thread
+			//data->renderQueue->clear();
 		}
 
 		{
 			std::lock_guard<std::mutex> lockGuard(data->updaterQueueMutex);
+			
+			if(! data->renderQueue->empty()) {
+				// to be thread safe, we don't free the queue in the render thread.
+				// instead we move it to another queue to be freed in the main thread.
+				data->commandQueueDeleter.emplace_back();
+				std::swap(data->commandQueueDeleter.back(), *(data->renderQueue));
+			}
+			
 			std::swap(data->renderQueue, data->updaterQueue);
 		}
 	}
@@ -91,7 +108,9 @@ GRenderEngineData::GRenderEngineData()
 void GRenderEngineData::initialize()
 {
 	this->window->setVerticalSyncEnabled(false);
+#ifndef TEMP_SINGLE_THREAD
 	this->window->setActive(false);
+#endif
 
 	this->updaterQueue = &this->queueStorage[0];
 	this->renderQueue = &this->queueStorage[1];
@@ -247,8 +266,21 @@ void GRenderEngine::doFinalize()
 
 void GRenderEngine::render()
 {
+#ifdef TEMP_SINGLE_THREAD
+	this->data->updaterQueue->clear();
+	GApplication::getInstance()->getEventQueue()->send(GEvent(GEventType::render, this));
+	std::swap(data->renderQueue, data->updaterQueue);
+	data->processRenderCommands();
+	data->window->display();
+	std::swap(data->renderQueue, data->updaterQueue);
+	this->data->updaterQueue->clear();
+return;
+#endif
+
 	{
 		std::lock_guard<std::mutex> lockGuard(this->data->updaterQueueMutex);
+		
+		this->data->commandQueueDeleter.clear();
 
 		// in case the render thread is too slow to render last frame, let's discard the old frame.
 		this->data->updaterQueue->clear();
@@ -334,6 +366,7 @@ bool GRenderEngine::isAlive() const
 void GRenderEngine::switchCamera(const GCamera & camera)
 {
 	this->data->updaterQueue->emplace_back(std::make_shared<GCameraData>(*camera.getData()));
+//	this->data->updaterQueue->emplace_back(createPooledSharedPtr<GCameraData>(*camera.getData()));
 }
 
 void GRenderEngine::draw(const GTexture & texture, const GRect & rect, const GMatrix44 & matrix, const GRenderInfo * renderInfo)

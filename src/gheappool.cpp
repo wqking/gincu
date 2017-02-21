@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <thread>
 
 #ifndef GINCU_MEMORY_POOL_ALIGNMENT
 #define GINCU_MEMORY_POOL_ALIGNMENT 64
@@ -79,6 +80,7 @@ ChunkHeader * getChunkHeader(void * p)
 	return (ChunkHeader *)p - 1;
 }
 
+std::thread::id createdThreadId;
 
 } //unnamed namespace
 
@@ -207,6 +209,7 @@ GHeapPool::GHeapPool(
 		blockCountPerChunk(blockCountPerChunk),
 		purgeStrategy(purgeStrategy)
 {
+	createdThreadId = std::this_thread::get_id();
 }
 
 GHeapPool::~GHeapPool()
@@ -215,6 +218,9 @@ GHeapPool::~GHeapPool()
 
 void * GHeapPool::allocate(const std::size_t size)
 {
+	G_LOG_IF(createdThreadId != std::this_thread::get_id(), G_LOG_FATAL("GHeapPool allocate in wrong thread!!!"));
+//return malloc(size);
+
 	GHeapSizedPool * pool = nullptr;
 
 	const std::size_t alignedSize = alignSize(size, this->alignment, 0);
@@ -233,6 +239,9 @@ void * GHeapPool::allocate(const std::size_t size)
 
 void GHeapPool::free(void * p)
 {
+	G_LOG_IF(createdThreadId != std::this_thread::get_id(), G_LOG_FATAL("GHeapPool free in wrong thread!!!"));
+//free(p); return;
+
 	const std::size_t size = getSize(p);
 	const std::size_t alignedSize = alignSize(size, this->alignment, 0);
 	

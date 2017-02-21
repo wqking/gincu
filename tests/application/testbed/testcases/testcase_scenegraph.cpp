@@ -15,6 +15,7 @@
 
 #include "gincu/gapplication.h"
 #include "gincu/geventqueue.h"
+#include "gincu/gheappool.h"
 #include "gincu/glog.h"
 #include "gincu/gutil.h"
 
@@ -39,6 +40,39 @@ void testWorker()
 	}
 }
 
+void testHeapPool()
+{
+	constexpr int iterateCount = 1000 * 100;
+	const std::vector<int> sizeList {
+		1, 33, 65, 129, 257, 513,
+		1025, 1024 * 4, 1024 * 1024
+	};
+	std::vector<char *> buffers(sizeList.size());
+	unsigned int t;
+	
+	t = getMilliseconds();
+	for(int i = 0; i < iterateCount; ++i) {
+		for(size_t k = 0; k < sizeList.size(); ++k) {
+			buffers[k] = (char *)GHeapPool::getInstance()->allocate(sizeList[k]);
+		}
+		for(size_t k = 0; k < sizeList.size(); ++k) {
+			GHeapPool::getInstance()->free(buffers[k]);
+		}
+	}
+	G_LOG_INFO("Heap pool %d", getMilliseconds() - t);
+	
+	t = getMilliseconds();
+	for(int i = 0; i < iterateCount; ++i) {
+		for(size_t k = 0; k < sizeList.size(); ++k) {
+			buffers[k] = new char[sizeList[k]];
+		}
+		for(size_t k = 0; k < sizeList.size(); ++k) {
+			delete buffers[k];
+		}
+	}
+	G_LOG_INFO("NewDelete %d", getMilliseconds() - t);
+}
+
 
 class TestCase_SceneGraph : public TestCase
 {
@@ -60,6 +94,7 @@ void TestCase_SceneGraph::doInitialize()
 	this->doInitializeRotationAnimation({ 450, 350 });
 
 //	testWorker();
+//	testHeapPool();
 }
 
 GComponentLocalTransform * TestCase_SceneGraph::createParentedObject(const GPoint & position, const GRenderAnchor anchor, const float rotation, const float scale)

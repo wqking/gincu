@@ -113,7 +113,7 @@ void StateResult::doShowMessage()
 		->addComponent(createComponent<GComponentTransform>())
 		->addComponent(createComponent<GComponentLocalTransform>(GPoint { viewSize.width / 2, viewSize.height / 2 }, GScale { 0.1f, 0.1f }))
 		->addComponent(createComponent<GComponentAnchor>(GRenderAnchor::center))
-		->addComponent(createRectRenderComponent(gameColorSetAlpha(colorGreen, 127), GSize { 450, 200}))
+		->addComponent(createRectRenderComponent(colorSetAlpha(colorGreen, 127), GSize { 450, 200}))
 		);
 
 	this->imageEntity = this->scene->addEntity(

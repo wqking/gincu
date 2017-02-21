@@ -10,6 +10,7 @@
 #include "gincu/geventqueue.h"
 
 #include "gincu/ecs/gcomponentanchor.h" // for test
+#include "gincu/grenderanchor.h"
 
 namespace gincu {
 
@@ -28,7 +29,8 @@ GScene::GScene()
 	: 
 		componentManager(new GComponentManager()),
 		primaryCamera(nullptr),
-		touchCapture(nullptr)
+		touchCapture(nullptr),
+		renderEnabled(false)
 {
 }
 
@@ -43,25 +45,27 @@ void GScene::initializePrimaryCamera()
 	}
 
 	GEntity * cameraEntity = new GEntity();
-	cameraEntity->addComponent(createComponent<GComponentTransform>());
+	cameraEntity->addComponent(createComponent<GComponentTransform>(GPoint{ 0, 0 }));
 	cameraEntity->addComponent((this->primaryCamera = createComponent<GComponentCamera>()
 		->setFitStrategy(GCameraFitStrategy::scaleFitFullScreen)
 	));
 //cameraEntity->addComponent(createComponent<GComponentAnchor>(GRenderAnchor::leftTop)->setFlipX(true)->setFlipY(true));
+
 	this->addEntity(cameraEntity);
 }
 
 void GScene::onEnter()
 {
 	this->initializePrimaryCamera();
-	GApplication::getInstance()->getEventQueue()->addListeners(interestedEventTypes.begin(), interestedEventTypes.end(), cpgf::makeCallback(this, &GScene::onEvent));
+
+	this->enableRender(true);
 
 	this->doOnEnter();
 }
 
 void GScene::onExit()
 {
-	GApplication::getInstance()->getEventQueue()->removeListeners(interestedEventTypes.begin(), interestedEventTypes.end(), cpgf::makeCallback(this, &GScene::onEvent));
+	this->enableRender(false);
 
 	this->doOnExit();
 
@@ -77,8 +81,17 @@ void GScene::doOnExit()
 {
 }
 
-void GScene::renderScene()
+void GScene::enableRender(const bool enable)
 {
+	if(this->renderEnabled != enable) {
+		this->renderEnabled = enable;
+
+		GApplication::getInstance()->getEventQueue()->removeListeners(interestedEventTypes.begin(), interestedEventTypes.end(), cpgf::makeCallback(this, &GScene::onEvent));
+
+		if(enable) {
+			GApplication::getInstance()->getEventQueue()->addListeners(interestedEventTypes.begin(), interestedEventTypes.end(), cpgf::makeCallback(this, &GScene::onEvent));
+		}
+	}
 }
 
 void GScene::setTouchCapture(GEntity * touchCapture)

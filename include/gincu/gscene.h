@@ -27,7 +27,7 @@ public:
 	void onEnter();
 	void onExit();
 
-	void renderScene();
+	void enableRender(const bool enable);
 
 	GEntity * addEntity(GEntity * entity);
 	void removeEntity(GEntity * entity);
@@ -53,6 +53,7 @@ private:
 	std::vector<EntityPointer> entityList;
 	GComponentCamera * primaryCamera;
 	GEntity * touchCapture;
+	bool renderEnabled;
 	cpgf::GTweenList tweenList;
 };
 
