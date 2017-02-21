@@ -73,7 +73,7 @@ void GCamera::apply(const GMatrix44 & matrix)
 	});
 }
 
-GPoint GCamera::mapScreenToCamera(const GPoint & point) const
+GPoint GCamera::mapScreenToWorld(const GPoint & point) const
 {
 	const GRect viewportPixels = this->getViewportPixels();
 	sf::Vector2f normalized;

@@ -81,6 +81,8 @@ inline bool operator == (const GBlendMode & a, const GBlendMode & b)
 	return a.colorChannel == b.colorChannel && a.alphaChannel == b.alphaChannel;
 }
 
+constexpr GBlendMode blendModeDefault = GBlendMode();
+
 constexpr GBlendMode blendModeAlpha(
 	{ GBlendFunc::sourceAlpha, GBlendFunc::oneMinusSourceAlpha },
 	{ GBlendFunc::one, GBlendFunc::oneMinusSourceAlpha });

@@ -38,14 +38,24 @@ void GTransition::addOnComplete(const cpgf::GCallback<void ()> & onComplete)
 
 void GTransition::cancel()
 {
+	this->doFinalize();
+
 	delete this;
 }
 
 void GTransition::finish()
 {
+	this->tween = nullptr;
+
+	this->doFinalize();
+
 	this->onCompleteList();
 
 	delete this;
+}
+
+void GTransition::doFinalize()
+{
 }
 
 void GTransition::doTransite(GScene * /*fromScene*/, GScene * /*toScene*/)

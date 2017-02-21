@@ -281,7 +281,7 @@ void GComponentManager::CameraInfo::findTouchHandlers(std::vector<GTouchHandlerF
 {
 	const GRect viewport = this->camera->getCamera().getViewportPixels();
 	if(isInRect(screenPosition, viewport)) {
-		doFindTouchHandlers(outputResult, this->touchHandlerList, this->camera->getCamera().mapScreenToCamera(screenPosition));
+		doFindTouchHandlers(outputResult, this->touchHandlerList, this->camera->getCamera().mapScreenToWorld(screenPosition));
 	}
 }
 

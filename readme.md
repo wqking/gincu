@@ -44,6 +44,7 @@ Apache License, Version 2.0
  * Multi threaded task processing and resource loading.
  * Entity Component System (ECS).
  * Scene management.
+ * Scene transition effect.
  * ECS based scene graph (GComponentLocalTransform).
  * Camera system.
  * Anchor and flip x/y (GComponentAnchor).

@@ -47,6 +47,24 @@ void GVertexArray::append(const GPoint & position, const GColor color, const GPo
 	));
 }
 
+GColor GVertexArray::getColor() const
+{
+	if(! this->data->vertexArray.empty()) {
+		return sfmlColorToGame(this->data->vertexArray.front().color);
+	}
+	else {
+		return GColor();
+	}
+}
+
+void GVertexArray::setColor(const GColor color)
+{
+	auto sfmlColor = gameColorToSfml(color);
+	for(auto & vertex : this->data->vertexArray) {
+		vertex.color = sfmlColor;
+	}
+}
+
 const GRect & GVertexArray::getBoundingRect() const
 {
 	if(this->boundingRect.width <= 0) {

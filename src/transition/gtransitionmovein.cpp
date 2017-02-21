@@ -7,7 +7,8 @@
 
 namespace gincu {
 
-GTransitionMoveIn::GTransitionMoveIn()
+GTransitionMoveIn::GTransitionMoveIn(const unsigned int durationMilliseconds, const GPoint & direction)
+	: durationMilliseconds(durationMilliseconds), direction(direction)
 {
 }
 
@@ -15,10 +16,10 @@ GTransitionMoveIn::~GTransitionMoveIn()
 {
 }
 
-class GCameraComponentBackup
+class GCameraComponentSaver
 {
 public:
-	GCameraComponentBackup(GComponentCamera * camera)
+	GCameraComponentSaver(GComponentCamera * camera)
 		:
 			camera(camera),
 			viewport(camera->getViewport()),
@@ -26,7 +27,7 @@ public:
 	{
 	}
 	
-	~GCameraComponentBackup() {
+	~GCameraComponentSaver() {
 		this->camera->setViewport(this->viewport);
 		this->camera->setFitStrategy(this->fitStrategy);
 	}
@@ -36,46 +37,51 @@ public:
 	GCameraFitStrategy fitStrategy;
 };
 
+void GTransitionMoveIn::doFinalize()
+{
+	this->fromSaver.reset();
+	this->toSaver.reset();
+}
+
 void GTransitionMoveIn::doTransite(GScene * fromScene, GScene * toScene)
 {
-this->finish(); return;
 	GComponentCamera * fromCameraComponent = fromScene->getPrimaryCamera();
 	GComponentCamera * toCameraComponent = toScene->getPrimaryCamera();
-	this->fromBackup.reset(new GCameraComponentBackup(fromCameraComponent));
-	this->toBackup.reset(new GCameraComponentBackup(toCameraComponent));
+	this->fromSaver.reset(new GCameraComponentSaver(fromCameraComponent));
+	this->toSaver.reset(new GCameraComponentSaver(toCameraComponent));
 
 	fromCameraComponent->setFitStrategy(GCameraFitStrategy::none);
 	toCameraComponent->setFitStrategy(GCameraFitStrategy::none);
 	
 	this->getTween()
-		.duration(1.0f)
-		.target(cpgf::createAccessor(nullptr, 0, &GTransitionMoveIn::doSetRatio), 0.0f, 1.0f)
+		.duration(this->durationMilliseconds)
+		.target(cpgf::createAccessor(this, 0, &GTransitionMoveIn::doSetRatio), 0.0f, 1.0f)
 		.onComplete(cpgf::makeCallback(this, &GTransitionMoveIn::finish))
 	;
 }
 
 void GTransitionMoveIn::doSetRatio(const float ratio)
 {
-	const GCoord fromSourceX = this->fromBackup->viewport.x;
-	const GCoord fromSourceY = this->fromBackup->viewport.y;
-	const GCoord fromTargetX = this->fromBackup->viewport.x + this->fromBackup->viewport.width;
-	const GCoord fromTargetY = this->fromBackup->viewport.y;
-	const GCoord toSourceX = this->fromBackup->viewport.x - this->toBackup->viewport.width;
-	const GCoord toSourceY = this->fromBackup->viewport.y;
-	const GCoord toTargetX = this->fromBackup->viewport.x;
-	const GCoord toTargetY = this->fromBackup->viewport.y;
+	const GCoord fromSourceX = this->fromSaver->viewport.x;
+	const GCoord fromSourceY = this->fromSaver->viewport.y;
+	const GCoord fromTargetX = this->fromSaver->viewport.x + this->fromSaver->viewport.width * this->direction.x;
+	const GCoord fromTargetY = this->fromSaver->viewport.y + this->fromSaver->viewport.height * this->direction.y;
+	const GCoord toSourceX = this->fromSaver->viewport.x - this->toSaver->viewport.width * this->direction.x;
+	const GCoord toSourceY = this->fromSaver->viewport.y - this->toSaver->viewport.height * this->direction.y;
+	const GCoord toTargetX = this->toSaver->viewport.x;
+	const GCoord toTargetY = this->toSaver->viewport.y;
 	
-	this->fromBackup->camera->setViewport({
+	this->fromSaver->camera->setViewport({
 		fromSourceX + (fromTargetX - fromSourceX) * ratio,
 		fromSourceY + (fromTargetY - fromSourceY) * ratio,
-		this->fromBackup->viewport.width,
-		this->fromBackup->viewport.height
+		this->fromSaver->viewport.width,
+		this->fromSaver->viewport.height
 	});
-	this->toBackup->camera->setViewport({
+	this->toSaver->camera->setViewport({
 		toSourceX + (toTargetX - toSourceX) * ratio,
 		toSourceY + (toTargetY - toSourceY) * ratio,
-		this->toBackup->viewport.width,
-		this->toBackup->viewport.height
+		this->toSaver->viewport.width,
+		this->toSaver->viewport.height
 	});
 }
 

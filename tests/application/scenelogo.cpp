@@ -173,7 +173,7 @@ void SceneLogo::onPressAnyKey(const GEvent & touchEvent)
 G_AUTO_RUN_BEFORE_MAIN(SceneLogo)
 {
 	MenuRegister::getInstance()->registerItem("about", 9999999, [](){
-			GApplication::getInstance()->getSceneManager()->switchScene(new SceneLogo(false), new GTransitionMoveIn());
+			GApplication::getInstance()->getSceneManager()->switchScene(new SceneLogo(false), new GTransitionMoveIn(500, { -1, -1 }));
 		},
 		0xffaaaaff);
 }

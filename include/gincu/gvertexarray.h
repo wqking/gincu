@@ -24,6 +24,9 @@ public:
 	void setAt(const int index, const GPoint & position, const GColor color = defaultColor, const GPoint & textureUV = GPoint());
 	void append(const GPoint & position, const GColor color = defaultColor, const GPoint & textureUV = GPoint());
 	
+	GColor getColor() const;
+	void setColor(const GColor color);
+	
 	const GRect & getBoundingRect() const;
 
 	const std::shared_ptr<GVertexArrayData> & getData() const { return this->data; }

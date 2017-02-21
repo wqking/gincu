@@ -25,6 +25,7 @@ protected:
 	void finish();
 	
 private:
+	virtual void doFinalize();
 	virtual void doTransite(GScene * fromScene, GScene * toScene);
 	
 private:
