@@ -5,7 +5,7 @@
 #include "gincu/gresourcemanager.h"
 
 #include "gsfmlutil.h"
-#include "gfontdata.h"
+#include "gsfmlfontdata.h"
 
 #include <SFML/Graphics.hpp>
 
@@ -15,7 +15,7 @@ class GSfmlTextRenderData : public GTextRenderData
 {
 public:
 	virtual void setText(const std::string & text) override {
-		this->text.setFont(GResourceManager::getInstance()->getFont().getData()->font);
+		this->text.setFont(static_cast<GSfmlFontData *>(GResourceManager::getInstance()->getFont().getData().get())->font);
 		this->text.setString(text);
 	}
 

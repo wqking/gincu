@@ -3,8 +3,9 @@
 #include "gincu/geventqueue.h"
 #include "gincu/gatlas.h"
 #include "gincu/gtexture.h"
+#include "gincu/gfont.h"
+#include "gincu/gdevicecontext.h"
 #include "gtexturedata.h"
-#include "gfontdata.h"
 
 #include <cassert>
 
@@ -121,7 +122,7 @@ GFont GResourceManager::getFont(const std::string & resourceName) const
 		data = it->second;
 	}
 	else {
-		data = std::make_shared<GFontData>();
+		data = GDeviceContext::getInstance()->createFontData(nullptr);
 		this->fontDataMap.insert(std::make_pair(resourceName, data));
 		const std::string fileName = this->solveResourcePath(resourceName);
 		{
@@ -142,7 +143,7 @@ GFont GResourceManager::asyncGetFont(const std::string & resourceName, const Loa
 		data = it->second;
 	}
 	else {
-		data = std::make_shared<GFontData>();
+		data = GDeviceContext::getInstance()->createFontData(nullptr);
 		this->fontDataMap.insert(std::make_pair(resourceName, data));
 		const std::string fileName = this->solveResourcePath(resourceName);
 		GApplication::getInstance()->executeWorkerTask(

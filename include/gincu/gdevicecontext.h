@@ -13,6 +13,7 @@ struct GConfigInfo;
 
 class GTextRenderData;
 class GVertexArrayData;
+class GFontData;
 
 class GDeviceContext
 {
@@ -31,6 +32,7 @@ public:
 	
 	virtual std::shared_ptr<GTextRenderData> createTextRenderData(const GTextRenderData * copy) const = 0;
 	virtual std::shared_ptr<GVertexArrayData> createVertexArrayData(const GVertexArrayData * copy) const = 0;
+	virtual std::shared_ptr<GFontData> createFontData(const GFontData * copy) const = 0;
 };
 
 class GDeviceContextRegister : public GObjectFactory<GDeviceContext>

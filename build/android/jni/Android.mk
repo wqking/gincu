@@ -68,7 +68,6 @@ LOCAL_SRC_FILES := \
 	$(SRC_PATH)/gatlasrender.cpp \
 	$(SRC_PATH)/grenderanchor.cpp \
 	$(SRC_PATH)/sfml/gengineutil.cpp \
-	$(SRC_PATH)/sfml/gfont.cpp \
 	$(SRC_PATH)/sfml/ginputstream.cpp \
 	$(SRC_PATH)/sfml/gsfmldevicecontext.cpp \
 	$(SRC_PATH)/sfml/gsfmlrendercontext.cpp \
@@ -96,6 +95,7 @@ LOCAL_SRC_FILES := \
 	$(SRC_PATH)/gdevicecontext.cpp \
 	$(SRC_PATH)/gevent.cpp \
 	$(SRC_PATH)/geventqueue.cpp \
+	$(SRC_PATH)/gfont.cpp \
 	$(SRC_PATH)/gapplication.cpp \
 	$(SRC_PATH)/gheappool.cpp \
 	$(SRC_PATH)/gobjectfactory.cpp \

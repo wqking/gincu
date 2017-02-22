@@ -5,7 +5,12 @@
 
 namespace gincu {
 
-class GFontData;
+class GFontData
+{
+public:
+	virtual ~GFontData() {}
+	virtual void load(const std::string & fileName) = 0;
+};
 
 class GFont
 {
