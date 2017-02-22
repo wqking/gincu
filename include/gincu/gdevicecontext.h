@@ -15,6 +15,7 @@ class GTextRenderData;
 class GVertexArrayData;
 class GFontData;
 class GTextureData;
+class GCameraData;
 
 class GDeviceContext
 {
@@ -35,6 +36,7 @@ public:
 	virtual std::shared_ptr<GVertexArrayData> createVertexArrayData(const GVertexArrayData * copy) const = 0;
 	virtual std::shared_ptr<GFontData> createFontData(const GFontData * copy) const = 0;
 	virtual std::shared_ptr<GTextureData> createTextureData(const GTextureData * copy) const = 0;
+	virtual std::shared_ptr<GCameraData> createCameraData(const GCameraData * copy) const = 0;
 };
 
 class GDeviceContextRegister : public GObjectFactory<GDeviceContext>

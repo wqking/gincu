@@ -8,6 +8,7 @@
 #include "gsfmlvertexarraydata.h"
 #include "gsfmlfontdata.h"
 #include "gsfmltexturedata.h"
+#include "gsfmlcameradata.h"
 
 #include "cpgf/goutmain.h"
 
@@ -30,6 +31,7 @@ private:
 	virtual std::shared_ptr<GVertexArrayData> createVertexArrayData(const GVertexArrayData * copy) const override;
 	virtual std::shared_ptr<GFontData> createFontData(const GFontData * copy) const override;
 	virtual std::shared_ptr<GTextureData> createTextureData(const GTextureData * copy) const override;
+	virtual std::shared_ptr<GCameraData> createCameraData(const GCameraData * copy) const override;
 
 private:
 	std::unique_ptr<sf::RenderWindow> window;
@@ -180,6 +182,16 @@ std::shared_ptr<GTextureData> GSfmlDeviceContext::createTextureData(const GTextu
 	}
 	else {
 		return std::make_shared<GSfmlTextureData>(*static_cast<const GSfmlTextureData *>(copy));
+	}
+}
+
+std::shared_ptr<GCameraData> GSfmlDeviceContext::createCameraData(const GCameraData * copy) const
+{
+	if(copy == nullptr) {
+		return std::make_shared<GSfmlCameraData>();
+	}
+	else {
+		return std::make_shared<GSfmlCameraData>(*static_cast<const GSfmlCameraData *>(copy));
 	}
 }
 

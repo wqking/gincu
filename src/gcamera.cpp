@@ -1,10 +1,9 @@
 #include "gincu/gcamera.h"
+#include "gincu/gdevicecontext.h"
 #include "gincu/gapplication.h"
 #include "gincu/grendercontext.h"
 #include "gincu/gtransform.h"
 #include "gincu/gutil.h"
-#include "gcameradata.h"
-#include "gsfmlutil.h"
 
 namespace gincu {
 
@@ -16,7 +15,7 @@ GCamera::GCamera()
 		fitStrategy(GCameraFitStrategy::none),
 		targetViewSize(GApplication::getInstance()->getConfigInfo().targetViewSize),
 		cachedScreenSize{ -1, -1 },
-		data(std::make_shared<GCameraData>())
+		data(GDeviceContext::getInstance()->createCameraData(nullptr))
 {
 }
 
@@ -60,26 +59,13 @@ void GCamera::setFitStrategy(const GCameraFitStrategy strategy)
 void GCamera::apply(const GMatrix44 & matrix)
 {
 	this->doRefresh();
-
-	matrixToSfml(&this->data->view.getTransform(), matrix);
-	matrixToSfml(&this->data->view.getInverseTransform(), inverseMatrix(matrix));
-
-	this->data->view.setViewport({
-		this->viewport.x,
-		this->viewport.y,
-		this->viewport.width,
-		this->viewport.height
-	});
+	
+	this->data->apply(matrix, this->viewport);
 }
 
 GPoint GCamera::mapScreenToWorld(const GPoint & point) const
 {
-	const GRect viewportPixels = this->getViewportPixels();
-	sf::Vector2f normalized;
-	normalized.x = -1.f + 2.f * (point.x - viewportPixels.x) / viewportPixels.width;
-	normalized.y =  1.f - 2.f * (point.y - viewportPixels.y)  / viewportPixels.height;
-	auto pt = this->data->view.getInverseTransform().transformPoint(normalized);
-	return {pt.x, pt.y};
+	return this->data->mapScreenToWorld(point, this->getViewportPixels());
 }
 
 void GCamera::doRequireRefresh()

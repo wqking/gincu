@@ -1,4 +1,5 @@
 #include "gsfmlrendercontext.h"
+#include "gincu/gdevicecontext.h"
 #include "gincu/gtransform.h"
 #include "gincu/gimage.h"
 #include "gincu/gatlasrender.h"
@@ -13,8 +14,8 @@
 #include "gsfmlutil.h"
 #include "gsfmltexturedata.h"
 #include "gsfmltextrenderdata.h"
-#include "gcameradata.h"
 #include "gsfmlvertexarraydata.h"
+#include "gsfmlcameradata.h"
 
 #include <thread>
 
@@ -208,7 +209,7 @@ void GSfmlRenderContext::processRenderCommands()
 		}
 
 		case GRenderCommandType::switchCamera: {
-			GCameraData * cameraData = static_cast<GCameraData *>(command.renderData.get());
+			GSfmlCameraData * cameraData = static_cast<GSfmlCameraData *>(command.renderData.get());
 			this->window->setView(cameraData->view);
 			break;
 		}
@@ -265,7 +266,7 @@ void GSfmlRenderContext::render(const cpgf::GCallback<void (GRenderContext *)> &
 
 void GSfmlRenderContext::switchCamera(const GCamera & camera)
 {
-	this->updaterQueue->emplace_back(std::make_shared<GCameraData>(*camera.getData()));
+	this->updaterQueue->emplace_back(GDeviceContext::getInstance()->createCameraData(camera.getData().get()));
 //	this->updaterQueue->emplace_back(createPooledSharedPtr<GCameraData>(*camera.getData()));
 }
 

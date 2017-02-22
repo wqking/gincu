@@ -11,7 +11,14 @@ namespace gincu {
 
 class GTransform;
 
-class GCameraData;
+class GCameraData
+{
+public:
+	virtual ~GCameraData() {}
+
+	virtual void apply(const GMatrix44 & matrix, const GRect & viewport) = 0;
+	virtual GPoint mapScreenToWorld(const GPoint & point, const GRect & viewportPixels) const = 0;
+};
 
 enum class GCameraFitStrategy
 {

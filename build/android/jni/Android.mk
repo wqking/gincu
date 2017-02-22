@@ -72,7 +72,6 @@ LOCAL_SRC_FILES := \
 	$(SRC_PATH)/sfml/gsfmldevicecontext.cpp \
 	$(SRC_PATH)/sfml/gsfmlrendercontext.cpp \
 	$(SRC_PATH)/sfml/gresourcemanager.cpp \
-	$(SRC_PATH)/sfml/gcamera.cpp \
 	$(SRC_PATH)/gimage.cpp \
 	$(SRC_PATH)/gtransform.cpp \
 	$(SRC_PATH)/ecs/gcomponent.cpp \
@@ -91,6 +90,7 @@ LOCAL_SRC_FILES := \
 	$(SRC_PATH)/transition/gtransition.cpp \
 	$(SRC_PATH)/transition/gtransitionmovein.cpp \
 	$(SRC_PATH)/transition/gtransitionfadeinout.cpp \
+	$(SRC_PATH)/gcamera.cpp \
 	$(SRC_PATH)/gdevicecontext.cpp \
 	$(SRC_PATH)/gevent.cpp \
 	$(SRC_PATH)/geventqueue.cpp \
