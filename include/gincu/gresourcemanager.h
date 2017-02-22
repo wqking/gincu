@@ -4,7 +4,6 @@
 #include "gincu/gimage.h"
 #include "gincu/gatlas.h"
 #include "gincu/gfont.h"
-#include "gincu/ginputstream.h"
 
 #include "cpgf/gcallback.h"
 
@@ -44,8 +43,6 @@ public:
 	GImage asyncGetImage(const std::string & resourceName, const LoaderCallback & callback = LoaderCallback()) const;
 
 	GAtlas getAtlas(const std::string & resourceName, const GAtlasFormat format) const;
-
-	GFileInputStream getFileStream(const std::string & resourceName) const;
 
 	GFont getFont(const std::string & resourceName) const;
 	GFont asyncGetFont(const std::string & resourceName, const LoaderCallback & callback = LoaderCallback()) const;

@@ -68,10 +68,8 @@ LOCAL_SRC_FILES := \
 	$(SRC_PATH)/gatlasrender.cpp \
 	$(SRC_PATH)/grenderanchor.cpp \
 	$(SRC_PATH)/sfml/gengineutil.cpp \
-	$(SRC_PATH)/sfml/ginputstream.cpp \
 	$(SRC_PATH)/sfml/gsfmldevicecontext.cpp \
 	$(SRC_PATH)/sfml/gsfmlrendercontext.cpp \
-	$(SRC_PATH)/sfml/gresourcemanager.cpp \
 	$(SRC_PATH)/gimage.cpp \
 	$(SRC_PATH)/gtransform.cpp \
 	$(SRC_PATH)/ecs/gcomponent.cpp \
@@ -90,14 +88,16 @@ LOCAL_SRC_FILES := \
 	$(SRC_PATH)/transition/gtransition.cpp \
 	$(SRC_PATH)/transition/gtransitionmovein.cpp \
 	$(SRC_PATH)/transition/gtransitionfadeinout.cpp \
+	$(SRC_PATH)/gapplication.cpp \
 	$(SRC_PATH)/gcamera.cpp \
 	$(SRC_PATH)/gdevicecontext.cpp \
 	$(SRC_PATH)/gevent.cpp \
 	$(SRC_PATH)/geventqueue.cpp \
 	$(SRC_PATH)/gfont.cpp \
-	$(SRC_PATH)/gapplication.cpp \
+	$(SRC_PATH)/gfileinputstream.cpp \
 	$(SRC_PATH)/gheappool.cpp \
 	$(SRC_PATH)/gobjectfactory.cpp \
+	$(SRC_PATH)/gresourcemanager.cpp \
 	$(SRC_PATH)/gscene.cpp \
 	$(SRC_PATH)/gscenemanager.cpp \
 	$(SRC_PATH)/gstate.cpp \

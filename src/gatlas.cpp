@@ -1,7 +1,7 @@
 #include "gincu/gatlas.h"
 #include "gincu/gerrorhandler.h"
 #include "gincu/gresourcemanager.h"
-#include "gincu/ginputstream.h"
+#include "gincu/gfileinputstream.h"
 #include "gincu/gapplication.h"
 
 #include "cpgf/goutmain.h"
@@ -123,7 +123,7 @@ void atlasLoader_spritePackText(const std::string & resourceName, GAtlasData * a
 {
 	atlas->setImageName(resourceName + ".png");
 	
-	GFileInputStream stream = GResourceManager::getInstance()->getFileStream(resourceName + ".txt");
+	GFileInputStream stream(GResourceManager::getInstance()->solveResourcePath(resourceName + ".txt"));
 	
 	const std::size_t size = (std::size_t)stream.getSize();
 	std::unique_ptr<char[]> buffer(new char[size + 2]);

@@ -9,6 +9,7 @@
 #include "gsfmlfontdata.h"
 #include "gsfmltexturedata.h"
 #include "gsfmlcameradata.h"
+#include "gsfmlfileinputstreamdata.h"
 
 #include "cpgf/goutmain.h"
 
@@ -32,6 +33,7 @@ private:
 	virtual std::shared_ptr<GFontData> createFontData(const GFontData * copy) const override;
 	virtual std::shared_ptr<GTextureData> createTextureData(const GTextureData * copy) const override;
 	virtual std::shared_ptr<GCameraData> createCameraData(const GCameraData * copy) const override;
+	virtual std::shared_ptr<GFileInputStreamData> createFileInputStreamData() const override;
 
 private:
 	std::unique_ptr<sf::RenderWindow> window;
@@ -193,6 +195,11 @@ std::shared_ptr<GCameraData> GSfmlDeviceContext::createCameraData(const GCameraD
 	else {
 		return std::make_shared<GSfmlCameraData>(*static_cast<const GSfmlCameraData *>(copy));
 	}
+}
+
+std::shared_ptr<GFileInputStreamData> GSfmlDeviceContext::createFileInputStreamData() const
+{
+	return std::make_shared<GSfmlFileInputStreamData>();
 }
 
 
