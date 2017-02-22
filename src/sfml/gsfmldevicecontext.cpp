@@ -4,6 +4,7 @@
 #include "gincu/gconfiginfo.h"
 
 #include "gsfmlrendercontext.h"
+#include "gsfmltextrenderdata.h"
 
 #include "cpgf/goutmain.h"
 
@@ -21,7 +22,9 @@ private:
 	virtual GRenderContext * getRenderContext() const override;
 	virtual bool getEvent(GEvent * event) const override;
 	virtual bool isFinished() const override;
-	
+
+	virtual std::shared_ptr<GTextRenderData> createTextRenderData(const GTextRenderData * copy) const;
+
 private:
 	std::unique_ptr<sf::RenderWindow> window;
 	std::unique_ptr<GSfmlRenderContext> renderContext;
@@ -133,6 +136,17 @@ bool GSfmlDeviceContext::isFinished() const
 {
 	return ! this->window->isOpen();
 }
+
+std::shared_ptr<GTextRenderData> GSfmlDeviceContext::createTextRenderData(const GTextRenderData * copy) const
+{
+	if(copy == nullptr) {
+		return std::make_shared<GSfmlTextRenderData>();
+	}
+	else {
+		return std::make_shared<GSfmlTextRenderData>(*static_cast<const GSfmlTextRenderData *>(copy));
+	}
+}
+
 
 G_AUTO_RUN_BEFORE_MAIN(GSfmlDeviceContext)
 {

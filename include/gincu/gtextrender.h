@@ -13,8 +13,18 @@ namespace gincu{
 class GTransform;
 struct GRenderInfo;
 class GTextRenderData;
-class GTextureData;
 class GRenderContext;
+
+class GTextRenderData
+{
+public:
+	virtual ~GTextRenderData() {}
+
+	virtual void setText(const std::string & text) = 0;
+	virtual void setColor(const GColor textColor) = 0;
+	virtual void setFontSize(const int fontSize) = 0;
+	virtual GSize getBoundingSize() const = 0;
+};
 
 class GTextRender
 {

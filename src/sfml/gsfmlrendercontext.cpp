@@ -12,7 +12,7 @@
 
 #include "gsfmlutil.h"
 #include "gtexturedata.h"
-#include "gtextrenderdata.h"
+#include "gsfmltextrenderdata.h"
 #include "gcameradata.h"
 #include "gvertexarraydata.h"
 
@@ -148,7 +148,7 @@ void GSfmlRenderContext::processRenderCommands()
 			break;
 
 		case GRenderCommandType::text: {
-			this->window->draw(static_cast<GTextRenderData *>(command.renderData.get())->text, command.sfmlRenderStates);
+			this->window->draw(static_cast<GSfmlTextRenderData *>(command.renderData.get())->text, command.sfmlRenderStates);
 			break;
 		}
 

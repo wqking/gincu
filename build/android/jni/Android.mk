@@ -70,7 +70,6 @@ LOCAL_SRC_FILES := \
 	$(SRC_PATH)/sfml/gengineutil.cpp \
 	$(SRC_PATH)/sfml/gfont.cpp \
 	$(SRC_PATH)/sfml/ginputstream.cpp \
-	$(SRC_PATH)/sfml/gtextrender.cpp \
 	$(SRC_PATH)/sfml/gsfmldevicecontext.cpp \
 	$(SRC_PATH)/sfml/gsfmlrendercontext.cpp \
 	$(SRC_PATH)/sfml/gresourcemanager.cpp \
@@ -105,6 +104,7 @@ LOCAL_SRC_FILES := \
 	$(SRC_PATH)/gscenemanager.cpp \
 	$(SRC_PATH)/gstate.cpp \
 	$(SRC_PATH)/gstatemachine.cpp \
+	$(SRC_PATH)/gtextrender.cpp \
 	$(SRC_PATH)/gutil.cpp \
 	$(SRC_PATH)/gvertexarrayrender.cpp \
 	$(SRC_PATH)/gworker.cpp \

@@ -2,6 +2,22 @@
 
 namespace gincu {
 
+namespace {
+
+GDeviceContext * instance = nullptr;
+
+} //unnamed namespace
+
+GDeviceContext * GDeviceContext::getInstance()
+{
+	return instance;
+}
+
+GDeviceContext::GDeviceContext()
+{
+	instance = this;
+}
+
 GDeviceContext::~GDeviceContext()
 {
 }

@@ -25,8 +25,6 @@ enum class GAtlasFormat
 	spritePackText,
 };
 
-class GTextureData;
-
 class GAtlasData
 {
 public:

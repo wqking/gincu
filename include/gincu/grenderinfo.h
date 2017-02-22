@@ -5,8 +5,6 @@
 
 namespace gincu {
 
-class GTextureData;
-
 struct GRenderInfo
 {
 	constexpr GRenderInfo()

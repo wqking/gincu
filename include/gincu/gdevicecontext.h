@@ -11,9 +11,15 @@ class GRenderContext;
 class GEvent;
 struct GConfigInfo;
 
+class GTextRenderData;
+
 class GDeviceContext
 {
 public:
+	static GDeviceContext * getInstance();
+
+public:
+	GDeviceContext();
 	virtual ~GDeviceContext();
 
 	virtual void initialize(const GConfigInfo & configInfo) = 0;
@@ -21,6 +27,8 @@ public:
 	virtual GRenderContext * getRenderContext() const = 0;
 	virtual bool getEvent(GEvent * event) const = 0;
 	virtual bool isFinished() const = 0;
+	
+	virtual std::shared_ptr<GTextRenderData> createTextRenderData(const GTextRenderData * copy) const = 0;
 };
 
 class GDeviceContextRegister : public GObjectFactory<GDeviceContext>
