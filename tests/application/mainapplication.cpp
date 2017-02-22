@@ -16,6 +16,7 @@ MainApplication::MainApplication()
 {
 	this->setConfigInfo(
 		{
+			"",
 			"Gincu",
 			gameFramesPerSecond,
 			gameRenderFramesPerSecond,

@@ -71,7 +71,8 @@ LOCAL_SRC_FILES := \
 	$(SRC_PATH)/sfml/gfont.cpp \
 	$(SRC_PATH)/sfml/ginputstream.cpp \
 	$(SRC_PATH)/sfml/gtextrender.cpp \
-	$(SRC_PATH)/sfml/grenderengine.cpp \
+	$(SRC_PATH)/sfml/gsfmldevicecontext.cpp \
+	$(SRC_PATH)/sfml/gsfmlrendercontext.cpp \
 	$(SRC_PATH)/sfml/gresourcemanager.cpp \
 	$(SRC_PATH)/sfml/gcamera.cpp \
 	$(SRC_PATH)/sfml/gtexture.cpp \
@@ -94,10 +95,12 @@ LOCAL_SRC_FILES := \
 	$(SRC_PATH)/transition/gtransition.cpp \
 	$(SRC_PATH)/transition/gtransitionmovein.cpp \
 	$(SRC_PATH)/transition/gtransitionfadeinout.cpp \
+	$(SRC_PATH)/gdevicecontext.cpp \
 	$(SRC_PATH)/gevent.cpp \
 	$(SRC_PATH)/geventqueue.cpp \
 	$(SRC_PATH)/gapplication.cpp \
 	$(SRC_PATH)/gheappool.cpp \
+	$(SRC_PATH)/gobjectfactory.cpp \
 	$(SRC_PATH)/gscene.cpp \
 	$(SRC_PATH)/gscenemanager.cpp \
 	$(SRC_PATH)/gstate.cpp \

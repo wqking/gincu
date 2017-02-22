@@ -1,4 +1,6 @@
 #include "gincu/gapplication.h"
+#include "gincu/gdevicecontext.h"
+#include "gincu/grendercontext.h"
 #include "gincu/gresourcemanager.h"
 #include "gincu/gscenemanager.h"
 #include "gincu/gevent.h"
@@ -6,7 +8,6 @@
 #include "gincu/gheappool.h"
 #include "gincu/gutil.h"
 #include "gincu/glog.h"
-#include "grenderengine.h"
 #include "gworker.h"
 
 #include "cpgf/tween/gtweenlist.h"
@@ -38,6 +39,8 @@ GApplication * GApplication::getInstance()
 
 GApplication::GApplication()
 	:
+		deviceContext(),
+		renderContext(),
 		finished(false),
 		screenSize(),
 		frameCount(0),
@@ -71,15 +74,21 @@ void GApplication::initialize()
 
 	this->eventQueue.reset(new GEventQueue());
 
-	this->renderEngine.reset(new GRenderEngine());
-
 	this->resourceManager.reset(new GResourceManager());
 
 	this->sceneManager.reset(new GSceneManager());
 
 	this->eventQueue->addListeners(interestedEventTypes.begin(), interestedEventTypes.end(), cpgf::makeCallback(this, &GApplication::onEvent));
+	
+	std::string engineName = this->configInfo.engine;
+	if(engineName.empty()) {
+		engineName = GDeviceContextRegister::getInstance()->getNameList().front();
+	}
+	this->deviceContext.reset(GDeviceContextRegister::getInstance()->createObject(engineName));
+	this->deviceContext->initialize(this->configInfo);
+	this->renderContext = this->deviceContext->getRenderContext();
+	this->renderContext->setBackgroundColor(this->configInfo.backgroundColor);
 
-	this->renderEngine->initialize();
 	this->resourceManager->initialize();
 	this->sceneManager->initialize();
 
@@ -92,9 +101,9 @@ void GApplication::finalize()
 {
 	this->eventQueue->removeListeners(interestedEventTypes.begin(), interestedEventTypes.end(), cpgf::makeCallback(this, &GApplication::onEvent));
 	
-	this->renderEngine->finalize();
 	this->resourceManager->finalize();
 	this->sceneManager->finalize();
+	this->deviceContext->finalize();
 
 	this->doFinalize();
 }
@@ -121,8 +130,9 @@ void GApplication::processMainLoop()
 	unsigned int milliseconds;
 
 	const GEvent updateEvent(GEventType::update);
+	auto renderCallback = cpgf::makeCallback(this, &GApplication::doRender);
 
-	while(! this->finished && this->renderEngine->isAlive()) {
+	while(! this->finished && ! this->deviceContext->isFinished()) {
 		++this->frameCount;
 
 		const unsigned int frameBeginTime = getMilliseconds();
@@ -139,7 +149,7 @@ void GApplication::processMainLoop()
 			this->renderMilliseconds = milliseconds - lastRenderTime;
 			lastRenderTime = milliseconds;;
 
-			this->renderEngine->render();
+			this->renderContext->render(renderCallback);
 			
 			++renderFps;
 		}
@@ -170,7 +180,7 @@ void GApplication::processMainLoop()
 void GApplication::processEvents()
 {
 	GEvent event;
-	while(this->renderEngine->peekEvent(&event)) {
+	while(this->deviceContext->getEvent(&event)) {
 		this->eventQueue->post(event);
 	}
 
@@ -208,6 +218,11 @@ void GApplication::onEvent(const GEvent & event)
 	default:
 		break;
 	}
+}
+
+void GApplication::doRender(GRenderContext * renderContext)
+{
+	this->eventQueue->send(GEvent(GEventType::render, renderContext));
 }
 
 void GApplication::doInitialize()

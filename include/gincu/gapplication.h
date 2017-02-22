@@ -19,6 +19,8 @@ class GHeapPool;
 class GEvent;
 class GEventQueue;
 class GWorker;
+class GDeviceContext;
+class GRenderContext;
 
 typedef cpgf::GCallback<void ()> FrameUpdater;
 
@@ -58,6 +60,7 @@ private:
 	void processMainLoop();
 	void processEvents();
 	void onEvent(const GEvent & event);
+	void doRender(GRenderContext * renderContext);
 
 private:
 	virtual void doInitialize();
@@ -66,7 +69,8 @@ private:
 private:
 	GConfigInfo configInfo;
 
-	std::unique_ptr<GRenderEngine> renderEngine;
+	std::unique_ptr<GDeviceContext> deviceContext;
+	GRenderContext * renderContext;
 	std::unique_ptr<GResourceManager> resourceManager;
 	std::unique_ptr<GSceneManager> sceneManager;
 	std::unique_ptr<GEventQueue> eventQueue;

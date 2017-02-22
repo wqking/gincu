@@ -5,7 +5,6 @@
 #include "gincu/gutil.h"
 #include "gcameradata.h"
 #include "gsfmlutil.h"
-#include "grenderenginedata.h"
 
 namespace gincu {
 

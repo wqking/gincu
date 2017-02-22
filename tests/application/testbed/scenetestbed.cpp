@@ -21,7 +21,7 @@ using namespace gincu;
 
 void SceneTestBed::switchToScene()
 {
-	GApplication::getInstance()->getSceneManager()->switchScene("SceneTestBed", &sceneCreator<SceneTestBed>, new GTransitionFadeInOut(2000, colorWhite));
+	GApplication::getInstance()->getSceneManager()->switchScene("SceneTestBed", &sceneCreator<SceneTestBed>, new GTransitionFadeInOut(500, colorWhite));
 }
 
 SceneTestBed::SceneTestBed()

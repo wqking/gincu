@@ -10,6 +10,7 @@ namespace gincu {
 
 struct GConfigInfo
 {
+	std::string engine;
 	std::string caption;
 	int framesPerSecond;
 	int renderFramesPerSecond; // -1 will use framesPerSecond
@@ -23,6 +24,7 @@ struct GConfigInfo
 inline GConfigInfo createDefaultConfigInfo()
 {
 	return {
+		"",
 		"",
 		60,
 		-1,
