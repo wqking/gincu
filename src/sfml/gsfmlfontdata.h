@@ -1,5 +1,5 @@
-#ifndef GFONTDATA_H
-#define GFONTDATA_H
+#ifndef GSFMLFONTDATA_H
+#define GSFMLFONTDATA_H
 
 #include "gincu/gfont.h"
 

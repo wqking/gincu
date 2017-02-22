@@ -11,7 +11,7 @@
 #include "gincu/glog.h"
 
 #include "gsfmlutil.h"
-#include "gtexturedata.h"
+#include "gsfmltexturedata.h"
 #include "gsfmltextrenderdata.h"
 #include "gcameradata.h"
 #include "gsfmlvertexarraydata.h"
@@ -50,6 +50,49 @@ int putImageToVertexArray(T & vertexArray, int index, const sf::Transform & tran
 
 
 } //unnamed namespace
+
+GRenderCommand::GRenderCommand()
+{
+}
+
+GRenderCommand::GRenderCommand(const std::shared_ptr<GCameraData> & cameraData)
+	:
+		type(GRenderCommandType::switchCamera),
+		renderData(cameraData)
+{
+}
+
+GRenderCommand::GRenderCommand(const std::shared_ptr<GTextureData> & textureData, const GRect & rect, const GMatrix44 & matrix, const GRenderInfo * renderInfo)
+	:
+		type(GRenderCommandType::image),
+		renderData(textureData),
+		rect(rect),
+		sfmlRenderStates(matrixToSfml(matrix))
+{
+	copyBlendAndShaderToSfml(&this->sfmlRenderStates, renderInfo);
+}
+
+GRenderCommand::GRenderCommand(const std::shared_ptr<GTextRenderData> & textData, const GMatrix44 & matrix, const GRenderInfo * renderInfo)
+	:
+		type(GRenderCommandType::text),
+		renderData(textData),
+		sfmlRenderStates(matrixToSfml(matrix))
+{
+	copyBlendAndShaderToSfml(&this->sfmlRenderStates, renderInfo);
+}
+
+GRenderCommand::GRenderCommand(const std::shared_ptr<GVertexCommand> & vertexCommand, const GMatrix44 & matrix, const GRenderInfo * renderInfo)
+	:
+	type(GRenderCommandType::vertexArray),
+	renderData(vertexCommand),
+	sfmlRenderStates(matrixToSfml(matrix))
+{
+	copyBlendAndShaderToSfml(&this->sfmlRenderStates, renderInfo);
+	if(vertexCommand->textureData) {
+		this->sfmlRenderStates.texture = &static_cast<GSfmlTextureData *>(vertexCommand->textureData.get())->texture;
+	}
+}
+
 
 GSfmlRenderContext::GSfmlRenderContext()
 	:
@@ -141,7 +184,7 @@ void GSfmlRenderContext::processRenderCommands()
 				i = k;
 			}
 			else {
-				sf::Sprite sprite(static_cast<GTextureData *>(command.renderData.get())->texture, { (int)command.rect.x, (int)command.rect.y, (int)command.rect.width, (int)command.rect.height });
+				sf::Sprite sprite(static_cast<GSfmlTextureData *>(command.renderData.get())->texture, { (int)command.rect.x, (int)command.rect.y, (int)command.rect.width, (int)command.rect.height });
 				this->window->draw(sprite, command.sfmlRenderStates);
 			}
 		}
@@ -193,7 +236,7 @@ void GSfmlRenderContext::batchDrawImages(const int firstIndex, const int lastInd
 	}
 
 	const GRenderCommand & command = this->renderQueue->at(firstIndex);
-	sf::RenderStates renderStates(&static_cast<GTextureData *>(command.renderData.get())->texture);
+	sf::RenderStates renderStates(&static_cast<GSfmlTextureData *>(command.renderData.get())->texture);
 	renderStates.blendMode = command.sfmlRenderStates.blendMode;
 	renderStates.shader = command.sfmlRenderStates.shader;
 	this->window->draw(vertexArray, renderStates);

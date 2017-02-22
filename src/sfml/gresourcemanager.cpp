@@ -5,7 +5,6 @@
 #include "gincu/gtexture.h"
 #include "gincu/gfont.h"
 #include "gincu/gdevicecontext.h"
-#include "gtexturedata.h"
 
 #include <cassert>
 
@@ -50,7 +49,7 @@ GImage GResourceManager::getImage(const std::string & resourceName) const
 		data = it->second;
 	}
 	else {
-		data = std::make_shared<GTextureData>();
+		data = GDeviceContext::getInstance()->createTextureData(nullptr);
 		this->imageDataMap.insert(std::make_pair(resourceName, data));
 		const std::string fileName = this->solveResourcePath(resourceName);
 		{
@@ -70,7 +69,7 @@ GImage GResourceManager::asyncGetImage(const std::string & resourceName, const L
 		data = it->second;
 	}
 	else {
-		data = std::make_shared<GTextureData>();
+		data = GDeviceContext::getInstance()->createTextureData(nullptr);
 		this->imageDataMap.insert(std::make_pair(resourceName, data));
 		const std::string fileName = this->solveResourcePath(resourceName);
 		GApplication::getInstance()->executeWorkerTask(

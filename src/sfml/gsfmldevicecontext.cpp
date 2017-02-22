@@ -7,6 +7,7 @@
 #include "gsfmltextrenderdata.h"
 #include "gsfmlvertexarraydata.h"
 #include "gsfmlfontdata.h"
+#include "gsfmltexturedata.h"
 
 #include "cpgf/goutmain.h"
 
@@ -28,6 +29,7 @@ private:
 	virtual std::shared_ptr<GTextRenderData> createTextRenderData(const GTextRenderData * copy) const override;
 	virtual std::shared_ptr<GVertexArrayData> createVertexArrayData(const GVertexArrayData * copy) const override;
 	virtual std::shared_ptr<GFontData> createFontData(const GFontData * copy) const override;
+	virtual std::shared_ptr<GTextureData> createTextureData(const GTextureData * copy) const override;
 
 private:
 	std::unique_ptr<sf::RenderWindow> window;
@@ -168,6 +170,16 @@ std::shared_ptr<GFontData> GSfmlDeviceContext::createFontData(const GFontData * 
 	}
 	else {
 		return std::make_shared<GSfmlFontData>(*static_cast<const GSfmlFontData *>(copy));
+	}
+}
+
+std::shared_ptr<GTextureData> GSfmlDeviceContext::createTextureData(const GTextureData * copy) const
+{
+	if(copy == nullptr) {
+		return std::make_shared<GSfmlTextureData>();
+	}
+	else {
+		return std::make_shared<GSfmlTextureData>(*static_cast<const GSfmlTextureData *>(copy));
 	}
 }
 
