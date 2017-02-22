@@ -8,7 +8,21 @@
 
 namespace gincu {
 
-class GVertexArrayData;
+class GVertexArrayData
+{
+public:
+	virtual ~GVertexArrayData() {}
+
+	virtual int getCount() const = 0;
+	virtual void resize(const int size) = 0;
+	virtual void setAt(const int index, const GPoint & position, const GColor color, const GPoint & textureUV) = 0;
+	virtual void append(const GPoint & position, const GColor color, const GPoint & textureUV) = 0;
+	
+	virtual GColor getColor() const = 0;
+	virtual void setColor(const GColor color) = 0;
+	
+	virtual GRect getBoundingRect() const = 0;
+};
 
 class GVertexArray
 {
@@ -27,13 +41,15 @@ public:
 	GColor getColor() const;
 	void setColor(const GColor color);
 	
-	const GRect & getBoundingRect() const;
+	GRect getBoundingRect() const;
 
 	const std::shared_ptr<GVertexArrayData> & getData() const { return this->data; }
 
 private:
+	void checkCopyOnWrite();
+
+private:
 	std::shared_ptr<GVertexArrayData> data;
-	mutable GRect boundingRect;
 };
 
 

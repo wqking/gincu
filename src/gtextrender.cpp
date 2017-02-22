@@ -4,9 +4,6 @@
 #include "gincu/gresourcemanager.h"
 #include "gincu/gtransform.h"
 #include "gincu/gdevicecontext.h"
-#include "gsfmlutil.h"
-#include "gsfmltextrenderdata.h"
-#include "gfontdata.h"
 
 namespace gincu {
 

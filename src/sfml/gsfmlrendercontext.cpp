@@ -14,7 +14,7 @@
 #include "gtexturedata.h"
 #include "gsfmltextrenderdata.h"
 #include "gcameradata.h"
-#include "gvertexarraydata.h"
+#include "gsfmlvertexarraydata.h"
 
 #include <thread>
 
@@ -154,9 +154,10 @@ void GSfmlRenderContext::processRenderCommands()
 
 		case GRenderCommandType::vertexArray: {
 			const GVertexCommand * vertexCommand = static_cast<GVertexCommand *>(command.renderData.get());
+			GSfmlVertexArrayData * data = static_cast<GSfmlVertexArrayData *>(vertexCommand->vertexArrayData.get());
 			this->window->draw(
-				&vertexCommand->vertexArrayData->vertexArray[0],
-				vertexCommand->vertexArrayData->vertexArray.size(),
+				&data->vertexArray[0],
+				data->vertexArray.size(),
 				gamePrimitiveToSfml(vertexCommand->primitive),
 				command.sfmlRenderStates
 		);

@@ -12,7 +12,6 @@ namespace gincu{
 
 class GTransform;
 struct GRenderInfo;
-class GTextRenderData;
 class GRenderContext;
 
 class GTextRenderData

@@ -5,6 +5,7 @@
 
 #include "gsfmlrendercontext.h"
 #include "gsfmltextrenderdata.h"
+#include "gsfmlvertexarraydata.h"
 
 #include "cpgf/goutmain.h"
 
@@ -23,7 +24,8 @@ private:
 	virtual bool getEvent(GEvent * event) const override;
 	virtual bool isFinished() const override;
 
-	virtual std::shared_ptr<GTextRenderData> createTextRenderData(const GTextRenderData * copy) const;
+	virtual std::shared_ptr<GTextRenderData> createTextRenderData(const GTextRenderData * copy) const override;
+	virtual std::shared_ptr<GVertexArrayData> createVertexArrayData(const GVertexArrayData * copy) const override;
 
 private:
 	std::unique_ptr<sf::RenderWindow> window;
@@ -144,6 +146,16 @@ std::shared_ptr<GTextRenderData> GSfmlDeviceContext::createTextRenderData(const 
 	}
 	else {
 		return std::make_shared<GSfmlTextRenderData>(*static_cast<const GSfmlTextRenderData *>(copy));
+	}
+}
+
+std::shared_ptr<GVertexArrayData> GSfmlDeviceContext::createVertexArrayData(const GVertexArrayData * copy) const
+{
+	if(copy == nullptr) {
+		return std::make_shared<GSfmlVertexArrayData>();
+	}
+	else {
+		return std::make_shared<GSfmlVertexArrayData>(*static_cast<const GSfmlVertexArrayData *>(copy));
 	}
 }
 

@@ -75,7 +75,6 @@ LOCAL_SRC_FILES := \
 	$(SRC_PATH)/sfml/gresourcemanager.cpp \
 	$(SRC_PATH)/sfml/gcamera.cpp \
 	$(SRC_PATH)/sfml/gtexture.cpp \
-	$(SRC_PATH)/sfml/gvertexarray.cpp \
 	$(SRC_PATH)/gimage.cpp \
 	$(SRC_PATH)/gtransform.cpp \
 	$(SRC_PATH)/ecs/gcomponent.cpp \
@@ -106,6 +105,7 @@ LOCAL_SRC_FILES := \
 	$(SRC_PATH)/gstatemachine.cpp \
 	$(SRC_PATH)/gtextrender.cpp \
 	$(SRC_PATH)/gutil.cpp \
+	$(SRC_PATH)/gvertexarray.cpp \
 	$(SRC_PATH)/gvertexarrayrender.cpp \
 	$(SRC_PATH)/gworker.cpp \
 	$(ROOT_PATH)/thirdparty/zf_log.cpp \
