@@ -17,7 +17,6 @@ if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
 		set(GINCU_COMPILE_FLAGS "${GINCU_COMPILE_FLAGS} -std=c++11 -D_REENTRANT -lpthread")
 	endif(MINGW)
 	
-	set(SFML_LIB_PATH ${SFML_PATH}/lib)
 	set(SFML_LIBS
 		${SFML_LIB_PATH}/libfreetype.a
 		${SFML_LIB_PATH}/libvorbis.a
@@ -28,13 +27,23 @@ if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
 		debug ${SFML_LIB_PATH}/libsfml-system-d.a
 		debug ${SFML_LIB_PATH}/libsfml-window-d.a
 	)
+	
+	set(SDL_LIBS
+		${ROOT_PATH}/thirdparty/sdlgpu/libs/mingw/libSDL2_gpu.a
+		${SDL_LIB_PATH}/libSDL2main.a
+		${SDL_LIB_PATH}/libSDL2.a
+		${SDL_LIB_PATH}/libSDL2.dll.a
+		opengl32
+		winmm
+		imm32
+		version
+	)
 
 else(CMAKE_COMPILER_IS_GNUCC OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
 
 if(MSVC)
 	set(GINCU_COMPILE_FLAGS "-W3")
 
-	set(SFML_LIB_PATH ${SFML_PATH}/lib)
 	set(SFML_LIBS
 		${SFML_LIB_PATH}/freetype.lib
 		${SFML_LIB_PATH}/vorbis.lib
@@ -48,8 +57,6 @@ if(MSVC)
 endif(MSVC)
 
 endif(CMAKE_COMPILER_IS_GNUCC OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-
-set(LIBS ${SFML_LIBS})
 
 
 macro(globAndAppendFiles fileList)
@@ -67,7 +74,6 @@ globAndAppendFiles(fileList
 	${SRC_PATH}/*.cpp
 	${SRC_PATH}/ecs/*.cpp
 	${SRC_PATH}/transition/*.cpp
-	${SRC_PATH}/sfml/*.cpp
 	${ROOT_PATH}/thirdparty/*.cpp
 	
 	${TESTS_PATH}/application/*.cpp
@@ -75,6 +81,21 @@ globAndAppendFiles(fileList
 	${TESTS_PATH}/application/testbed/*.cpp
 	${TESTS_PATH}/application/testbed/testcases/*.cpp
 )
+
+if(ENABLE_SFML)
+	list(APPEND LIBS ${SFML_LIBS})
+	include_directories(${SFML_INCLUDE_PATH})
+	globAndAppendFiles(fileList ${SRC_PATH}/sfml/*.cpp)
+endif(ENABLE_SFML)
+
+if(ENABLE_SDL)
+	list(APPEND LIBS ${SDL_LIBS})
+	include_directories(
+		${SDL_INCLUDE_PATH}
+		${ROOT_PATH}/thirdparty/sdlgpu/include
+	)
+	globAndAppendFiles(fileList	${SRC_PATH}/sdl/*.cpp)
+endif(ENABLE_SDL)
 
 add_executable(
 	${TARGET}
@@ -96,8 +117,8 @@ include_directories(
 	${INCLUDE_PATH}
 	${TESTS_PATH}/application
 	${CPGF_PATH}/include
-	${SFML_PATH}/include
 	${ROOT_PATH}/thirdparty
 )
+
 target_link_libraries(${TARGET} ${LIBS} )
 

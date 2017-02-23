@@ -75,10 +75,7 @@ int getRand();
 int getRand(const int min, const int max);
 int getRand(const int max);
 
-// implemented in engineutil.cpp
 void sleepMilliseconds(const unsigned int milliseconds);
-
-// implemented in engineutil.cpp
 unsigned int getMilliseconds();
 
 

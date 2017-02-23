@@ -67,7 +67,6 @@ LOCAL_SRC_FILES := \
 	$(SRC_PATH)/gatlas.cpp \
 	$(SRC_PATH)/gatlasrender.cpp \
 	$(SRC_PATH)/grenderanchor.cpp \
-	$(SRC_PATH)/sfml/gengineutil.cpp \
 	$(SRC_PATH)/sfml/gsfmldevicecontext.cpp \
 	$(SRC_PATH)/sfml/gsfmlrendercontext.cpp \
 	$(SRC_PATH)/gimage.cpp \

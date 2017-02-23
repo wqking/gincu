@@ -1,11 +1,11 @@
-#ifndef GSFMLRENDERCONTEXT_H
-#define GSFMLRENDERCONTEXT_H
+#ifndef GSDLRENDERCONTEXT_H
+#define GSDLRENDERCONTEXT_H
 
 #include "gincu/grendercontext.h"
 
-#include "gsfmlutil.h"
+#include "gsdlutil.h"
 
-#include <SFML/Graphics.hpp>
+#include "SDL_gpu.h"
 
 #include <vector>
 #include <atomic>
@@ -14,7 +14,7 @@
 
 namespace gincu {
 
-enum class GSfmlRenderCommandType
+enum class GSdlRenderCommandType
 {
 	none,
 	image,
@@ -36,20 +36,21 @@ struct GVertexCommand
 	std::shared_ptr<GTextureData> textureData;
 };
 
-struct GSfmlRenderCommand
+struct GSdlRenderCommand
 {
-	GSfmlRenderCommand();
-	GSfmlRenderCommand(const std::shared_ptr<GCameraData> & cameraData);
-	GSfmlRenderCommand(const std::shared_ptr<GTextureData> & textureData, const GRect & rect, const GMatrix44 & matrix, const GRenderInfo * renderInfo);
-	GSfmlRenderCommand(const std::shared_ptr<GTextRenderData> & textData, const GMatrix44 & matrix, const GRenderInfo * renderInfo);
-	GSfmlRenderCommand(const std::shared_ptr<GVertexCommand> & vertexCommand, const GMatrix44 & matrix, const GRenderInfo * renderInfo);
+	GSdlRenderCommand();
+	GSdlRenderCommand(const std::shared_ptr<GCameraData> & cameraData);
+	GSdlRenderCommand(const std::shared_ptr<GTextureData> & textureData, const GRect & rect, const GMatrix44 & matrix, const GRenderInfo * renderInfo);
+	GSdlRenderCommand(const std::shared_ptr<GTextRenderData> & textData, const GMatrix44 & matrix, const GRenderInfo * renderInfo);
+	GSdlRenderCommand(const std::shared_ptr<GVertexCommand> & vertexCommand, const GMatrix44 & matrix, const GRenderInfo * renderInfo);
 
-	GSfmlRenderCommandType type;
+	GSdlRenderCommandType type;
 
 	std::shared_ptr<void> renderData;
 
 	GRect rect;
-	sf::RenderStates sfmlRenderStates;
+	
+	GMatrix44 matrix;
 };
 
 class GRenderEngineLock
@@ -77,16 +78,16 @@ private:
 	std::condition_variable signal;
 };
 
-class GSfmlRenderContext : public GRenderContext
+class GSdlRenderContext : public GRenderContext
 {
 private:
-	typedef std::vector<GSfmlRenderCommand> RenderCommandQueue;
+	typedef std::vector<GSdlRenderCommand> RenderCommandQueue;
 
 public:
-	GSfmlRenderContext();
-	~GSfmlRenderContext();
+	GSdlRenderContext();
+	~GSdlRenderContext();
 
-	void initialize(sf::RenderWindow * window);
+	void initialize(GPU_Target * window);
 	void finalize();
 
 private:
@@ -123,8 +124,8 @@ private:
 	) override;
 	
 private:
+	GPU_Target * window;
 	GColor backgroundColor;
-	sf::RenderWindow * window;
 
 	std::atomic_bool finished;
 	GRenderEngineLock updaterReadyLock;

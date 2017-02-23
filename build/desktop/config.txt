@@ -1,5 +1,14 @@
 set(CPGF_PATH /projects/cpgf)
+
+set(ENABLE_SFML 1)
 set(SFML_PATH /source/SFML-2.4.1)
+set(SFML_INCLUDE_PATH ${SFML_PATH}/include)
+set(SFML_LIB_PATH ${SFML_PATH}/lib)
+
+set(ENABLE_SDL 1)
+set(SDL_PATH /source/SDL2-2.0.5/i686-w64-mingw32)
+set(SDL_INCLUDE_PATH ${SDL_PATH}/include/SDL2)
+set(SDL_LIB_PATH ${SDL_PATH}/lib)
 
 
 #[[

@@ -52,20 +52,20 @@ int putImageToVertexArray(T & vertexArray, int index, const sf::Transform & tran
 
 } //unnamed namespace
 
-GRenderCommand::GRenderCommand()
+GSfmlRenderCommand::GSfmlRenderCommand()
 {
 }
 
-GRenderCommand::GRenderCommand(const std::shared_ptr<GCameraData> & cameraData)
+GSfmlRenderCommand::GSfmlRenderCommand(const std::shared_ptr<GCameraData> & cameraData)
 	:
-		type(GRenderCommandType::switchCamera),
+		type(GSfmlRenderCommandType::switchCamera),
 		renderData(cameraData)
 {
 }
 
-GRenderCommand::GRenderCommand(const std::shared_ptr<GTextureData> & textureData, const GRect & rect, const GMatrix44 & matrix, const GRenderInfo * renderInfo)
+GSfmlRenderCommand::GSfmlRenderCommand(const std::shared_ptr<GTextureData> & textureData, const GRect & rect, const GMatrix44 & matrix, const GRenderInfo * renderInfo)
 	:
-		type(GRenderCommandType::image),
+		type(GSfmlRenderCommandType::image),
 		renderData(textureData),
 		rect(rect),
 		sfmlRenderStates(matrixToSfml(matrix))
@@ -73,18 +73,18 @@ GRenderCommand::GRenderCommand(const std::shared_ptr<GTextureData> & textureData
 	copyBlendAndShaderToSfml(&this->sfmlRenderStates, renderInfo);
 }
 
-GRenderCommand::GRenderCommand(const std::shared_ptr<GTextRenderData> & textData, const GMatrix44 & matrix, const GRenderInfo * renderInfo)
+GSfmlRenderCommand::GSfmlRenderCommand(const std::shared_ptr<GTextRenderData> & textData, const GMatrix44 & matrix, const GRenderInfo * renderInfo)
 	:
-		type(GRenderCommandType::text),
+		type(GSfmlRenderCommandType::text),
 		renderData(textData),
 		sfmlRenderStates(matrixToSfml(matrix))
 {
 	copyBlendAndShaderToSfml(&this->sfmlRenderStates, renderInfo);
 }
 
-GRenderCommand::GRenderCommand(const std::shared_ptr<GVertexCommand> & vertexCommand, const GMatrix44 & matrix, const GRenderInfo * renderInfo)
+GSfmlRenderCommand::GSfmlRenderCommand(const std::shared_ptr<GVertexCommand> & vertexCommand, const GMatrix44 & matrix, const GRenderInfo * renderInfo)
 	:
-	type(GRenderCommandType::vertexArray),
+	type(GSfmlRenderCommandType::vertexArray),
 	renderData(vertexCommand),
 	sfmlRenderStates(matrixToSfml(matrix))
 {
@@ -163,12 +163,12 @@ void GSfmlRenderContext::processRenderCommands()
 
 	const int count = (int)this->renderQueue->size();
 	for(int i = 0; i < count; ++i) {
-		const GRenderCommand & command = this->renderQueue->at(i);
+		const GSfmlRenderCommand & command = this->renderQueue->at(i);
 		switch(command.type) {
-		case GRenderCommandType::image: {
+		case GSfmlRenderCommandType::image: {
 			int k = i + 1;
 			while(k < count) {
-				const GRenderCommand & nextCommand = this->renderQueue->at(k);
+				const GSfmlRenderCommand & nextCommand = this->renderQueue->at(k);
 				if(nextCommand.type != command.type
 					|| nextCommand.renderData != command.renderData
 					|| nextCommand.sfmlRenderStates.blendMode != command.sfmlRenderStates.blendMode
@@ -191,12 +191,12 @@ void GSfmlRenderContext::processRenderCommands()
 		}
 			break;
 
-		case GRenderCommandType::text: {
+		case GSfmlRenderCommandType::text: {
 			this->window->draw(static_cast<GSfmlTextRenderData *>(command.renderData.get())->text, command.sfmlRenderStates);
 			break;
 		}
 
-		case GRenderCommandType::vertexArray: {
+		case GSfmlRenderCommandType::vertexArray: {
 			const GVertexCommand * vertexCommand = static_cast<GVertexCommand *>(command.renderData.get());
 			GSfmlVertexArrayData * data = static_cast<GSfmlVertexArrayData *>(vertexCommand->vertexArrayData.get());
 			this->window->draw(
@@ -208,13 +208,13 @@ void GSfmlRenderContext::processRenderCommands()
 			break;
 		}
 
-		case GRenderCommandType::switchCamera: {
+		case GSfmlRenderCommandType::switchCamera: {
 			GSfmlCameraData * cameraData = static_cast<GSfmlCameraData *>(command.renderData.get());
 			this->window->setView(cameraData->view);
 			break;
 		}
 
-		case GRenderCommandType::none:
+		case GSfmlRenderCommandType::none:
 			break;
 		}
 	}
@@ -230,13 +230,13 @@ void GSfmlRenderContext::batchDrawImages(const int firstIndex, const int lastInd
 
 	int index = 0;
 	for(int i = 0; i < count; ++i) {
-		const GRenderCommand & command = this->renderQueue->at(i + firstIndex);
+		const GSfmlRenderCommand & command = this->renderQueue->at(i + firstIndex);
 		const GRect & rect = command.rect;
 
 		index = putImageToVertexArray(vertexArray, index, command.sfmlRenderStates.transform, rect);
 	}
 
-	const GRenderCommand & command = this->renderQueue->at(firstIndex);
+	const GSfmlRenderCommand & command = this->renderQueue->at(firstIndex);
 	sf::RenderStates renderStates(&static_cast<GSfmlTextureData *>(command.renderData.get())->texture);
 	renderStates.blendMode = command.sfmlRenderStates.blendMode;
 	renderStates.shader = command.sfmlRenderStates.shader;

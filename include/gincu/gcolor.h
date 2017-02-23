@@ -23,6 +23,21 @@ inline unsigned int colorGetAlpha(const GColor color)
 	return (color & 0xff000000) >> 24;
 }
 
+inline unsigned int colorGetRed(const GColor color)
+{
+	return (color & 0x00ff0000) >> 16;
+}
+
+inline unsigned int colorGetGreen(const GColor color)
+{
+	return (color & 0x0000ff00) >> 8;
+}
+
+inline unsigned int colorGetBlue(const GColor color)
+{
+	return (color & 0x000000ff);
+}
+
 inline GColor colorMakeARGB(const int a, const int r, const int g, const int b)
 {
 	return ((GColor)a << 24)
