@@ -17,6 +17,8 @@
 #include "gsdlvertexarraydata.h"
 #include "gsdlcameradata.h"
 
+#include "SDL_opengl.h"
+
 #include <thread>
 
 namespace gincu {
@@ -197,8 +199,6 @@ int putImageToVertexArray(float * vertexArray, int index, const GMatrix44 & matr
 
 void GSdlRenderContext::processRenderCommands()
 {
-	GPU_MatrixMode(GPU_MODELVIEW);
-
 //	this->window->clear(gameColorToSdl(this->backgroundColor));
 	GPU_Clear(this->window);
 
@@ -254,6 +254,25 @@ k = i;
 		case GSdlRenderCommandType::vertexArray: {
 			const GVertexCommand * vertexCommand = static_cast<GVertexCommand *>(command.renderData.get());
 			GSdlVertexArrayData * data = static_cast<GSdlVertexArrayData *>(vertexCommand->vertexArrayData.get());
+/*
+			glMatrixMode(GL_MODELVIEW);
+			glPushMatrix();
+			glLoadIdentity();
+//			glLoadMatrixf(&data->vertexArray[0]);
+            glEnableClientState(GL_VERTEX_ARRAY);
+            glEnableClientState(GL_COLOR_ARRAY);
+            glVertexPointer(2, GL_FLOAT, 8 * 4, &data->vertexArray[0]);
+            glColorPointer(4, GL_FLOAT, 8 * 4, &data->vertexArray[0] + 4);
+            glDrawArrays(GL_TRIANGLES, 0, data->getCount());
+			glPopMatrix();
+			break;
+*/
+			GPU_PushMatrix();
+			GPU_LoadIdentity();
+//			GPU_MatrixCopy(GPU_GetCurrentMatrix(), &command.matrix[0][0]);
+//printf("%s\n\n", GPU_GetMatrixString(GPU_GetCurrentMatrix()));
+			GPU_TriangleBatch(nullptr, this->window, data->getCount(), &data->vertexArray[0], 0, nullptr, GPU_BATCH_XY_ST_RGBA);
+			GPU_PopMatrix();
 			break;
 		}
 

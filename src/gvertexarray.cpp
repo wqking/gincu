@@ -50,6 +50,18 @@ void GVertexArray::setColor(const GColor color)
 	this->data->setColor(color);
 }
 
+GSize GVertexArray::getTextureSize() const
+{
+	return this->data->getTextureSize();
+}
+
+void GVertexArray::setTextureSize(const GSize & size)
+{
+	this->checkCopyOnWrite();
+	
+	this->data->setTextureSize(size);
+}
+
 GRect GVertexArray::getBoundingRect() const
 {
 	return this->data->getBoundingRect();

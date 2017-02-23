@@ -12,6 +12,9 @@ namespace gincu {
 class GSfmlVertexArrayData : public GVertexArrayData
 {
 public:
+	GSfmlVertexArrayData() : textureSize(), boundingRect() {
+	}
+
 	virtual int getCount() const override {
 		return (int)this->vertexArray.size();
 	}
@@ -58,6 +61,14 @@ public:
 		}
 	}
 	
+	virtual GSize getTextureSize() const {
+		return this->textureSize;
+	}
+	
+	virtual void setTextureSize(const GSize & size) {
+		this->textureSize = size;
+	}
+
 	virtual GRect getBoundingRect() const override {
 		if(this->boundingRect.width <= 0) {
 			const auto & vertexList = this->vertexArray;
@@ -95,6 +106,7 @@ public:
 	}
 
 	std::vector<sf::Vertex> vertexArray;
+	GSize textureSize;
 	mutable GRect boundingRect;
 };
 

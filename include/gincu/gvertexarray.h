@@ -21,6 +21,9 @@ public:
 	virtual GColor getColor() const = 0;
 	virtual void setColor(const GColor color) = 0;
 	
+	virtual GSize getTextureSize() const = 0;
+	virtual void setTextureSize(const GSize & size) = 0;
+	
 	virtual GRect getBoundingRect() const = 0;
 };
 
@@ -41,6 +44,9 @@ public:
 	GColor getColor() const;
 	void setColor(const GColor color);
 	
+	GSize getTextureSize() const;
+	void setTextureSize(const GSize & size);
+
 	GRect getBoundingRect() const;
 
 	const std::shared_ptr<GVertexArrayData> & getData() const { return this->data; }
