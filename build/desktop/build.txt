@@ -16,6 +16,7 @@ if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
 	else(MINGW)
 		set(GINCU_COMPILE_FLAGS "${GINCU_COMPILE_FLAGS} -std=c++11 -D_REENTRANT -lpthread")
 	endif(MINGW)
+	set(GINCU_COMPILE_C_FLAGS -std=c99)
 	
 	set(SFML_LIBS
 		${SFML_LIB_PATH}/libfreetype.a
@@ -29,9 +30,7 @@ if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
 	)
 	
 	set(SDL_LIBS
-		${ROOT_PATH}/thirdparty/sdlgpu/libs/mingw/libSDL2_gpu.a
 		${SDL_LIB_PATH}/libSDL2main.a
-		${SDL_LIB_PATH}/libSDL2.a
 		${SDL_LIB_PATH}/libSDL2.dll.a
 		opengl32
 		winmm
@@ -93,8 +92,14 @@ if(ENABLE_SDL)
 	include_directories(
 		${SDL_INCLUDE_PATH}
 		${ROOT_PATH}/thirdparty/sdlgpu/include
+		${ROOT_PATH}/thirdparty/sdlgpu/src/GL
 	)
-	globAndAppendFiles(fileList	${SRC_PATH}/sdl/*.cpp)
+	globAndAppendFiles(fileList
+		${SRC_PATH}/sdl/*.cpp
+		${ROOT_PATH}/thirdparty/sdlgpu/src/*.c
+	)
+	add_definitions("-DSDL_GPU_DISABLE_GLES")
+	add_definitions("-DGLEW_STATIC")
 endif(ENABLE_SDL)
 
 add_executable(
@@ -102,11 +107,13 @@ add_executable(
 	${fileList}
 )
 
+set(CMAKE_CXX_FLAGS ${GINCU_COMPILE_FLAGS})
+set(CMAKE_C_FLAGS ${GINCU_COMPILE_C_FLAGS})
+
 set_target_properties(
 	${TARGET}
 	PROPERTIES
 	OUTPUT_NAME ${TARGET}
-	COMPILE_FLAGS ${GINCU_COMPILE_FLAGS}
 	RUNTIME_OUTPUT_DIRECTORY_DEBUG ${BIN_PATH}
 	RUNTIME_OUTPUT_DIRECTORY_RELEASE ${BIN_PATH}
 	RUNTIME_OUTPUT_DIRECTORY_MINSIZEREL ${BIN_PATH}

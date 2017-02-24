@@ -269,7 +269,10 @@ k = i;
 */
 			GPU_PushMatrix();
 			GPU_LoadIdentity();
-//			GPU_MatrixCopy(GPU_GetCurrentMatrix(), &command.matrix[0][0]);
+//printf("%s\n\n", GPU_GetMatrixString(GPU_GetCurrentMatrix()));
+			GPU_MatrixCopy(GPU_GetCurrentMatrix(), &command.matrix[0][0]);
+			float * a = GPU_GetCurrentMatrix();
+			a[12]= 0; a[13] = 0; a[14] = 0; a[15] = 1;
 //printf("%s\n\n", GPU_GetMatrixString(GPU_GetCurrentMatrix()));
 			GPU_TriangleBatch(nullptr, this->window, data->getCount(), &data->vertexArray[0], 0, nullptr, GPU_BATCH_XY_ST_RGBA);
 			GPU_PopMatrix();
