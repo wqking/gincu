@@ -19,7 +19,12 @@ public:
 	
 	virtual GPoint mapScreenToWorld(const GPoint & point, const GRect & viewportPixels) const override
 	{
-		return point;
+		const GPoint normalizedPoint {
+			-1.0f + 2.0f * (point.x - this->viewportPixels.x) / this->viewportPixels.width,
+			1.0f - 2.0f * (point.y - this->viewportPixels.y) / this->viewportPixels.height
+		};
+
+		return transformPoint(inverseMatrix(this->matrix), normalizedPoint);
 	}
 
 	GMatrix44 matrix;

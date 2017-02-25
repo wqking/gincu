@@ -5,23 +5,6 @@
 
 namespace gincu {
 
-namespace {
-
-inline GMatrix44 createMatrix44(
-		const float v0x, const float v1x, const float v3x,
-		const float v0y, const float v1y, const float v3y,
-		const float v0w, const float v1w, const float v3w)
-{
-	return GMatrix44(
-		{ v0x, v0y, 0, v0w },
-		{ v1x, v1y, 0, v1w },
-		{ 0, 0, 1, 0 },
-		{ v3x, v3y, 0, v3w }
-	);
-}
-
-} //unnamed namespace
-
 GTransform::GTransform()
 	:
 		position(),
@@ -116,14 +99,16 @@ void GTransform::doUpdateTransform() const
 			const float tx = -this->origin.x * sxc - this->origin.y * sys + this->position.x;
 			const float ty =  this->origin.x * sxs - this->origin.y * syc + this->position.y;
 
-			this->matrix = createMatrix44( sxc, sys, tx,
-									-sxs, syc, ty,
-									 0.f, 0.f, 1.f);
+			this->matrix = GMatrix44(
+				{ sxc, -sxs, 0, 0},
+				{ sys, syc, 0, 0 },
+				{ 0, 0, 1, 0 },
+				{ tx, ty, 0, 1 }
+			);
 		}
 		else {
 			// below code is from SFML View class
 			// "origin" is borrowed as the camera size.
-/*
 			const float angle  = degreeToRadian(this->rotation);
 			const float cosine = (float)(std::cos(angle));
 			const float sine = (float)(std::sin(angle));
@@ -140,33 +125,16 @@ void GTransform::doUpdateTransform() const
 			float d = -b * pos.y;
 
 			// Rebuild the projection matrix
-			this->matrix = createMatrix44( a * cosine, a * sine,   a * tx + c,
-									-b * sine,   b * cosine, b * ty + d,
-									 0.f,        0.f,        1.f);
-*/
-			const float angle  = degreeToRadian(this->rotation);
-			const float cosine = (float)(std::cos(angle));
-			const float sine = (float)(std::sin(angle));
-			GPoint pos = this->position;
-			pos.x += this->origin.x / 2;
-			pos.y += this->origin.y / 2;
-			float tx     = -pos.x * cosine - pos.y * sine + pos.x;
-			float ty     =  pos.x * sine - pos.y * cosine + pos.y;
-
-			// Projection components
-			float a =  2.f / (this->origin.x * this->scaleValue.x);
-			float b = -2.f / (this->origin.y * this->scaleValue.y);
-			float c = -a * pos.x;
-			float d = -b * pos.y;
-
-			// Rebuild the projection matrix
-			this->matrix = createMatrix44( a * cosine, a * sine,   a * tx + c,
-				-b * sine,   b * cosine, b * ty + d,
-				0.f,        0.f,        1.f);
-
+			this->matrix = GMatrix44(
+				{ a * cosine, -b * sine, 0, 0 },
+				{ a * sine, b * cosine, 0, 0 },
+				{ 0, 0, 1, 0 },
+				{ a * tx + c, b * ty + d, 0, 1}
+			);
 		}
 	}
 }
+
 
 const GMatrix44 & GTransform::getMatrix() const
 {

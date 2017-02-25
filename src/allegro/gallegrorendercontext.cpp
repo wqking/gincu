@@ -166,16 +166,11 @@ void GAllegroRenderContext::processRenderCommands()
 
 			--k;
 
-			if(k > i) {
-				this->batchDrawImages(i, k);
-				i = k;
-			}
-			else {
-
-				GAllegroTextureData * textureData = static_cast<GAllegroTextureData *>(command.renderData.get());
-				this->allegroApplyMatrix(command.matrix);
-				al_draw_bitmap_region(textureData->image, command.rect.x, command.rect.y, command.rect.width, command.rect.height, 0, 0, 0);
-			}
+			// Event there is only one image, we still use our routine to render it.
+			// We can't use any Allegro bitmap drawing function such as al_draw_bitmap_region
+			// because those functions reset the projection matrix that cause GCamera stops working.
+			this->batchDrawImages(i, k);
+			i = k;
 		}
 			break;
 
