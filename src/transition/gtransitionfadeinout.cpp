@@ -49,7 +49,6 @@ void GTransitionFadeInOut::doTransite(GScene * fromScene, GScene * toScene)
 
 	this->fromScene->addEntity(
 		(new GEntity())
-		//->addComponent(createComponent<GComponentTransform>(this->fromScene->getPrimaryCamera()->getCamera().mapScreenToWorld(GPoint()))->setZOrder(std::numeric_limits<int>::max()))
 		->addComponent(createComponent<GComponentTransform>()->setZOrder(std::numeric_limits<int>::max()))
 		->addComponent((this->fromRender = createRectRenderComponent(colorSetAlpha(this->color, 0), size)))
 	);

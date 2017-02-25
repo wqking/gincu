@@ -45,6 +45,8 @@ struct GAllegroRenderCommand
 	GAllegroRenderCommand(const std::shared_ptr<GTextRenderData> & textData, const GMatrix44 & matrix, const GRenderInfo * renderInfo);
 	GAllegroRenderCommand(const std::shared_ptr<GVertexCommand> & vertexCommand, const GMatrix44 & matrix, const GRenderInfo * renderInfo);
 
+	void doCopyRenderInfo(const GRenderInfo * renderInfo);
+
 	GAllegroRenderCommandType type;
 
 	std::shared_ptr<void> renderData;
@@ -52,6 +54,7 @@ struct GAllegroRenderCommand
 	GRect rect;
 	
 	GMatrix44 matrix;
+	GBlendMode blendMode;
 };
 
 class GRenderEngineLock
@@ -92,10 +95,11 @@ public:
 	void finalize();
 
 private:
-	void threadMain();
+	void threadMain(ALLEGRO_STATE * state);
 	void processRenderCommands();
 	void batchDrawImages(const int firstIndex, const int lastIndex);
 	void allegroApplyMatrix(const GMatrix44 & matrix);
+	void allegroApplyBlendMode(const GBlendMode & blendMode);
 
 private:
 	virtual void setBackgroundColor(const GColor color);

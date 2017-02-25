@@ -25,6 +25,45 @@ namespace gincu {
 
 namespace {
 
+int blendEquationToAllegro(const GBlendEquation & equation)
+{
+	static const int values[] = {
+		ALLEGRO_ADD,
+		ALLEGRO_SRC_MINUS_DEST,
+		ALLEGRO_DEST_MINUS_SRC,
+	};
+
+	const int index = (int)equation;
+	if(index >= 0 && index <= sizeof(values) / sizeof(values[0])) {
+		return values[index];
+	}
+	
+	return values[0];
+}
+
+int blendFuncToAllegro(const GBlendFunc & func)
+{
+	static const int values[] = {
+		ALLEGRO_ZERO,
+		ALLEGRO_ONE,
+		ALLEGRO_SRC_COLOR,
+		ALLEGRO_INVERSE_SRC_COLOR,
+		ALLEGRO_DEST_COLOR,
+		ALLEGRO_INVERSE_DEST_COLOR,
+		ALLEGRO_ALPHA,
+		ALLEGRO_INVERSE_ALPHA,
+		ALLEGRO_ZERO, // destAlpha is not supported
+		ALLEGRO_ZERO, // oneMinusDestAlpha is not supported
+	};
+
+	const int index = (int)func;
+	if(index >= 0 && index <= sizeof(values) / sizeof(values[0])) {
+		return values[index];
+	}
+
+	return values[0];
+}
+
 
 } //unnamed namespace
 
@@ -46,6 +85,7 @@ GAllegroRenderCommand::GAllegroRenderCommand(const std::shared_ptr<GTextureData>
 		rect(rect),
 		matrix(matrix)
 {
+	this->doCopyRenderInfo(renderInfo);
 }
 
 GAllegroRenderCommand::GAllegroRenderCommand(const std::shared_ptr<GTextRenderData> & textData, const GMatrix44 & matrix, const GRenderInfo * renderInfo)
@@ -54,6 +94,7 @@ GAllegroRenderCommand::GAllegroRenderCommand(const std::shared_ptr<GTextRenderDa
 		renderData(textData),
 		matrix(matrix)
 {
+	this->doCopyRenderInfo(renderInfo);
 }
 
 GAllegroRenderCommand::GAllegroRenderCommand(const std::shared_ptr<GVertexCommand> & vertexCommand, const GMatrix44 & matrix, const GRenderInfo * renderInfo)
@@ -62,8 +103,13 @@ GAllegroRenderCommand::GAllegroRenderCommand(const std::shared_ptr<GVertexComman
 		renderData(vertexCommand),
 		matrix(matrix)
 {
+	this->doCopyRenderInfo(renderInfo);
 }
 
+void GAllegroRenderCommand::doCopyRenderInfo(const GRenderInfo * renderInfo)
+{
+	this->blendMode = renderInfo->blendMode;
+}
 
 GAllegroRenderContext::GAllegroRenderContext()
 	:
@@ -87,7 +133,12 @@ void GAllegroRenderContext::initialize(ALLEGRO_DISPLAY * window)
 	this->updaterQueue = &this->queueStorage[0];
 	this->renderQueue = &this->queueStorage[1];
 
-	std::thread thread(&GAllegroRenderContext::threadMain, this);
+//	ALLEGRO_STATE * state = new ALLEGRO_STATE();
+//	al_store_state(state, ALLEGRO_STATE_DISPLAY);
+//	ALLEGRO_STATE newState = ALLEGRO_STATE();
+//	al_restore_state(&newState);
+
+	std::thread thread(&GAllegroRenderContext::threadMain, this, nullptr);
 	thread.detach();
 }
 
@@ -95,9 +146,13 @@ void GAllegroRenderContext::finalize()
 {
 }
 
-void GAllegroRenderContext::threadMain()
+void GAllegroRenderContext::threadMain(ALLEGRO_STATE * state)
 {
+	if(state != nullptr) {
+		al_restore_state(state);
+	}
 return;
+
 	this->processRenderCommands(); // just to draw background
 
 	while(! this->finished) {
@@ -156,7 +211,7 @@ void GAllegroRenderContext::processRenderCommands()
 				const GAllegroRenderCommand & nextCommand = this->renderQueue->at(k);
 				if(nextCommand.type != command.type
 					|| nextCommand.renderData != command.renderData
-//					|| nextCommand.allegroRenderStates.blendMode != command.allegroRenderStates.blendMode
+					|| nextCommand.blendMode != command.blendMode
 //					|| nextCommand.allegroRenderStates.shader != command.allegroRenderStates.shader
 				) {
 					break;
@@ -176,6 +231,7 @@ void GAllegroRenderContext::processRenderCommands()
 
 		case GAllegroRenderCommandType::text: {
 			GAllegroTextRenderData * data = static_cast<GAllegroTextRenderData *>(command.renderData.get());
+			this->allegroApplyBlendMode(command.blendMode);
 			this->allegroApplyMatrix(command.matrix);
 			al_draw_text(static_cast<const GAllegroFontData *>(data->font.getData().get())->font, gameColorToAllegro(data->color), 0, 0, 0, data->text.c_str());
 			break;
@@ -188,6 +244,7 @@ void GAllegroRenderContext::processRenderCommands()
 			if(vertexCommand->textureData) {
 				texture = static_cast<GAllegroTextureData *>(vertexCommand->textureData.get())->image;
 			}
+			this->allegroApplyBlendMode(command.blendMode);
 			this->allegroApplyMatrix(command.matrix);
 			al_draw_prim(&data->vertexArray[0], nullptr, texture, 0, data->vertexArray.size(), primitiveToAllegro(vertexCommand->primitive));
 			break;
@@ -225,6 +282,7 @@ void GAllegroRenderContext::batchDrawImages(const int firstIndex, const int last
 
 	const GAllegroRenderCommand & command = this->renderQueue->at(firstIndex);
 	GAllegroTextureData * textureData = static_cast<GAllegroTextureData *>(command.renderData.get());
+	this->allegroApplyBlendMode(command.blendMode);
 	this->allegroApplyMatrix(identityMatrix);
 	al_draw_prim(&vertexArray.vertexArray[0], nullptr, textureData->image, 0, vertexArray.vertexArray.size(), ALLEGRO_PRIM_TRIANGLE_LIST);
 }
@@ -243,6 +301,19 @@ void GAllegroRenderContext::allegroApplyMatrix(const GMatrix44 & matrix)
 		);
 		//al_set_clipping_rectangle(rect.x, rect.y, rect.width, rect.height);
 	}
+}
+
+void GAllegroRenderContext::allegroApplyBlendMode(const GBlendMode & blendMode)
+{
+	//al_set_separate_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA, ALLEGRO_ADD, ALLEGRO_ONE, ALLEGRO_ONE);
+	al_set_separate_blender(
+		blendEquationToAllegro(blendMode.colorChannel.func),
+		blendFuncToAllegro(blendMode.colorChannel.source),
+		blendFuncToAllegro(blendMode.colorChannel.dest),
+		blendEquationToAllegro(blendMode.alphaChannel.func),
+		blendFuncToAllegro(blendMode.alphaChannel.source),
+		blendFuncToAllegro(blendMode.alphaChannel.dest)
+	);
 }
 
 void GAllegroRenderContext::setBackgroundColor(const GColor color)
