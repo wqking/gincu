@@ -60,7 +60,7 @@ void GCamera::apply(const GMatrix44 & matrix)
 {
 	this->doRefresh();
 	
-	this->data->apply(matrix, this->viewport);
+	this->data->apply(matrix, this->viewport, this->getViewportPixels());
 }
 
 GPoint GCamera::mapScreenToWorld(const GPoint & point) const

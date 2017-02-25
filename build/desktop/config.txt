@@ -5,7 +5,18 @@ set(SFML_PATH /source/SFML-2.4.1)
 set(SFML_INCLUDE_PATH ${SFML_PATH}/include)
 set(SFML_LIB_PATH ${SFML_PATH}/lib)
 
-set(ENABLE_SDL 1)
+set(ENABLE_ALLEGRO 1)
+set(ALLEGRO_PATH E:/source/allegro)
+set(ALLEGRO_INCLUDE_PATH
+	${ALLEGRO_PATH}/include
+	${ALLEGRO_PATH}/addons/image/
+	${ALLEGRO_PATH}/addons/font/
+	${ALLEGRO_PATH}/addons/primitives/
+)
+#set(ALLEGRO_VC_LIBS E:/source/allegro/build/lib/Release/allegro_monolith.lib)
+set(ALLEGRO_VC_LIBS E:/source/allegro/build/lib/Debug/allegro_monolith-debug.lib)
+
+set(ENABLE_SDL 0)
 set(SDL_PATH /source/SDL2-2.0.5/i686-w64-mingw32)
 set(SDL_INCLUDE_PATH ${SDL_PATH}/include/SDL2)
 set(SDL_LIB_PATH ${SDL_PATH}/lib)

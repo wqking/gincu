@@ -41,7 +41,7 @@ if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
 else(CMAKE_COMPILER_IS_GNUCC OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
 
 if(MSVC)
-	set(GINCU_COMPILE_FLAGS "-W3")
+	set(GINCU_COMPILE_FLAGS "-W3 -EHsc")
 
 	set(SFML_LIBS
 		${SFML_LIB_PATH}/freetype.lib
@@ -52,6 +52,10 @@ if(MSVC)
 		debug ${SFML_LIB_PATH}/sfml-graphics-d.lib
 		debug ${SFML_LIB_PATH}/sfml-system-d.lib
 		debug ${SFML_LIB_PATH}/sfml-window-d.lib
+	)
+
+	set(ALLEGRO_LIBS
+		${ALLEGRO_VC_LIBS}
 	)
 endif(MSVC)
 
@@ -86,6 +90,12 @@ if(ENABLE_SFML)
 	include_directories(${SFML_INCLUDE_PATH})
 	globAndAppendFiles(fileList ${SRC_PATH}/sfml/*.cpp)
 endif(ENABLE_SFML)
+
+if(ENABLE_ALLEGRO)
+	list(APPEND LIBS ${ALLEGRO_LIBS} opengl32)
+	include_directories(${ALLEGRO_INCLUDE_PATH})
+	globAndAppendFiles(fileList ${SRC_PATH}/allegro/*.cpp)
+endif(ENABLE_ALLEGRO)
 
 if(ENABLE_SDL)
 	list(APPEND LIBS ${SDL_LIBS})

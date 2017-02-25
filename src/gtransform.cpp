@@ -123,6 +123,7 @@ void GTransform::doUpdateTransform() const
 		else {
 			// below code is from SFML View class
 			// "origin" is borrowed as the camera size.
+/*
 			const float angle  = degreeToRadian(this->rotation);
 			const float cosine = (float)(std::cos(angle));
 			const float sine = (float)(std::sin(angle));
@@ -142,6 +143,27 @@ void GTransform::doUpdateTransform() const
 			this->matrix = createMatrix44( a * cosine, a * sine,   a * tx + c,
 									-b * sine,   b * cosine, b * ty + d,
 									 0.f,        0.f,        1.f);
+*/
+			const float angle  = degreeToRadian(this->rotation);
+			const float cosine = (float)(std::cos(angle));
+			const float sine = (float)(std::sin(angle));
+			GPoint pos = this->position;
+			pos.x += this->origin.x / 2;
+			pos.y += this->origin.y / 2;
+			float tx     = -pos.x * cosine - pos.y * sine + pos.x;
+			float ty     =  pos.x * sine - pos.y * cosine + pos.y;
+
+			// Projection components
+			float a =  2.f / (this->origin.x * this->scaleValue.x);
+			float b = -2.f / (this->origin.y * this->scaleValue.y);
+			float c = -a * pos.x;
+			float d = -b * pos.y;
+
+			// Rebuild the projection matrix
+			this->matrix = createMatrix44( a * cosine, a * sine,   a * tx + c,
+				-b * sine,   b * cosine, b * ty + d,
+				0.f,        0.f,        1.f);
+
 		}
 	}
 }

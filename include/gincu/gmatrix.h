@@ -10,6 +10,8 @@ namespace gincu {
 
 typedef glm::mat4 GMatrix44;
 
+extern const GMatrix44 identityMatrix;
+
 inline GMatrix44 translateMatrix(const GMatrix44 & matrix, const GPoint & p)
 {
 	return glm::translate(matrix, { p.x, p.y, 0 });

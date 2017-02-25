@@ -1,6 +1,7 @@
 #ifndef GFONT_H
 #define GFONT_H
 
+#include <string>
 #include <memory>
 
 namespace gincu {

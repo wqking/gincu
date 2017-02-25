@@ -60,7 +60,7 @@ unsigned int getMilliseconds()
 	static auto start = std::chrono::high_resolution_clock::now();
 	const auto now = std::chrono::high_resolution_clock::now();
 	const std::chrono::milliseconds diff = std::chrono::duration_cast<std::chrono::milliseconds>(now - start);
-	return diff.count();
+	return (unsigned int)diff.count();
 }
 
 

@@ -11,7 +11,7 @@ namespace gincu {
 class GSfmlCameraData : public GCameraData
 {
 public:
-	virtual void apply(const GMatrix44 & matrix, const GRect & viewport) override
+	virtual void apply(const GMatrix44 & matrix, const GRect & viewport, const GRect & /*viewportPixels*/) override
 	{
 		matrixToSfml(&this->view.getTransform(), matrix);
 		matrixToSfml(&this->view.getInverseTransform(), inverseMatrix(matrix));

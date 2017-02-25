@@ -16,7 +16,7 @@ class GCameraData
 public:
 	virtual ~GCameraData() {}
 
-	virtual void apply(const GMatrix44 & matrix, const GRect & viewport) = 0;
+	virtual void apply(const GMatrix44 & matrix, const GRect & viewport, const GRect & viewportPixels) = 0;
 	virtual GPoint mapScreenToWorld(const GPoint & point, const GRect & viewportPixels) const = 0;
 };
 

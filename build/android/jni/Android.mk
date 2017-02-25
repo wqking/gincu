@@ -95,6 +95,7 @@ LOCAL_SRC_FILES := \
 	$(SRC_PATH)/gfont.cpp \
 	$(SRC_PATH)/gfileinputstream.cpp \
 	$(SRC_PATH)/gheappool.cpp \
+	$(SRC_PATH)/gmatrix.cpp \
 	$(SRC_PATH)/gobjectfactory.cpp \
 	$(SRC_PATH)/gresourcemanager.cpp \
 	$(SRC_PATH)/gscene.cpp \
