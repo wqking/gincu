@@ -11,6 +11,7 @@ set(ALLEGRO_INCLUDE_PATH
 	${ALLEGRO_PATH}/include
 	${ALLEGRO_PATH}/addons/image/
 	${ALLEGRO_PATH}/addons/font/
+	${ALLEGRO_PATH}/addons/ttf/
 	${ALLEGRO_PATH}/addons/primitives/
 )
 #set(ALLEGRO_VC_LIBS E:/source/allegro/build/lib/Release/allegro_monolith.lib)

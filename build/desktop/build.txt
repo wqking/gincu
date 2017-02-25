@@ -94,7 +94,7 @@ endif(ENABLE_SFML)
 if(ENABLE_ALLEGRO)
 	list(APPEND LIBS ${ALLEGRO_LIBS} opengl32)
 	include_directories(${ALLEGRO_INCLUDE_PATH})
-	globAndAppendFiles(fileList ${SRC_PATH}/allegro/*.cpp)
+	globAndAppendFiles(fileList	${SRC_PATH}/allegro/*.cpp)
 endif(ENABLE_ALLEGRO)
 
 if(ENABLE_SDL)

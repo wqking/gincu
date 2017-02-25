@@ -18,6 +18,21 @@ inline GColor colorSetAlpha(const GColor color, const unsigned int alpha)
 	return (color & 0x00ffffff) | ((alpha & 0xff) << 24);
 }
 
+inline GColor colorSetRed(const GColor color, const unsigned int red)
+{
+	return (color & 0xff00ffff) | ((red & 0xff) << 16);
+}
+
+inline GColor colorSetGreen(const GColor color, const unsigned int green)
+{
+	return (color & 0xffff00ff) | ((green & 0xff) << 8);
+}
+
+inline GColor colorSetBlue(const GColor color, const unsigned int blue)
+{
+	return (color & 0xffffff00) | (blue & 0xff);
+}
+
 inline unsigned int colorGetAlpha(const GColor color)
 {
 	return (color & 0xff000000) >> 24;

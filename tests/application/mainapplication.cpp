@@ -16,7 +16,8 @@ MainApplication::MainApplication()
 {
 	this->setConfigInfo(
 		{
-			"sfml", //"allegro",
+			//"sfml",
+			"allegro",
 			"Gincu",
 			gameFramesPerSecond,
 			gameRenderFramesPerSecond,

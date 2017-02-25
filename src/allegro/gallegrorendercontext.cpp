@@ -175,7 +175,9 @@ void GAllegroRenderContext::processRenderCommands()
 			break;
 
 		case GAllegroRenderCommandType::text: {
-//			this->window->draw(static_cast<GAllegroTextRenderData *>(command.renderData.get())->text, command.allegroRenderStates);
+			GAllegroTextRenderData * data = static_cast<GAllegroTextRenderData *>(command.renderData.get());
+			this->allegroApplyMatrix(command.matrix);
+			al_draw_text(static_cast<const GAllegroFontData *>(data->font.getData().get())->font, gameColorToAllegro(data->color), 0, 0, 0, data->text.c_str());
 			break;
 		}
 

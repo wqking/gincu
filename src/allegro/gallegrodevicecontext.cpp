@@ -13,8 +13,9 @@
 
 #include "cpgf/goutmain.h"
 
-#include "allegro5/allegro.h"
+#include <allegro5/allegro.h>
 #include <allegro5/allegro_font.h>
+#include <allegro5/allegro_ttf.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_primitives.h>
 
@@ -68,6 +69,7 @@ void GAllegroDeviceContext::initialize(const GConfigInfo & configInfo)
 	al_install_keyboard();
 	al_init_image_addon();
 	al_init_font_addon();
+//	al_init_ttf_addon();
 	al_init_primitives_addon();
 
 	al_set_new_display_flags(ALLEGRO_OPENGL | ALLEGRO_RESIZABLE | ALLEGRO_WINDOWED);
