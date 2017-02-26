@@ -44,14 +44,14 @@ private:
 	virtual std::shared_ptr<GFileInputStreamData> createFileInputStreamData() const override;
 
 private:
-	ALLEGRO_DISPLAY * window;
+	mutable bool needInitializeDisplayEvent;
 	ALLEGRO_EVENT_QUEUE * eventQueue;
 	std::unique_ptr<GAllegroRenderContext> renderContext;
 };
 
 GAllegroDeviceContext::GAllegroDeviceContext()
 	:
-		window(nullptr),
+		needInitializeDisplayEvent(true),
 		eventQueue(nullptr),
 		renderContext()
 {
@@ -72,18 +72,14 @@ void GAllegroDeviceContext::initialize(const GConfigInfo & configInfo)
 //	al_init_ttf_addon();
 	al_init_primitives_addon();
 
-	al_set_new_display_flags(ALLEGRO_OPENGL | ALLEGRO_RESIZABLE | ALLEGRO_WINDOWED);
-	this->window = al_create_display(configInfo.windowSize.width, configInfo.windowSize.height);
-
 	this->eventQueue = al_create_event_queue();
 	al_register_event_source(this->eventQueue, al_get_mouse_event_source());
 	al_register_event_source(this->eventQueue, al_get_keyboard_event_source());
-	al_register_event_source(this->eventQueue, al_get_display_event_source(this->window));
 
-	G_LOG_INFO("Render window is created.");
+	this->needInitializeDisplayEvent = true;
 	
 	this->renderContext.reset(new GAllegroRenderContext());
-	this->renderContext->initialize(this->window);
+	this->renderContext->initialize(true);
 }
 
 void GAllegroDeviceContext::finalize()
@@ -91,7 +87,6 @@ void GAllegroDeviceContext::finalize()
 	this->renderContext->finalize();
 
 	al_destroy_event_queue(this->eventQueue);
-	al_destroy_display(this->window);
 }
 
 GRenderContext * GAllegroDeviceContext::getRenderContext() const
@@ -101,6 +96,14 @@ GRenderContext * GAllegroDeviceContext::getRenderContext() const
 
 bool GAllegroDeviceContext::getEvent(GEvent * event) const
 {
+	if(this->needInitializeDisplayEvent) {
+		ALLEGRO_DISPLAY * window = this->renderContext->getWindow();
+		if(window != nullptr) {
+			this->needInitializeDisplayEvent = false;
+			al_register_event_source(this->eventQueue, al_get_display_event_source(window));
+		}
+	}
+
 	ALLEGRO_EVENT e;
 	if(! al_get_next_event(this->eventQueue, &e)) {
 		return false;

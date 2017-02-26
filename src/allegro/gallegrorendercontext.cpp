@@ -10,6 +10,7 @@
 #include "gincu/gcamera.h"
 #include "gincu/gheappool.h"
 #include "gincu/glog.h"
+#include "gincu/gapplication.h"
 
 #include "gallegroutil.h"
 #include "gallegrotexturedata.h"
@@ -113,6 +114,7 @@ void GAllegroRenderCommand::doCopyRenderInfo(const GRenderInfo * renderInfo)
 
 GAllegroRenderContext::GAllegroRenderContext()
 	:
+		multiThread(true),
 		window(nullptr),
 		backgroundColor(colorWhite),
 		currentCameraData(nullptr),
@@ -126,32 +128,56 @@ GAllegroRenderContext::~GAllegroRenderContext()
 {
 }
 
-void GAllegroRenderContext::initialize(ALLEGRO_DISPLAY * window)
+void GAllegroRenderContext::initialize(const bool multiThread)
 {
-	this->window = window;
+	this->multiThread = multiThread;
 
 	this->updaterQueue = &this->queueStorage[0];
 	this->renderQueue = &this->queueStorage[1];
 
-//	ALLEGRO_STATE * state = new ALLEGRO_STATE();
-//	al_store_state(state, ALLEGRO_STATE_DISPLAY);
-//	ALLEGRO_STATE newState = ALLEGRO_STATE();
-//	al_restore_state(&newState);
-
-	std::thread thread(&GAllegroRenderContext::threadMain, this, nullptr);
-	thread.detach();
+	if(this->multiThread) {
+		std::thread thread(&GAllegroRenderContext::threadMain, this);
+		thread.detach();
+	}
+	else {
+		this->doInitializeWindow();
+	}
 }
 
 void GAllegroRenderContext::finalize()
 {
+	if(this->multiThread) {
+		this->finished = true;
+		this->updaterReadyLock.set();
+		this->finishedLock.wait();
+	}
+	else {
+		this->doFinalizeWindow();
+	}
 }
 
-void GAllegroRenderContext::threadMain(ALLEGRO_STATE * state)
+void GAllegroRenderContext::doInitializeWindow()
 {
-	if(state != nullptr) {
-		al_restore_state(state);
+	if(this->window != nullptr) {
+		return;
 	}
-return;
+
+	const GConfigInfo & configInfo = GApplication::getInstance()->getConfigInfo();
+
+	al_set_new_display_flags(ALLEGRO_OPENGL | ALLEGRO_RESIZABLE | ALLEGRO_WINDOWED);
+	this->window = al_create_display(configInfo.windowSize.width, configInfo.windowSize.height);
+}
+
+void GAllegroRenderContext::doFinalizeWindow()
+{
+	if(this->window != nullptr) {
+		al_destroy_display(this->window);
+	}
+}
+
+void GAllegroRenderContext::threadMain()
+{
+	this->doInitializeWindow();
 
 	this->processRenderCommands(); // just to draw background
 
@@ -159,7 +185,15 @@ return;
 		this->updaterReadyLock.wait();
 		this->updaterReadyLock.reset();
 
+		if(this->finished) {
+			break;
+		}
+
 		if(! this->renderQueue->empty()) {
+			// The bitmaps loaded from the main thread is memory bitmap, which will be rendered using soft-render, which is super slow.
+			// al_convert_memory_bitmaps converts all memory bitmap to GPU.
+			al_convert_memory_bitmaps();
+
 			this->processRenderCommands();
 			al_flip_display();
 			
@@ -180,6 +214,10 @@ return;
 			std::swap(this->renderQueue, this->updaterQueue);
 		}
 	}
+
+	this->doFinalizeWindow();
+
+	this->finishedLock.set();
 }
 
 int putImageToVertexArray(GAllegroVertexArrayData * vertexArray, int index, const GMatrix44 & matrix, const GRect & rect)
@@ -305,7 +343,6 @@ void GAllegroRenderContext::allegroApplyMatrix(const GMatrix44 & matrix)
 
 void GAllegroRenderContext::allegroApplyBlendMode(const GBlendMode & blendMode)
 {
-	//al_set_separate_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA, ALLEGRO_ADD, ALLEGRO_ONE, ALLEGRO_ONE);
 	al_set_separate_blender(
 		blendEquationToAllegro(blendMode.colorChannel.func),
 		blendFuncToAllegro(blendMode.colorChannel.source),
@@ -323,27 +360,27 @@ void GAllegroRenderContext::setBackgroundColor(const GColor color)
 
 void GAllegroRenderContext::render(const cpgf::GCallback<void (GRenderContext *)> & renderCallback)
 {
-
-renderCallback(this);
-std::swap(this->updaterQueue, this->renderQueue);
-this->processRenderCommands();
-this->renderQueue->clear();
-al_flip_display();
-return;
-
-
-	{
-		std::lock_guard<std::mutex> lockGuard(this->updaterQueueMutex);
+	if(this->multiThread) {
+		{
+			std::lock_guard<std::mutex> lockGuard(this->updaterQueueMutex);
 		
-		this->commandQueueDeleter.clear();
+			this->commandQueueDeleter.clear();
 
-		// in case the render thread is too slow to render last frame, let's discard the old frame.
-		this->updaterQueue->clear();
+			// in case the render thread is too slow to render last frame, let's discard the old frame.
+			this->updaterQueue->clear();
 
-		renderCallback(this);
+			renderCallback(this);
+		}
+
+		this->updaterReadyLock.set();
 	}
-
-	this->updaterReadyLock.set();
+	else {
+		renderCallback(this);
+		std::swap(this->updaterQueue, this->renderQueue);
+		this->processRenderCommands();
+		this->renderQueue->clear();
+		al_flip_display();
+	}
 }
 
 void GAllegroRenderContext::switchCamera(const GCamera & camera)

@@ -91,11 +91,15 @@ public:
 	GAllegroRenderContext();
 	~GAllegroRenderContext();
 
-	void initialize(ALLEGRO_DISPLAY * window);
+	void initialize(const bool multiThread);
 	void finalize();
+	
+	ALLEGRO_DISPLAY * getWindow() const { return this->window; }
 
 private:
-	void threadMain(ALLEGRO_STATE * state);
+	void doInitializeWindow();
+	void doFinalizeWindow();
+	void threadMain();
 	void processRenderCommands();
 	void batchDrawImages(const int firstIndex, const int lastIndex);
 	void allegroApplyMatrix(const GMatrix44 & matrix);
@@ -130,12 +134,14 @@ private:
 	) override;
 	
 private:
+	bool multiThread;
 	ALLEGRO_DISPLAY * window;
 	GColor backgroundColor;
 	GAllegroCameraData * currentCameraData;
 
 	std::atomic_bool finished;
 	GRenderEngineLock updaterReadyLock;
+	GRenderEngineLock finishedLock;
 	RenderCommandQueue queueStorage[2];
 	RenderCommandQueue * updaterQueue;
 	RenderCommandQueue * renderQueue;
