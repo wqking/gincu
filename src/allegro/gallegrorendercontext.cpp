@@ -1,5 +1,6 @@
 #include "gallegrorendercontext.h"
 #include "gincu/gdevicecontext.h"
+#include "gincu/gapplication.h"
 #include "gincu/gtransform.h"
 #include "gincu/gimage.h"
 #include "gincu/gatlasrender.h"
@@ -10,7 +11,6 @@
 #include "gincu/gcamera.h"
 #include "gincu/gheappool.h"
 #include "gincu/glog.h"
-#include "gincu/gapplication.h"
 
 #include "gallegroutil.h"
 #include "gallegrotexturedata.h"
@@ -114,8 +114,8 @@ void GAllegroRenderCommand::doCopyRenderInfo(const GRenderInfo * renderInfo)
 
 GAllegroRenderContext::GAllegroRenderContext()
 	:
-		multiThread(true),
 		window(nullptr),
+		multiThread(true),
 		backgroundColor(colorWhite),
 		currentCameraData(nullptr),
 		finished(false),
@@ -128,8 +128,9 @@ GAllegroRenderContext::~GAllegroRenderContext()
 {
 }
 
-void GAllegroRenderContext::initialize(const bool multiThread)
+void GAllegroRenderContext::initialize(ALLEGRO_DISPLAY * window, const bool multiThread)
 {
+	this->window = window;
 	this->multiThread = multiThread;
 
 	this->updaterQueue = &this->queueStorage[0];
@@ -138,6 +139,8 @@ void GAllegroRenderContext::initialize(const bool multiThread)
 	if(this->multiThread) {
 		std::thread thread(&GAllegroRenderContext::threadMain, this);
 		thread.detach();
+
+		this->initializededLock.wait();
 	}
 	else {
 		this->doInitializeWindow();
@@ -158,14 +161,7 @@ void GAllegroRenderContext::finalize()
 
 void GAllegroRenderContext::doInitializeWindow()
 {
-	if(this->window != nullptr) {
-		return;
-	}
-
-	const GConfigInfo & configInfo = GApplication::getInstance()->getConfigInfo();
-
-	al_set_new_display_flags(ALLEGRO_OPENGL | ALLEGRO_RESIZABLE | ALLEGRO_WINDOWED);
-	this->window = al_create_display(configInfo.windowSize.width, configInfo.windowSize.height);
+	al_set_target_backbuffer(this->window);
 }
 
 void GAllegroRenderContext::doFinalizeWindow()
@@ -180,6 +176,8 @@ void GAllegroRenderContext::threadMain()
 	this->doInitializeWindow();
 
 	this->processRenderCommands(); // just to draw background
+
+	this->initializededLock.set();
 
 	while(! this->finished) {
 		this->updaterReadyLock.wait();
@@ -331,13 +329,13 @@ void GAllegroRenderContext::allegroApplyMatrix(const GMatrix44 & matrix)
 
 	if(this->currentCameraData != nullptr) {
 		const GRect & rect = this->currentCameraData->viewportPixels;
+		const float height = GApplication::getInstance()->getScreenSize().height;
 		glViewport(
 			rect.x,
-			al_get_display_height(this->window) - (rect.y + rect.height),
+			height - (rect.y + rect.height),
 			rect.width,
 			rect.height
 		);
-		//al_set_clipping_rectangle(rect.x, rect.y, rect.width, rect.height);
 	}
 }
 

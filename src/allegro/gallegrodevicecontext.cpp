@@ -44,14 +44,14 @@ private:
 	virtual std::shared_ptr<GFileInputStreamData> createFileInputStreamData() const override;
 
 private:
-	mutable bool needInitializeDisplayEvent;
+	ALLEGRO_DISPLAY * window;
 	ALLEGRO_EVENT_QUEUE * eventQueue;
 	std::unique_ptr<GAllegroRenderContext> renderContext;
 };
 
 GAllegroDeviceContext::GAllegroDeviceContext()
 	:
-		needInitializeDisplayEvent(true),
+		window(nullptr),
 		eventQueue(nullptr),
 		renderContext()
 {
@@ -72,14 +72,20 @@ void GAllegroDeviceContext::initialize(const GConfigInfo & configInfo)
 //	al_init_ttf_addon();
 	al_init_primitives_addon();
 
+	al_set_new_display_flags(ALLEGRO_OPENGL | ALLEGRO_RESIZABLE | ALLEGRO_WINDOWED);
+	this->window = al_create_display(configInfo.windowSize.width, configInfo.windowSize.height);
+	al_set_target_bitmap(nullptr);
+
 	this->eventQueue = al_create_event_queue();
 	al_register_event_source(this->eventQueue, al_get_mouse_event_source());
 	al_register_event_source(this->eventQueue, al_get_keyboard_event_source());
 
-	this->needInitializeDisplayEvent = true;
-	
 	this->renderContext.reset(new GAllegroRenderContext());
-	this->renderContext->initialize(true);
+	this->renderContext->initialize(this->window, true);
+
+	// the display event source must be registered after initialized the render context
+	// because the window will be transfered to the render thread
+	al_register_event_source(this->eventQueue, al_get_display_event_source(this->window));
 }
 
 void GAllegroDeviceContext::finalize()
@@ -96,14 +102,6 @@ GRenderContext * GAllegroDeviceContext::getRenderContext() const
 
 bool GAllegroDeviceContext::getEvent(GEvent * event) const
 {
-	if(this->needInitializeDisplayEvent) {
-		ALLEGRO_DISPLAY * window = this->renderContext->getWindow();
-		if(window != nullptr) {
-			this->needInitializeDisplayEvent = false;
-			al_register_event_source(this->eventQueue, al_get_display_event_source(window));
-		}
-	}
-
 	ALLEGRO_EVENT e;
 	if(! al_get_next_event(this->eventQueue, &e)) {
 		return false;
@@ -112,6 +110,7 @@ bool GAllegroDeviceContext::getEvent(GEvent * event) const
 	switch(e.type) {
 	case ALLEGRO_EVENT_DISPLAY_RESIZE:
 		*event = GEvent(GEventType::windowResized, GResizeEvent{ (GCoord)e.display.width, (GCoord)e.display.height });
+		al_acknowledge_resize(this->window);
 		break;
 
 	case ALLEGRO_EVENT_DISPLAY_CLOSE:

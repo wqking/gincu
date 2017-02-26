@@ -91,7 +91,7 @@ public:
 	GAllegroRenderContext();
 	~GAllegroRenderContext();
 
-	void initialize(const bool multiThread);
+	void initialize(ALLEGRO_DISPLAY * window, const bool multiThread);
 	void finalize();
 	
 	ALLEGRO_DISPLAY * getWindow() const { return this->window; }
@@ -134,13 +134,14 @@ private:
 	) override;
 	
 private:
-	bool multiThread;
 	ALLEGRO_DISPLAY * window;
+	bool multiThread;
 	GColor backgroundColor;
 	GAllegroCameraData * currentCameraData;
 
 	std::atomic_bool finished;
 	GRenderEngineLock updaterReadyLock;
+	GRenderEngineLock initializededLock;
 	GRenderEngineLock finishedLock;
 	RenderCommandQueue queueStorage[2];
 	RenderCommandQueue * updaterQueue;
