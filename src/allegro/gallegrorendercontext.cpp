@@ -386,7 +386,6 @@ void GAllegroRenderContext::render(const cpgf::GCallback<void (GRenderContext *)
 void GAllegroRenderContext::switchCamera(const GCamera & camera)
 {
 	this->updaterQueue->emplace_back(GDeviceContext::getInstance()->createCameraData(camera.getData().get()));
-//	this->updaterQueue->emplace_back(createPooledSharedPtr<GCameraData>(*camera.getData()));
 }
 
 void GAllegroRenderContext::draw(

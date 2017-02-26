@@ -97,21 +97,6 @@ if(ENABLE_ALLEGRO)
 	globAndAppendFiles(fileList	${SRC_PATH}/allegro/*.cpp)
 endif(ENABLE_ALLEGRO)
 
-if(ENABLE_SDL)
-	list(APPEND LIBS ${SDL_LIBS})
-	include_directories(
-		${SDL_INCLUDE_PATH}
-		${ROOT_PATH}/thirdparty/sdlgpu/include
-		${ROOT_PATH}/thirdparty/sdlgpu/src/GL
-	)
-	globAndAppendFiles(fileList
-		${SRC_PATH}/sdl/*.cpp
-		${ROOT_PATH}/thirdparty/sdlgpu/src/*.c
-	)
-	add_definitions("-DSDL_GPU_DISABLE_GLES")
-	add_definitions("-DGLEW_STATIC")
-endif(ENABLE_SDL)
-
 add_executable(
 	${TARGET}
 	${fileList}

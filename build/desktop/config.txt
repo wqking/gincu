@@ -17,11 +17,6 @@ set(ALLEGRO_INCLUDE_PATH
 #set(ALLEGRO_VC_LIBS E:/source/allegro/build/lib/Release/allegro_monolith.lib)
 set(ALLEGRO_VC_LIBS E:/source/allegro/build/lib/Debug/allegro_monolith-debug.lib)
 
-set(ENABLE_SDL 0)
-set(SDL_PATH /source/SDL2-2.0.5/i686-w64-mingw32)
-set(SDL_INCLUDE_PATH ${SDL_PATH}/include/SDL2)
-set(SDL_LIB_PATH ${SDL_PATH}/lib)
-
 
 #[[
 The level to output log messages.
