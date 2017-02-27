@@ -15,8 +15,12 @@ public:
 
 	virtual int getCount() const = 0;
 	virtual void resize(const int size) = 0;
-	virtual void setAt(const int index, const GPoint & position, const GColor color, const GPoint & textureUV) = 0;
-	virtual void append(const GPoint & position, const GColor color, const GPoint & textureUV) = 0;
+	virtual void setAt(const int index, const GPoint & position, const GColor color, const GPoint & textureUv) = 0;
+	virtual void append(const GPoint & position, const GColor color, const GPoint & textureUv) = 0;
+	
+	virtual GPoint getPositionAt(const int index) = 0;
+	virtual GPoint getTextureUvAt(const int index) = 0;
+	virtual GColor getColorAt(const int index) = 0;
 	
 	virtual GColor getColor() const = 0;
 	virtual void setColor(const GColor color) = 0;
@@ -38,9 +42,13 @@ public:
 
 	int getCount() const;
 	void resize(const int size);
-	void setAt(const int index, const GPoint & position, const GColor color = defaultColor, const GPoint & textureUV = GPoint());
-	void append(const GPoint & position, const GColor color = defaultColor, const GPoint & textureUV = GPoint());
+	void setAt(const int index, const GPoint & position, const GColor color = defaultColor, const GPoint & textureUv = GPoint());
+	void append(const GPoint & position, const GColor color = defaultColor, const GPoint & textureUv = GPoint());
 	
+	GPoint getPositionAt(const int index);
+	GPoint getTextureUvAt(const int index);
+	GColor getColorAt(const int index);
+
 	GColor getColor() const;
 	void setColor(const GColor color);
 	

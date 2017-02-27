@@ -28,14 +28,9 @@ if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
 		debug ${SFML_LIB_PATH}/libsfml-system-d.a
 		debug ${SFML_LIB_PATH}/libsfml-window-d.a
 	)
-	
-	set(SDL_LIBS
-		${SDL_LIB_PATH}/libSDL2main.a
-		${SDL_LIB_PATH}/libSDL2.dll.a
-		opengl32
-		winmm
-		imm32
-		version
+
+	set(ALLEGRO_LIBS
+		${ALLEGRO_GCC_LIBS}
 	)
 
 else(CMAKE_COMPILER_IS_GNUCC OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")

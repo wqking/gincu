@@ -67,10 +67,18 @@ void GAllegroDeviceContext::initialize(const GConfigInfo & configInfo)
 
 	al_install_mouse();
 	al_install_keyboard();
-	al_init_image_addon();
+	if(! al_init_image_addon()) {
+		G_LOG_ERROR("Can't initialize image addon");
+	}
 	al_init_font_addon();
+	if(! al_init_image_addon()) {
+		G_LOG_ERROR("Can't initialize font addon");
+	}
 //	al_init_ttf_addon();
 	al_init_primitives_addon();
+	if(! al_init_image_addon()) {
+		G_LOG_ERROR("Can't initialize primitives addon");
+	}
 
 	al_set_new_display_flags(ALLEGRO_OPENGL | ALLEGRO_RESIZABLE | ALLEGRO_WINDOWED);
 	this->window = al_create_display(configInfo.windowSize.width, configInfo.windowSize.height);

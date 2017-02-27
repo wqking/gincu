@@ -129,7 +129,7 @@ void TestCase_Camera::doInitializeCameras()
 
 void TestCase_Camera::doInitializeButtons()
 {
-	const float startX = 10;
+	const float startX = 80;
 	const float startY = 100;
 //	const float deltaY = defaultButtonSize.height + 10;
 

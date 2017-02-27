@@ -25,24 +25,36 @@ public:
 		this->vertexArray.resize(size);
 	}
 	
-	virtual void setAt(const int index, const GPoint & position, const GColor color, const GPoint & textureUV) override {
+	virtual void setAt(const int index, const GPoint & position, const GColor color, const GPoint & textureUv) override {
 		this->boundingRect.width = -1;
 
 		this->vertexArray[index] = sf::Vertex(
 			gameVector2ToSfml(position),
 			gameColorToSfml(color),
-			gameVector2ToSfml(textureUV)
+			gameVector2ToSfml(textureUv)
 		);
 	}
 	
-	virtual void append(const GPoint & position, const GColor color, const GPoint & textureUV) override {
+	virtual void append(const GPoint & position, const GColor color, const GPoint & textureUv) override {
 		this->boundingRect.width = -1;
 
 		this->vertexArray.push_back(sf::Vertex(
 			gameVector2ToSfml(position),
 			gameColorToSfml(color),
-			gameVector2ToSfml(textureUV)
+			gameVector2ToSfml(textureUv)
 		));
+	}
+	
+	virtual GPoint getPositionAt(const int index) override {
+		return sfmlVector2ToGame(this->vertexArray[index].position);
+	}
+	
+	virtual GPoint getTextureUvAt(const int index) override {
+		return sfmlVector2ToGame(this->vertexArray[index].texCoords);
+	}
+	
+	virtual GColor getColorAt(const int index) override {
+		return sfmlColorToGame(this->vertexArray[index].color);
 	}
 	
 	virtual GColor getColor() const override {

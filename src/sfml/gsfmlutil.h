@@ -27,6 +27,11 @@ inline sf::Vector2f gameVector2ToSfml(const GVector2 & v)
 	return { v.x, v.y };
 }
 
+inline GVector2 sfmlVector2ToGame(const sf::Vector2f & v)
+{
+	return { v.x, v.y };
+}
+
 inline sf::BlendMode gameBlendModeToSfml(const GBlendMode & blendMode)
 {
 	return sf::BlendMode(

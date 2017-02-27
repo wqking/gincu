@@ -17,6 +17,17 @@ set(ALLEGRO_INCLUDE_PATH
 #set(ALLEGRO_VC_LIBS E:/source/allegro/build/lib/Release/allegro_monolith.lib)
 set(ALLEGRO_VC_LIBS E:/source/allegro/build/lib/Debug/allegro_monolith-debug.lib)
 
+set(ALLEGRO_INCLUDE_PATH
+	E:/source/allegro-mingw/include
+)
+set(ALLEGRO_GCC_LIBS
+	E:/source/allegro/build/lib/liballegro.dll.a
+	E:/source/allegro/build/lib/liballegro_color.dll.a
+	E:/source/allegro/build/lib/liballegro_font.dll.a
+	E:/source/allegro/build/lib/liballegro_image.dll.a
+	E:/source/allegro/build/lib/liballegro_primitives.dll.a
+)
+
 
 #[[
 The level to output log messages.

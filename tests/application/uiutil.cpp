@@ -34,7 +34,7 @@ gincu::GEntity * createButton(
 {
 	return (new GEntity())
 		->addComponent(createComponent<GComponentTransform>(position))
-		->addComponent(createComponent<GComponentAnchor>(GRenderAnchor::leftTop))
+		->addComponent(createComponent<GComponentAnchor>(GRenderAnchor::center))
 		->addComponent(createComponent<GComponentContainerRender>()
 			->add(createRectRenderComponent(0xffeeee77, size))
 			->add(createAndLoadTextComponent(text, colorBlue, 16))

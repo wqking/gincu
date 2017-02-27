@@ -24,18 +24,33 @@ void GVertexArray::resize(const int size)
 	this->data->resize(size);
 }
 
-void GVertexArray::setAt(const int index, const GPoint & position, const GColor color, const GPoint & textureUV)
+void GVertexArray::setAt(const int index, const GPoint & position, const GColor color, const GPoint & textureUv)
 {
 	this->checkCopyOnWrite();
 
-	this->data->setAt(index, position,color, textureUV);
+	this->data->setAt(index, position,color, textureUv);
 }
 
-void GVertexArray::append(const GPoint & position, const GColor color, const GPoint & textureUV)
+void GVertexArray::append(const GPoint & position, const GColor color, const GPoint & textureUv)
 {
 	this->checkCopyOnWrite();
 
-	this->data->append(position, color, textureUV);
+	this->data->append(position, color, textureUv);
+}
+
+GPoint GVertexArray::getPositionAt(const int index)
+{
+	return this->data->getPositionAt(index);
+}
+
+GPoint GVertexArray::getTextureUvAt(const int index)
+{
+	return this->data->getTextureUvAt(index);
+}
+
+GColor GVertexArray::getColorAt(const int index)
+{
+	return this->data->getColorAt(index);
 }
 
 GColor GVertexArray::getColor() const

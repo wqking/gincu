@@ -2,6 +2,7 @@
 #define GALLEGROTEXTUREDATA_H
 
 #include "gincu/gtexture.h"
+#include "gincu/glog.h"
 
 #include "allegro5/allegro.h"
 
@@ -33,6 +34,10 @@ public:
 		this->close();
 
 		this->image = al_load_bitmap(this->fileName.c_str());
+		
+		if(this->image == nullptr) {
+			G_LOG_ERROR("Can't load image %s", this->fileName.c_str());
+		}
 	}
 
 	virtual GSize getSize() const override

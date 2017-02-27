@@ -24,6 +24,7 @@ public:
 	void setPrimitive(const GPrimitive primitive) { this->primitive = primitive; }
 
 	const GVertexArray & getVertexArray() const { return this->vertexArray; }
+	GVertexArray & getVertexArray() { return this->vertexArray; }
 	void setVertexArray(const GVertexArray & vertexArray) { this->vertexArray = vertexArray; }
 
 	const GTexture & getTexture() const { return this->texture; }

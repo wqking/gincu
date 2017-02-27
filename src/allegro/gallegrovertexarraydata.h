@@ -25,18 +25,32 @@ public:
 		this->vertexArray.resize(size);
 	}
 	
-	virtual void setAt(const int index, const GPoint & position, const GColor color, const GPoint & textureUV) override {
+	virtual void setAt(const int index, const GPoint & position, const GColor color, const GPoint & textureUv) override {
 		this->boundingRect.width = -1;
 		
-		this->doPutVertex(index, position, color, textureUV);
+		this->doPutVertex(index, position, color, textureUv);
 	}
 	
-	virtual void append(const GPoint & position, const GColor color, const GPoint & textureUV) override {
+	virtual void append(const GPoint & position, const GColor color, const GPoint & textureUv) override {
 		this->boundingRect.width = -1;
 
 		const int index = (int)this->vertexArray.size();
 		this->vertexArray.resize(index + 1);
-		this->doPutVertex(index, position, color, textureUV);
+		this->doPutVertex(index, position, color, textureUv);
+	}
+	
+	virtual GPoint getPositionAt(const int index) override {
+		ALLEGRO_VERTEX & vertex = this->vertexArray[index];
+		return { vertex.x, vertex.y };
+	}
+	
+	virtual GPoint getTextureUvAt(const int index) override {
+		ALLEGRO_VERTEX & vertex = this->vertexArray[index];
+		return { vertex.u, vertex.v };
+	}
+	
+	virtual GColor getColorAt(const int index) override {
+		return allegroColorToGame(this->vertexArray[index].color);
 	}
 	
 	virtual GColor getColor() const override {
@@ -98,14 +112,14 @@ public:
 	}
 
 private:
-	int doPutVertex(int index, const GPoint & position, const GColor color, const GPoint & textureUV)
+	int doPutVertex(int index, const GPoint & position, const GColor color, const GPoint & textureUv)
 	{
 		ALLEGRO_VERTEX & vertex = this->vertexArray[index];
 		vertex.x = position.x;
 		vertex.y = position.y;
 		vertex.color = gameColorToAllegro(color);
-		vertex.u = textureUV.x;
-		vertex.v = textureUV.y;
+		vertex.u = textureUv.x;
+		vertex.v = textureUv.y;
 
 		return index;
 	}
