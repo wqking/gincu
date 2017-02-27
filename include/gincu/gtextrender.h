@@ -20,7 +20,6 @@ public:
 	virtual ~GTextRenderData() {}
 
 	virtual void setText(const std::string & text) = 0;
-	virtual void setColor(const GColor textColor) = 0;
 	virtual void setFontSize(const int fontSize) = 0;
 	virtual GSize getBoundingSize() const = 0;
 };
@@ -32,7 +31,6 @@ public:
 	~GTextRender();
 
 	void setText(const std::string & text);
-	void setColor(const GColor textColor);
 	void setFontSize(const int fontSize);
 
 	const std::shared_ptr<GTextRenderData> & getData() const { return this->data; }

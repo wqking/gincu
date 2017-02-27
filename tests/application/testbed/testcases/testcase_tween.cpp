@@ -203,8 +203,10 @@ void TestCase_Tween::doTestBasic()
 {
 	const cpgf::GTweenNumber duration = 2000;
 
-	GComponentTransform * target = this->addImage(imageName, { spriteBoardEnd.x, spriteBoardEnd.y });
 	GComponentTransform * sprite = this->addImage(imageName, { spriteBoardStart.x, spriteBoardStart.y });
+	GComponentTransform * target = this->addImage(imageName, { spriteBoardEnd.x, spriteBoardEnd.y });
+	
+	target->getEntity()->getComponentByType<GComponentRender>()->setColor(colorSetAlpha(colorWhite, 127));
 
 	this->tweenList.tween()
 		.duration(duration)
@@ -223,6 +225,8 @@ void TestCase_Tween::doTestFollow()
 	GComponentTransform * target = this->addImage(imageName, { spriteBoardStart.x, spriteBoardEnd.y });
 	GComponentTransform * sprite = this->addImage(imageName, { spriteBoardStart.x, spriteBoardStart.y });
 	GComponentTransform * sprite2 = this->addImage(imageName, { spriteBoardEnd.x, spriteBoardStart.y });
+	
+	target->getEntity()->getComponentByType<GComponentRender>()->setColor(colorSetAlpha(colorWhite, 127));
 
 	this->tweenList.tween()
 		.duration(duration)
@@ -247,6 +251,8 @@ void TestCase_Tween::doTestTimeline1()
 	GComponentTransform * target = this->addImage(imageName, { spriteBoardEnd.x, spriteBoardEnd.y });
 	(void)target;
 	GComponentTransform * sprite = this->addImage(imageName, { spriteBoardStart.x, spriteBoardStart.y });
+	
+	target->getEntity()->getComponentByType<GComponentRender>()->setColor(colorSetAlpha(colorWhite, 127));
 
 	cpgf::GTimeline & timeline = this->tweenList.timeline();
 

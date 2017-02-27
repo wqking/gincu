@@ -55,6 +55,7 @@ struct GAllegroRenderCommand
 	
 	GMatrix44 matrix;
 	GBlendMode blendMode;
+	GColor color;
 };
 
 class GRenderEngineLock

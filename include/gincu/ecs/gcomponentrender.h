@@ -43,6 +43,22 @@ public:
 		this->renderInfo.blendMode = blendMode;
 		return this;
 	}
+	
+	const GBlendMode & getBlendMode() const {
+		return this->renderInfo.blendMode;
+	}
+	
+	GComponentRender * setColor(const GColor color) {
+		if(this->renderInfo.color != color) {
+			this->renderInfo.color = color;
+			this->doColorChanged();
+		}
+		return this;
+	}
+	
+	GColor getColor() const {
+		return this->renderInfo.color;
+	}
 
 protected:
 	GRenderInfo * getRenderInfo() { return &this->renderInfo; }
@@ -50,6 +66,7 @@ protected:
 private:
 	virtual void doDraw(GRenderContext * renderContext) = 0;
 	virtual GSize doGetSize() const = 0;
+	virtual void doColorChanged() {}
 
 private:
 	mutable GRenderInfo renderInfo;
@@ -114,10 +131,23 @@ private:
 	RenderType render;
 };
 
+class GComponentVertexArrayRender : public GComponentRenderCommon<GVertexArrayRender>
+{
+private:
+	typedef GComponentRenderCommon<GVertexArrayRender> super;
+	
+public:
+	using super::super;
+
+private:
+	virtual void doColorChanged() override {
+		this->getRender().setColor(this->getColor());
+	}
+};
+
 typedef GComponentRenderCommon<GImage> GComponentImageRender;
 typedef GComponentRenderCommon<GAtlasRender> GComponentAtlasRender;
 typedef GComponentRenderCommon<GTextRender> GComponentTextRender;
-typedef GComponentRenderCommon<GVertexArrayRender> GComponentVertexArrayRender;
 typedef GComponentVertexArrayRender GComponentRectRender;
 
 GComponentImageRender * createAndLoadImageComponent(const std::string & resourceName);

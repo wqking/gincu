@@ -22,8 +22,8 @@ const ConfigItem allegroConfig {
 	"fixed_font.tga"
 };
 
-//const ConfigItem * config = &sfmlConfig;
-const ConfigItem * config = &allegroConfig;
+const ConfigItem * config = &sfmlConfig;
+//const ConfigItem * config = &allegroConfig;
 
 MainApplication * MainApplication::getInstance()
 {

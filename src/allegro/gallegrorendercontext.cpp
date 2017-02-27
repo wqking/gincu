@@ -69,6 +69,8 @@ int blendFuncToAllegro(const GBlendFunc & func)
 } //unnamed namespace
 
 GAllegroRenderCommand::GAllegroRenderCommand()
+	:
+		type(GAllegroRenderCommandType::none)
 {
 }
 
@@ -110,6 +112,7 @@ GAllegroRenderCommand::GAllegroRenderCommand(const std::shared_ptr<GVertexComman
 void GAllegroRenderCommand::doCopyRenderInfo(const GRenderInfo * renderInfo)
 {
 	this->blendMode = renderInfo->blendMode;
+	this->color = renderInfo->color;
 }
 
 GAllegroRenderContext::GAllegroRenderContext()
@@ -194,9 +197,6 @@ void GAllegroRenderContext::threadMain()
 
 			this->processRenderCommands();
 			al_flip_display();
-			
-			// don't free in render thread
-			//this->renderQueue->clear();
 		}
 
 		{
@@ -218,9 +218,8 @@ void GAllegroRenderContext::threadMain()
 	this->finishedLock.set();
 }
 
-int putImageToVertexArray(GAllegroVertexArrayData * vertexArray, int index, const GMatrix44 & matrix, const GRect & rect)
+int putImageToVertexArray(GAllegroVertexArrayData * vertexArray, int index, const GMatrix44 & matrix, const GRect & rect, const GColor color)
 {
-	GColor color = colorWhite;
 	vertexArray->setAt(index++, transformPoint(matrix, { 0, 0 }), color, { rect.x, rect.y });
 	vertexArray->setAt(index++, transformPoint(matrix, { rect.width, 0 }), color, { rect.x + rect.width, rect.y });
 	vertexArray->setAt(index++, transformPoint(matrix, { rect.width, rect.height }), color, { rect.x + rect.width, rect.y + rect.height });
@@ -269,7 +268,7 @@ void GAllegroRenderContext::processRenderCommands()
 			GAllegroTextRenderData * data = static_cast<GAllegroTextRenderData *>(command.renderData.get());
 			this->allegroApplyBlendMode(command.blendMode);
 			this->allegroApplyMatrix(command.matrix);
-			al_draw_text(static_cast<const GAllegroFontData *>(data->font.getData().get())->font, gameColorToAllegro(data->color), 0, 0, 0, data->text.c_str());
+			al_draw_text(static_cast<const GAllegroFontData *>(data->font.getData().get())->font, gameColorToAllegro(command.color), 0, 0, 0, data->text.c_str());
 			break;
 		}
 
@@ -311,9 +310,8 @@ void GAllegroRenderContext::batchDrawImages(const int firstIndex, const int last
 	int index = 0;
 	for(int i = 0; i < count; ++i) {
 		const GAllegroRenderCommand & command = this->renderQueue->at(i + firstIndex);
-		const GRect & rect = command.rect;
 
-		index = putImageToVertexArray(&vertexArray, index, command.matrix, rect);
+		index = putImageToVertexArray(&vertexArray, index, command.matrix, command.rect, command.color);
 	}
 
 	const GAllegroRenderCommand & command = this->renderQueue->at(firstIndex);

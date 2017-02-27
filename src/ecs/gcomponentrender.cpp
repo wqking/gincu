@@ -89,9 +89,10 @@ GComponentTextRender * createAndLoadTextComponent(const std::string & text, cons
 {
 	GTextRender render;
 	render.setText(text);
-	render.setColor(textColor);
 	render.setFontSize(fontSize);
-	return createComponent<GComponentTextRender>(render);
+	GComponentTextRender * result = createComponent<GComponentTextRender>(render);
+	result->setColor(textColor);
+	return result;
 }
 
 GComponentRectRender * createRectRenderComponent(const GColor color, const GSize & size)

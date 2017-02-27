@@ -43,6 +43,8 @@ struct GSfmlRenderCommand
 	GSfmlRenderCommand(const std::shared_ptr<GTextureData> & textureData, const GRect & rect, const GMatrix44 & matrix, const GRenderInfo * renderInfo);
 	GSfmlRenderCommand(const std::shared_ptr<GTextRenderData> & textData, const GMatrix44 & matrix, const GRenderInfo * renderInfo);
 	GSfmlRenderCommand(const std::shared_ptr<GVertexCommand> & vertexCommand, const GMatrix44 & matrix, const GRenderInfo * renderInfo);
+	
+	void doCopyRenderInfo(const GRenderInfo * renderInfo);
 
 	GSfmlRenderCommandType type;
 
@@ -50,6 +52,7 @@ struct GSfmlRenderCommand
 
 	GRect rect;
 	sf::RenderStates sfmlRenderStates;
+	GColor color;
 };
 
 class GRenderEngineLock

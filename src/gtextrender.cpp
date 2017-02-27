@@ -24,13 +24,6 @@ void GTextRender::setText(const std::string & text)
 	this->data->setText(text);
 }
 
-void GTextRender::setColor(const GColor textColor)
-{
-	this->checkCopyOnWrite();
-
-	this->data->setColor(textColor);
-}
-
 void GTextRender::setFontSize(const int fontSize)
 {
 	this->checkCopyOnWrite();

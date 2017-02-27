@@ -19,11 +19,6 @@ public:
 		this->text.setString(text);
 	}
 
-	virtual void setColor(const GColor textColor) override {
-		this->text.setOutlineColor(gameColorToSfml(textColor));
-		this->text.setFillColor(gameColorToSfml(textColor));
-	}
-	
 	virtual void setFontSize(const int fontSize) override {
 		this->text.setCharacterSize(fontSize);
 	}

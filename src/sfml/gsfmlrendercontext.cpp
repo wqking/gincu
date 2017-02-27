@@ -24,26 +24,33 @@ namespace gincu {
 namespace {
 
 template <typename T>
-int putImageToVertexArray(T & vertexArray, int index, const sf::Transform & transform, const GRect & rect)
+int putImageToVertexArray(T & vertexArray, int index, const sf::Transform & transform, const GRect & rect, const GColor color)
 {
+	const auto sfmlColor = gameColorToSfml(color);
 	vertexArray[index].position = transform.transformPoint({ 0, 0 });
 	vertexArray[index].texCoords = { rect.x, rect.y };
+	vertexArray[index].color = sfmlColor;
 	++index;
 	vertexArray[index].position = transform.transformPoint({ rect.width, 0 });
 	vertexArray[index].texCoords = { rect.x + rect.width, rect.y };
+	vertexArray[index].color = sfmlColor;
 	++index;
 	vertexArray[index].position = transform.transformPoint({ rect.width, rect.height });
 	vertexArray[index].texCoords = { rect.x + rect.width, rect.y + rect.height };
+	vertexArray[index].color = sfmlColor;
 	++index;
 
 	vertexArray[index].position = transform.transformPoint({ rect.width, rect.height });
 	vertexArray[index].texCoords = { rect.x + rect.width, rect.y + rect.height };
+	vertexArray[index].color = sfmlColor;
 	++index;
 	vertexArray[index].position = transform.transformPoint({ 0, rect.height });
 	vertexArray[index].texCoords = { rect.x, rect.y + rect.height };
+	vertexArray[index].color = sfmlColor;
 	++index;
 	vertexArray[index].position = transform.transformPoint({ 0, 0 });
 	vertexArray[index].texCoords = { rect.x, rect.y };
+	vertexArray[index].color = sfmlColor;
 	++index;
 	
 	return index;
@@ -70,7 +77,7 @@ GSfmlRenderCommand::GSfmlRenderCommand(const std::shared_ptr<GTextureData> & tex
 		rect(rect),
 		sfmlRenderStates(matrixToSfml(matrix))
 {
-	copyBlendAndShaderToSfml(&this->sfmlRenderStates, renderInfo);
+	this->doCopyRenderInfo(renderInfo);
 }
 
 GSfmlRenderCommand::GSfmlRenderCommand(const std::shared_ptr<GTextRenderData> & textData, const GMatrix44 & matrix, const GRenderInfo * renderInfo)
@@ -79,7 +86,7 @@ GSfmlRenderCommand::GSfmlRenderCommand(const std::shared_ptr<GTextRenderData> & 
 		renderData(textData),
 		sfmlRenderStates(matrixToSfml(matrix))
 {
-	copyBlendAndShaderToSfml(&this->sfmlRenderStates, renderInfo);
+	this->doCopyRenderInfo(renderInfo);
 }
 
 GSfmlRenderCommand::GSfmlRenderCommand(const std::shared_ptr<GVertexCommand> & vertexCommand, const GMatrix44 & matrix, const GRenderInfo * renderInfo)
@@ -88,12 +95,18 @@ GSfmlRenderCommand::GSfmlRenderCommand(const std::shared_ptr<GVertexCommand> & v
 	renderData(vertexCommand),
 	sfmlRenderStates(matrixToSfml(matrix))
 {
-	copyBlendAndShaderToSfml(&this->sfmlRenderStates, renderInfo);
+	this->doCopyRenderInfo(renderInfo);
+
 	if(vertexCommand->textureData) {
 		this->sfmlRenderStates.texture = &static_cast<GSfmlTextureData *>(vertexCommand->textureData.get())->texture;
 	}
 }
 
+void GSfmlRenderCommand::doCopyRenderInfo(const GRenderInfo * renderInfo)
+{
+	copyBlendAndShaderToSfml(&this->sfmlRenderStates, renderInfo);
+	this->color = renderInfo->color;
+}
 
 GSfmlRenderContext::GSfmlRenderContext()
 	:
@@ -186,13 +199,18 @@ void GSfmlRenderContext::processRenderCommands()
 			}
 			else {
 				sf::Sprite sprite(static_cast<GSfmlTextureData *>(command.renderData.get())->texture, { (int)command.rect.x, (int)command.rect.y, (int)command.rect.width, (int)command.rect.height });
+				sprite.setColor(gameColorToSfml(command.color));
 				this->window->draw(sprite, command.sfmlRenderStates);
 			}
 		}
 			break;
 
 		case GSfmlRenderCommandType::text: {
-			this->window->draw(static_cast<GSfmlTextRenderData *>(command.renderData.get())->text, command.sfmlRenderStates);
+			GSfmlTextRenderData * data = static_cast<GSfmlTextRenderData *>(command.renderData.get());
+			auto color = gameColorToSfml(command.color);
+			data->text.setOutlineColor(color);
+			data->text.setFillColor(color);
+			this->window->draw(data->text, command.sfmlRenderStates);
 			break;
 		}
 
@@ -231,9 +249,7 @@ void GSfmlRenderContext::batchDrawImages(const int firstIndex, const int lastInd
 	int index = 0;
 	for(int i = 0; i < count; ++i) {
 		const GSfmlRenderCommand & command = this->renderQueue->at(i + firstIndex);
-		const GRect & rect = command.rect;
-
-		index = putImageToVertexArray(vertexArray, index, command.sfmlRenderStates.transform, rect);
+		index = putImageToVertexArray(vertexArray, index, command.sfmlRenderStates.transform, command.rect, command.color);
 	}
 
 	const GSfmlRenderCommand & command = this->renderQueue->at(firstIndex);

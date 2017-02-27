@@ -2,18 +2,20 @@
 #define GRENDERINFO_H
 
 #include "gincu/gblendmode.h"
+#include "gincu/gcolor.h"
 
 namespace gincu {
 
 struct GRenderInfo
 {
 	constexpr GRenderInfo()
-		: blendMode()
+		:
+			blendMode(),
+			color(colorWhite)
 	{}
 
 	GBlendMode blendMode;
-	
-	// will add shader in the future
+	GColor color;
 };
 
 inline bool operator == (const GRenderInfo & a, const GRenderInfo & b)

@@ -18,10 +18,6 @@ public:
 		this->text = text;
 	}
 
-	virtual void setColor(const GColor textColor) override {
-		this->color = textColor;
-	}
-	
 	virtual void setFontSize(const int fontSize) override {
 		this->size = size;
 	}
@@ -36,7 +32,6 @@ public:
 public:
 	GFont font;
 	std::string text;
-	GColor color;
 	int size;
 };
 
