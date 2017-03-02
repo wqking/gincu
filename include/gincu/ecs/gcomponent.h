@@ -82,7 +82,7 @@ private:
 // In current implementation, component can be created by "new" directly.
 // But using the function createComponent can allow future extension, such as do some initializations.
 template <typename ComponentType, typename... Params>
-ComponentType * createComponent(Params... params)
+ComponentType * createComponent(Params && ... params)
 {
 	ComponentType * component = new ComponentType(std::forward<Params>(params)...);
 	return component;

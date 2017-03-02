@@ -83,12 +83,12 @@ void GTransitionFadeInOut::doTransite(GScene * fromScene, GScene * toScene)
 void GTransitionFadeInOut::doSetRatio(const float ratio)
 {
 	if(ratio <= 255.0f) {
-		this->fromRender->getRender().setColor(colorSetAlpha(this->fromRender->getRender().getColor(), (unsigned int)ratio));
+		this->fromRender->setColor(colorSetAlpha(this->fromRender->getRender().getColor(), (unsigned int)ratio));
 	}
 	else {
 		this->fromScene->enableRender(false);
 		this->toScene->enableRender(true);
-		this->toRender->getRender().setColor(colorSetAlpha(this->toRender->getRender().getColor(), 255 * 2 - (unsigned int)ratio));
+		this->toRender->setColor(colorSetAlpha(this->toRender->getRender().getColor(), 255 * 2 - (unsigned int)ratio));
 	}
 }
 

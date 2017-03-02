@@ -85,7 +85,7 @@ private:
 };
 
 template <typename T, typename... Params>
-T * allocateObjectOnHeapPool(Params... params)
+T * allocateObjectOnHeapPool(Params && ... params)
 {
 	void * p = GHeapPool::getInstance()->allocate(sizeof(T));
 	return new (p) T (std::forward<Params>(params)...);
@@ -140,7 +140,7 @@ bool operator != (const GHeapPoolAllocator<T> & a, const GHeapPoolAllocator<U> &
 }
 
 template <typename T, typename... Params>
-std::shared_ptr<T>  createPooledSharedPtr(Params... params)
+std::shared_ptr<T>  createPooledSharedPtr(Params && ... params)
 {
 	return std::allocate_shared<T>(GHeapPoolAllocator<T>(), std::forward<Params>(params)...);
 }
