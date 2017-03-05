@@ -116,7 +116,8 @@ void * GHeapSizedPool::allocate(const std::size_t size)
 			std::unique_ptr<char>(newChunk),
 			(char *)alignPointer(newChunk, this->alignment, sizeof(ChunkHeader))
 		});
-		
+		this->chunkMap.insert(std::make_pair(ChunkRange{ this->chunkList.back().start, (char *)this->chunkList.back().start + this->chunkSize }, (int)this->chunkList.size() - 1));
+
 		for(int i = 1; i < (int)this->blockCountPerChunk; ++i) {
 			this->idleList.push_back({ chunkIndex, i });
 		}
@@ -143,6 +144,26 @@ void * GHeapSizedPool::allocate(const std::size_t size)
 void GHeapSizedPool::free(void * p)
 {
 	void * rawPointer = getRawPointer(p);
+
+	auto it = this->chunkMap.find(ChunkRange(rawPointer));
+	if(it != this->chunkMap.end()) {
+		char * chunk = (char *)this->chunkList[it->second].start;
+		const int blockIndex = ((char *)rawPointer - chunk) / this->blockTotalSize;
+		this->idleList.push_back({it->second, blockIndex});
+
+		ChunkHeader * chunkHeader = getChunkHeader(chunk);
+		--chunkHeader->usedCount;
+
+		if(chunkHeader->usedCount == 0 && this->purgeStrategy == GHeapPoolPurgeStrategy::onFree) {
+			this->doPurgeChunk(it->second);
+		}
+
+	}
+	else {
+		G_LOG_ERROR("GHeapSizedPool: Can't find chunk.");
+	}
+return;
+
 	for(int i = 0; i < (int)this->chunkList.size(); ++i) {
 		char * chunk = (char *)this->chunkList[i].start;
 		if(chunk <= rawPointer && rawPointer < chunk + this->chunkSize) {
@@ -184,6 +205,21 @@ void GHeapSizedPool::doPurgeChunk(const int index)
 			}
 			++it;
 		}
+	}
+
+	auto itToErase = this->chunkMap.end();
+	for(auto & it = this->chunkMap.begin(); it != this->chunkMap.end(); ++it) {
+		if(it->second == index) {
+			itToErase = it;
+		}
+		else {
+			if(it->second > index) {
+				--it->second;
+			}
+		}
+	}
+	if(itToErase != this->chunkMap.end()) {
+		this->chunkMap.erase(itToErase);
 	}
 
 //	G_LOG_DEBUG("Purged one chunk %d %p %d remain: %d", index, this->chunkList[index].start, this->blockTotalSize, this->chunkList.size() - 1);

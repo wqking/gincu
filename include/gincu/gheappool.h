@@ -27,6 +27,31 @@ private:
 		std::unique_ptr<char> rawMemory;
 		void * start;
 	};
+
+	struct ChunkRange {
+		ChunkRange(void * start) : start(start), end(nullptr) {
+		}
+
+		ChunkRange(void * start, void * end) : start(start), end(end) {
+		}
+
+		bool operator < (const ChunkRange & other) const {
+			if(this->end == NULL) {
+				return this->start < other.start;
+			}
+			else {
+				if(other.end == NULL) {
+					return other.start >= this->end;
+				}
+				else {
+					return this->start < other.start;
+				}
+			}
+		}
+
+		void * start;
+		void * end;
+	};
 	
 public:
 	GHeapSizedPool(
@@ -55,6 +80,7 @@ private:
 	
 	std::deque<Chunk> chunkList;
 	std::deque<IdleIndex> idleList;
+	std::map<ChunkRange, int> chunkMap;
 };
 
 class GHeapPool
