@@ -208,7 +208,7 @@ void GHeapSizedPool::doPurgeChunk(const int index)
 	}
 
 	auto itToErase = this->chunkMap.end();
-	for(auto & it = this->chunkMap.begin(); it != this->chunkMap.end(); ++it) {
+	for(auto it = this->chunkMap.begin(); it != this->chunkMap.end(); ++it) {
 		if(it->second == index) {
 			itToErase = it;
 		}
