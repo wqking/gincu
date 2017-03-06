@@ -1,5 +1,7 @@
 set(CPGF_PATH /projects/cpgf)
 
+set(ENABLE_CPGF_REFLECTION 1)
+
 set(ENABLE_SFML 1)
 set(SFML_PATH /source/SFML-2.4.1)
 set(SFML_INCLUDE_PATH ${SFML_PATH}/include)

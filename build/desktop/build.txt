@@ -13,9 +13,9 @@ if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
 	set(GINCU_COMPILE_FLAGS "-Wall -Wextra -Wundef -O3")
 	if(MINGW)
 		set(GINCU_COMPILE_FLAGS "${GINCU_COMPILE_FLAGS} -std=gnu++0x -D_REENTRANT -lpthread")
-	else(MINGW)
+	else()
 		set(GINCU_COMPILE_FLAGS "${GINCU_COMPILE_FLAGS} -std=c++11 -D_REENTRANT -lpthread")
-	endif(MINGW)
+	endif()
 	set(GINCU_COMPILE_C_FLAGS -std=c99)
 	
 	set(SFML_LIBS
@@ -33,7 +33,7 @@ if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
 		${ALLEGRO_GCC_LIBS}
 	)
 
-else(CMAKE_COMPILER_IS_GNUCC OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+else()
 
 if(MSVC)
 	set(GINCU_COMPILE_FLAGS "-W3 -EHsc")
@@ -52,9 +52,9 @@ if(MSVC)
 	set(ALLEGRO_LIBS
 		${ALLEGRO_VC_LIBS}
 	)
-endif(MSVC)
+endif()
 
-endif(CMAKE_COMPILER_IS_GNUCC OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+endif()
 
 
 macro(globAndAppendFiles fileList)
@@ -80,17 +80,24 @@ globAndAppendFiles(fileList
 	${TESTS_PATH}/application/testbed/testcases/*.cpp
 )
 
+if(ENABLE_CPGF_REFLECTION)
+globAndAppendFiles(fileList
+	${ROOT_PATH}/metagen/*.cpp
+	${CPGF_PATH}/src/gmeta*.cpp
+)
+endif()
+
 if(ENABLE_SFML)
 	list(APPEND LIBS ${SFML_LIBS})
 	include_directories(${SFML_INCLUDE_PATH})
 	globAndAppendFiles(fileList ${SRC_PATH}/sfml/*.cpp)
-endif(ENABLE_SFML)
+endif()
 
 if(ENABLE_ALLEGRO)
 	list(APPEND LIBS ${ALLEGRO_LIBS} opengl32)
 	include_directories(${ALLEGRO_INCLUDE_PATH})
 	globAndAppendFiles(fileList	${SRC_PATH}/allegro/*.cpp)
-endif(ENABLE_ALLEGRO)
+endif()
 
 add_executable(
 	${TARGET}
