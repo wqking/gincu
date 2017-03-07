@@ -33,6 +33,9 @@ public:
 	GApplication();
 	virtual ~GApplication();
 
+	GApplication(const GApplication &) = delete;
+	GApplication & operator = (const GApplication &) = delete;
+
 	void run();
 	
 	void finish();
