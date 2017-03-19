@@ -26,19 +26,14 @@ void buildMetaClass_Global_gcomponent(D _d)
     _d.CPGF_MD_TEMPLATE _field("componentTypeUser", &componentTypeUser);
     _d.CPGF_MD_TEMPLATE _method("registerComponentId", (GComponentType (*) (const std::string &))&registerComponentId);
     _d.CPGF_MD_TEMPLATE _enum<GComponentType>("GComponentType")
-        ._element("render", gincu::render)
-        ._element("transform", gincu::transform)
-        ._element("localTransform", gincu::localTransform)
-        ._element("touchHandler", gincu::touchHandler)
-        ._element("anchor", gincu::anchor)
-        ._element("animation", gincu::animation)
-        ._element("camera", gincu::camera)
+        ._element("render", gincu::GComponentType::render)
+        ._element("transform", gincu::GComponentType::transform)
+        ._element("localTransform", gincu::GComponentType::localTransform)
+        ._element("touchHandler", gincu::GComponentType::touchHandler)
+        ._element("anchor", gincu::GComponentType::anchor)
+        ._element("animation", gincu::GComponentType::animation)
+        ._element("camera", gincu::GComponentType::camera)
     ;
-}
-
-
-inline GComponent & opErAToRWrapper_GComponent__opAssign(GComponent * self, const GComponent & __arg0) {
-    return (*self) = __arg0;
 }
 
 
@@ -49,14 +44,9 @@ void buildMetaClass_GComponent(D _d)
     using namespace cpgf;
     
     _d.CPGF_MD_TEMPLATE _constructor<void * (const GComponentType)>();
-    _d.CPGF_MD_TEMPLATE _constructor<void * (const GComponent &)>(cpgf::MakePolicy<cpgf::GMetaRuleCopyConstReference<0> >());
     _d.CPGF_MD_TEMPLATE _method("setEntity", &D::ClassType::setEntity);
     _d.CPGF_MD_TEMPLATE _method("getType", &D::ClassType::getType);
     _d.CPGF_MD_TEMPLATE _method("getEntity", &D::ClassType::getEntity);
-    _d.CPGF_MD_TEMPLATE _operator< new (cpgf::GMetaSelf)>(mopHolder());
-    _d.CPGF_MD_TEMPLATE _operator< delete (cpgf::GMetaSelf)>(mopHolder());
-    _d.CPGF_MD_TEMPLATE _operator<GComponent & (*)(cpgf::GMetaSelf, const GComponent &)>(mopHolder = mopHolder, cpgf::MakePolicy<cpgf::GMetaRuleCopyConstReference<1> >());
-    _d.CPGF_MD_TEMPLATE _method("_opAssign", (GComponent & (*) (GComponent *, const GComponent &))&opErAToRWrapper_GComponent__opAssign, cpgf::MakePolicy<cpgf::GMetaRuleCopyConstReference<1>, cpgf::GMetaRuleExplicitThis >());
 }
 
 

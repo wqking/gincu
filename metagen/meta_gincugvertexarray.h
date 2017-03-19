@@ -27,12 +27,12 @@ void buildMetaClass_GVertexArray(D _d)
     _d.CPGF_MD_TEMPLATE _method("getCount", &D::ClassType::getCount);
     _d.CPGF_MD_TEMPLATE _method("resize", &D::ClassType::resize);
     _d.CPGF_MD_TEMPLATE _method("setAt", &D::ClassType::setAt)
-        ._default(copyVariantFromCopyable(GPoint()))
-        ._default(copyVariantFromCopyable(defaultColor))
+        ._default(copyVariantFromCopyable<const GPoint &>(GPoint()))
+        ._default(copyVariantFromCopyable<const GColor>(defaultColor))
     ;
     _d.CPGF_MD_TEMPLATE _method("append", &D::ClassType::append)
-        ._default(copyVariantFromCopyable(GPoint()))
-        ._default(copyVariantFromCopyable(defaultColor))
+        ._default(copyVariantFromCopyable<const GPoint &>(GPoint()))
+        ._default(copyVariantFromCopyable<const GColor>(defaultColor))
     ;
     _d.CPGF_MD_TEMPLATE _method("getPositionAt", &D::ClassType::getPositionAt);
     _d.CPGF_MD_TEMPLATE _method("getTextureUvAt", &D::ClassType::getTextureUvAt);

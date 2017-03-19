@@ -36,9 +36,9 @@ void buildMetaClass_GComponentTransformBase(D _d)
     _d.CPGF_MD_TEMPLATE _method("setVisible", &D::ClassType::setVisible);
     _d.CPGF_MD_TEMPLATE _method("getZOrder", &D::ClassType::getZOrder);
     _d.CPGF_MD_TEMPLATE _method("setZOrder", &D::ClassType::setZOrder);
-    _d.CPGF_MD_TEMPLATE _method("getTransform", (const GTransform & (D::ClassType::*) () const)&D::ClassType::getTransform, cpgf::MakePolicy<cpgf::GMetaRuleCopyConstReference<-1> >());
+    _d.CPGF_MD_TEMPLATE _method("getTransform", (const GTransform & (D::ClassType::*) () const)&D::ClassType::getTransform);
     _d.CPGF_MD_TEMPLATE _method("getTransform", (GTransform & (D::ClassType::*) ())&D::ClassType::getTransform);
-    _d.CPGF_MD_TEMPLATE _method("setTransform", &D::ClassType::setTransform, cpgf::MakePolicy<cpgf::GMetaRuleCopyConstReference<0> >());
+    _d.CPGF_MD_TEMPLATE _method("setTransform", &D::ClassType::setTransform);
 }
 
 

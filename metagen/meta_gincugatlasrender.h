@@ -22,8 +22,8 @@ void buildMetaClass_Global_gatlasrender(D _d)
     (void)_d;
     using namespace cpgf;
     
-    _d.CPGF_MD_TEMPLATE _method("drawRender", (void (*) (const GAtlasRender &, GRenderContext *, const GMatrix44 &, const GRenderInfo *))&drawRender, cpgf::MakePolicy<cpgf::GMetaRuleCopyConstReference<0> >());
-    _d.CPGF_MD_TEMPLATE _method("getRenderSize", (GSize (*) (const GAtlasRender &))&getRenderSize, cpgf::MakePolicy<cpgf::GMetaRuleCopyConstReference<0> >());
+    _d.CPGF_MD_TEMPLATE _method("drawRender", (void (*) (const GAtlasRender &, GRenderContext *, const GMatrix44 &, const GRenderInfo *))&drawRender);
+    _d.CPGF_MD_TEMPLATE _method("getRenderSize", (GSize (*) (const GAtlasRender &))&getRenderSize);
 }
 
 

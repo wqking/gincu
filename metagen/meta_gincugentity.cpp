@@ -28,7 +28,7 @@ GDefineMetaInfo createMetaClass_GEntity()
 {
     GDefineMetaGlobalDangle _d = GDefineMetaGlobalDangle::dangle();
     {
-        GDefineMetaClass<gincu::GEntity> _nd = GDefineMetaClass<gincu::GEntity>::lazyDeclare("GEntity", &buildMetaClass_GEntity);
+        GDefineMetaClass<gincu::GEntity, EntityBase> _nd = GDefineMetaClass<gincu::GEntity, EntityBase>::lazyDeclare("GEntity", &buildMetaClass_GEntity);
         _d._class(_nd);
     }
     return _d.getMetaInfo();

@@ -24,17 +24,17 @@ void buildMetaClass_Global_gevent(D _d)
     
     _d.CPGF_MD_TEMPLATE _method("isTouchEvent", (bool (*) (const GEventType))&isTouchEvent);
     _d.CPGF_MD_TEMPLATE _enum<GEventType>("GEventType")
-        ._element("none", gincu::none)
-        ._element("render", gincu::render)
-        ._element("update", gincu::update)
-        ._element("execute", gincu::execute)
-        ._element("touchMoved", gincu::touchMoved)
-        ._element("touchPressed", gincu::touchPressed)
-        ._element("touchReleased", gincu::touchReleased)
-        ._element("windowClosed", gincu::windowClosed)
-        ._element("windowResized", gincu::windowResized)
-        ._element("windowActivated", gincu::windowActivated)
-        ._element("windowDeactivated", gincu::windowDeactivated)
+        ._element("none", gincu::GEventType::none)
+        ._element("render", gincu::GEventType::render)
+        ._element("update", gincu::GEventType::update)
+        ._element("execute", gincu::GEventType::execute)
+        ._element("touchMoved", gincu::GEventType::touchMoved)
+        ._element("touchPressed", gincu::GEventType::touchPressed)
+        ._element("touchReleased", gincu::GEventType::touchReleased)
+        ._element("windowClosed", gincu::GEventType::windowClosed)
+        ._element("windowResized", gincu::GEventType::windowResized)
+        ._element("windowActivated", gincu::GEventType::windowActivated)
+        ._element("windowDeactivated", gincu::GEventType::windowDeactivated)
     ;
 }
 

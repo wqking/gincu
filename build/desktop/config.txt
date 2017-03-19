@@ -1,6 +1,6 @@
 set(CPGF_PATH /projects/cpgf)
 
-set(ENABLE_CPGF_REFLECTION 0)
+set(ENABLE_CPGF_REFLECTION 1)
 
 set(ENABLE_SFML 1)
 set(SFML_PATH /source/SFML-2.4.1)
@@ -16,9 +16,10 @@ set(ALLEGRO_INCLUDE_PATH
 	${ALLEGRO_PATH}/addons/ttf/
 	${ALLEGRO_PATH}/addons/primitives/
 )
-#set(ALLEGRO_VC_LIBS E:/source/allegro/build/lib/Release/allegro_monolith.lib)
+set(ALLEGRO_VC_LIBS E:/source/allegro/build/lib/Release/allegro_monolith.lib)
 set(ALLEGRO_VC_LIBS E:/source/allegro/build/lib/Debug/allegro_monolith-debug.lib)
 
+#[[
 set(ALLEGRO_INCLUDE_PATH
 	E:/source/allegro-mingw/include
 )
@@ -29,7 +30,7 @@ set(ALLEGRO_GCC_LIBS
 	E:/source/allegro/build/lib/liballegro_image.dll.a
 	E:/source/allegro/build/lib/liballegro_primitives.dll.a
 )
-
+]]
 
 #[[
 The level to output log messages.

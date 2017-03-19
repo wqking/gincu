@@ -86,19 +86,19 @@ inline bool operator != (const GBlendMode & a, const GBlendMode & b)
 	return ! operator == (a, b);
 }
 
-constexpr GBlendMode blendModeDefault = GBlendMode();
+constexpr GBlendMode blendModeDefault{};
 
-constexpr GBlendMode blendModeAlpha(
+constexpr GBlendMode blendModeAlpha{
 	{ GBlendFunc::sourceAlpha, GBlendFunc::oneMinusSourceAlpha },
-	{ GBlendFunc::one, GBlendFunc::oneMinusSourceAlpha });
+	{ GBlendFunc::one, GBlendFunc::oneMinusSourceAlpha }};
 
-constexpr GBlendMode blendModeAdd(
+constexpr GBlendMode blendModeAdd{
 	{ GBlendFunc::sourceAlpha, GBlendFunc::one },
-	{ GBlendFunc::one, GBlendFunc::one });
+	{ GBlendFunc::one, GBlendFunc::one }};
 
-constexpr GBlendMode blendModeMultiply(GBlendFunc::destColor, GBlendFunc::zero);
+constexpr GBlendMode blendModeMultiply{ GBlendFunc::destColor, GBlendFunc::zero };
 
-constexpr GBlendMode blendModeNone(GBlendFunc::one, GBlendFunc::zero);
+constexpr GBlendMode blendModeNone{ GBlendFunc::one, GBlendFunc::zero };
 
 
 } //namespace gincu

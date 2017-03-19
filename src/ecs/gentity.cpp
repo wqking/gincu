@@ -10,6 +10,11 @@ void * GEntity::operator new (const std::size_t size)
 	return GHeapPool::getInstance()->allocate(size);
 }
 
+void * GEntity::operator new (const std::size_t /*size*/, void * ptr)
+{
+	return ptr;
+}
+
 void GEntity::operator delete(void * p)
 {
 	GHeapPool::getInstance()->free(p);

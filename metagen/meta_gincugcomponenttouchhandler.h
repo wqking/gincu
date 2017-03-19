@@ -36,7 +36,7 @@ void buildMetaClass_GComponentTouchHandler(D _d)
     _d.CPGF_MD_TEMPLATE _method("addOnTouch", &D::ClassType::addOnTouch);
     _d.CPGF_MD_TEMPLATE _method("removeOnTouch", &D::ClassType::removeOnTouch);
     _d.CPGF_MD_TEMPLATE _method("canHandle", &D::ClassType::canHandle);
-    _d.CPGF_MD_TEMPLATE _method("handle", &D::ClassType::handle, cpgf::MakePolicy<cpgf::GMetaRuleCopyConstReference<0> >());
+    _d.CPGF_MD_TEMPLATE _method("handle", &D::ClassType::handle);
 }
 
 

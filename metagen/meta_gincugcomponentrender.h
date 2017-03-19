@@ -23,7 +23,7 @@ void buildMetaClass_Global_gcomponentrender(D _d)
     using namespace cpgf;
     
     _d.CPGF_MD_TEMPLATE _method("createAndLoadImageComponent", (GComponentImageRender * (*) (const std::string &))&createAndLoadImageComponent);
-    _d.CPGF_MD_TEMPLATE _method("createImageComponent", (GComponentImageRender * (*) (const GImage &))&createImageComponent, cpgf::MakePolicy<cpgf::GMetaRuleCopyConstReference<0> >());
+    _d.CPGF_MD_TEMPLATE _method("createImageComponent", (GComponentImageRender * (*) (const GImage &))&createImageComponent);
     _d.CPGF_MD_TEMPLATE _method("createAtlasRenderComponent", (GComponentAtlasRender * (*) (const GAtlas &, const std::string &))&createAtlasRenderComponent);
     _d.CPGF_MD_TEMPLATE _method("createAndLoadTextComponent", (GComponentTextRender * (*) (const std::string &, const GColor, const int))&createAndLoadTextComponent);
     _d.CPGF_MD_TEMPLATE _method("createRectRenderComponent", (GComponentRectRender * (*) (const GColor, const GSize &))&createRectRenderComponent);

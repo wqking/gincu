@@ -22,8 +22,9 @@ void buildMetaClass_GTransitionMoveIn(D _d)
     (void)_d;
     using namespace cpgf;
     
-    _d.CPGF_MD_TEMPLATE _constructor<void * (unsigned int)>()
-        ._default(copyVariantFromCopyable(500))
+    _d.CPGF_MD_TEMPLATE _constructor<void * (unsigned int, const GPoint &)>()
+        ._default(copyVariantFromCopyable<const GPoint &>({ 1.0f, 0.0f }))
+        ._default(copyVariantFromCopyable<unsigned int>(500))
     ;
 }
 

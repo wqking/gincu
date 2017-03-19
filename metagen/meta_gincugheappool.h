@@ -23,10 +23,10 @@ void buildMetaClass_Global_gheappool(D _d)
     using namespace cpgf;
     
     _d.CPGF_MD_TEMPLATE _enum<GHeapPoolPurgeStrategy>("GHeapPoolPurgeStrategy")
-        ._element("never", gincu::never)
-        ._element("onSceneFreed", gincu::onSceneFreed)
-        ._element("onSceneSwitched", gincu::onSceneSwitched)
-        ._element("onFree", gincu::onFree)
+        ._element("never", gincu::GHeapPoolPurgeStrategy::never)
+        ._element("onSceneFreed", gincu::GHeapPoolPurgeStrategy::onSceneFreed)
+        ._element("onSceneSwitched", gincu::GHeapPoolPurgeStrategy::onSceneSwitched)
+        ._element("onFree", gincu::GHeapPoolPurgeStrategy::onFree)
     ;
 }
 
@@ -38,9 +38,9 @@ void buildMetaClass_GHeapPool(D _d)
     using namespace cpgf;
     
     _d.CPGF_MD_TEMPLATE _constructor<void * (const std::size_t, const std::size_t, const GHeapPoolPurgeStrategy)>()
-        ._default(copyVariantFromCopyable(GHeapPoolPurgeStrategy::onSceneSwitched))
-        ._default(copyVariantFromCopyable(256))
-        ._default(copyVariantFromCopyable(64))
+        ._default(copyVariantFromCopyable<const GHeapPoolPurgeStrategy>(GHeapPoolPurgeStrategy::onSceneSwitched))
+        ._default(copyVariantFromCopyable<const std::size_t>(256))
+        ._default(copyVariantFromCopyable<const std::size_t>(64))
     ;
     _d.CPGF_MD_TEMPLATE _method("getInstance", &D::ClassType::getInstance);
     _d.CPGF_MD_TEMPLATE _method("allocate", &D::ClassType::allocate);
@@ -75,9 +75,9 @@ void buildMetaClass_GHeapSizedPool(D _d)
     using namespace cpgf;
     
     _d.CPGF_MD_TEMPLATE _constructor<void * (const std::size_t, const std::size_t, const std::size_t, const GHeapPoolPurgeStrategy)>()
-        ._default(copyVariantFromCopyable(GHeapPoolPurgeStrategy::onSceneSwitched))
-        ._default(copyVariantFromCopyable(256))
-        ._default(copyVariantFromCopyable(64))
+        ._default(copyVariantFromCopyable<const GHeapPoolPurgeStrategy>(GHeapPoolPurgeStrategy::onSceneSwitched))
+        ._default(copyVariantFromCopyable<const std::size_t>(256))
+        ._default(copyVariantFromCopyable<const std::size_t>(64))
     ;
     _d.CPGF_MD_TEMPLATE _method("allocate", (void * (D::ClassType::*) ())&D::ClassType::allocate);
     _d.CPGF_MD_TEMPLATE _method("allocate", (void * (D::ClassType::*) (const std::size_t))&D::ClassType::allocate);

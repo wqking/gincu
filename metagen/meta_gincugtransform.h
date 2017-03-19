@@ -23,7 +23,9 @@ void buildMetaClass_GTransform(D _d)
     using namespace cpgf;
     
     _d.CPGF_MD_TEMPLATE _constructor<void * ()>();
-    _d.CPGF_MD_TEMPLATE _constructor<void * (const GPoint &)>();
+    _d.CPGF_MD_TEMPLATE _constructor<void * (const GPoint &, const GScale &)>()
+        ._default(copyVariantFromCopyable<const GScale &>({1.0f, 1.0f}))
+    ;
     _d.CPGF_MD_TEMPLATE _constructor<void * (const GMatrix44 &)>();
     _d.CPGF_MD_TEMPLATE _method("getPosition", &D::ClassType::getPosition);
     _d.CPGF_MD_TEMPLATE _method("setPosition", &D::ClassType::setPosition);

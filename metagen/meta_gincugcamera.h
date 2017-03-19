@@ -23,9 +23,9 @@ void buildMetaClass_Global_gcamera(D _d)
     using namespace cpgf;
     
     _d.CPGF_MD_TEMPLATE _enum<GCameraFitStrategy>("GCameraFitStrategy")
-        ._element("none", gincu::none)
-        ._element("scaleFitFullScreen", gincu::scaleFitFullScreen)
-        ._element("fixed", gincu::fixed)
+        ._element("none", gincu::GCameraFitStrategy::none)
+        ._element("scaleFitFullScreen", gincu::GCameraFitStrategy::scaleFitFullScreen)
+        ._element("fixed", gincu::GCameraFitStrategy::fixed)
     ;
 }
 

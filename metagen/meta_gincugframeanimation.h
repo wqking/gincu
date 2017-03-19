@@ -23,7 +23,7 @@ void buildMetaClass_Global_gframeanimation(D _d)
     using namespace cpgf;
     
     _d.CPGF_MD_TEMPLATE _method("buildFrameAnimationDataFromAtlas", (void (*) (GFrameAnimationSetData *, const GAtlas &, const int))&buildFrameAnimationDataFromAtlas)
-        ._default(copyVariantFromCopyable(30))
+        ._default(copyVariantFromCopyable<const int>(30))
     ;
 }
 

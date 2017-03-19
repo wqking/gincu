@@ -23,8 +23,8 @@ void buildMetaClass_GTransitionFadeInOut(D _d)
     using namespace cpgf;
     
     _d.CPGF_MD_TEMPLATE _constructor<void * (unsigned int, const GColor)>()
-        ._default(copyVariantFromCopyable(colorWhite))
-        ._default(copyVariantFromCopyable(500))
+        ._default(copyVariantFromCopyable<const GColor>(colorWhite))
+        ._default(copyVariantFromCopyable<unsigned int>(500))
     ;
 }
 

@@ -23,11 +23,11 @@ void buildMetaClass_Global_gentitypolicy(D _d)
     using namespace cpgf;
     
     _d.CPGF_MD_TEMPLATE _enum<GEntityStoragePolicy>("GEntityStoragePolicy")
-        ._element("dynamicArray", gincu::dynamicArray)
-        ._element("dynamicMap", gincu::dynamicMap)
-        ._element("staticArray", gincu::staticArray)
-        ._element("mixedArray", gincu::mixedArray)
-        ._element("mixedMap", gincu::mixedMap)
+        ._element("dynamicArray", gincu::GEntityStoragePolicy::dynamicArray)
+        ._element("dynamicMap", gincu::GEntityStoragePolicy::dynamicMap)
+        ._element("staticArray", gincu::GEntityStoragePolicy::staticArray)
+        ._element("mixedArray", gincu::GEntityStoragePolicy::mixedArray)
+        ._element("mixedMap", gincu::GEntityStoragePolicy::mixedMap)
     ;
     _d.CPGF_MD_TEMPLATE _enum<long long>("GlobalDefine_gincu_2")
         ._element("GINCU_ENTITY_STORAGE_POLICY", GINCU_ENTITY_STORAGE_POLICY)

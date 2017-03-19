@@ -23,12 +23,12 @@ void buildMetaClass_Global_gprimitive(D _d)
     using namespace cpgf;
     
     _d.CPGF_MD_TEMPLATE _enum<GPrimitive>("GPrimitive")
-        ._element("points", gincu::points)
-        ._element("lines", gincu::lines)
-        ._element("lineStrip", gincu::lineStrip)
-        ._element("triangles", gincu::triangles)
-        ._element("triangleStrip", gincu::triangleStrip)
-        ._element("triangleFan", gincu::triangleFan)
+        ._element("points", gincu::GPrimitive::points)
+        ._element("lines", gincu::GPrimitive::lines)
+        ._element("lineStrip", gincu::GPrimitive::lineStrip)
+        ._element("triangles", gincu::GPrimitive::triangles)
+        ._element("triangleStrip", gincu::GPrimitive::triangleStrip)
+        ._element("triangleFan", gincu::GPrimitive::triangleFan)
     ;
 }
 

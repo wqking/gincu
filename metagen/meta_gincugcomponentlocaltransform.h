@@ -23,7 +23,10 @@ void buildMetaClass_GComponentLocalTransform(D _d)
     using namespace cpgf;
     
     _d.CPGF_MD_TEMPLATE _constructor<void * ()>();
-    _d.CPGF_MD_TEMPLATE _constructor<void * (const GPoint &)>();
+    _d.CPGF_MD_TEMPLATE _constructor<void * (const GPoint &, const GScale &, const bool)>()
+        ._default(copyVariantFromCopyable<const bool>(true))
+        ._default(copyVariantFromCopyable<const GScale &>({1.0f, 1.0f}))
+    ;
     _d.CPGF_MD_TEMPLATE _method("getComponentType", &D::ClassType::getComponentType);
     _d.CPGF_MD_TEMPLATE _method("setParent", &D::ClassType::setParent);
     _d.CPGF_MD_TEMPLATE _method("getParent", &D::ClassType::getParent);

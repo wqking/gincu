@@ -24,7 +24,7 @@ void buildMetaClass_Global_gentityutil(D _d)
     
     _d.CPGF_MD_TEMPLATE _method("computeRenderableMatrix", (GMatrix44 (*) (const GComponentTransform *, const GSize &))&computeRenderableMatrix);
     _d.CPGF_MD_TEMPLATE _method("computeRenderableMatrix", (GMatrix44 (*) (const GComponentTransform *, const GComponentRender *))&computeRenderableMatrix)
-        ._default(copyVariantFromCopyable((const GComponentRender *)nullptr))
+        ._default(copyVariantFromCopyable<const GComponentRender *>((const GComponentRender *)nullptr))
     ;
     _d.CPGF_MD_TEMPLATE _method("getComponentManagerFromEntity", (GComponentManager * (*) (const GEntity *))&getComponentManagerFromEntity);
     _d.CPGF_MD_TEMPLATE _method("getParentLocalTransform", (GComponentLocalTransform * (*) (const GEntity *))&getParentLocalTransform);

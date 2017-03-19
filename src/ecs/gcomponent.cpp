@@ -23,6 +23,11 @@ void * GComponent::operator new (const std::size_t size)
 	return GHeapPool::getInstance()->allocate(size);
 }
 
+void * GComponent::operator new (const std::size_t /*size*/, void * ptr)
+{
+	return ptr;
+}
+
 void GComponent::operator delete(void * p)
 {
 	GHeapPool::getInstance()->free(p);

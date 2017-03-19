@@ -25,19 +25,19 @@ void buildMetaClass_GEventQueue(D _d)
     _d.CPGF_MD_TEMPLATE _constructor<void * ()>();
     _d.CPGF_MD_TEMPLATE _method("dispatchAll", &D::ClassType::dispatchAll);
     _d.CPGF_MD_TEMPLATE _method("addListener", (void (D::ClassType::*) (const GEventType, const GEventQueue::EventListener&, const GEvent::TagType))&D::ClassType::addListener)
-        ._default(copyVariantFromCopyable((const GEvent::TagType)nullptr))
+        ._default(copyVariantFromCopyable<const GEvent::TagType>((const GEvent::TagType)nullptr))
     ;
     _d.CPGF_MD_TEMPLATE _method("addListener", (void (D::ClassType::*) (const GEventQueue::EventListener&, const GEvent::TagType))&D::ClassType::addListener)
-        ._default(copyVariantFromCopyable((const GEvent::TagType)nullptr))
+        ._default(copyVariantFromCopyable<const GEvent::TagType>((const GEvent::TagType)nullptr))
     ;
     _d.CPGF_MD_TEMPLATE _method("removeListener", (void (D::ClassType::*) (const GEventType, const GEventQueue::EventListener&, const GEvent::TagType))&D::ClassType::removeListener)
-        ._default(copyVariantFromCopyable((const GEvent::TagType)nullptr))
+        ._default(copyVariantFromCopyable<const GEvent::TagType>((const GEvent::TagType)nullptr))
     ;
     _d.CPGF_MD_TEMPLATE _method("removeListener", (void (D::ClassType::*) (const GEventQueue::EventListener&, const GEvent::TagType))&D::ClassType::removeListener)
-        ._default(copyVariantFromCopyable((const GEvent::TagType)nullptr))
+        ._default(copyVariantFromCopyable<const GEvent::TagType>((const GEvent::TagType)nullptr))
     ;
-    _d.CPGF_MD_TEMPLATE _method("send", &D::ClassType::send, cpgf::MakePolicy<cpgf::GMetaRuleCopyConstReference<0> >());
-    _d.CPGF_MD_TEMPLATE _method("post", &D::ClassType::post, cpgf::MakePolicy<cpgf::GMetaRuleCopyConstReference<0> >());
+    _d.CPGF_MD_TEMPLATE _method("send", &D::ClassType::send);
+    _d.CPGF_MD_TEMPLATE _method("post", &D::ClassType::post);
     _d.CPGF_MD_TEMPLATE _method("dispatch", &D::ClassType::dispatch);
 }
 
