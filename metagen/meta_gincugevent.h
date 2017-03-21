@@ -52,9 +52,6 @@ void buildMetaClass_GEvent(D _d)
     _d.CPGF_MD_TEMPLATE _constructor<void * (const GEventType, GRenderContext *)>();
     _d.CPGF_MD_TEMPLATE _constructor<void * (const GEventType, const std::shared_ptr< void > &)>();
     _d.CPGF_MD_TEMPLATE _constructor<void * (const GEventType, const cpgf::GCallback< void()> &)>();
-    _d.CPGF_MD_TEMPLATE _field("touch", &D::ClassType::touch);
-    _d.CPGF_MD_TEMPLATE _field("resize", &D::ClassType::resize);
-    _d.CPGF_MD_TEMPLATE _field("renderContext", &D::ClassType::renderContext);
     _d.CPGF_MD_TEMPLATE _method("getType", &D::ClassType::getType);
     _d.CPGF_MD_TEMPLATE _method("setType", &D::ClassType::setType);
     _d.CPGF_MD_TEMPLATE _method("getTouch", &D::ClassType::getTouch);

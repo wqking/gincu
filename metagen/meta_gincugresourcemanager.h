@@ -28,12 +28,12 @@ void buildMetaClass_GResourceManager(D _d)
     _d.CPGF_MD_TEMPLATE _method("finalize", &D::ClassType::finalize);
     _d.CPGF_MD_TEMPLATE _method("getImage", &D::ClassType::getImage);
     _d.CPGF_MD_TEMPLATE _method("asyncGetImage", &D::ClassType::asyncGetImage)
-        ._default(copyVariantFromCopyable<const GResourceManager::LoaderCallback&>(LoaderCallback()))
+        ._default(copyVariantFromCopyable<const GResourceManager::LoaderCallback&>(GResourceManager::LoaderCallback()))
     ;
     _d.CPGF_MD_TEMPLATE _method("getAtlas", &D::ClassType::getAtlas);
     _d.CPGF_MD_TEMPLATE _method("getFont", (GFont (D::ClassType::*) (const std::string &) const)&D::ClassType::getFont);
     _d.CPGF_MD_TEMPLATE _method("asyncGetFont", &D::ClassType::asyncGetFont)
-        ._default(copyVariantFromCopyable<const GResourceManager::LoaderCallback&>(LoaderCallback()))
+        ._default(copyVariantFromCopyable<const GResourceManager::LoaderCallback&>(GResourceManager::LoaderCallback()))
     ;
     _d.CPGF_MD_TEMPLATE _method("getFont", (GFont (D::ClassType::*) () const)&D::ClassType::getFont);
     _d.CPGF_MD_TEMPLATE _method("solveResourcePath", &D::ClassType::solveResourcePath);

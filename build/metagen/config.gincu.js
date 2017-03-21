@@ -22,7 +22,7 @@ var config = {
 	wrapOperator : true, // default is true 
 
 	metaNamespace : "gincu",
-	sourceHeaderCode : "",
+	sourceHeaderCode : '#include "gincu/gincuall.h"\n',
 	sourceHeaderReplacer : [ "!.*include/gincu!i", "gincu" ],
 	metaHeaderPath : "",
 	
@@ -34,9 +34,50 @@ var config = {
 	]
 };
 
-var re_Win32 = new RegExp("(.*)/Win32/(.*)", "i");
+var ignoredItemNames = [
+	"GEntityDynamicArrayBase",
+	"GEntityDynamicArray",
+	"GEntityDynamicMap",
+	"GEntityStaticArray",
+	"GEntityMixedArray",
+	"GEntityMixedMap",
+	"GEntityStoragePolicySelector",
+	"GHeapPool",
+	"GHeapSizedPool",
+	"defaultColor",
+];
 
 function processCallback(item, data)
 {
+	if(item.isConstant()) {
+		data.skipBind = true;
+	}
+	
+	var owner = item.getOwner();
+
+	if(item.isField()) {
+		if(owner != null && owner.getPrimaryName() == "GEvent") {
+			data.skipBind = true;
+		}
+	}
+	
+	var itemName = item.getPrimaryName();
+	
+	for each(name in ignoredItemNames) {
+		if(itemName.match(name)) {
+			data.skipBind = true;
+			break;
+		}
+	}
+	
+	if(itemName == "asyncGetImage" || itemName == "asyncGetFont") {
+		item.setParameterDefaultValueAt(-1, "GResourceManager::LoaderCallback()");
+	}
+	
+	if(owner != null && owner.getPrimaryName() == "GVertexArray") {
+		if(itemName == "setAt" || itemName == "append") {
+			item.setParameterDefaultValueAt(-2, "GVertexArray::defaultColor");
+		}
+	}
 }
 

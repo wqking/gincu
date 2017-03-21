@@ -64,11 +64,6 @@ macro(globAndAppendFiles fileList)
 endmacro()
 
 globAndAppendFiles(fileList
-	${CPGF_PATH}/src/tween/*.cpp
-	${CPGF_PATH}/src/gexception.cpp
-	${CPGF_PATH}/src/glifecycle.cpp
-	${CPGF_PATH}/src/gmemorypool.cpp
-	
 	${SRC_PATH}/*.cpp
 	${SRC_PATH}/ecs/*.cpp
 	${SRC_PATH}/transition/*.cpp
@@ -83,7 +78,6 @@ globAndAppendFiles(fileList
 if(ENABLE_CPGF_REFLECTION)
 globAndAppendFiles(fileList
 	${ROOT_PATH}/metagen/*.cpp
-	${CPGF_PATH}/src/gmeta*.cpp
 )
 endif()
 
@@ -124,5 +118,5 @@ include_directories(
 	${ROOT_PATH}/thirdparty
 )
 
-target_link_libraries(${TARGET} ${LIBS} )
+target_link_libraries(${TARGET} ${CPGF_LIB} ${LIBS} )
 

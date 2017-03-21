@@ -1,5 +1,6 @@
 // Auto generated file, don't modify.
 
+#include "gincu/gincuall.h"
 
 #include "gincu/transition/gtransition.h"
 
