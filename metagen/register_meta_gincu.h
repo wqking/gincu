@@ -13,6 +13,8 @@ namespace meta_gincu {
 
 
 GDefineMetaInfo createMetaClass_GApplication();
+GDefineMetaInfo createMetaClass_GAtlas();
+GDefineMetaInfo createMetaClass_GAtlasData();
 GDefineMetaInfo createMetaClass_GAtlasRender();
 GDefineMetaInfo createMetaClass_GBlendMode();
 GDefineMetaInfo createMetaClass_GBlendModeChannel();
@@ -30,6 +32,7 @@ GDefineMetaInfo createMetaClass_GComponentManager();
 GDefineMetaInfo createMetaClass_GComponentRender();
 GDefineMetaInfo createMetaClass_GComponentRendererTouchHandler();
 GDefineMetaInfo createMetaClass_GComponentTouchHandler();
+GDefineMetaInfo createMetaClass_GComponentTransform();
 GDefineMetaInfo createMetaClass_GComponentVertexArrayRender();
 GDefineMetaInfo createMetaClass_GConfigInfo();
 GDefineMetaInfo createMetaClass_GDeviceContext();
@@ -52,6 +55,7 @@ GDefineMetaInfo createMetaClass_GResourceManager();
 GDefineMetaInfo createMetaClass_GScene();
 GDefineMetaInfo createMetaClass_GSceneManager();
 GDefineMetaInfo createMetaClass_GSize();
+GDefineMetaInfo createMetaClass_GState();
 GDefineMetaInfo createMetaClass_GStateMachine();
 GDefineMetaInfo createMetaClass_GTextRender();
 GDefineMetaInfo createMetaClass_GTextRenderData();
@@ -67,6 +71,7 @@ GDefineMetaInfo createMetaClass_GVector2();
 GDefineMetaInfo createMetaClass_GVertexArray();
 GDefineMetaInfo createMetaClass_GVertexArrayData();
 GDefineMetaInfo createMetaClass_GVertexArrayRender();
+GDefineMetaInfo createMetaClass_Global_gatlas();
 GDefineMetaInfo createMetaClass_Global_gatlasrender();
 GDefineMetaInfo createMetaClass_Global_gblendmode();
 GDefineMetaInfo createMetaClass_Global_gcamera();
@@ -90,6 +95,7 @@ GDefineMetaInfo createMetaClass_Global_gprimitive();
 GDefineMetaInfo createMetaClass_Global_grenderanchor();
 GDefineMetaInfo createMetaClass_Global_grenderinfo();
 GDefineMetaInfo createMetaClass_Global_gscene();
+GDefineMetaInfo createMetaClass_Global_gstate();
 GDefineMetaInfo createMetaClass_Global_gtextrender();
 GDefineMetaInfo createMetaClass_Global_gutil();
 GDefineMetaInfo createMetaClass_Global_gvertexarrayrender();
@@ -99,6 +105,8 @@ template <typename Meta>
 void registerMain_gincu(Meta _d)
 {
     _d._class(createMetaClass_GApplication());
+    _d._class(createMetaClass_GAtlas());
+    _d._class(createMetaClass_GAtlasData());
     _d._class(createMetaClass_GAtlasRender());
     _d._class(createMetaClass_GBlendMode());
     _d._class(createMetaClass_GBlendModeChannel());
@@ -116,6 +124,7 @@ void registerMain_gincu(Meta _d)
     _d._class(createMetaClass_GComponentRender());
     _d._class(createMetaClass_GComponentRendererTouchHandler());
     _d._class(createMetaClass_GComponentTouchHandler());
+    _d._class(createMetaClass_GComponentTransform());
     _d._class(createMetaClass_GComponentVertexArrayRender());
     _d._class(createMetaClass_GConfigInfo());
     _d._class(createMetaClass_GDeviceContext());
@@ -138,6 +147,7 @@ void registerMain_gincu(Meta _d)
     _d._class(createMetaClass_GScene());
     _d._class(createMetaClass_GSceneManager());
     _d._class(createMetaClass_GSize());
+    _d._class(createMetaClass_GState());
     _d._class(createMetaClass_GStateMachine());
     _d._class(createMetaClass_GTextRender());
     _d._class(createMetaClass_GTextRenderData());
@@ -153,6 +163,7 @@ void registerMain_gincu(Meta _d)
     _d._class(createMetaClass_GVertexArray());
     _d._class(createMetaClass_GVertexArrayData());
     _d._class(createMetaClass_GVertexArrayRender());
+    _d._class(createMetaClass_Global_gatlas());
     _d._class(createMetaClass_Global_gatlasrender());
     _d._class(createMetaClass_Global_gblendmode());
     _d._class(createMetaClass_Global_gcamera());
@@ -176,6 +187,7 @@ void registerMain_gincu(Meta _d)
     _d._class(createMetaClass_Global_grenderanchor());
     _d._class(createMetaClass_Global_grenderinfo());
     _d._class(createMetaClass_Global_gscene());
+    _d._class(createMetaClass_Global_gstate());
     _d._class(createMetaClass_Global_gtextrender());
     _d._class(createMetaClass_Global_gutil());
     _d._class(createMetaClass_Global_gvertexarrayrender());

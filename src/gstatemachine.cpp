@@ -18,7 +18,7 @@ GStateMachine::~GStateMachine()
 
 void GStateMachine::registerState(GState * state)
 {
-	state->stateMachine = this;
+	state->setStateMachine(this);
 	this->stateMap[state->getId()].reset(state);
 }
 

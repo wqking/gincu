@@ -22,7 +22,8 @@ public:
 	int getId() const { return id; }
 	int getNextId() const { return nextId; }
 
-	GStateMachine * getStateMachine() const { return stateMachine; }
+	GStateMachine * getStateMachine() const { return this->stateMachine; }
+	void setStateMachine(GStateMachine * stateMachine) { this->stateMachine = stateMachine; }
 
 private:
 	virtual void doOnEnter();
@@ -32,9 +33,6 @@ private:
 	int id;
 	int nextId;
 	GStateMachine * stateMachine;
-
-private:
-	friend class GStateMachine;
 };
 
 

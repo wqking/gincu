@@ -25,14 +25,14 @@ public:
 	unsigned int getCameraId() const { return this->cameraId; }
 	GComponentTransform * setCameraId(const unsigned int cameraId);
 	
+	// for internal usage
+	void setCameraIdSilently(const unsigned int cameraId) { this->cameraId = cameraId; }
+	
 private:
 	virtual void doAfterZOrderChanged();
 
 private:
 	unsigned int cameraId; // must between [0, 31]
-
-private:
-	friend class GComponentLocalTransform;
 };
 
 

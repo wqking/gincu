@@ -77,8 +77,7 @@ void GComponentLocalTransform::applyGlobal()
 			GComponentTransform * parentGlobalTransform = this->parent->getEntity()->getComponentByType<GComponentTransform>();
 			if(parentGlobalTransform != nullptr) {
 				globalTransform->setVisible(parentGlobalTransform->isVisible() && this->isVisible());
-				// don't call setCameraId to avoid trigger events.
-				globalTransform->cameraId = parentGlobalTransform->getCameraId();
+				globalTransform->setCameraIdSilently(parentGlobalTransform->getCameraId());
 
 				globalTransform->setTransform(
 					GTransform(translateMatrix(parentGlobalTransform->getTransform().getMatrix(), this->parent->getTransform().getOrigin()) * this->getTransform().getMatrix())

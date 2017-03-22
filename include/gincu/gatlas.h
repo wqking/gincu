@@ -52,7 +52,7 @@ private:
 
 class GAtlas
 {
-private:
+public:
 	typedef cpgf::GCallback<void (const std::string &, GAtlasData *)> LoaderCallback;
 	typedef std::map<GAtlasFormat, LoaderCallback> LoaderMap;
 
@@ -73,14 +73,11 @@ public:
 	int getImageCount() const { return (int)this->data->getNameList().size(); }
 	int getIndex(const std::string & name) const { return this->data->getIndex(name); }
 
-private:
+	// internal use
 	static LoaderMap * getLoaderMap();
 
 private:
 	std::shared_ptr<GAtlasData> data;
-
-private:
-	friend class GAtlasData;
 };
 
 } //namespace gincu

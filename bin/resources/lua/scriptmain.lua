@@ -6,10 +6,10 @@ backgroundImageName = "matchthree/background.png"
 ScriptScene = cpgf.cloneClass(gincu.GSceneWrapper)
 
 ScriptScene.doOnEnter = function(me)
-	print(456)
+	local pos = gincu.GVector2()
 	me.addEntity(
-		createEntity()
---			.addComponent(gincu.GComponentTransform())
+		gincu.GEntity()
+			.addComponent(gincu.GComponentTransform())
 			.addComponent(gincu.createAndLoadImageComponent(backgroundImageName))
 	)
 end
