@@ -9,7 +9,6 @@
 #include "gincu/gvertexarray.h"
 #include "gincu/gprimitive.h"
 #include "gincu/gcamera.h"
-#include "gincu/gheappool.h"
 #include "gincu/glog.h"
 
 #include "gallegroutil.h"

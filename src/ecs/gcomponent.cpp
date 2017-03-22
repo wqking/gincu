@@ -1,5 +1,6 @@
 #include "gincu/ecs/gcomponent.h"
-#include "gincu/gheappool.h"
+
+#include "cpgf/gmemorypool.h"
 
 #include <map>
 
@@ -20,7 +21,7 @@ std::map<std::string, unsigned int> * getComponentNameIdMap()
 
 void * GComponent::operator new (const std::size_t size)
 {
-	return GHeapPool::getInstance()->allocate(size);
+	return cpgf::GMemoryPool::getInstance()->allocate(size);
 }
 
 void * GComponent::operator new (const std::size_t /*size*/, void * ptr)
@@ -28,9 +29,9 @@ void * GComponent::operator new (const std::size_t /*size*/, void * ptr)
 	return ptr;
 }
 
-void GComponent::operator delete(void * p)
+void GComponent::operator delete(void * p, size_t size)
 {
-	GHeapPool::getInstance()->free(p);
+	cpgf::GMemoryPool::getInstance()->free(p, size);
 }
 
 GComponent::GComponent(const GComponentType type)

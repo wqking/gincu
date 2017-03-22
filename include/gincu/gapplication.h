@@ -15,7 +15,6 @@ namespace gincu {
 class GRenderEngine;
 class GResourceManager;
 class GSceneManager;
-class GHeapPool;
 class GEvent;
 class GEventQueue;
 class GWorker;

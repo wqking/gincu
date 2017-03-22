@@ -13,7 +13,6 @@
 #include "gincu/gfont.h"
 #include "gincu/gframeanimation.h"
 #include "gincu/ggeometry.h"
-#include "gincu/gheappool.h"
 #include "gincu/gimage.h"
 #include "gincu/glog.h"
 #include "gincu/gmatrix.h"

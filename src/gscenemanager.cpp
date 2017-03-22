@@ -1,7 +1,6 @@
 #include "gincu/gscenemanager.h"
 #include "gincu/gscene.h"
 #include "gincu/gapplication.h"
-#include "gincu/gheappool.h"
 #include "gincu/gevent.h"
 #include "gincu/geventqueue.h"
 #include "gincu/transition/gtransition.h"
@@ -77,12 +76,6 @@ void GSceneManager::doSwitchScene(GScene * scene, const bool keepScene, const bo
 		this->currentScene.release();
 	}
 
-	this->currentScene.reset();
-
-	if(GHeapPool::getInstance()->getPurgeStrategy() == GHeapPoolPurgeStrategy::onSceneFreed) {
-		GHeapPool::getInstance()->purge();
-	}
-
 	this->currentScene.reset(scene);
 
 	if(this->currentScene) {
@@ -90,10 +83,6 @@ void GSceneManager::doSwitchScene(GScene * scene, const bool keepScene, const bo
 
 		if(enterNewScene) {
 			this->currentScene->onEnter();
-		}
-		
-		if(GHeapPool::getInstance()->getPurgeStrategy() == GHeapPoolPurgeStrategy::onSceneSwitched) {
-			GHeapPool::getInstance()->purge();
 		}
 	}
 }

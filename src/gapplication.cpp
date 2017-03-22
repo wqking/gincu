@@ -5,7 +5,6 @@
 #include "gincu/gscenemanager.h"
 #include "gincu/gevent.h"
 #include "gincu/geventqueue.h"
-#include "gincu/gheappool.h"
 #include "gincu/gutil.h"
 #include "gincu/glog.h"
 #include "gworker.h"

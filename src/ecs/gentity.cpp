@@ -1,13 +1,14 @@
 #include "gincu/ecs/gentity.h"
 #include "gincu/ecs/gcomponent.h"
 #include "gincu/ecs/gcomponentmanager.h"
-#include "gincu/gheappool.h"
+
+#include "cpgf/gmemorypool.h"
 
 namespace gincu {
 
 void * GEntity::operator new (const std::size_t size)
 {
-	return GHeapPool::getInstance()->allocate(size);
+	return cpgf::GMemoryPool::getInstance()->allocate(size);
 }
 
 void * GEntity::operator new (const std::size_t /*size*/, void * ptr)
@@ -15,9 +16,9 @@ void * GEntity::operator new (const std::size_t /*size*/, void * ptr)
 	return ptr;
 }
 
-void GEntity::operator delete(void * p)
+void GEntity::operator delete(void * p, size_t size)
 {
-	GHeapPool::getInstance()->free(p);
+	cpgf::GMemoryPool::getInstance()->free(p, size);
 }
 
 GEntity::GEntity()

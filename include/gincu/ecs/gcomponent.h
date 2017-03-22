@@ -33,7 +33,7 @@ class GComponent
 public:
 	void * operator new (const std::size_t size);
 	void * operator new (const std::size_t size, void * ptr);
-	void operator delete(void * p);
+	void operator delete(void * p, size_t size);
 
 	explicit GComponent(const GComponentType type);
 	virtual ~GComponent();

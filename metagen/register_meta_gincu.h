@@ -86,7 +86,6 @@ GDefineMetaInfo createMetaClass_Global_gerrorhandler();
 GDefineMetaInfo createMetaClass_Global_gevent();
 GDefineMetaInfo createMetaClass_Global_gframeanimation();
 GDefineMetaInfo createMetaClass_Global_ggeometry();
-GDefineMetaInfo createMetaClass_Global_gheappool();
 GDefineMetaInfo createMetaClass_Global_gimage();
 GDefineMetaInfo createMetaClass_Global_glog();
 GDefineMetaInfo createMetaClass_Global_gmatrix();
@@ -178,7 +177,6 @@ void registerMain_gincu(Meta _d)
     _d._class(createMetaClass_Global_gevent());
     _d._class(createMetaClass_Global_gframeanimation());
     _d._class(createMetaClass_Global_ggeometry());
-    _d._class(createMetaClass_Global_gheappool());
     _d._class(createMetaClass_Global_gimage());
     _d._class(createMetaClass_Global_glog());
     _d._class(createMetaClass_Global_gmatrix());
