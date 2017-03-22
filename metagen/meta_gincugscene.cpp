@@ -32,6 +32,10 @@ GDefineMetaInfo createMetaClass_GScene()
         GDefineMetaClass<gincu::GScene> _nd = GDefineMetaClass<gincu::GScene>::lazyDeclare("GScene", &buildMetaClass_GScene);
         _d._class(_nd);
     }
+    {
+        GDefineMetaClass<GSceneWrapper, gincu::GScene> _nd = GDefineMetaClass<GSceneWrapper, gincu::GScene>::lazyDeclare("GSceneWrapper", &buildMetaClass_GSceneWrapper);
+        _d._class(_nd);
+    }
     return _d.getMetaInfo();
 }
 

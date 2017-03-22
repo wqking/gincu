@@ -27,7 +27,6 @@ var config = {
 	metaHeaderPath : "",
 	
 	classTraits : [
-//		{ pattern : "GApplication", traits : { copyConstructorHidden : true }  },
 	],
 
 	predefinedTemplateInstances : [
@@ -46,6 +45,12 @@ var ignoredItemNames = [
 	"GHeapSizedPool",
 	"defaultColor",
 ];
+
+var wrapperClassNames = {
+	GApplication : 1,
+	GComponent : 1,
+	GScene : 1,
+};
 
 function processCallback(item, data)
 {
@@ -77,6 +82,12 @@ function processCallback(item, data)
 	if(owner != null && owner.getPrimaryName() == "GVertexArray") {
 		if(itemName == "setAt" || itemName == "append") {
 			item.setParameterDefaultValueAt(-2, "GVertexArray::defaultColor");
+		}
+	}
+
+	if(item.isClass()) {
+		if(wrapperClassNames[itemName]) {
+			data.getWrapperConfig().setWrapClass(true);
 		}
 	}
 }

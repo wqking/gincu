@@ -8,6 +8,9 @@
 #include "cpgf/metadata/gmetadataconfig.h"
 #include "cpgf/metadata/private/gmetadata_header.h"
 #include "cpgf/gmetapolicy.h"
+#include "cpgf/scriptbind/gscriptbindutil.h"
+#include "cpgf/scriptbind/gscriptwrapper.h"
+#include "cpgf/gscopedinterface.h"
 
 
 using namespace gincu;
@@ -41,6 +44,53 @@ void buildMetaClass_GScene(D _d)
     _d.CPGF_MD_TEMPLATE _method("getTouchCapture", &D::ClassType::getTouchCapture);
     _d.CPGF_MD_TEMPLATE _method("getPrimaryCamera", &D::ClassType::getPrimaryCamera);
     _d.CPGF_MD_TEMPLATE _method("getTweenList", &D::ClassType::getTweenList);
+}
+
+
+class GSceneWrapper : public gincu::GScene, public cpgf::GScriptWrapper {
+public:
+    
+    GSceneWrapper()
+        : gincu::GScene() {}
+    
+    void doOnExit()
+    {
+        cpgf::GScopedInterface<cpgf::IScriptFunction> func(this->getScriptFunction("doOnExit"));
+        if(func)
+        {
+            cpgf::invokeScriptFunctionOnObject(func.get(), this);
+            return;
+        }
+    }
+    
+    void doOnEnter()
+    {
+        cpgf::GScopedInterface<cpgf::IScriptFunction> func(this->getScriptFunction("doOnEnter"));
+        if(func)
+        {
+            cpgf::invokeScriptFunctionOnObject(func.get(), this);
+            return;
+        }
+    }
+    template <typename D>
+    static void cpgf__register(D _d)
+    {
+        (void)_d;
+        using namespace cpgf;
+    }
+};
+
+
+template <typename D>
+void buildMetaClass_GSceneWrapper(D _d)
+{
+    (void)_d;
+    using namespace cpgf;
+    
+    
+    GSceneWrapper::cpgf__register(_d);
+    
+    buildMetaClass_GScene<D>(_d);
 }
 
 

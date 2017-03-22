@@ -32,6 +32,10 @@ GDefineMetaInfo createMetaClass_GComponent()
         GDefineMetaClass<gincu::GComponent> _nd = GDefineMetaClass<gincu::GComponent>::Policy<MakePolicy<GMetaRuleDefaultConstructorAbsent> >::lazyDeclare("GComponent", &buildMetaClass_GComponent);
         _d._class(_nd);
     }
+    {
+        GDefineMetaClass<GComponentWrapper, gincu::GComponent> _nd = GDefineMetaClass<GComponentWrapper, gincu::GComponent>::Policy<MakePolicy<GMetaRuleDefaultConstructorAbsent> >::lazyDeclare("GComponentWrapper", &buildMetaClass_GComponentWrapper);
+        _d._class(_nd);
+    }
     return _d.getMetaInfo();
 }
 

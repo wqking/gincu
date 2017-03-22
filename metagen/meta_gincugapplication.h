@@ -8,6 +8,9 @@
 #include "cpgf/metadata/gmetadataconfig.h"
 #include "cpgf/metadata/private/gmetadata_header.h"
 #include "cpgf/gmetapolicy.h"
+#include "cpgf/scriptbind/gscriptbindutil.h"
+#include "cpgf/scriptbind/gscriptwrapper.h"
+#include "cpgf/gscopedinterface.h"
 
 
 using namespace gincu;
@@ -36,6 +39,59 @@ void buildMetaClass_GApplication(D _d)
     _d.CPGF_MD_TEMPLATE _method("getRenderFrameRate", &D::ClassType::getRenderFrameRate);
     _d.CPGF_MD_TEMPLATE _method("getFrameMilliseconds", &D::ClassType::getFrameMilliseconds);
     _d.CPGF_MD_TEMPLATE _method("getRenderMilliseconds", &D::ClassType::getRenderMilliseconds);
+}
+
+
+class GApplicationWrapper : public gincu::GApplication, public cpgf::GScriptWrapper {
+public:
+    
+    GApplicationWrapper()
+        : gincu::GApplication() {}
+    
+    void doInitialize()
+    {
+        cpgf::GScopedInterface<cpgf::IScriptFunction> func(this->getScriptFunction("doInitialize"));
+        if(func)
+        {
+            cpgf::invokeScriptFunctionOnObject(func.get(), this);
+            return;
+        }
+    }
+    
+    void setConfigInfo(const GConfigInfo & configInfo)
+    {
+        gincu::GApplication::setConfigInfo(configInfo);
+    }
+    
+    void doFinalize()
+    {
+        cpgf::GScopedInterface<cpgf::IScriptFunction> func(this->getScriptFunction("doFinalize"));
+        if(func)
+        {
+            cpgf::invokeScriptFunctionOnObject(func.get(), this);
+            return;
+        }
+    }
+    template <typename D>
+    static void cpgf__register(D _d)
+    {
+        (void)_d;
+        using namespace cpgf;
+        _d.CPGF_MD_TEMPLATE _method("setConfigInfo", (void (D::ClassType::*) (const GConfigInfo &))&D::ClassType::setConfigInfo);
+    }
+};
+
+
+template <typename D>
+void buildMetaClass_GApplicationWrapper(D _d)
+{
+    (void)_d;
+    using namespace cpgf;
+    
+    
+    GApplicationWrapper::cpgf__register(_d);
+    
+    buildMetaClass_GApplication<D>(_d);
 }
 
 

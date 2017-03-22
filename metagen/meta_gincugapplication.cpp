@@ -21,6 +21,10 @@ GDefineMetaInfo createMetaClass_GApplication()
         GDefineMetaClass<gincu::GApplication> _nd = GDefineMetaClass<gincu::GApplication>::lazyDeclare("GApplication", &buildMetaClass_GApplication);
         _d._class(_nd);
     }
+    {
+        GDefineMetaClass<GApplicationWrapper, gincu::GApplication> _nd = GDefineMetaClass<GApplicationWrapper, gincu::GApplication>::lazyDeclare("GApplicationWrapper", &buildMetaClass_GApplicationWrapper);
+        _d._class(_nd);
+    }
     return _d.getMetaInfo();
 }
 

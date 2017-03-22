@@ -8,6 +8,9 @@
 #include "cpgf/metadata/gmetadataconfig.h"
 #include "cpgf/metadata/private/gmetadata_header.h"
 #include "cpgf/gmetapolicy.h"
+#include "cpgf/scriptbind/gscriptbindutil.h"
+#include "cpgf/scriptbind/gscriptwrapper.h"
+#include "cpgf/gscopedinterface.h"
 
 
 using namespace gincu;
@@ -47,6 +50,49 @@ void buildMetaClass_GComponent(D _d)
     _d.CPGF_MD_TEMPLATE _method("setEntity", &D::ClassType::setEntity);
     _d.CPGF_MD_TEMPLATE _method("getType", &D::ClassType::getType);
     _d.CPGF_MD_TEMPLATE _method("getEntity", &D::ClassType::getEntity);
+}
+
+
+class GComponentWrapper : public gincu::GComponent, public cpgf::GScriptWrapper {
+public:
+    
+    GComponentWrapper(const GComponentType type)
+        : gincu::GComponent(type) {}
+    
+    void setType(const GComponentType type)
+    {
+        gincu::GComponent::setType(type);
+    }
+    
+    void doAfterSetEntity()
+    {
+        cpgf::GScopedInterface<cpgf::IScriptFunction> func(this->getScriptFunction("doAfterSetEntity"));
+        if(func)
+        {
+            cpgf::invokeScriptFunctionOnObject(func.get(), this);
+            return;
+        }
+    }
+    template <typename D>
+    static void cpgf__register(D _d)
+    {
+        (void)_d;
+        using namespace cpgf;
+        _d.CPGF_MD_TEMPLATE _method("setType", (void (D::ClassType::*) (const GComponentType))&D::ClassType::setType);
+    }
+};
+
+
+template <typename D>
+void buildMetaClass_GComponentWrapper(D _d)
+{
+    (void)_d;
+    using namespace cpgf;
+    
+    
+    GComponentWrapper::cpgf__register(_d);
+    
+    buildMetaClass_GComponent<D>(_d);
 }
 
 
