@@ -1,12 +1,19 @@
 cpgf.import(nil, "builtin.core");
 cpgf.import(nil, "builtin.debug");
+
+backgroundImageName = "matchthree/background.png"
+
 ScriptScene = cpgf.cloneClass(gincu.GSceneWrapper)
-print(ScriptScene.doOnEnter)
-function OnEnter(me)
-print(456)
+
+ScriptScene.doOnEnter = function(me)
+	print(456)
+	me.addEntity(
+		createEntity()
+--			.addComponent(gincu.GComponentTransform())
+			.addComponent(gincu.createAndLoadImageComponent(backgroundImageName))
+	)
 end
-ScriptScene.doOnEnter = OnEnter
-print(ScriptScene.doOnEnter)
+
 scriptScene = ScriptScene()
 
 gincu.GApplication.getInstance().getSceneManager().switchScene(scriptScene)

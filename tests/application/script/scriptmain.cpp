@@ -3,7 +3,11 @@
 #include "scenemenu.h"
 
 #include "gincu/gresourcemanager.h"
+#include "gincu/ecs/gentity.h"
+#include "gincu/ecs/gcomponenttransform.h"
 
+#include "cpgf/gmetaclass.h"
+#include "cpgf/gmetadefine.h"
 #include "cpgf/gmetaapi.h"
 #include "cpgf/scriptbind/gscriptbindutil.h"
 #include "cpgf/gscopedinterface.h"
@@ -17,6 +21,13 @@ using namespace cpgf;
 namespace {
 
 std::unique_ptr<ScriptMain> scriptMain;
+
+GEntity * createEntity()
+{
+	GEntity * entity = new GEntity();
+	entity->addComponent(createComponent<GComponentTransform>());
+	return entity;
+}
 
 } //unnamed namespace
 
@@ -47,6 +58,12 @@ void ScriptMain::run()
 	GScopedInterface<IMetaClass> metaClass(this->scriptHelper->borrowService()->findClassByName("gincu"));
 	//this->scriptHelper->borrowScriptObject()->bindCoreService("cpgf", NULL);
 	scriptSetValue(this->scriptHelper->borrowScriptObject(), "gincu", GScriptValue::fromClass(metaClass.get()));
+
+	GDefineMetaGlobal()
+		._method("createEntity", &createEntity);
+
+	GScopedInterface<IMetaMethod> method(static_cast<IMetaMethod *>(metaItemToInterface(getGlobalMetaClass()->getMethod("createEntity"))));
+	scriptSetValue(this->scriptHelper->borrowScriptObject(), "createEntity", GScriptValue::fromMethod(NULL, method.get()));
 
 	this->scriptHelper->execute();
 }
