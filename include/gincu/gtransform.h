@@ -6,6 +6,8 @@
 
 #include "cpgf/gflags.h"
 
+#include <string>
+
 namespace gincu {
 
 class GTransform
@@ -36,6 +38,8 @@ public:
 	const GMatrix44 & getMatrix() const;
 	
 	void setProjectionMode(const bool projectionMode);
+	
+	std::string toDebugString() const;
 
 private:
 	void doUpdateTransform() const;

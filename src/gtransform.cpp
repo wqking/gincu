@@ -150,6 +150,33 @@ void GTransform::setProjectionMode(const bool projectionMode)
 	}
 }
 
+std::string GTransform::toDebugString() const
+{
+	this->doUpdateTransform();
+
+	char buffer[1024];
+
+	sprintf(
+		buffer,
+		"Position(%d, %d), Origin(%d, %d), Scale(%.2f, %.2f), Rotation(%.2f) \n"
+		"%.2f %.2f %.2f %.2f\n"
+		"%.2f %.2f %.2f %.2f\n"
+		"%.2f %.2f %.2f %.2f\n"
+		"%.2f %.2f %.2f %.2f\n"
+		,
+		(int)this->position.x, (int)this->position.y,
+		(int)this->origin.x, (int)this->origin.y,
+		(float)this->scaleValue.x, (float)this->scaleValue.y,
+		(float)this->rotation,
+		this->matrix[0].x, this->matrix[1].x, this->matrix[2].x, this->matrix[3].x,
+		this->matrix[0].y, this->matrix[1].y, this->matrix[2].y, this->matrix[3].y,
+		this->matrix[0].z, this->matrix[1].z, this->matrix[2].z, this->matrix[3].z,
+		this->matrix[0].w, this->matrix[1].w, this->matrix[2].w, this->matrix[3].w
+	);
+
+	return buffer;
+}
+
 
 } //namespace gincu
 

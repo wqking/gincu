@@ -31,9 +31,9 @@ GEntity * createEntity()
 	return entity;
 }
 
-void doTest(const GPoint & pos)
+void doTest(const GComponentTransform * transform)
 {
-	cout << "PPPPPPPPPPPPPPPPP " << pos.x << "   " << pos.y << endl;
+	cout << transform->getTransform().toDebugString() << endl;
 }
 
 } //unnamed namespace
@@ -54,6 +54,10 @@ ScriptMain::~ScriptMain()
 
 void ScriptMain::run()
 {
+	GVariant v = copyVariantFromCopyable<const GScale &>({2.0f, 3.0f});
+	GScale scale = fromVariant<const GScale &>(v);
+	cout << "aaaaaaaaaaaaaaaaaa    " << scale.x << "  " << scale.y << endl;
+	
 	std::string scriptFileName = GResourceManager::getInstance()->solveResourcePath("lua/scriptmain.lua");
 	char * argv[] = {
 		(char *)"",
