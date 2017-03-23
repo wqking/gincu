@@ -14,9 +14,11 @@
 #include "cpgf/goutmain.h"
 
 #include <memory>
+#include <iostream>
 
 using namespace gincu;
 using namespace cpgf;
+using namespace std;
 
 namespace {
 
@@ -27,6 +29,11 @@ GEntity * createEntity()
 	GEntity * entity = new GEntity();
 	entity->addComponent(createComponent<GComponentTransform>());
 	return entity;
+}
+
+void doTest(const GPoint & pos)
+{
+	cout << "PPPPPPPPPPPPPPPPP " << pos.x << "   " << pos.y << endl;
 }
 
 } //unnamed namespace
@@ -60,13 +67,22 @@ void ScriptMain::run()
 	scriptSetValue(this->scriptHelper->borrowScriptObject(), "gincu", GScriptValue::fromClass(metaClass.get()));
 
 	GDefineMetaGlobal()
-		._method("createEntity", &createEntity);
+		._method("createEntity", &createEntity)
+		._method("doTest", &doTest)
+	;
 
-	GScopedInterface<IMetaMethod> method(static_cast<IMetaMethod *>(metaItemToInterface(getGlobalMetaClass()->getMethod("createEntity"))));
-	scriptSetValue(this->scriptHelper->borrowScriptObject(), "createEntity", GScriptValue::fromMethod(NULL, method.get()));
+	this->doBindMethod("createEntity");
+	this->doBindMethod("doTest");
 
 	this->scriptHelper->execute();
 }
+
+void ScriptMain::doBindMethod(const std::string & methodName)
+{
+	GScopedInterface<IMetaMethod> method(static_cast<IMetaMethod *>(metaItemToInterface(getGlobalMetaClass()->getMethod(methodName.c_str()))));
+	scriptSetValue(this->scriptHelper->borrowScriptObject(), methodName.c_str(), GScriptValue::fromMethod(NULL, method.get()));
+}
+
 
 G_AUTO_RUN_BEFORE_MAIN(ScriptMain)
 {

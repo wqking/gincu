@@ -30,6 +30,10 @@ var config = {
 	],
 
 	predefinedTemplateInstances : [
+		// These are used as the base class of GComponentTransform and GComponentLocalTransform
+		// we must define these instantiations to make those two classes work.
+		"GComponentTransformBase<GComponentTransform>", "",
+		"GComponentTransformBase<GComponentLocalTransform>", "",
 	]
 };
 

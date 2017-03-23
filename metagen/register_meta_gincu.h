@@ -33,6 +33,8 @@ GDefineMetaInfo createMetaClass_GComponentRender();
 GDefineMetaInfo createMetaClass_GComponentRendererTouchHandler();
 GDefineMetaInfo createMetaClass_GComponentTouchHandler();
 GDefineMetaInfo createMetaClass_GComponentTransform();
+GDefineMetaInfo createMetaClass_GComponentTransformBase_TemplateInstance_GComponentTransformBase_GComponentLocalTransform();
+GDefineMetaInfo createMetaClass_GComponentTransformBase_TemplateInstance_GComponentTransformBase_GComponentTransform();
 GDefineMetaInfo createMetaClass_GComponentVertexArrayRender();
 GDefineMetaInfo createMetaClass_GConfigInfo();
 GDefineMetaInfo createMetaClass_GDeviceContext();
@@ -124,6 +126,8 @@ void registerMain_gincu(Meta _d)
     _d._class(createMetaClass_GComponentRendererTouchHandler());
     _d._class(createMetaClass_GComponentTouchHandler());
     _d._class(createMetaClass_GComponentTransform());
+    _d._class(createMetaClass_GComponentTransformBase_TemplateInstance_GComponentTransformBase_GComponentLocalTransform());
+    _d._class(createMetaClass_GComponentTransformBase_TemplateInstance_GComponentTransformBase_GComponentTransform());
     _d._class(createMetaClass_GComponentVertexArrayRender());
     _d._class(createMetaClass_GConfigInfo());
     _d._class(createMetaClass_GDeviceContext());

@@ -13,7 +13,13 @@ private:
 	typedef GComponent super;
 
 public:
-	GComponentTransformBase() :	GComponentTransformBase(GPoint()) {
+	GComponentTransformBase()
+		:
+			super(static_cast<T *>(this)),
+			transform(),
+			zOrder(0),
+			visible(true)
+	{
 	}
 
 	explicit GComponentTransformBase(const GPoint & position, const GScale & scale, const bool visible)
