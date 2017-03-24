@@ -5,6 +5,7 @@
 #include "gincu/gresourcemanager.h"
 #include "gincu/ecs/gentity.h"
 #include "gincu/ecs/gcomponenttransform.h"
+#include "gincu/gevent.h"
 
 #include "cpgf/gmetaclass.h"
 #include "cpgf/gmetadefine.h"
@@ -23,6 +24,27 @@ using namespace std;
 namespace {
 
 std::unique_ptr<ScriptMain> scriptMain;
+
+template <typename RT>
+struct ScriptCallback
+{
+	explicit ScriptCallback(IScriptFunction * func) : func(func) {
+	}
+	
+	template <typename... Parameters>
+	RT operator() (Parameters && ... parameters) const
+	{
+		invokeScriptFunction(this->func.get(), std::forward<Parameters>(parameters)...);
+		return RT();
+	}
+	
+	GSharedInterface<IScriptFunction> func;
+};
+
+cpgf::GCallback<void (const GEvent &)> createOnTouchedCallback(IScriptFunction * func)
+{
+	return cpgf::GCallback<void (const GEvent &)>(ScriptCallback<void>(func));
+}
 
 GEntity * createEntity()
 {
@@ -54,10 +76,6 @@ ScriptMain::~ScriptMain()
 
 void ScriptMain::run()
 {
-	GVariant v = copyVariantFromCopyable<const GScale &>({2.0f, 3.0f});
-	GScale scale = fromVariant<const GScale &>(v);
-	cout << "aaaaaaaaaaaaaaaaaa    " << scale.x << "  " << scale.y << endl;
-	
 	std::string scriptFileName = GResourceManager::getInstance()->solveResourcePath("lua/scriptmain.lua");
 	char * argv[] = {
 		(char *)"",
@@ -73,10 +91,12 @@ void ScriptMain::run()
 	GDefineMetaGlobal()
 		._method("createEntity", &createEntity)
 		._method("doTest", &doTest)
+		._method("createOnTouchedCallback", &createOnTouchedCallback)
 	;
 
 	this->doBindMethod("createEntity");
 	this->doBindMethod("doTest");
+	this->doBindMethod("createOnTouchedCallback");
 
 	this->scriptHelper->execute();
 }

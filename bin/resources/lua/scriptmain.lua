@@ -1,7 +1,9 @@
 cpgf.import(nil, "builtin.core");
 cpgf.import(nil, "builtin.debug");
 
-local pos = gincu.GVector2()
+GPoint = gincu.GVector2
+
+local pos = GPoint()
 pos.x = 3
 pos.y = 8
 -- t = gincu.GComponentTransform(pos)
@@ -12,6 +14,10 @@ backgroundImageName = "matchthree/background.png"
 
 ScriptScene = cpgf.cloneClass(gincu.GSceneWrapper)
 
+function onTouched(e)
+	print("Clicked yyyyyyyyyyyyyyy")
+end
+
 ScriptScene.doOnEnter = function(me)
 	local pos = gincu.GVector2()
 	pos.x = 100
@@ -19,6 +25,7 @@ ScriptScene.doOnEnter = function(me)
 	entity = gincu.GEntity()
 	entity.addComponent(gincu.createAndLoadImageComponent(backgroundImageName))
 	entity.addComponent(gincu.GComponentTransform(pos))
+	entity.addComponent(gincu.GComponentRendererTouchHandler().addOnTouch(createOnTouchedCallback(onTouched)))
 	me.addEntity(entity)
 
 --	local t = entity.getComponentByTypeId(1)
