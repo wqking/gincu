@@ -38,7 +38,7 @@ void buildMetaClass_GScene(D _d)
     _d.CPGF_MD_TEMPLATE _method("onEnter", &D::ClassType::onEnter);
     _d.CPGF_MD_TEMPLATE _method("onExit", &D::ClassType::onExit);
     _d.CPGF_MD_TEMPLATE _method("enableRender", &D::ClassType::enableRender);
-    _d.CPGF_MD_TEMPLATE _method("addEntity", &D::ClassType::addEntity);
+    _d.CPGF_MD_TEMPLATE _method("addEntity", &D::ClassType::addEntity, cpgf::MakePolicy<cpgf::GMetaRuleTransferOwnership<0> >());
     _d.CPGF_MD_TEMPLATE _method("removeEntity", &D::ClassType::removeEntity);
     _d.CPGF_MD_TEMPLATE _method("setTouchCapture", &D::ClassType::setTouchCapture);
     _d.CPGF_MD_TEMPLATE _method("getTouchCapture", &D::ClassType::getTouchCapture);
