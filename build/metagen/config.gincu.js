@@ -56,10 +56,22 @@ var wrapperClassNames = {
 	GScene : 1,
 };
 
+var parameterFromEndIndex = 1000;
 var transferOwnerShipParameters = {
 	addEntity : 0,
 	addComponent : 0,
+	switchScene : parameterFromEndIndex + 1,
 };
+
+function normalizeParameterIndex(item, index)
+{
+	if(index >= parameterFromEndIndex) {
+		return item.getParameterCount() - 1 - (index - parameterFromEndIndex);
+	}
+	else {
+		return index;
+	}
+}
 
 function processCallback(item, data)
 {
@@ -104,11 +116,11 @@ function processCallback(item, data)
 		var indexes = transferOwnerShipParameters[itemName];
 		if(indexes instanceof Array) {
 			for(var i = 0; i < indexes.length; ++i) {
-				item.addPolicyRule("GMetaRuleTransferOwnership<" + indexes[i] + ">");
+				item.addPolicyRule("GMetaRuleTransferOwnership<" + normalizeParameterIndex(item, indexes[i]) + ">");
 			}
 		}
 		else {
-			item.addPolicyRule("GMetaRuleTransferOwnership<" + indexes + ">");
+			item.addPolicyRule("GMetaRuleTransferOwnership<" + normalizeParameterIndex(item, indexes) + ">");
 		}
 	}
 }
