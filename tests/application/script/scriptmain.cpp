@@ -48,16 +48,14 @@ cpgf::GCallback<void (const GEvent &)> createOnTouchedCallback(IScriptFunction *
 	return cpgf::GCallback<void (const GEvent &)>(ScriptCallback<void>(func));
 }
 
-void onUpdate(const GEvent &)
+void onExit(const GEvent &)
 {
-	GApplication::getInstance()->getEventQueue()->removeListener(GEventType::update, &onUpdate);
 	scriptMain.reset();
 }
 
 void exitScriptDemo()
 {
 	SceneMenu::returnToMainMenu();
-	GApplication::getInstance()->getEventQueue()->addListener(GEventType::update, &onUpdate);
 }
 
 void doTest(const GComponentTransform * transform)
@@ -69,6 +67,8 @@ void doTest(const GComponentTransform * transform)
 
 void ScriptMain::runScript()
 {
+	GApplication::getInstance()->getEventQueue()->addListener(GEventType::windowClosed, &onExit);
+
 	scriptMain.reset(new ScriptMain());
 	scriptMain->run();
 }

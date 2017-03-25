@@ -56,6 +56,12 @@ Apache License, Version 2.0
  * Event driven.
  * Memory pool and cached entities and components. So CPU cache optimization is considered.
  * Underlying rendering engine agnostic. We can replace SFML with any other engine or even 3D engine simply and easily.
+ * Script binding using cpgf, we can write game in Lua, Python, or JavaScript.
+
+## Underlying render engine
+Currently Gincu supports both SFML (desktop and Android) and Allegro (desktop only since I didn't succeeded compiling Allegro for Android).
+But SFML will most likely be abandoned soon because it doesn't support iOS and very bad support for Android.
+Most likely Gincu will rely on Allegro or some other libraries such as Irrlicht in the future.
 
 ## How to contribute
 
