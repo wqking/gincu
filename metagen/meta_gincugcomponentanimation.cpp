@@ -1,7 +1,7 @@
 // Auto generated file, don't modify.
 
 #include "gincu/gincuall.h"
-
+#include "cpgf/metatraits/gmetasharedptrtraits_cpp11_shared_ptr.h"
 #include "gincu/ecs/gcomponentanimation.h"
 
 #include "meta_gincugcomponentanimation.h"

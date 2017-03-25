@@ -23,7 +23,7 @@ void buildMetaClass_GComponentFrameAnimation(D _d)
     using namespace cpgf;
     
     _d.CPGF_MD_TEMPLATE _constructor<void * ()>();
-    _d.CPGF_MD_TEMPLATE _constructor<void * (const std::shared_ptr< GFrameAnimationSetData > &)>();
+    _d.CPGF_MD_TEMPLATE _constructor<void * (const std::shared_ptr< GFrameAnimationSetData > &)>(cpgf::MakePolicy<cpgf::GMetaRuleTransferOwnership<0> >());
     _d.CPGF_MD_TEMPLATE _method("getTween", &D::ClassType::getTween);
 }
 

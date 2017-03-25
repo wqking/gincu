@@ -37,6 +37,7 @@ void buildMetaClass_GTransform(D _d)
     _d.CPGF_MD_TEMPLATE _method("setRotation", &D::ClassType::setRotation);
     _d.CPGF_MD_TEMPLATE _method("getMatrix", &D::ClassType::getMatrix);
     _d.CPGF_MD_TEMPLATE _method("setProjectionMode", &D::ClassType::setProjectionMode);
+    _d.CPGF_MD_TEMPLATE _method("toDebugString", &D::ClassType::toDebugString);
 }
 
 

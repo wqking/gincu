@@ -16,12 +16,15 @@ SceneMain.doOnEnter = function(me)
 	local buttonSize = port.createSize(200, 60);
 	
 	local x = viewWidth / 2
+	local y = viewHeight / 2
 
 	me.addEntity(
-		createButton("Back", port.createPoint(x, viewHeight / 2), buttonSize, function(e)
-			exitScriptDemo() end
+		createButton("Scene graph", port.createPoint(x, y), buttonSize, function(e)
+			gincu.GApplication.getInstance().getSceneManager().switchScene(SceneTestSceneGraph())
+		end
 		)
 	)
+
 	me.addEntity(createBackButton(function(e) exitScriptDemo() end))
 end
 

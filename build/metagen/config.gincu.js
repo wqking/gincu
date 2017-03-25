@@ -22,7 +22,8 @@ var config = {
 	wrapOperator : true, // default is true 
 
 	metaNamespace : "gincu",
-	sourceHeaderCode : '#include "gincu/gincuall.h"\n',
+	sourceHeaderCode : '#include "gincu/gincuall.h"\n'
+		+ '#include "cpgf/metatraits/gmetasharedptrtraits_cpp11_shared_ptr.h"',
 	sourceHeaderReplacer : [ "!.*include/gincu!i", "gincu" ],
 	metaHeaderPath : "",
 	
@@ -62,6 +63,7 @@ var transferOwnerShipParameters = {
 	addComponent : 0,
 	switchScene : parameterFromEndIndex + 1,
 };
+
 
 function normalizeParameterIndex(item, index)
 {
@@ -121,6 +123,14 @@ function processCallback(item, data)
 		}
 		else {
 			item.addPolicyRule("GMetaRuleTransferOwnership<" + normalizeParameterIndex(item, indexes) + ">");
+		}
+	}
+	
+	if(item.isConstructor()) {
+		if(owner.getPrimaryName() == "GComponentFrameAnimation") {
+			if(item.getParameterCount() > 0) {
+				item.addPolicyRule("GMetaRuleTransferOwnership<0>");
+			}
 		}
 	}
 }
