@@ -119,5 +119,5 @@ include_directories(
 	${ROOT_PATH}/thirdparty
 )
 
-target_link_libraries(${TARGET} ${CPGF_LIB} ${LIBS} E:/source/lua-5.3.4/src/liblua.a )
+target_link_libraries(${TARGET} ${CPGF_LIB} ${LIBS} ${LUA_LIB} )
 

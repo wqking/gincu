@@ -1,9 +1,11 @@
 set(CPGF_PATH /projects/cpgf)
 
+include(${CPGF_PATH}/build/build.config.txt)
+
 set(ENABLE_CPGF_REFLECTION 1)
 
 if(MSVC)
-set(CPGF_LIB ${CPGF_PATH}/lib/cpgf.lib)
+set(CPGF_LIB optimized ${CPGF_PATH}/lib/Release/cpgf.lib debug ${CPGF_PATH}/lib/Debug/cpgf.lib)
 else()
 set(CPGF_LIB ${CPGF_PATH}/lib/libcpgf.a)
 endif()

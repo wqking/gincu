@@ -6,6 +6,8 @@
 #include "gincu/ecs/gentity.h"
 #include "gincu/ecs/gcomponenttransform.h"
 #include "gincu/gevent.h"
+#include "gincu/geventqueue.h"
+#include "gincu/gapplication.h"
 
 #include "cpgf/gmetaclass.h"
 #include "cpgf/gmetadefine.h"
@@ -46,11 +48,16 @@ cpgf::GCallback<void (const GEvent &)> createOnTouchedCallback(IScriptFunction *
 	return cpgf::GCallback<void (const GEvent &)>(ScriptCallback<void>(func));
 }
 
-GEntity * createEntity()
+void onUpdate(const GEvent &)
 {
-	GEntity * entity = new GEntity();
-	entity->addComponent(createComponent<GComponentTransform>());
-	return entity;
+	GApplication::getInstance()->getEventQueue()->removeListener(GEventType::update, &onUpdate);
+	scriptMain.reset();
+}
+
+void exitScriptDemo()
+{
+	SceneMenu::returnToMainMenu();
+	GApplication::getInstance()->getEventQueue()->addListener(GEventType::update, &onUpdate);
 }
 
 void doTest(const GComponentTransform * transform)
@@ -89,12 +96,12 @@ void ScriptMain::run()
 	scriptSetValue(this->scriptHelper->borrowScriptObject(), "gincu", GScriptValue::fromClass(metaClass.get()));
 
 	GDefineMetaGlobal()
-		._method("createEntity", &createEntity)
+		._method("exitScriptDemo", &exitScriptDemo)
 		._method("doTest", &doTest)
 		._method("createOnTouchedCallback", &createOnTouchedCallback)
 	;
 
-	this->doBindMethod("createEntity");
+	this->doBindMethod("exitScriptDemo");
 	this->doBindMethod("doTest");
 	this->doBindMethod("createOnTouchedCallback");
 
