@@ -79,6 +79,7 @@ globAndAppendFiles(fileList
 if(ENABLE_CPGF_REFLECTION)
 globAndAppendFiles(fileList
 	${ROOT_PATH}/metagen/*.cpp
+	${CPGF_PATH}/src/metadata/tween/*.cpp
 )
 endif()
 

@@ -133,5 +133,9 @@ function processCallback(item, data)
 			}
 		}
 	}
+
+//	if(itemName == 'addComponent') {
+//		data.addAlias('_addComponent');
+//	}
 }
 

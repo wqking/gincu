@@ -90,10 +90,16 @@ void ScriptMain::run()
 	};
 
 	this->scriptHelper.reset(new ScriptHelper(sizeof(argv) / sizeof(argv[0]), argv));
-	
-	GScopedInterface<IMetaClass> metaClass(this->scriptHelper->borrowService()->findClassByName("gincu"));
-	//this->scriptHelper->borrowScriptObject()->bindCoreService("cpgf", NULL);
-	scriptSetValue(this->scriptHelper->borrowScriptObject(), "gincu", GScriptValue::fromClass(metaClass.get()));
+
+	{
+		GScopedInterface<IMetaClass> metaClass(this->scriptHelper->borrowService()->findClassByName("gincu"));
+		scriptSetValue(this->scriptHelper->borrowScriptObject(), "gincu", GScriptValue::fromClass(metaClass.get()));
+	}
+
+	{
+		GScopedInterface<IMetaClass> metaClass(this->scriptHelper->borrowService()->findClassByName("tween"));
+		scriptSetValue(this->scriptHelper->borrowScriptObject(), "tween", GScriptValue::fromClass(metaClass.get()));
+	}
 
 	GDefineMetaGlobal()
 		._method("exitScriptDemo", &exitScriptDemo)
