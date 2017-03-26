@@ -1,5 +1,6 @@
 SceneTestSceneGraph = cpgf.cloneClass(gincu.GSceneWrapper)
 
+-- need to support convert raw pointer to shared_ptr to make the function works
 function createAnimation(atlasName)
 	local data = gincu.GFrameAnimationSetData();
 	gincu.buildFrameAnimationDataFromAtlas(data, gincu.GResourceManager.getInstance().getAtlas(atlasName, gincu.GAtlasFormat.spritePackText));
@@ -84,7 +85,7 @@ local function createParentedObject(me, position, anchor, rotation, scale)
 		.addComponent(gincu.GComponentLocalTransform(port.createPoint(0, yDelta * 2)).setParent(entityB.getComponentByTypeId(gincu.GComponentLocalTransform.getComponentType())))
 		.addComponent(gincu.GComponentAnchor(anchor).setFlipX(true).setFlipY(true))
 		.addComponent(gincu.createAtlasRenderComponent(gincu.GResourceManager.getInstance().getAtlas(atlasName, gincu.GAtlasFormat.spritePackText), ""))
-		.addComponent(createAnimation(atlasName))
+--		.addComponent(createAnimation(atlasName))
 		.addComponent(gincu.GComponentRendererTouchHandler().addOnTouch(createOnTouchedCallback(
 			function(e)
 				if e.getType() == gincu.GEventType.touchPressed then
@@ -97,12 +98,30 @@ local function createParentedObject(me, position, anchor, rotation, scale)
 	return result;
 end
 
+function doInitializeStatic(me, pos)
+	createParentedObject(me, pos, gincu.GRenderAnchor.leftTop, 0, 1)
+end
+
+function doInitializeRotation(me, pos)
+	createParentedObject(me, pos, gincu.GRenderAnchor.leftTop, -45, 0.75)
+end
+
+function doInitializeRotationAnimation(me, pos)
+	local localTransform = createParentedObject(me, pos, gincu.GRenderAnchor.center, 0, 0.5)
+--	me.getTweenList().tween()
+--		.duration(10000)
+--		.ease(cpgf::ElasticEase::easeOut())
+--		.repeat(-1)
+--		.target(cpgf::createAccessor(localTransform, &GComponentLocalTransform::getRotation, &GComponentLocalTransform::setRotation), 360)
+end
 
 SceneTestSceneGraph.doOnEnter = function(me)
 	me.addEntity(createBackButton(function(e)
 		gincu.GApplication.getInstance().getSceneManager().switchScene(SceneMain())
 	end))
 
-	createParentedObject(me, port.createPoint(150, 50), gincu.GRenderAnchor.leftTop, 0, 1)
+	doInitializeStatic(me, port.createPoint(150, 50))
+	doInitializeRotation(me, port.createPoint(300, 50))
+	doInitializeRotationAnimation(me, port.createPoint(450, 350))
 end
 
