@@ -27,27 +27,6 @@ namespace {
 
 std::unique_ptr<ScriptMain> scriptMain;
 
-template <typename RT>
-struct ScriptCallback
-{
-	explicit ScriptCallback(IScriptFunction * func) : func(func) {
-	}
-	
-	template <typename... Parameters>
-	RT operator() (Parameters && ... parameters) const
-	{
-		invokeScriptFunction(this->func.get(), std::forward<Parameters>(parameters)...);
-		return RT();
-	}
-	
-	GSharedInterface<IScriptFunction> func;
-};
-
-cpgf::GCallback<void (const GEvent &)> createOnTouchedCallback(IScriptFunction * func)
-{
-	return cpgf::GCallback<void (const GEvent &)>(ScriptCallback<void>(func));
-}
-
 void onExit(const GEvent &)
 {
 	scriptMain.reset();
@@ -96,20 +75,13 @@ void ScriptMain::run()
 		scriptSetValue(this->scriptHelper->borrowScriptObject(), "gincu", GScriptValue::fromClass(metaClass.get()));
 	}
 
-//	{
-//		GScopedInterface<IMetaClass> metaClass(this->scriptHelper->borrowService()->findClassByName("tween"));
-//		scriptSetValue(this->scriptHelper->borrowScriptObject(), "tween", GScriptValue::fromClass(metaClass.get()));
-//	}
-
 	GDefineMetaGlobal()
 		._method("exitScriptDemo", &exitScriptDemo)
 		._method("doTest", &doTest)
-		._method("createOnTouchedCallback", &createOnTouchedCallback)
 	;
 
 	this->doBindMethod("exitScriptDemo");
 	this->doBindMethod("doTest");
-	this->doBindMethod("createOnTouchedCallback");
 
 	this->scriptHelper->execute();
 }

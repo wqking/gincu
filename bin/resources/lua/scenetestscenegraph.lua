@@ -35,7 +35,7 @@ local function createParentedObject(me, position, anchor, rotation, scale)
 		.addComponent(result)
 		.addComponent(gincu.GComponentAnchor(anchor))
 		.addComponent(gincu.createAndLoadImageComponent(imageNameA))
-		.addComponent(gincu.GComponentRendererTouchHandler().addOnTouch(createOnTouchedCallback(
+		.addComponent(gincu.GComponentRendererTouchHandler().addOnTouch(gincu.createOnTouchedCallback(
 			function(e)
 				if e.getType() == gincu.GEventType.touchPressed then
 					cpgf.cast(entityB.getComponentByTypeId(gincu.GComponentLocalTransform.getComponentType()))
@@ -54,7 +54,7 @@ local function createParentedObject(me, position, anchor, rotation, scale)
 		.addComponent(gincu.GComponentLocalTransform(port.createPoint(0, yDelta)).setParent(entityA.getComponentByTypeId(gincu.GComponentLocalTransform.getComponentType())))
 		.addComponent(gincu.GComponentAnchor(anchor).setFlipX(true))
 		.addComponent(gincu.createAndLoadImageComponent(imageNameB))
-		.addComponent(gincu.GComponentRendererTouchHandler().addOnTouch(createOnTouchedCallback(
+		.addComponent(gincu.GComponentRendererTouchHandler().addOnTouch(gincu.createOnTouchedCallback(
 			function(e)
 				if e.getType() == gincu.GEventType.touchPressed then
 					print("clicked: imageB-A flip x");
@@ -69,7 +69,7 @@ local function createParentedObject(me, position, anchor, rotation, scale)
 		.addComponent(gincu.GComponentLocalTransform(port.createPoint(0, yDelta)).setParent(entityB.getComponentByTypeId(gincu.GComponentLocalTransform.getComponentType())))
 		.addComponent(gincu.GComponentAnchor(anchor).setFlipY(true))
 		.addComponent(gincu.createAndLoadImageComponent(imageNameC))
-		.addComponent(gincu.GComponentRendererTouchHandler().addOnTouch(createOnTouchedCallback(
+		.addComponent(gincu.GComponentRendererTouchHandler().addOnTouch(gincu.createOnTouchedCallback(
 			function(e)
 				if e.getType() == gincu.GEventType.touchPressed then
 					print("clicked: imageC-B flip y");
@@ -86,7 +86,7 @@ local function createParentedObject(me, position, anchor, rotation, scale)
 		.addComponent(gincu.GComponentAnchor(anchor).setFlipX(true).setFlipY(true))
 		.addComponent(gincu.createAtlasRenderComponent(gincu.GResourceManager.getInstance().getAtlas(atlasName, gincu.GAtlasFormat.spritePackText), ""))
 --		.addComponent(createAnimation(atlasName))
-		.addComponent(gincu.GComponentRendererTouchHandler().addOnTouch(createOnTouchedCallback(
+		.addComponent(gincu.GComponentRendererTouchHandler().addOnTouch(gincu.createOnTouchedCallback(
 			function(e)
 				if e.getType() == gincu.GEventType.touchPressed then
 					print("clicked: imageD-B flip x/y");

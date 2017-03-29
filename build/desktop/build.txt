@@ -67,6 +67,7 @@ globAndAppendFiles(fileList
 	${SRC_PATH}/*.cpp
 	${SRC_PATH}/ecs/*.cpp
 	${SRC_PATH}/transition/*.cpp
+
 	${ROOT_PATH}/thirdparty/*.cpp
 	
 	${TESTS_PATH}/application/*.cpp
@@ -78,6 +79,7 @@ globAndAppendFiles(fileList
 
 if(ENABLE_CPGF_REFLECTION)
 globAndAppendFiles(fileList
+	${SRC_PATH}/scripting/*.cpp
 	${ROOT_PATH}/metagen/*.cpp
 
 	# don't use cpgf tween meta data, use the one in Gincu.
@@ -115,11 +117,19 @@ set_target_properties(
 	RUNTIME_OUTPUT_DIRECTORY_RELWITHDEBINFO ${BIN_PATH}
 	DEBUGGER_WORKING_DIRECTORY ${BIN_PATH}
 )
+
 include_directories(
 	${INCLUDE_PATH}
 	${TESTS_PATH}/application
 	${CPGF_PATH}/include
 	${ROOT_PATH}/thirdparty
+)
+
+add_definitions(
+	-DENABLE_LUA=${HAS_LUA}
+	-DENABLE_V8=${HAS_V8}
+	-DENABLE_PYTHON=${HAS_PYTHON}
+	-DENABLE_SPIDERMONKEY=${HAS_SPIDERMONKEY}
 )
 
 target_link_libraries(${TARGET} ${CPGF_LIB} ${LIBS} ${LUA_LIB} )
