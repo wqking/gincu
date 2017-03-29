@@ -44,9 +44,6 @@ void buildMetaClass_Global_gblendmode(D _d)
         ._element("subtract", gincu::GBlendEquation::subtract)
         ._element("reverseSubtract", gincu::GBlendEquation::reverseSubtract)
     ;
-    _d.CPGF_MD_TEMPLATE _operator<bool (*)(const GBlendModeChannel &, const GBlendModeChannel &)>(mopHolder == mopHolder);
-    _d.CPGF_MD_TEMPLATE _operator<bool (*)(const GBlendMode &, const GBlendMode &)>(mopHolder == mopHolder);
-    _d.CPGF_MD_TEMPLATE _operator<bool (*)(const GBlendMode &, const GBlendMode &)>(mopHolder != mopHolder);
 }
 
 

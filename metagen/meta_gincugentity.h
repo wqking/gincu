@@ -37,7 +37,6 @@ void buildMetaClass_GEntity(D _d)
     
     _d.CPGF_MD_TEMPLATE _constructor<void * ()>();
     _d.CPGF_MD_TEMPLATE _method("addComponent", &D::ClassType::addComponent, cpgf::MakePolicy<cpgf::GMetaRuleTransferOwnership<0> >());
-    _d.CPGF_MD_TEMPLATE _method("_addComponent", &D::ClassType::addComponent, cpgf::MakePolicy<cpgf::GMetaRuleTransferOwnership<0> >());
     _d.CPGF_MD_TEMPLATE _method("removeComponent", &D::ClassType::removeComponent);
     _d.CPGF_MD_TEMPLATE _method("addEventCallback", &D::ClassType::addEventCallback);
     _d.CPGF_MD_TEMPLATE _method("removeEventCallback", &D::ClassType::removeEventCallback);

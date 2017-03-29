@@ -79,7 +79,9 @@ globAndAppendFiles(fileList
 if(ENABLE_CPGF_REFLECTION)
 globAndAppendFiles(fileList
 	${ROOT_PATH}/metagen/*.cpp
-	${CPGF_PATH}/src/metadata/tween/*.cpp
+
+	# don't use cpgf tween meta data, use the one in Gincu.
+	# ${CPGF_PATH}/src/metadata/tween/*.cpp
 )
 endif()
 

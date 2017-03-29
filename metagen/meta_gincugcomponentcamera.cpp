@@ -2,6 +2,8 @@
 
 #include "gincu/gincuall.h"
 #include "cpgf/metatraits/gmetasharedptrtraits_cpp11_shared_ptr.h"
+#include "cpgf/tween/gtimeline.h"
+
 #include "gincu/ecs/gcomponentcamera.h"
 
 #include "meta_gincugcomponentcamera.h"

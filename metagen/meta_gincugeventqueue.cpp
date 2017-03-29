@@ -2,6 +2,8 @@
 
 #include "gincu/gincuall.h"
 #include "cpgf/metatraits/gmetasharedptrtraits_cpp11_shared_ptr.h"
+#include "cpgf/tween/gtimeline.h"
+
 #include "gincu/geventqueue.h"
 
 #include "meta_gincugeventqueue.h"

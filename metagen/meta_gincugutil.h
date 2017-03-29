@@ -36,20 +36,12 @@ void buildMetaClass_Global_gutil(D _d)
 }
 
 
-template <typename T>
-inline bool opErAToRWrapper_ReferenceWrapperLessCompare__opFunction(const ReferenceWrapperLessCompare<T > * self, const T & a, const T & b) {
-    return (*self)(a, b);
-}
-
-
 template <typename D, typename T>
 void buildMetaClass_ReferenceWrapperLessCompare(D _d)
 {
     (void)_d;
     using namespace cpgf;
     
-    _d.CPGF_MD_TEMPLATE _operator<bool (*)(const T &, const T &)>(mopHolder(mopHolder));
-    _d.CPGF_MD_TEMPLATE _method("_opFunction", (bool (*) (const ReferenceWrapperLessCompare<T > *, const T &, const T &))&opErAToRWrapper_ReferenceWrapperLessCompare__opFunction<T>, cpgf::MakePolicy<cpgf::GMetaRuleExplicitThis >());
 }
 
 

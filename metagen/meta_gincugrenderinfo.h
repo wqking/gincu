@@ -22,8 +22,6 @@ void buildMetaClass_Global_grenderinfo(D _d)
     (void)_d;
     using namespace cpgf;
     
-    _d.CPGF_MD_TEMPLATE _operator<bool (*)(const GRenderInfo &, const GRenderInfo &)>(mopHolder == mopHolder);
-    _d.CPGF_MD_TEMPLATE _operator<bool (*)(const GRenderInfo &, const GRenderInfo &)>(mopHolder != mopHolder);
 }
 
 

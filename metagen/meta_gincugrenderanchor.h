@@ -37,8 +37,6 @@ void buildMetaClass_Global_grenderanchor(D _d)
         ._element("center", gincu::GRenderAnchor::center)
         ._element("rightTop", gincu::GRenderAnchor::rightTop)
     ;
-    _d.CPGF_MD_TEMPLATE _operator<GRenderAnchor (*)(const GRenderAnchor, const GRenderAnchor)>(mopHolder & mopHolder);
-    _d.CPGF_MD_TEMPLATE _operator<GRenderAnchor (*)(const GRenderAnchor, const GRenderAnchor)>(mopHolder | mopHolder);
 }
 
 

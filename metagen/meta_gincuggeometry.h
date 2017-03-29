@@ -26,19 +26,6 @@ void buildMetaClass_Global_ggeometry(D _d)
     _d.CPGF_MD_TEMPLATE _method("getSize", (GSize (*) (const GRect &))&getSize);
     _d.CPGF_MD_TEMPLATE _method("createRect", (GRect (*) (const GPoint &, const GSize &))&createRect);
     _d.CPGF_MD_TEMPLATE _method("isInRect", (bool (*) (const GPoint &, const GRect &))&isInRect);
-    _d.CPGF_MD_TEMPLATE _operator<GVector2 (*)(const GVector2 &, const GVector2 &)>(mopHolder + mopHolder);
-    _d.CPGF_MD_TEMPLATE _operator<GVector2 (*)(const GVector2 &, const GVector2 &)>(mopHolder - mopHolder);
-    _d.CPGF_MD_TEMPLATE _operator<GVector2 (*)(const GVector2 &, const float)>(mopHolder * mopHolder);
-    _d.CPGF_MD_TEMPLATE _operator<bool (*)(const GVector2 &, const GVector2 &)>(mopHolder == mopHolder);
-    _d.CPGF_MD_TEMPLATE _operator<bool (*)(const GVector2 &, const GVector2 &)>(mopHolder != mopHolder);
-    _d.CPGF_MD_TEMPLATE _operator<GVector2 (*)(const GVector2 &)>(-mopHolder);
-    _d.CPGF_MD_TEMPLATE _operator<GSize (*)(const GSize &, const GSize &)>(mopHolder + mopHolder);
-    _d.CPGF_MD_TEMPLATE _operator<GSize (*)(const GSize &, const GSize &)>(mopHolder - mopHolder);
-    _d.CPGF_MD_TEMPLATE _operator<GSize (*)(const GSize &, const float)>(mopHolder * mopHolder);
-    _d.CPGF_MD_TEMPLATE _operator<bool (*)(const GSize &, const GSize &)>(mopHolder == mopHolder);
-    _d.CPGF_MD_TEMPLATE _operator<bool (*)(const GSize &, const GSize &)>(mopHolder != mopHolder);
-    _d.CPGF_MD_TEMPLATE _operator<bool (*)(const GRect &, const GRect &)>(mopHolder == mopHolder);
-    _d.CPGF_MD_TEMPLATE _operator<bool (*)(const GRect &, const GRect &)>(mopHolder != mopHolder);
 }
 
 

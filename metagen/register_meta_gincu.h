@@ -12,6 +12,12 @@ using namespace cpgf;
 namespace meta_gincu { 
 
 
+GDefineMetaInfo createMetaClass_BackEase();
+GDefineMetaInfo createMetaClass_BounceEase();
+GDefineMetaInfo createMetaClass_CircleEase();
+GDefineMetaInfo createMetaClass_CubicEase();
+GDefineMetaInfo createMetaClass_ElasticEase();
+GDefineMetaInfo createMetaClass_ExponentEase();
 GDefineMetaInfo createMetaClass_GApplication();
 GDefineMetaInfo createMetaClass_GAtlas();
 GDefineMetaInfo createMetaClass_GAtlasData();
@@ -63,12 +69,17 @@ GDefineMetaInfo createMetaClass_GTextRender();
 GDefineMetaInfo createMetaClass_GTextRenderData();
 GDefineMetaInfo createMetaClass_GTexture();
 GDefineMetaInfo createMetaClass_GTextureData();
+GDefineMetaInfo createMetaClass_GTimeline();
 GDefineMetaInfo createMetaClass_GTouchEvent();
 GDefineMetaInfo createMetaClass_GTouchHandlerFindResult();
 GDefineMetaInfo createMetaClass_GTransform();
 GDefineMetaInfo createMetaClass_GTransition();
 GDefineMetaInfo createMetaClass_GTransitionFadeInOut();
 GDefineMetaInfo createMetaClass_GTransitionMoveIn();
+GDefineMetaInfo createMetaClass_GTween();
+GDefineMetaInfo createMetaClass_GTweenEaseParam();
+GDefineMetaInfo createMetaClass_GTweenList();
+GDefineMetaInfo createMetaClass_GTweenable();
 GDefineMetaInfo createMetaClass_GVector2();
 GDefineMetaInfo createMetaClass_GVertexArray();
 GDefineMetaInfo createMetaClass_GVertexArrayData();
@@ -98,13 +109,25 @@ GDefineMetaInfo createMetaClass_Global_grenderinfo();
 GDefineMetaInfo createMetaClass_Global_gscene();
 GDefineMetaInfo createMetaClass_Global_gstate();
 GDefineMetaInfo createMetaClass_Global_gtextrender();
+GDefineMetaInfo createMetaClass_Global_gtweencommon();
 GDefineMetaInfo createMetaClass_Global_gutil();
 GDefineMetaInfo createMetaClass_Global_gvertexarrayrender();
+GDefineMetaInfo createMetaClass_LinearEase();
+GDefineMetaInfo createMetaClass_QuadEase();
+GDefineMetaInfo createMetaClass_QuartEase();
+GDefineMetaInfo createMetaClass_QuintEase();
+GDefineMetaInfo createMetaClass_SineEase();
 
 
 template <typename Meta>
 void registerMain_gincu(Meta _d)
 {
+    _d._class(createMetaClass_BackEase());
+    _d._class(createMetaClass_BounceEase());
+    _d._class(createMetaClass_CircleEase());
+    _d._class(createMetaClass_CubicEase());
+    _d._class(createMetaClass_ElasticEase());
+    _d._class(createMetaClass_ExponentEase());
     _d._class(createMetaClass_GApplication());
     _d._class(createMetaClass_GAtlas());
     _d._class(createMetaClass_GAtlasData());
@@ -156,12 +179,17 @@ void registerMain_gincu(Meta _d)
     _d._class(createMetaClass_GTextRenderData());
     _d._class(createMetaClass_GTexture());
     _d._class(createMetaClass_GTextureData());
+    _d._class(createMetaClass_GTimeline());
     _d._class(createMetaClass_GTouchEvent());
     _d._class(createMetaClass_GTouchHandlerFindResult());
     _d._class(createMetaClass_GTransform());
     _d._class(createMetaClass_GTransition());
     _d._class(createMetaClass_GTransitionFadeInOut());
     _d._class(createMetaClass_GTransitionMoveIn());
+    _d._class(createMetaClass_GTween());
+    _d._class(createMetaClass_GTweenEaseParam());
+    _d._class(createMetaClass_GTweenList());
+    _d._class(createMetaClass_GTweenable());
     _d._class(createMetaClass_GVector2());
     _d._class(createMetaClass_GVertexArray());
     _d._class(createMetaClass_GVertexArrayData());
@@ -191,8 +219,14 @@ void registerMain_gincu(Meta _d)
     _d._class(createMetaClass_Global_gscene());
     _d._class(createMetaClass_Global_gstate());
     _d._class(createMetaClass_Global_gtextrender());
+    _d._class(createMetaClass_Global_gtweencommon());
     _d._class(createMetaClass_Global_gutil());
     _d._class(createMetaClass_Global_gvertexarrayrender());
+    _d._class(createMetaClass_LinearEase());
+    _d._class(createMetaClass_QuadEase());
+    _d._class(createMetaClass_QuartEase());
+    _d._class(createMetaClass_QuintEase());
+    _d._class(createMetaClass_SineEase());
 }
 
 } // namespace meta_gincu

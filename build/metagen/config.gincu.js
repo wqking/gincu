@@ -23,8 +23,13 @@ var config = {
 
 	metaNamespace : "gincu",
 	sourceHeaderCode : '#include "gincu/gincuall.h"\n'
-		+ '#include "cpgf/metatraits/gmetasharedptrtraits_cpp11_shared_ptr.h"',
-	sourceHeaderReplacer : [ "!.*include/gincu!i", "gincu" ],
+		+ '#include "cpgf/metatraits/gmetasharedptrtraits_cpp11_shared_ptr.h"\n'
+		+ '#include "cpgf/tween/gtimeline.h"\n'
+	,
+	sourceHeaderReplacer : [
+		"!.*include/gincu!i", "gincu",
+		'!.*include/cpgf!i', 'cpgf'
+	],
 	metaHeaderPath : "",
 	
 	classTraits : [
@@ -134,8 +139,22 @@ function processCallback(item, data)
 		}
 	}
 
-//	if(itemName == 'addComponent') {
-//		data.addAlias('_addComponent');
-//	}
+	// cpgf accessor/tween meta data
+	if(item.isConstant() || item.isOperator()) {
+		data.skipBind = true;
+	}
+	
+	if(itemName == 'repeat') {
+		data.addAlias('_repeat');
+	}
+	
+	if(owner != null) {
+		var ownerName = owner.getPrimaryName();
+		if(ownerName == "GTween") {
+			if(itemName == 'target') {
+//				data.addAlias('targetFloat', 'target<>');
+			}
+		}
+	}
 }
 
