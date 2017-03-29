@@ -8,6 +8,9 @@
 #include "cpgf/metadata/gmetadataconfig.h"
 #include "cpgf/metadata/private/gmetadata_header.h"
 #include "cpgf/gmetapolicy.h"
+#include "cpgf/tween/gtimeline.h"
+#include "cpgf/accessor/gaccessor.h"
+#include "cpgf/gselectfunctionbyarity.h"
 
 
 using namespace cpgf;

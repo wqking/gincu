@@ -96,10 +96,10 @@ void ScriptMain::run()
 		scriptSetValue(this->scriptHelper->borrowScriptObject(), "gincu", GScriptValue::fromClass(metaClass.get()));
 	}
 
-	{
-		GScopedInterface<IMetaClass> metaClass(this->scriptHelper->borrowService()->findClassByName("tween"));
-		scriptSetValue(this->scriptHelper->borrowScriptObject(), "tween", GScriptValue::fromClass(metaClass.get()));
-	}
+//	{
+//		GScopedInterface<IMetaClass> metaClass(this->scriptHelper->borrowService()->findClassByName("tween"));
+//		scriptSetValue(this->scriptHelper->borrowScriptObject(), "tween", GScriptValue::fromClass(metaClass.get()));
+//	}
 
 	GDefineMetaGlobal()
 		._method("exitScriptDemo", &exitScriptDemo)

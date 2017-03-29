@@ -24,7 +24,6 @@ var config = {
 	metaNamespace : "gincu",
 	sourceHeaderCode : '#include "gincu/gincuall.h"\n'
 		+ '#include "cpgf/metatraits/gmetasharedptrtraits_cpp11_shared_ptr.h"\n'
-		+ '#include "cpgf/tween/gtimeline.h"\n'
 	,
 	sourceHeaderReplacer : [
 		"!.*include/gincu!i", "gincu",
@@ -140,6 +139,14 @@ function processCallback(item, data)
 	}
 
 	// cpgf accessor/tween meta data
+
+	var location = item.getLocation();
+	if(location.indexOf('cpgf') >= 0 && location.indexOf('tween') >= 0) {
+		data.addHeaderInclude("cpgf/tween/gtimeline.h");
+		data.addHeaderInclude("cpgf/accessor/gaccessor.h");
+		data.addHeaderInclude("cpgf/gselectfunctionbyarity.h");
+	}
+	
 	if(item.isConstant() || item.isOperator()) {
 		data.skipBind = true;
 	}
@@ -151,8 +158,32 @@ function processCallback(item, data)
 	if(owner != null) {
 		var ownerName = owner.getPrimaryName();
 		if(ownerName == "GTween") {
-			if(itemName == 'target') {
-//				data.addAlias('targetFloat', 'target<>');
+			if(itemName == 'target' && item.getParameterCount() == 3) {
+				var accessorTypeList = [
+					'cpgf::GAccessor<cpgf::GGetter<cpgf::GCallback<float ()> >, cpgf::GSetter<cpgf::GCallback<void (float)> > > ',
+				];
+				var namePostfixList = [
+					'Float',
+				];
+				var protoList = [
+					'target', 'relative' //, 'follow'
+				];
+
+				for each(var proto in protoList) {
+					for(var i = 0; i < accessorTypeList.length; ++i) {
+						var name = proto + namePostfixList[i];
+						var type = accessorTypeList[i];
+
+						data.addRawCode(
+							'_d.CPGF_MD_TEMPLATE _method("' + name + '", '
+								+ 'cpgf::selectFunctionByArity2(&D::ClassType::template ' + proto + '<' + type + '>));'
+						);
+						data.addRawCode(
+							'_d.CPGF_MD_TEMPLATE _method("' + name + '", '
+								+ 'cpgf::selectFunctionByArity3(&D::ClassType::template ' + proto + '<' + type + '>));'
+						);
+					}
+				}
 			}
 		}
 	}

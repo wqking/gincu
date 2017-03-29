@@ -8,6 +8,9 @@
 #include "cpgf/metadata/gmetadataconfig.h"
 #include "cpgf/metadata/private/gmetadata_header.h"
 #include "cpgf/gmetapolicy.h"
+#include "cpgf/tween/gtimeline.h"
+#include "cpgf/accessor/gaccessor.h"
+#include "cpgf/gselectfunctionbyarity.h"
 
 
 using namespace cpgf;
@@ -25,6 +28,10 @@ void buildMetaClass_GTween(D _d)
     _d.CPGF_MD_TEMPLATE _constructor<void * ()>();
     _d.CPGF_MD_TEMPLATE _method("getDuration", &D::ClassType::getDuration);
     _d.CPGF_MD_TEMPLATE _method("removeForInstance", &D::ClassType::removeForInstance);
+    _d.CPGF_MD_TEMPLATE _method("targetFloat", cpgf::selectFunctionByArity2(&D::ClassType::template target<cpgf::GAccessor<cpgf::GGetter<cpgf::GCallback<float ()> >, cpgf::GSetter<cpgf::GCallback<void (float)> > > >));
+    _d.CPGF_MD_TEMPLATE _method("targetFloat", cpgf::selectFunctionByArity3(&D::ClassType::template target<cpgf::GAccessor<cpgf::GGetter<cpgf::GCallback<float ()> >, cpgf::GSetter<cpgf::GCallback<void (float)> > > >));
+    _d.CPGF_MD_TEMPLATE _method("relativeFloat", cpgf::selectFunctionByArity2(&D::ClassType::template relative<cpgf::GAccessor<cpgf::GGetter<cpgf::GCallback<float ()> >, cpgf::GSetter<cpgf::GCallback<void (float)> > > >));
+    _d.CPGF_MD_TEMPLATE _method("relativeFloat", cpgf::selectFunctionByArity3(&D::ClassType::template relative<cpgf::GAccessor<cpgf::GGetter<cpgf::GCallback<float ()> >, cpgf::GSetter<cpgf::GCallback<void (float)> > > >));
     _d.CPGF_MD_TEMPLATE _method("ease", &D::ClassType::ease);
     _d.CPGF_MD_TEMPLATE _method("duration", &D::ClassType::duration);
     _d.CPGF_MD_TEMPLATE _method("backward", &D::ClassType::backward);

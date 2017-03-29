@@ -110,7 +110,7 @@ function doInitializeRotationAnimation(me, pos)
 	local localTransform = createParentedObject(me, pos, gincu.GRenderAnchor.center, 0, 0.5)
 	me.getTweenList().tween()
 		.duration(10000)
-		.ease(tween.ElasticEase.easeOut())
+		.ease(gincu.ElasticEase.easeOut())
 		._repeat(-1)
 --		.target(cpgf::createAccessor(localTransform, &GComponentLocalTransform::getRotation, &GComponentLocalTransform::setRotation), 360)
 end
