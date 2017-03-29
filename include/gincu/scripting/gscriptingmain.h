@@ -28,6 +28,8 @@ public:
 	cpgf::IScriptObject * getScriptObject();
 	cpgf::IMetaService * getService();
 	
+	cpgf::IMetaClass * getInstanceMetaClass(const cpgf::GVariant & instance);
+	
 	void executeString(const std::string & code);
 	void executeFile(const std::string & fileName);
 

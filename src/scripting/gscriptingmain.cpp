@@ -2,6 +2,7 @@
 #include "gincu/scripting/gscriptingutil.h"
 #include "gincu/gfileinputstream.h"
 #include "gincu/gresourcemanager.h"
+#include "gincu/gscenemanager.h"
 #include "gincu/gevent.h"
 #include "gincu/geventqueue.h"
 #include "gincu/gapplication.h"
@@ -25,6 +26,9 @@ GScriptingMain * GScriptingMain::getInstance()
 		instance.reset(new GScriptingMain());
 		GApplication::getInstance()->getEventQueue()->addListener(GEventType::windowClosed,
 			[](const GEvent &) {
+				// Exit any scene, otherwise, any script scene will crash after instance.reset()
+				GApplication::getInstance()->getSceneManager()->switchScene(nullptr);
+
 				instance.reset();
 			}
 		);
@@ -62,6 +66,22 @@ cpgf::IScriptObject * GScriptingMain::getScriptObject()
 cpgf::IMetaService * GScriptingMain::getService()
 {
 	return this->runner->getService();
+}
+
+cpgf::IMetaClass * GScriptingMain::getInstanceMetaClass(const cpgf::GVariant & instance)
+{
+	using namespace cpgf;
+
+	GVariant value = getVariantRealValue(instance);
+	GMetaType type = getVariantRealMetaType(instance);
+	
+	if(canFromVariant<void *>(value) && type.getBaseName() != nullptr) {
+		GScopedInterface<cpgf::IMetaService> metaService(this->getService());
+		return metaService->findClassByName(type.getBaseName());
+	}
+	else {
+		return nullptr;
+	}
 }
 
 void GScriptingMain::executeString(const std::string & code)

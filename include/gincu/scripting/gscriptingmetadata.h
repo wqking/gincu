@@ -8,6 +8,7 @@
 #include "cpgf/accessor/gaccessor.h"
 
 #include <string>
+#include <memory>
 
 // The code in this file is intended to be used in script, not in C++.
 
@@ -19,11 +20,12 @@ OnTouchCallback createOnTouchedCallback(cpgf::IScriptFunction * func);
 
 typedef cpgf::GAccessor<cpgf::GGetter<cpgf::GCallback<float ()> >, cpgf::GSetter<cpgf::GCallback<void (float)> > > FloatAccessor;
 FloatAccessor createFloatAccessor(
-		void * instance,
-		cpgf::IMetaClass * metaClass,
+		const cpgf::GVariant & instance,
 		const std::string & getterName,
 		const std::string & setterName
 	);
+
+std::shared_ptr<void> createSharedPointer(const cpgf::GVariant & instance);
 
 
 } //namespace gincu

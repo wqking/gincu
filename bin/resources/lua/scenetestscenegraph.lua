@@ -4,7 +4,8 @@ SceneTestSceneGraph = cpgf.cloneClass(gincu.GSceneWrapper)
 function createAnimation(atlasName)
 	local data = gincu.GFrameAnimationSetData();
 	gincu.buildFrameAnimationDataFromAtlas(data, gincu.GResourceManager.getInstance().getAtlas(atlasName, gincu.GAtlasFormat.spritePackText));
-	local component = gincu.GComponentFrameAnimation(data);
+	local sp = gincu.createSharedPointer(data);
+	local component = gincu.GComponentFrameAnimation(sp);
 --	component.getTween().repeat(-1).timeScale(0.2);
 	return component;
 end
@@ -85,7 +86,7 @@ local function createParentedObject(me, position, anchor, rotation, scale)
 		.addComponent(gincu.GComponentLocalTransform(port.createPoint(0, yDelta * 2)).setParent(entityB.getComponentByTypeId(gincu.GComponentLocalTransform.getComponentType())))
 		.addComponent(gincu.GComponentAnchor(anchor).setFlipX(true).setFlipY(true))
 		.addComponent(gincu.createAtlasRenderComponent(gincu.GResourceManager.getInstance().getAtlas(atlasName, gincu.GAtlasFormat.spritePackText), ""))
---		.addComponent(createAnimation(atlasName))
+--.addComponent(createAnimation(atlasName))
 		.addComponent(gincu.GComponentRendererTouchHandler().addOnTouch(gincu.createOnTouchedCallback(
 			function(e)
 				if e.getType() == gincu.GEventType.touchPressed then
@@ -108,7 +109,7 @@ end
 
 function doInitializeRotationAnimation(me, pos)
 	local localTransform = createParentedObject(me, pos, gincu.GRenderAnchor.center, 0, 0.5)
-	local accessor = gincu.createFloatAccessor(localTransform, gincu.GComponentLocalTransform, 'getRotation', 'setRotation')
+	local accessor = gincu.createFloatAccessor(localTransform, 'getRotation', 'setRotation')
 	me.getTweenList().tween()
 		.duration(10000)
 		.ease(gincu.ElasticEase.easeOut())

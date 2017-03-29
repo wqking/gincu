@@ -1,4 +1,6 @@
 #include "gincu/scripting/gscriptingmetadata.h"
+#include "gincu/scripting/gscriptingmain.h"
+#include "gincu/gerrorhandler.h"
 
 #include "cpgf/gsharedinterface.h"
 #include "cpgf/gscopedinterface.h"
@@ -26,7 +28,7 @@ struct ScriptCallback
 
 } //unnamed namespace
 
-cpgf::GCallback<void (const GEvent &)> createOnTouchedCallback(cpgf::IScriptFunction * func)
+OnTouchCallback createOnTouchedCallback(cpgf::IScriptFunction * func)
 {
 	return cpgf::GCallback<void (const GEvent &)>(ScriptCallback<void>(func));
 }
@@ -59,31 +61,72 @@ struct MetaGetterSetter
 template <typename T>
 cpgf::GAccessor<cpgf::GGetter<cpgf::GCallback<T ()> >, cpgf::GSetter<cpgf::GCallback<void (T)> > >
 createMetaAccessor(
-		void * instance,
-		cpgf::IMetaClass * metaClass,
+		const cpgf::GVariant & instance,
 		const std::string & getterName,
 		const std::string & setterName
 	)
 {
-	void * getterInstance = instance;
-	void * setterInstance = instance;
+	cpgf::GScopedInterface<cpgf::IMetaClass> metaClass(GScriptingMain::getInstance()->getInstanceMetaClass(instance));
+	if(! metaClass) {
+		handleFatal("createMetaAccessor: can't find meta class.");
+	}
+
+	void * instanceAddress = cpgf::fromVariant<void *>(instance);
+	void * getterInstance = instanceAddress;
+	void * setterInstance = instanceAddress;
+
 	cpgf::GScopedInterface<cpgf::IMetaMethod> getter(metaClass->getMethodInHierarchy(getterName.c_str(), &getterInstance));
+	if(! getter) {
+		handleFatal("createMetaAccessor: can't find getter method " + getterName);
+	}
+
 	cpgf::GScopedInterface<cpgf::IMetaMethod> setter(metaClass->getMethodInHierarchy(setterName.c_str(), &setterInstance));
+	if(! setter) {
+		handleFatal("createMetaAccessor: can't find setter method " + setterName);
+	}
 
 	return cpgf::createAccessor(
-		cpgf::createGetter(instance, cpgf::GCallback<T ()>(MetaGetterSetter<T>(getterInstance, getter.get()))),
-		cpgf::createSetter(instance, cpgf::GCallback<void (T)>(MetaGetterSetter<T>(setterInstance, setter.get())))
+		cpgf::createGetter(getterInstance, cpgf::GCallback<T ()>(MetaGetterSetter<T>(getterInstance, getter.get()))),
+		cpgf::createSetter(setterInstance, cpgf::GCallback<void (T)>(MetaGetterSetter<T>(setterInstance, setter.get())))
 	);
 }
 
 FloatAccessor createFloatAccessor(
-		void * instance,
-		cpgf::IMetaClass * metaClass,
+		const cpgf::GVariant & instance,
 		const std::string & getterName,
 		const std::string & setterName
 	)
 {
-	return createMetaAccessor<float>(instance, metaClass, getterName, setterName);
+	return createMetaAccessor<float>(instance, getterName, setterName);
+}
+
+struct MetaInstanceDeleter
+{
+	explicit MetaInstanceDeleter(cpgf::IMetaClass * metaClass)
+		: metaClass(metaClass)
+	{
+	}
+	
+	void operator() (void * p)
+	{
+		this->metaClass->destroyInstance(p);
+	}
+	
+	cpgf::GSharedInterface<cpgf::IMetaClass> metaClass;
+};
+
+std::shared_ptr<void> createSharedPointer(const cpgf::GVariant & instance)
+{
+	cpgf::GScopedInterface<cpgf::IMetaClass> metaClass(GScriptingMain::getInstance()->getInstanceMetaClass(instance));
+	if(! metaClass) {
+		handleFatal("createMetaAccessor: can't find meta class.");
+	}
+
+	cpgf::GScopedInterface<cpgf::IScriptObject> scriptObject(GScriptingMain::getInstance()->getScriptObject());
+	cpgf::GScopedInterface<cpgf::IScriptContext> context(scriptObject->getContext());
+	context->setAllowGC(&instance.refData(), false);
+	
+	return std::shared_ptr<void>(cpgf::fromVariant<void *>(instance), MetaInstanceDeleter(metaClass.get()));
 }
 
 

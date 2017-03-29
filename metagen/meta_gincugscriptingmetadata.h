@@ -23,7 +23,8 @@ void buildMetaClass_Global_gscriptingmetadata(D _d)
     using namespace cpgf;
     
     _d.CPGF_MD_TEMPLATE _method("createOnTouchedCallback", (OnTouchCallback (*) (cpgf::IScriptFunction *))&createOnTouchedCallback);
-    _d.CPGF_MD_TEMPLATE _method("createFloatAccessor", (FloatAccessor (*) (void *, cpgf::IMetaClass *, const std::string &, const std::string &))&createFloatAccessor, cpgf::MakePolicy<cpgf::GMetaRuleCopyConstReference<2>, cpgf::GMetaRuleCopyConstReference<3> >());
+    _d.CPGF_MD_TEMPLATE _method("createFloatAccessor", (FloatAccessor (*) (const cpgf::GVariant &, const std::string &, const std::string &))&createFloatAccessor, cpgf::MakePolicy<cpgf::GMetaRuleCopyConstReference<1>, cpgf::GMetaRuleCopyConstReference<2> >());
+    _d.CPGF_MD_TEMPLATE _method("createSharedPointer", (std::shared_ptr< void > (*) (const cpgf::GVariant &))&createSharedPointer);
 }
 
 
