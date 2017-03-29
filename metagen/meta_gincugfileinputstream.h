@@ -23,8 +23,8 @@ void buildMetaClass_GFileInputStream(D _d)
     using namespace cpgf;
     
     _d.CPGF_MD_TEMPLATE _constructor<void * ()>();
-    _d.CPGF_MD_TEMPLATE _constructor<void * (const std::string &)>();
-    _d.CPGF_MD_TEMPLATE _method("open", &D::ClassType::open);
+    _d.CPGF_MD_TEMPLATE _constructor<void * (const std::string &)>(cpgf::MakePolicy<cpgf::GMetaRuleCopyConstReference<0> >());
+    _d.CPGF_MD_TEMPLATE _method("open", &D::ClassType::open, cpgf::MakePolicy<cpgf::GMetaRuleCopyConstReference<0> >());
     _d.CPGF_MD_TEMPLATE _method("close", &D::ClassType::close);
     _d.CPGF_MD_TEMPLATE _method("read", &D::ClassType::read);
     _d.CPGF_MD_TEMPLATE _method("seek", &D::ClassType::seek);
@@ -39,7 +39,7 @@ void buildMetaClass_GFileInputStreamData(D _d)
     (void)_d;
     using namespace cpgf;
     
-    _d.CPGF_MD_TEMPLATE _method("open", &D::ClassType::open);
+    _d.CPGF_MD_TEMPLATE _method("open", &D::ClassType::open, cpgf::MakePolicy<cpgf::GMetaRuleCopyConstReference<0> >());
     _d.CPGF_MD_TEMPLATE _method("read", &D::ClassType::read);
     _d.CPGF_MD_TEMPLATE _method("seek", &D::ClassType::seek);
     _d.CPGF_MD_TEMPLATE _method("tell", &D::ClassType::tell);

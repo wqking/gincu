@@ -54,7 +54,7 @@ void GScriptingMain::initialize(const GScriptLanguage lang)
 	scriptObject->bindCoreService("cpgf", NULL);
 }
 
-cpgf::IScriptObject * GScriptingMain::getScripeObject()
+cpgf::IScriptObject * GScriptingMain::getScriptObject()
 {
 	return this->runner->getScripeObject();
 }

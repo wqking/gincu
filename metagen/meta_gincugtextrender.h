@@ -34,7 +34,7 @@ void buildMetaClass_GTextRender(D _d)
     using namespace cpgf;
     
     _d.CPGF_MD_TEMPLATE _constructor<void * ()>();
-    _d.CPGF_MD_TEMPLATE _method("setText", &D::ClassType::setText);
+    _d.CPGF_MD_TEMPLATE _method("setText", &D::ClassType::setText, cpgf::MakePolicy<cpgf::GMetaRuleCopyConstReference<0> >());
     _d.CPGF_MD_TEMPLATE _method("setFontSize", &D::ClassType::setFontSize);
     _d.CPGF_MD_TEMPLATE _method("getData", &D::ClassType::getData);
 }
@@ -46,7 +46,7 @@ void buildMetaClass_GTextRenderData(D _d)
     (void)_d;
     using namespace cpgf;
     
-    _d.CPGF_MD_TEMPLATE _method("setText", &D::ClassType::setText);
+    _d.CPGF_MD_TEMPLATE _method("setText", &D::ClassType::setText, cpgf::MakePolicy<cpgf::GMetaRuleCopyConstReference<0> >());
     _d.CPGF_MD_TEMPLATE _method("setFontSize", &D::ClassType::setFontSize);
     _d.CPGF_MD_TEMPLATE _method("getBoundingSize", &D::ClassType::getBoundingSize);
 }

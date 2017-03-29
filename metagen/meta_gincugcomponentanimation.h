@@ -23,7 +23,7 @@ void buildMetaClass_GComponentAnimation(D _d)
     using namespace cpgf;
     
     _d.CPGF_MD_TEMPLATE _method("getComponentType", &D::ClassType::getComponentType);
-    _d.CPGF_MD_TEMPLATE _method("setAnimation", &D::ClassType::setAnimation);
+    _d.CPGF_MD_TEMPLATE _method("setAnimation", &D::ClassType::setAnimation, cpgf::MakePolicy<cpgf::GMetaRuleCopyConstReference<0> >());
 }
 
 

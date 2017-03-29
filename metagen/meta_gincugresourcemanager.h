@@ -26,21 +26,21 @@ void buildMetaClass_GResourceManager(D _d)
     _d.CPGF_MD_TEMPLATE _method("getInstance", &D::ClassType::getInstance);
     _d.CPGF_MD_TEMPLATE _method("initialize", &D::ClassType::initialize);
     _d.CPGF_MD_TEMPLATE _method("finalize", &D::ClassType::finalize);
-    _d.CPGF_MD_TEMPLATE _method("getImage", &D::ClassType::getImage);
-    _d.CPGF_MD_TEMPLATE _method("asyncGetImage", &D::ClassType::asyncGetImage)
+    _d.CPGF_MD_TEMPLATE _method("getImage", &D::ClassType::getImage, cpgf::MakePolicy<cpgf::GMetaRuleCopyConstReference<0> >());
+    _d.CPGF_MD_TEMPLATE _method("asyncGetImage", &D::ClassType::asyncGetImage, cpgf::MakePolicy<cpgf::GMetaRuleCopyConstReference<0> >())
         ._default(copyVariantFromCopyable<const GResourceManager::LoaderCallback&>(GResourceManager::LoaderCallback()))
     ;
-    _d.CPGF_MD_TEMPLATE _method("getAtlas", &D::ClassType::getAtlas);
-    _d.CPGF_MD_TEMPLATE _method("getFont", (GFont (D::ClassType::*) (const std::string &) const)&D::ClassType::getFont);
-    _d.CPGF_MD_TEMPLATE _method("asyncGetFont", &D::ClassType::asyncGetFont)
+    _d.CPGF_MD_TEMPLATE _method("getAtlas", &D::ClassType::getAtlas, cpgf::MakePolicy<cpgf::GMetaRuleCopyConstReference<0> >());
+    _d.CPGF_MD_TEMPLATE _method("getFont", (GFont (D::ClassType::*) (const std::string &) const)&D::ClassType::getFont, cpgf::MakePolicy<cpgf::GMetaRuleCopyConstReference<0> >());
+    _d.CPGF_MD_TEMPLATE _method("asyncGetFont", &D::ClassType::asyncGetFont, cpgf::MakePolicy<cpgf::GMetaRuleCopyConstReference<0> >())
         ._default(copyVariantFromCopyable<const GResourceManager::LoaderCallback&>(GResourceManager::LoaderCallback()))
     ;
     _d.CPGF_MD_TEMPLATE _method("getFont", (GFont (D::ClassType::*) () const)&D::ClassType::getFont);
-    _d.CPGF_MD_TEMPLATE _method("solveResourcePath", &D::ClassType::solveResourcePath);
+    _d.CPGF_MD_TEMPLATE _method("solveResourcePath", &D::ClassType::solveResourcePath, cpgf::MakePolicy<cpgf::GMetaRuleCopyConstReference<0> >());
     _d.CPGF_MD_TEMPLATE _method("reloadResources", &D::ClassType::reloadResources);
-    _d.CPGF_MD_TEMPLATE _method("getResourcePath", &D::ClassType::getResourcePath);
-    _d.CPGF_MD_TEMPLATE _method("setDefaultFontName", &D::ClassType::setDefaultFontName);
-    _d.CPGF_MD_TEMPLATE _method("getDefaultFontName", &D::ClassType::getDefaultFontName);
+    _d.CPGF_MD_TEMPLATE _method("getResourcePath", &D::ClassType::getResourcePath, cpgf::MakePolicy<cpgf::GMetaRuleCopyConstReference<-1> >());
+    _d.CPGF_MD_TEMPLATE _method("setDefaultFontName", &D::ClassType::setDefaultFontName, cpgf::MakePolicy<cpgf::GMetaRuleCopyConstReference<0> >());
+    _d.CPGF_MD_TEMPLATE _method("getDefaultFontName", &D::ClassType::getDefaultFontName, cpgf::MakePolicy<cpgf::GMetaRuleCopyConstReference<-1> >());
 }
 
 

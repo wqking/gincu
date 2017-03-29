@@ -31,7 +31,7 @@ void buildMetaClass_GAfterObjectCreated(D _d)
     (void)_d;
     using namespace cpgf;
     
-    _d.CPGF_MD_TEMPLATE _method("afterCreated", &D::ClassType::afterCreated);
+    _d.CPGF_MD_TEMPLATE _method("afterCreated", &D::ClassType::afterCreated, cpgf::MakePolicy<cpgf::GMetaRuleCopyConstReference<1> >());
 }
 
 
@@ -41,7 +41,7 @@ void buildMetaClass_GAfterObjectCreatedSetName(D _d)
     (void)_d;
     using namespace cpgf;
     
-    _d.CPGF_MD_TEMPLATE _method("afterCreated", &D::ClassType::afterCreated);
+    _d.CPGF_MD_TEMPLATE _method("afterCreated", &D::ClassType::afterCreated, cpgf::MakePolicy<cpgf::GMetaRuleCopyConstReference<1> >());
 }
 
 
@@ -51,11 +51,11 @@ void buildMetaClass_GObjectFactory(D _d)
     (void)_d;
     using namespace cpgf;
     
-    _d.CPGF_MD_TEMPLATE _method("registerObject", (void (D::ClassType::*) (const std::string &, typename GObjectFactory<T, AfterCreated, ParamType >::ObjectCreator, const ParamType &))&D::ClassType::registerObject);
-    _d.CPGF_MD_TEMPLATE _method("registerObject", (void (D::ClassType::*) (const std::string &, typename GObjectFactory<T, AfterCreated, ParamType >::ObjectCreator))&D::ClassType::registerObject);
-    _d.CPGF_MD_TEMPLATE _method("createObject", &D::ClassType::createObject);
-    _d.CPGF_MD_TEMPLATE _method("getParam", &D::ClassType::getParam);
-    _d.CPGF_MD_TEMPLATE _method("has", &D::ClassType::has);
+    _d.CPGF_MD_TEMPLATE _method("registerObject", (void (D::ClassType::*) (const std::string &, typename GObjectFactory<T, AfterCreated, ParamType >::ObjectCreator, const ParamType &))&D::ClassType::registerObject, cpgf::MakePolicy<cpgf::GMetaRuleCopyConstReference<0> >());
+    _d.CPGF_MD_TEMPLATE _method("registerObject", (void (D::ClassType::*) (const std::string &, typename GObjectFactory<T, AfterCreated, ParamType >::ObjectCreator))&D::ClassType::registerObject, cpgf::MakePolicy<cpgf::GMetaRuleCopyConstReference<0> >());
+    _d.CPGF_MD_TEMPLATE _method("createObject", &D::ClassType::createObject, cpgf::MakePolicy<cpgf::GMetaRuleCopyConstReference<0> >());
+    _d.CPGF_MD_TEMPLATE _method("getParam", &D::ClassType::getParam, cpgf::MakePolicy<cpgf::GMetaRuleCopyConstReference<0> >());
+    _d.CPGF_MD_TEMPLATE _method("has", &D::ClassType::has, cpgf::MakePolicy<cpgf::GMetaRuleCopyConstReference<0> >());
     {
         GDefineMetaClass<typename GObjectFactory<T, AfterCreated, ParamType >::RegisterEntry> _nd = GDefineMetaClass<typename GObjectFactory<T, AfterCreated, ParamType >::RegisterEntry>::declare("RegisterEntry");
         _nd.CPGF_MD_TEMPLATE _field("name", &GObjectFactory<T, AfterCreated, ParamType >::RegisterEntry::name);

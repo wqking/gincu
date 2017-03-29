@@ -47,10 +47,10 @@ void buildMetaClass_GFrameAnimationSetData(D _d)
     (void)_d;
     using namespace cpgf;
     
-    _d.CPGF_MD_TEMPLATE _method("append", &D::ClassType::append);
-    _d.CPGF_MD_TEMPLATE _method("getAnimationData", &D::ClassType::getAnimationData);
+    _d.CPGF_MD_TEMPLATE _method("append", &D::ClassType::append, cpgf::MakePolicy<cpgf::GMetaRuleCopyConstReference<0> >());
+    _d.CPGF_MD_TEMPLATE _method("getAnimationData", &D::ClassType::getAnimationData, cpgf::MakePolicy<cpgf::GMetaRuleCopyConstReference<0> >());
     _d.CPGF_MD_TEMPLATE _method("getAnimationCount", &D::ClassType::getAnimationCount);
-    _d.CPGF_MD_TEMPLATE _method("getAnimationNameAt", &D::ClassType::getAnimationNameAt);
+    _d.CPGF_MD_TEMPLATE _method("getAnimationNameAt", &D::ClassType::getAnimationNameAt, cpgf::MakePolicy<cpgf::GMetaRuleCopyConstReference<-1> >());
     _d.CPGF_MD_TEMPLATE _method("getAnimationDataAt", &D::ClassType::getAnimationDataAt);
 }
 

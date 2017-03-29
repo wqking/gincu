@@ -24,10 +24,10 @@ void buildMetaClass_GScriptingMain(D _d)
     
     _d.CPGF_MD_TEMPLATE _method("getInstance", &D::ClassType::getInstance);
     _d.CPGF_MD_TEMPLATE _method("initialize", &D::ClassType::initialize);
-    _d.CPGF_MD_TEMPLATE _method("getScripeObject", &D::ClassType::getScripeObject);
+    _d.CPGF_MD_TEMPLATE _method("getScriptObject", &D::ClassType::getScriptObject);
     _d.CPGF_MD_TEMPLATE _method("getService", &D::ClassType::getService);
-    _d.CPGF_MD_TEMPLATE _method("executeString", &D::ClassType::executeString);
-    _d.CPGF_MD_TEMPLATE _method("executeFile", &D::ClassType::executeFile);
+    _d.CPGF_MD_TEMPLATE _method("executeString", &D::ClassType::executeString, cpgf::MakePolicy<cpgf::GMetaRuleCopyConstReference<0> >());
+    _d.CPGF_MD_TEMPLATE _method("executeFile", &D::ClassType::executeFile, cpgf::MakePolicy<cpgf::GMetaRuleCopyConstReference<0> >());
 }
 
 

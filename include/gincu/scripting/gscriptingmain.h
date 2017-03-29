@@ -25,7 +25,7 @@ public:
 	
 	void initialize(const GScriptLanguage lang);
 
-	cpgf::IScriptObject * getScripeObject();
+	cpgf::IScriptObject * getScriptObject();
 	cpgf::IMetaService * getService();
 	
 	void executeString(const std::string & code);

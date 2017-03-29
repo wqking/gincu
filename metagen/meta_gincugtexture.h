@@ -36,7 +36,7 @@ void buildMetaClass_GTextureData(D _d)
     (void)_d;
     using namespace cpgf;
     
-    _d.CPGF_MD_TEMPLATE _method("load", &D::ClassType::load);
+    _d.CPGF_MD_TEMPLATE _method("load", &D::ClassType::load, cpgf::MakePolicy<cpgf::GMetaRuleCopyConstReference<0> >());
     _d.CPGF_MD_TEMPLATE _method("reload", &D::ClassType::reload);
     _d.CPGF_MD_TEMPLATE _method("getSize", &D::ClassType::getSize);
     _d.CPGF_MD_TEMPLATE _method("isValid", &D::ClassType::isValid);

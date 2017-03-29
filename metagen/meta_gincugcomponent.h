@@ -27,7 +27,7 @@ void buildMetaClass_Global_gcomponent(D _d)
     
     _d.CPGF_MD_TEMPLATE _field("componentTypePrimaryCount", &componentTypePrimaryCount);
     _d.CPGF_MD_TEMPLATE _field("componentTypeUser", &componentTypeUser);
-    _d.CPGF_MD_TEMPLATE _method("registerComponentId", (GComponentType (*) (const std::string &))&registerComponentId);
+    _d.CPGF_MD_TEMPLATE _method("registerComponentId", (GComponentType (*) (const std::string &))&registerComponentId, cpgf::MakePolicy<cpgf::GMetaRuleCopyConstReference<0> >());
     _d.CPGF_MD_TEMPLATE _enum<GComponentType>("GComponentType")
         ._element("render", gincu::GComponentType::render)
         ._element("transform", gincu::GComponentType::transform)
@@ -102,7 +102,7 @@ void buildMetaClass_GComponentIdRegister(D _d)
     (void)_d;
     using namespace cpgf;
     
-    _d.CPGF_MD_TEMPLATE _constructor<void * (const std::string &)>();
+    _d.CPGF_MD_TEMPLATE _constructor<void * (const std::string &)>(cpgf::MakePolicy<cpgf::GMetaRuleCopyConstReference<0> >());
     _d.CPGF_MD_TEMPLATE _method("getComponentId", &D::ClassType::getComponentId);
 }
 

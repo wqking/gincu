@@ -108,11 +108,12 @@ end
 
 function doInitializeRotationAnimation(me, pos)
 	local localTransform = createParentedObject(me, pos, gincu.GRenderAnchor.center, 0, 0.5)
+	local accessor = gincu.createFloatAccessor(localTransform, gincu.GComponentLocalTransform, 'getRotation', 'setRotation')
 	me.getTweenList().tween()
 		.duration(10000)
 		.ease(gincu.ElasticEase.easeOut())
 		._repeat(-1)
---		.target(cpgf::createAccessor(localTransform, &GComponentLocalTransform::getRotation, &GComponentLocalTransform::setRotation), 360)
+		.targetFloat(accessor, 360)
 end
 
 SceneTestSceneGraph.doOnEnter = function(me)

@@ -35,7 +35,7 @@ void buildMetaClass_GFontData(D _d)
     (void)_d;
     using namespace cpgf;
     
-    _d.CPGF_MD_TEMPLATE _method("load", &D::ClassType::load);
+    _d.CPGF_MD_TEMPLATE _method("load", &D::ClassType::load, cpgf::MakePolicy<cpgf::GMetaRuleCopyConstReference<0> >());
 }
 
 

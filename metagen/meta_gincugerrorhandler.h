@@ -22,7 +22,7 @@ void buildMetaClass_Global_gerrorhandler(D _d)
     (void)_d;
     using namespace cpgf;
     
-    _d.CPGF_MD_TEMPLATE _method("handleFatal", (void (*) (const std::string &))&handleFatal);
+    _d.CPGF_MD_TEMPLATE _method("handleFatal", (void (*) (const std::string &))&handleFatal, cpgf::MakePolicy<cpgf::GMetaRuleCopyConstReference<0> >());
 }
 
 

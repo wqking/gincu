@@ -32,6 +32,8 @@ var config = {
 	metaHeaderPath : "",
 	
 	classTraits : [
+		{ pattern : ".*\\b[io]stream$", traits : { copyConstructorHidden : true }  },
+		{ pattern : ".*\\bw?string$", traits : { hasTypeConvertConstructor : true }  },
 	],
 
 	predefinedTemplateInstances : [
