@@ -86,7 +86,7 @@ local function createParentedObject(me, position, anchor, rotation, scale)
 		.addComponent(gincu.GComponentLocalTransform(port.createPoint(0, yDelta * 2)).setParent(entityB.getComponentByTypeId(gincu.GComponentLocalTransform.getComponentType())))
 		.addComponent(gincu.GComponentAnchor(anchor).setFlipX(true).setFlipY(true))
 		.addComponent(gincu.createAtlasRenderComponent(gincu.GResourceManager.getInstance().getAtlas(atlasName, gincu.GAtlasFormat.spritePackText), ""))
---.addComponent(createAnimation(atlasName))
+		.addComponent(createAnimation(atlasName))
 		.addComponent(gincu.GComponentRendererTouchHandler().addOnTouch(gincu.createOnTouchedCallback(
 			function(e)
 				if e.getType() == gincu.GEventType.touchPressed then
