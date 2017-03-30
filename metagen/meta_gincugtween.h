@@ -11,6 +11,7 @@
 #include "cpgf/tween/gtimeline.h"
 #include "cpgf/accessor/gaccessor.h"
 #include "cpgf/gselectfunctionbyarity.h"
+#include "gincu/ggeometry.h"
 
 
 using namespace cpgf;
@@ -30,8 +31,22 @@ void buildMetaClass_GTween(D _d)
     _d.CPGF_MD_TEMPLATE _method("removeForInstance", &D::ClassType::removeForInstance);
     _d.CPGF_MD_TEMPLATE _method("targetFloat", cpgf::selectFunctionByArity2(&D::ClassType::template target<cpgf::GAccessor<cpgf::GGetter<cpgf::GCallback<float ()> >, cpgf::GSetter<cpgf::GCallback<void (float)> > > >));
     _d.CPGF_MD_TEMPLATE _method("targetFloat", cpgf::selectFunctionByArity3(&D::ClassType::template target<cpgf::GAccessor<cpgf::GGetter<cpgf::GCallback<float ()> >, cpgf::GSetter<cpgf::GCallback<void (float)> > > >));
+    _d.CPGF_MD_TEMPLATE _method("targetPoint", cpgf::selectFunctionByArity2(&D::ClassType::template target<cpgf::GAccessor<cpgf::GGetter<cpgf::GCallback<gincu::GPoint ()> >, cpgf::GSetter<cpgf::GCallback<void (gincu::GPoint)> > > >));
+    _d.CPGF_MD_TEMPLATE _method("targetPoint", cpgf::selectFunctionByArity3(&D::ClassType::template target<cpgf::GAccessor<cpgf::GGetter<cpgf::GCallback<gincu::GPoint ()> >, cpgf::GSetter<cpgf::GCallback<void (gincu::GPoint)> > > >));
+    _d.CPGF_MD_TEMPLATE _method("targetScale", cpgf::selectFunctionByArity2(&D::ClassType::template target<cpgf::GAccessor<cpgf::GGetter<cpgf::GCallback<gincu::GScale ()> >, cpgf::GSetter<cpgf::GCallback<void (gincu::GScale)> > > >));
+    _d.CPGF_MD_TEMPLATE _method("targetScale", cpgf::selectFunctionByArity3(&D::ClassType::template target<cpgf::GAccessor<cpgf::GGetter<cpgf::GCallback<gincu::GScale ()> >, cpgf::GSetter<cpgf::GCallback<void (gincu::GScale)> > > >));
     _d.CPGF_MD_TEMPLATE _method("relativeFloat", cpgf::selectFunctionByArity2(&D::ClassType::template relative<cpgf::GAccessor<cpgf::GGetter<cpgf::GCallback<float ()> >, cpgf::GSetter<cpgf::GCallback<void (float)> > > >));
     _d.CPGF_MD_TEMPLATE _method("relativeFloat", cpgf::selectFunctionByArity3(&D::ClassType::template relative<cpgf::GAccessor<cpgf::GGetter<cpgf::GCallback<float ()> >, cpgf::GSetter<cpgf::GCallback<void (float)> > > >));
+    _d.CPGF_MD_TEMPLATE _method("relativePoint", cpgf::selectFunctionByArity2(&D::ClassType::template relative<cpgf::GAccessor<cpgf::GGetter<cpgf::GCallback<gincu::GPoint ()> >, cpgf::GSetter<cpgf::GCallback<void (gincu::GPoint)> > > >));
+    _d.CPGF_MD_TEMPLATE _method("relativePoint", cpgf::selectFunctionByArity3(&D::ClassType::template relative<cpgf::GAccessor<cpgf::GGetter<cpgf::GCallback<gincu::GPoint ()> >, cpgf::GSetter<cpgf::GCallback<void (gincu::GPoint)> > > >));
+    _d.CPGF_MD_TEMPLATE _method("relativeScale", cpgf::selectFunctionByArity2(&D::ClassType::template relative<cpgf::GAccessor<cpgf::GGetter<cpgf::GCallback<gincu::GScale ()> >, cpgf::GSetter<cpgf::GCallback<void (gincu::GScale)> > > >));
+    _d.CPGF_MD_TEMPLATE _method("relativeScale", cpgf::selectFunctionByArity3(&D::ClassType::template relative<cpgf::GAccessor<cpgf::GGetter<cpgf::GCallback<gincu::GScale ()> >, cpgf::GSetter<cpgf::GCallback<void (gincu::GScale)> > > >));
+    _d.CPGF_MD_TEMPLATE _method("followFloat", cpgf::selectFunctionByArity2(&D::ClassType::template follow<cpgf::GAccessor<cpgf::GGetter<cpgf::GCallback<float ()> >, cpgf::GSetter<cpgf::GCallback<void (float)> > > , cpgf::GAccessor<cpgf::GGetter<cpgf::GCallback<float ()> >, cpgf::GSetter<cpgf::GCallback<void (float)> > > ::GetterType>));
+    _d.CPGF_MD_TEMPLATE _method("followFloat", cpgf::selectFunctionByArity3(&D::ClassType::template follow<cpgf::GAccessor<cpgf::GGetter<cpgf::GCallback<float ()> >, cpgf::GSetter<cpgf::GCallback<void (float)> > > , cpgf::GAccessor<cpgf::GGetter<cpgf::GCallback<float ()> >, cpgf::GSetter<cpgf::GCallback<void (float)> > > ::GetterType>));
+    _d.CPGF_MD_TEMPLATE _method("followPoint", cpgf::selectFunctionByArity2(&D::ClassType::template follow<cpgf::GAccessor<cpgf::GGetter<cpgf::GCallback<gincu::GPoint ()> >, cpgf::GSetter<cpgf::GCallback<void (gincu::GPoint)> > > , cpgf::GAccessor<cpgf::GGetter<cpgf::GCallback<gincu::GPoint ()> >, cpgf::GSetter<cpgf::GCallback<void (gincu::GPoint)> > > ::GetterType>));
+    _d.CPGF_MD_TEMPLATE _method("followPoint", cpgf::selectFunctionByArity3(&D::ClassType::template follow<cpgf::GAccessor<cpgf::GGetter<cpgf::GCallback<gincu::GPoint ()> >, cpgf::GSetter<cpgf::GCallback<void (gincu::GPoint)> > > , cpgf::GAccessor<cpgf::GGetter<cpgf::GCallback<gincu::GPoint ()> >, cpgf::GSetter<cpgf::GCallback<void (gincu::GPoint)> > > ::GetterType>));
+    _d.CPGF_MD_TEMPLATE _method("followScale", cpgf::selectFunctionByArity2(&D::ClassType::template follow<cpgf::GAccessor<cpgf::GGetter<cpgf::GCallback<gincu::GScale ()> >, cpgf::GSetter<cpgf::GCallback<void (gincu::GScale)> > > , cpgf::GAccessor<cpgf::GGetter<cpgf::GCallback<gincu::GScale ()> >, cpgf::GSetter<cpgf::GCallback<void (gincu::GScale)> > > ::GetterType>));
+    _d.CPGF_MD_TEMPLATE _method("followScale", cpgf::selectFunctionByArity3(&D::ClassType::template follow<cpgf::GAccessor<cpgf::GGetter<cpgf::GCallback<gincu::GScale ()> >, cpgf::GSetter<cpgf::GCallback<void (gincu::GScale)> > > , cpgf::GAccessor<cpgf::GGetter<cpgf::GCallback<gincu::GScale ()> >, cpgf::GSetter<cpgf::GCallback<void (gincu::GScale)> > > ::GetterType>));
     _d.CPGF_MD_TEMPLATE _method("ease", &D::ClassType::ease);
     _d.CPGF_MD_TEMPLATE _method("duration", &D::ClassType::duration);
     _d.CPGF_MD_TEMPLATE _method("backward", &D::ClassType::backward);

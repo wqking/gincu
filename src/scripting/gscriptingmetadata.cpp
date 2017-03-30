@@ -100,6 +100,24 @@ FloatAccessor createFloatAccessor(
 	return createMetaAccessor<float>(instance, getterName, setterName);
 }
 
+PointAccessor createPointAccessor(
+		const cpgf::GVariant & instance,
+		const std::string & getterName,
+		const std::string & setterName
+	)
+{
+	return createMetaAccessor<GPoint>(instance, getterName, setterName);
+}
+
+ScaleAccessor createScaleAccessor(
+		const cpgf::GVariant & instance,
+		const std::string & getterName,
+		const std::string & setterName
+	)
+{
+	return createMetaAccessor<GScale>(instance, getterName, setterName);
+}
+
 struct MetaInstanceDeleter
 {
 	explicit MetaInstanceDeleter(cpgf::IMetaClass * metaClass)

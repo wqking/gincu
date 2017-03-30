@@ -11,6 +11,7 @@
 #include "cpgf/tween/gtimeline.h"
 #include "cpgf/accessor/gaccessor.h"
 #include "cpgf/gselectfunctionbyarity.h"
+#include "gincu/ggeometry.h"
 
 
 using namespace cpgf;

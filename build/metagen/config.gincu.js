@@ -147,6 +147,7 @@ function processCallback(item, data)
 		data.addHeaderInclude("cpgf/tween/gtimeline.h");
 		data.addHeaderInclude("cpgf/accessor/gaccessor.h");
 		data.addHeaderInclude("cpgf/gselectfunctionbyarity.h");
+		data.addHeaderInclude("gincu/ggeometry.h");
 	}
 	
 	if(item.isConstant() || item.isOperator()) {
@@ -161,33 +162,62 @@ function processCallback(item, data)
 		var ownerName = owner.getPrimaryName();
 		if(ownerName == "GTween") {
 			if(itemName == 'target' && item.getParameterCount() == 3) {
-				var accessorTypeList = [
-					'cpgf::GAccessor<cpgf::GGetter<cpgf::GCallback<float ()> >, cpgf::GSetter<cpgf::GCallback<void (float)> > > ',
-				];
-				var namePostfixList = [
-					'Float',
-				];
-				var protoList = [
-					'target', 'relative' //, 'follow'
-				];
-
-				for each(var proto in protoList) {
-					for(var i = 0; i < accessorTypeList.length; ++i) {
-						var name = proto + namePostfixList[i];
-						var type = accessorTypeList[i];
-
-						data.addRawCode(
-							'_d.CPGF_MD_TEMPLATE _method("' + name + '", '
-								+ 'cpgf::selectFunctionByArity2(&D::ClassType::template ' + proto + '<' + type + '>));'
-						);
-						data.addRawCode(
-							'_d.CPGF_MD_TEMPLATE _method("' + name + '", '
-								+ 'cpgf::selectFunctionByArity3(&D::ClassType::template ' + proto + '<' + type + '>));'
-						);
-					}
-				}
+				doGenerateTweenSpecializations(item, data);
 			}
 		}
 	}
 }
 
+function doGenerateTweenSpecializations(item, data)
+{
+	var accessorTypeList = [
+		'cpgf::GAccessor<cpgf::GGetter<cpgf::GCallback<float ()> >, cpgf::GSetter<cpgf::GCallback<void (float)> > > ',
+		'cpgf::GAccessor<cpgf::GGetter<cpgf::GCallback<gincu::GPoint ()> >, cpgf::GSetter<cpgf::GCallback<void (gincu::GPoint)> > > ',
+		'cpgf::GAccessor<cpgf::GGetter<cpgf::GCallback<gincu::GScale ()> >, cpgf::GSetter<cpgf::GCallback<void (gincu::GScale)> > > ',
+	];
+	
+	// the element count must be same as accessorTypeList
+	var namePostfixList = [
+		'Float', 'Point', 'Scale'
+	];
+	var protoList = [
+		'target', 'relative'
+	];
+
+	var twoProtoList = [
+		'follow'
+	];
+
+	for each(var proto in protoList) {
+		for(var i = 0; i < accessorTypeList.length; ++i) {
+			var name = proto + namePostfixList[i];
+			var type = accessorTypeList[i];
+
+			data.addRawCode(
+				'_d.CPGF_MD_TEMPLATE _method("' + name + '", '
+					+ 'cpgf::selectFunctionByArity2(&D::ClassType::template ' + proto + '<' + type + '>));'
+			);
+			data.addRawCode(
+				'_d.CPGF_MD_TEMPLATE _method("' + name + '", '
+					+ 'cpgf::selectFunctionByArity3(&D::ClassType::template ' + proto + '<' + type + '>));'
+			);
+		}
+	}
+
+	for each(var proto in twoProtoList) {
+		for(var i = 0; i < accessorTypeList.length; ++i) {
+			var name = proto + namePostfixList[i];
+			var type = accessorTypeList[i];
+			type = type + ', ' + type + '::GetterType';
+
+			data.addRawCode(
+				'_d.CPGF_MD_TEMPLATE _method("' + name + '", '
+					+ 'cpgf::selectFunctionByArity2(&D::ClassType::template ' + proto + '<' + type + '>));'
+			);
+			data.addRawCode(
+				'_d.CPGF_MD_TEMPLATE _method("' + name + '", '
+					+ 'cpgf::selectFunctionByArity3(&D::ClassType::template ' + proto + '<' + type + '>));'
+			);
+		}
+	}
+}

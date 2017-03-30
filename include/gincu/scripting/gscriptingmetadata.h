@@ -2,6 +2,7 @@
 #define GSCRIPTINGMETADATA_H
 
 #include "gincu/gevent.h"
+#include "gincu/ggeometry.h"
 
 #include "cpgf/gcallback.h"
 #include "cpgf/scriptbind/gscriptbindapi.h"
@@ -20,6 +21,20 @@ OnTouchCallback createOnTouchedCallback(cpgf::IScriptFunction * func);
 
 typedef cpgf::GAccessor<cpgf::GGetter<cpgf::GCallback<float ()> >, cpgf::GSetter<cpgf::GCallback<void (float)> > > FloatAccessor;
 FloatAccessor createFloatAccessor(
+		const cpgf::GVariant & instance,
+		const std::string & getterName,
+		const std::string & setterName
+	);
+
+typedef cpgf::GAccessor<cpgf::GGetter<cpgf::GCallback<GPoint ()> >, cpgf::GSetter<cpgf::GCallback<void (GPoint)> > > PointAccessor;
+PointAccessor createPointAccessor(
+		const cpgf::GVariant & instance,
+		const std::string & getterName,
+		const std::string & setterName
+	);
+
+typedef cpgf::GAccessor<cpgf::GGetter<cpgf::GCallback<GScale ()> >, cpgf::GSetter<cpgf::GCallback<void (GScale)> > > ScaleAccessor;
+ScaleAccessor createScaleAccessor(
 		const cpgf::GVariant & instance,
 		const std::string & getterName,
 		const std::string & setterName
