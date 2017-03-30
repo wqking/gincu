@@ -3,6 +3,10 @@
 
 namespace gincu {
 
+// Even static constexpr member has to be defined in the translate unit.
+// http://stackoverflow.com/questions/40690260/undefined-reference-error-for-static-constexpr-member
+const GColor GVertexArray::defaultColor;
+
 GVertexArray::GVertexArray()
 	: data(GDeviceContext::getInstance()->createVertexArrayData(nullptr))
 {

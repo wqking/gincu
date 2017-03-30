@@ -40,6 +40,21 @@ set(ALLEGRO_GCC_LIBS
 )
 ]]
 
+set(MSVC_OPTIMIZED_COMPILE_FLAGS "-W3 -O2 -Oy -EHsc")
+set(MSVC_DEBUG_COMPILE_FLAGS "-W3 -O0 -Od -EHsc")
+set(MSVC_OPTIMIZED_LINK_FLAGS " ")
+set(MSVC_DEBUG_LINK_FLAGS " ")
+
+set(GCC_OPTIMIZED_COMPILE_FLAGS "-Wall -Wextra -Wundef -O3 -D_REENTRANT -lpthread")
+set(GCC_DEBUG_COMPILE_FLAGS "-Wall -Wextra -Wundef -O0 -D_REENTRANT -lpthread")
+set(GCC_OPTIMIZED_LINK_FLAGS " ")
+set(GCC_DEBUG_LINK_FLAGS " ")
+
+set(GCC_LIKE 0)
+if(CMAKE_COMPILER_IS_GNUCC OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+	set(GCC_LIKE 1)
+endif()
+
 #[[
 The level to output log messages.
 If this macro is not defined, default is G_LOG_LEVEL_INFO.

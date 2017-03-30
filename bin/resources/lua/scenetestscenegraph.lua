@@ -6,7 +6,7 @@ function createAnimation(atlasName)
 	gincu.buildFrameAnimationDataFromAtlas(data, gincu.GResourceManager.getInstance().getAtlas(atlasName, gincu.GAtlasFormat.spritePackText));
 	local sp = gincu.createSharedPointer(data);
 	local component = gincu.GComponentFrameAnimation(sp);
---	component.getTween().repeat(-1).timeScale(0.2);
+	component.getTween()._repeat(-1).timeScale(0.2);
 	return component;
 end
 

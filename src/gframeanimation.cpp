@@ -10,6 +10,14 @@
 
 namespace gincu {
 
+GFrameAnimationSetData::GFrameAnimationSetData()
+{
+}
+
+GFrameAnimationSetData::~GFrameAnimationSetData()
+{
+}
+
 void GFrameAnimationSetData::append(const std::string & name, GFrameAnimationData && animationData)
 {
 	this->animationDataList.push_back({ name, animationData });

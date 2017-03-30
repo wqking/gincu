@@ -45,6 +45,9 @@ private:
 	};
 
 public:
+	GFrameAnimationSetData();
+	~GFrameAnimationSetData();
+
 	void append(const std::string & name, GFrameAnimationData && animationData);
 
 	const GFrameAnimationData * getAnimationData(const std::string & name) const;
