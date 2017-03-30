@@ -15,9 +15,9 @@
 
 namespace gincu {
 
-// Doxygen treats it as variable if we expand OnTouchCallback to result type directly
-typedef cpgf::GCallback<void (const GEvent &)> OnTouchCallback;
-OnTouchCallback createOnTouchedCallback(cpgf::IScriptFunction * func);
+// Doxygen treats it as variable if we expand EventCallback to result type directly
+typedef cpgf::GCallback<void (const GEvent &)> EventCallback;
+EventCallback createEventCallback(cpgf::IScriptFunction * func);
 
 typedef cpgf::GAccessor<cpgf::GGetter<cpgf::GCallback<float ()> >, cpgf::GSetter<cpgf::GCallback<void (float)> > > FloatAccessor;
 FloatAccessor createFloatAccessor(

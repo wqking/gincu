@@ -22,8 +22,10 @@ void buildMetaClass_Global_gscriptingmetadata(D _d)
     (void)_d;
     using namespace cpgf;
     
-    _d.CPGF_MD_TEMPLATE _method("createOnTouchedCallback", (OnTouchCallback (*) (cpgf::IScriptFunction *))&createOnTouchedCallback);
+    _d.CPGF_MD_TEMPLATE _method("createEventCallback", (EventCallback (*) (cpgf::IScriptFunction *))&createEventCallback);
     _d.CPGF_MD_TEMPLATE _method("createFloatAccessor", (FloatAccessor (*) (const cpgf::GVariant &, const std::string &, const std::string &))&createFloatAccessor, cpgf::MakePolicy<cpgf::GMetaRuleCopyConstReference<1>, cpgf::GMetaRuleCopyConstReference<2> >());
+    _d.CPGF_MD_TEMPLATE _method("createPointAccessor", (PointAccessor (*) (const cpgf::GVariant &, const std::string &, const std::string &))&createPointAccessor, cpgf::MakePolicy<cpgf::GMetaRuleCopyConstReference<1>, cpgf::GMetaRuleCopyConstReference<2> >());
+    _d.CPGF_MD_TEMPLATE _method("createScaleAccessor", (ScaleAccessor (*) (const cpgf::GVariant &, const std::string &, const std::string &))&createScaleAccessor, cpgf::MakePolicy<cpgf::GMetaRuleCopyConstReference<1>, cpgf::GMetaRuleCopyConstReference<2> >());
     _d.CPGF_MD_TEMPLATE _method("createSharedPointer", (std::shared_ptr< void > (*) (const cpgf::GVariant &))&createSharedPointer);
 }
 

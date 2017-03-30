@@ -28,7 +28,7 @@ struct ScriptCallback
 
 } //unnamed namespace
 
-OnTouchCallback createOnTouchedCallback(cpgf::IScriptFunction * func)
+EventCallback createEventCallback(cpgf::IScriptFunction * func)
 {
 	return cpgf::GCallback<void (const GEvent &)>(ScriptCallback<void>(func));
 }

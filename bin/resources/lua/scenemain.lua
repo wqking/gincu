@@ -15,12 +15,24 @@ SceneMain.doOnEnter = function(me)
 
 	local buttonSize = port.createSize(200, 60);
 	
-	local x = viewWidth / 2
-	local y = viewHeight / 2
+	local yDelta = buttonSize.height + 10
 
+	local x = viewWidth / 2
+	local y = viewHeight / 2 - buttonSize.height
+	
 	me.addEntity(
 		createButton("Scene graph", port.createPoint(x, y), buttonSize, function(e)
+			require("scenetestscenegraph")
 			gincu.GApplication.getInstance().getSceneManager().switchScene(SceneTestSceneGraph())
+		end
+		)
+	)
+
+	y = y + yDelta
+	me.addEntity(
+		createButton("Tween", port.createPoint(x, y), buttonSize, function(e)
+			require("scenetesttween")
+			gincu.GApplication.getInstance().getSceneManager().switchScene(SceneTestTween())
 		end
 		)
 	)
