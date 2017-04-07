@@ -32,10 +32,22 @@ local function doTestBasic(me)
 	--target->getEntity()->getComponentByType<GComponentRender>()->setColor(colorSetAlpha(colorWhite, 127));
 end
 
+local x = 0
+local function onUpdate(me)
+	x = x + 1
+	print("abc   " .. x)
+end
+
+-- local uCallback = gincu.createEventCallback(function(e) onUpdate(me) end)
 SceneTestTween.doOnEnter = function(me)
 	me.addEntity(createBackButton(function(e)
 		gincu.GApplication.getInstance().getSceneManager().switchScene(SceneMain())
 	end))
+	
+	me.onUpdateCallback = gincu.createEventCallback(function(e) onUpdate(me) end)
+print(me.onUpdateCallback)
+
+	gincu.GApplication.getInstance().getEventQueue().addListener(gincu.GEventType.update, me.onUpdateCallback)
 
 	local buttonSize = port.createSize(100, 40);
 	
@@ -52,3 +64,10 @@ SceneTestTween.doOnEnter = function(me)
 	buttonY = buttonY + yDelta;
 
 end
+
+SceneTestTween.doOnExit = function(me)
+	print("SceneTestTween.doOnExit")
+print(me.onUpdateCallback)
+	gincu.GApplication.getInstance().getEventQueue().removeListener(gincu.GEventType.update, me.onUpdateCallback)
+end
+

@@ -23,7 +23,7 @@ SceneMain.doOnEnter = function(me)
 	me.addEntity(
 		createButton("Scene graph", port.createPoint(x, y), buttonSize, function(e)
 			require("scenetestscenegraph")
-			gincu.GApplication.getInstance().getSceneManager().switchScene(SceneTestSceneGraph())
+			doSwitchScene(SceneTestSceneGraph())
 		end
 		)
 	)
@@ -32,7 +32,7 @@ SceneMain.doOnEnter = function(me)
 	me.addEntity(
 		createButton("Tween", port.createPoint(x, y), buttonSize, function(e)
 			require("scenetesttween")
-			gincu.GApplication.getInstance().getSceneManager().switchScene(SceneTestTween())
+			doSwitchScene(SceneTestTween())
 		end
 		)
 	)

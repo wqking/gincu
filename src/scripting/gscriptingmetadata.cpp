@@ -16,6 +16,9 @@ struct ScriptCallback
 	explicit ScriptCallback(cpgf::IScriptFunction * func) : func(func) {
 	}
 	
+	~ScriptCallback() {
+	}
+	
 	template <typename... Parameters>
 	RT operator() (Parameters && ... parameters) const
 	{

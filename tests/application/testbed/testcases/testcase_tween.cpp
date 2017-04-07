@@ -156,17 +156,17 @@ void TestCase_Tween::doInitialize()
 	));
 	buttonY += yDelta;
 
-	GApplication::getInstance()->getEventQueue()->addListener(cpgf::makeCallback(this, &TestCase_Tween::onUpdate));
+	GApplication::getInstance()->getEventQueue()->addListener(GEventType::update, cpgf::makeCallback(this, &TestCase_Tween::onUpdate));
 }
 
 void TestCase_Tween::doFinalize()
 {
-	GApplication::getInstance()->getEventQueue()->removeListener(cpgf::makeCallback(this, &TestCase_Tween::onUpdate));
+	GApplication::getInstance()->getEventQueue()->removeListener(GEventType::update, cpgf::makeCallback(this, &TestCase_Tween::onUpdate));
 }
 
 void TestCase_Tween::onUpdate(const GEvent & /*event*/)
 {
-	this->tweenList.tick((cpgf::GTweenNumber)std::max(1u, GApplication::getInstance()->getFrameMilliseconds()));
+	this->tweenList.tick((cpgf::GTweenNumber)GApplication::getInstance()->getFrameMilliseconds());
 }
 
 void TestCase_Tween::doExecuteTest(const cpgf::GCallback<void ()> & handler)
