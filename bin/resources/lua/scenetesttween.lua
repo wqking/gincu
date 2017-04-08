@@ -30,24 +30,30 @@ local function doTestBasic(me)
 	local target = addImage(me, imageName, port.createPoint(spriteBoardEnd.x, spriteBoardEnd.y));
 	
 	--target->getEntity()->getComponentByType<GComponentRender>()->setColor(colorSetAlpha(colorWhite, 127));
+	local accessorPosition = gincu.createPointAccessor(sprite, 'getPosition', 'setPosition')
+	local accessorRotation = gincu.createFloatAccessor(sprite, 'getRotation', 'setRotation')
+	me.getTweenList().tween()
+		.duration(2000)
+		.targetPoint(accessorPosition, target.getPosition())
+		.targetFloat(accessorRotation, 180, 360)
+		._repeat(gincu.tweenRepeatInfinitely)
+		.yoyo(true)
+	;
 end
 
-local x = 0
 local function onUpdate(me)
-	x = x + 1
-	print("abc   " .. x)
+--	me.tweenList.tick(gincu.GApplication.getInstance().getFrameMilliseconds());
 end
 
--- local uCallback = gincu.createEventCallback(function(e) onUpdate(me) end)
 SceneTestTween.doOnEnter = function(me)
 	me.addEntity(createBackButton(function(e)
 		gincu.GApplication.getInstance().getSceneManager().switchScene(SceneMain())
 	end))
 	
 	me.onUpdateCallback = gincu.createEventCallback(function(e) onUpdate(me) end)
-print(me.onUpdateCallback)
-
 	gincu.GApplication.getInstance().getEventQueue().addListener(gincu.GEventType.update, me.onUpdateCallback)
+	
+	me.tweenList = gincu.GTweenList()
 
 	local buttonSize = port.createSize(100, 40);
 	
@@ -67,7 +73,7 @@ end
 
 SceneTestTween.doOnExit = function(me)
 	print("SceneTestTween.doOnExit")
-print(me.onUpdateCallback)
+
 	gincu.GApplication.getInstance().getEventQueue().removeListener(gincu.GEventType.update, me.onUpdateCallback)
 end
 

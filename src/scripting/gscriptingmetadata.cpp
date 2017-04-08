@@ -18,6 +18,10 @@ struct ScriptCallback
 	
 	~ScriptCallback() {
 	}
+
+	bool operator == (const ScriptCallback & other) const {
+		return this->func.get() == other.func.get();
+	}
 	
 	template <typename... Parameters>
 	RT operator() (Parameters && ... parameters) const
