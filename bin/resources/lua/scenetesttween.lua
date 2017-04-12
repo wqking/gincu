@@ -24,6 +24,10 @@ local function addImage(scene, resourceName, position)
 	return result;
 end
 
+local function onUpdate(me)
+	me.tweenList.tick(gincu.GApplication.getInstance().getFrameMilliseconds());
+end
+
 local function doExecute(me, handler)
 	me.tweenList.clear()
 	for key, value in pairs(me.entityList) do
@@ -39,11 +43,13 @@ local function doTestBasic(me)
 
 	local sprite = addImage(me, imageName, port.createPoint(spriteBoardStart.x, spriteBoardStart.y));
 	local target = addImage(me, imageName, port.createPoint(spriteBoardEnd.x, spriteBoardEnd.y));
+
 	cpgf.cast(target.getEntity().getComponentByTypeId(gincu.GComponentRender.getComponentType())).setColor(gincu.colorSetAlpha(gincu.colorWhite, 127));
+
 	local accessorPosition = gincu.createPointAccessor(sprite, 'getPosition', 'setPosition')
 	local accessorRotation = gincu.createFloatAccessor(sprite, 'getRotation', 'setRotation')
 	me.tweenList.tween()
-		.duration(2000)
+		.duration(duration)
 		.targetPoint(accessorPosition, target.getPosition())
 		.targetFloat(accessorRotation, 180, 360)
 		._repeat(gincu.tweenRepeatInfinitely)
@@ -51,8 +57,36 @@ local function doTestBasic(me)
 	;
 end
 
-local function onUpdate(me)
-	me.tweenList.tick(gincu.GApplication.getInstance().getFrameMilliseconds());
+local function doTestFollow(me)
+	local duration = 2000;
+
+	local target = addImage(me, imageName, port.createPoint(spriteBoardStart.x, spriteBoardEnd.y));
+	local sprite = addImage(me, imageName, port.createPoint(spriteBoardStart.x, spriteBoardStart.y));
+	local sprite2 = addImage(me, imageName, port.createPoint(spriteBoardEnd.x, spriteBoardStart.y));
+
+	cpgf.cast(target.getEntity().getComponentByTypeId(gincu.GComponentRender.getComponentType())).setColor(gincu.colorSetAlpha(gincu.colorWhite, 127));
+
+	me.tweenList.tween()
+		.duration(duration)
+		.followPoint(
+			gincu.createPointAccessor(sprite, 'getPosition', 'setPosition'),
+			gincu.createPointGetter(target, 'getPosition')
+		)
+
+	me.tweenList.tween()
+		.duration(duration)
+		.followPoint(
+			gincu.createPointAccessor(sprite2, 'getPosition', 'setPosition'),
+			gincu.createPointGetter(sprite, 'getPosition')
+		)
+
+	me.tweenList.tween()
+		.duration(duration)
+		.targetPoint(
+			gincu.createPointAccessor(target, 'getPosition', 'setPosition'),
+			spriteBoardEnd
+		)
+
 end
 
 SceneTestTween.doOnEnter = function(me)
@@ -78,6 +112,14 @@ SceneTestTween.doOnEnter = function(me)
 		port.createPoint(buttonX, buttonY),
 		buttonSize,
 		function(e) doExecute(me, doTestBasic) end
+	));
+	buttonY = buttonY + yDelta;
+
+	me.addEntity(createButton(
+		"Follow",
+		port.createPoint(buttonX, buttonY),
+		buttonSize,
+		function(e) doExecute(me, doTestFollow) end
 	));
 	buttonY = buttonY + yDelta;
 

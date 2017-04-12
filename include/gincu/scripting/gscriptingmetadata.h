@@ -40,6 +40,24 @@ ScaleAccessor createScaleAccessor(
 		const std::string & setterName
 	);
 
+typedef cpgf::GGetter<cpgf::GCallback<float ()> > FloatGetter;
+FloatGetter createFloatGetter(
+		const cpgf::GVariant & instance,
+		const std::string & getterName
+	);
+
+typedef cpgf::GGetter<cpgf::GCallback<GPoint ()> > PointGetter;
+PointGetter createPointGetter(
+		const cpgf::GVariant & instance,
+		const std::string & getterName
+	);
+
+typedef cpgf::GGetter<cpgf::GCallback<GScale ()> > ScaleGetter;
+ScaleGetter createScaleGetter(
+		const cpgf::GVariant & instance,
+		const std::string & getterName
+	);
+
 std::shared_ptr<void> createSharedPointer(const cpgf::GVariant & instance);
 
 

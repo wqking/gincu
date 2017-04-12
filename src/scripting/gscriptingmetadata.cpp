@@ -41,8 +41,6 @@ EventCallback createEventCallback(cpgf::IScriptFunction * func)
 }
 
 
-typedef cpgf::GAccessor<cpgf::GGetter<cpgf::GCallback<float ()> >, cpgf::GSetter<cpgf::GCallback<void (float)> > > FloatAccessor;
-
 template <typename T>
 struct MetaGetterSetter
 {
@@ -98,6 +96,29 @@ createMetaAccessor(
 	);
 }
 
+template <typename T>
+cpgf::GGetter<cpgf::GCallback<T ()> >
+createMetaGetter(
+		const cpgf::GVariant & instance,
+		const std::string & getterName
+	)
+{
+	cpgf::GScopedInterface<cpgf::IMetaClass> metaClass(GScriptingMain::getInstance()->getInstanceMetaClass(instance));
+	if(! metaClass) {
+		handleFatal("createMetaGetter: can't find meta class.");
+	}
+
+	void * instanceAddress = cpgf::fromVariant<void *>(instance);
+	void * getterInstance = instanceAddress;
+
+	cpgf::GScopedInterface<cpgf::IMetaMethod> getter(metaClass->getMethodInHierarchy(getterName.c_str(), &getterInstance));
+	if(! getter) {
+		handleFatal("createMetaAccessor: can't find getter method " + getterName);
+	}
+
+	return cpgf::createGetter(getterInstance, cpgf::GCallback<T ()>(MetaGetterSetter<T>(getterInstance, getter.get())));
+}
+
 FloatAccessor createFloatAccessor(
 		const cpgf::GVariant & instance,
 		const std::string & getterName,
@@ -123,6 +144,30 @@ ScaleAccessor createScaleAccessor(
 	)
 {
 	return createMetaAccessor<GScale>(instance, getterName, setterName);
+}
+
+FloatGetter createFloatGetter(
+		const cpgf::GVariant & instance,
+		const std::string & getterName
+	)
+{
+	return createMetaGetter<float>(instance, getterName);
+}
+
+PointGetter createPointGetter(
+		const cpgf::GVariant & instance,
+		const std::string & getterName
+	)
+{
+	return createMetaGetter<GPoint>(instance, getterName);
+}
+
+ScaleGetter createScaleGetter(
+		const cpgf::GVariant & instance,
+		const std::string & getterName
+	)
+{
+	return createMetaGetter<GScale>(instance, getterName);
 }
 
 struct MetaInstanceDeleter

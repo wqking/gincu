@@ -1,4 +1,5 @@
 port = {}
+
 port.GPoint = gincu.GVector2
 port.GSize = gincu.GSize
 port.createPoint = function(x, y)  local p = port.GPoint(); p.x = x; p.y = y; return p; end
