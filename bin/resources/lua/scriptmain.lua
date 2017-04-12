@@ -4,6 +4,7 @@ cpgf.import(nil, "builtin.debug");
 package.path = package.path .. ';resources/lua/?.lua'
 require("port")
 require("uiutil")
+require("util")
 require("scenemain")
 
 currentScene = nil;

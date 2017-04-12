@@ -9,6 +9,7 @@ local spriteBoardEnd = port.createPoint(spriteBoardStart.x + spriteBoardSize.wid
 SceneTestTween = cpgf.cloneClass(gincu.GSceneWrapper)
 
 local function addEntity(scene, entity)
+	pushArray(scene.entityList, entity)
 	scene.addEntity(entity)
 end
 
@@ -23,16 +24,25 @@ local function addImage(scene, resourceName, position)
 	return result;
 end
 
+local function doExecute(me, handler)
+	me.tweenList.clear()
+	for key, value in pairs(me.entityList) do
+		me.removeEntity(value)
+	end
+	me.entityList = {}
+	
+	handler(me)
+end
+
 local function doTestBasic(me)
 	local duration = 2000;
 
 	local sprite = addImage(me, imageName, port.createPoint(spriteBoardStart.x, spriteBoardStart.y));
 	local target = addImage(me, imageName, port.createPoint(spriteBoardEnd.x, spriteBoardEnd.y));
-	
-	--target->getEntity()->getComponentByType<GComponentRender>()->setColor(colorSetAlpha(colorWhite, 127));
+	cpgf.cast(target.getEntity().getComponentByTypeId(gincu.GComponentRender.getComponentType())).setColor(gincu.colorSetAlpha(gincu.colorWhite, 127));
 	local accessorPosition = gincu.createPointAccessor(sprite, 'getPosition', 'setPosition')
 	local accessorRotation = gincu.createFloatAccessor(sprite, 'getRotation', 'setRotation')
-	me.getTweenList().tween()
+	me.tweenList.tween()
 		.duration(2000)
 		.targetPoint(accessorPosition, target.getPosition())
 		.targetFloat(accessorRotation, 180, 360)
@@ -42,7 +52,7 @@ local function doTestBasic(me)
 end
 
 local function onUpdate(me)
---	me.tweenList.tick(gincu.GApplication.getInstance().getFrameMilliseconds());
+	me.tweenList.tick(gincu.GApplication.getInstance().getFrameMilliseconds());
 end
 
 SceneTestTween.doOnEnter = function(me)
@@ -54,6 +64,8 @@ SceneTestTween.doOnEnter = function(me)
 	gincu.GApplication.getInstance().getEventQueue().addListener(gincu.GEventType.update, me.onUpdateCallback)
 	
 	me.tweenList = gincu.GTweenList()
+	
+	me.entityList = {}
 
 	local buttonSize = port.createSize(100, 40);
 	
@@ -65,7 +77,7 @@ SceneTestTween.doOnEnter = function(me)
 		"Basic",
 		port.createPoint(buttonX, buttonY),
 		buttonSize,
-		function(e) doTestBasic(me) end
+		function(e) doExecute(me, doTestBasic) end
 	));
 	buttonY = buttonY + yDelta;
 
