@@ -29,9 +29,13 @@ void * GComponent::operator new (const std::size_t /*size*/, void * ptr)
 	return ptr;
 }
 
-void GComponent::operator delete(void * p, size_t size)
+void GComponent::operator delete (void * p, size_t size)
 {
 	cpgf::GMemoryPool::getInstance()->free(p, size);
+}
+
+void GComponent::operator delete (void * /*p*/, void * /*place*/)
+{
 }
 
 GComponent::GComponent(const GComponentType type)

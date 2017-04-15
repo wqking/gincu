@@ -54,7 +54,7 @@ void GTransitionMoveIn::doTransite(GScene * fromScene, GScene * toScene)
 	toCameraComponent->setFitStrategy(GCameraFitStrategy::none);
 	
 	this->getTween()
-		.duration(this->durationMilliseconds)
+		.duration((cpgf::GTweenNumber)this->durationMilliseconds)
 		.target(cpgf::createAccessor(this, 0, &GTransitionMoveIn::doSetRatio), 0.0f, 1.0f)
 		.onComplete(cpgf::makeCallback(this, &GTransitionMoveIn::finish))
 	;

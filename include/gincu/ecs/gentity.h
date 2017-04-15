@@ -27,7 +27,8 @@ public:
 public:
 	void * operator new (const std::size_t size);
 	void * operator new (const std::size_t size, void * ptr);
-	void operator delete(void * p, size_t size);
+	void operator delete (void * p, size_t size);
+	void operator delete (void * p, void * place);
 
 	GEntity();
 	~GEntity();

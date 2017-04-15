@@ -97,7 +97,7 @@ void GScriptingMain::executeFile(const std::string & fileName)
 		return;
 	}
 
-	std::string code(size, 0);
+	std::string code((size_t)size, 0);
 	stream.read(&code[0], size);
 	this->executeString(code);
 }

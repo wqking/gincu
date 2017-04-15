@@ -74,7 +74,7 @@ void GTransitionFadeInOut::doTransite(GScene * fromScene, GScene * toScene)
 	this->toScene->enableRender(false);
 
 	this->getTween()
-		.duration(this->durationMilliseconds)
+		.duration((cpgf::GTweenNumber)this->durationMilliseconds)
 		.target(cpgf::createAccessor(this, 0, &GTransitionFadeInOut::doSetRatio), 0.0f, 255.0f * 2.0f)
 		.onComplete(cpgf::makeCallback(this, &GTransitionFadeInOut::finish))
 	;

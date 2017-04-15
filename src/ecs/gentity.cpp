@@ -21,6 +21,10 @@ void GEntity::operator delete(void * p, size_t size)
 	cpgf::GMemoryPool::getInstance()->free(p, size);
 }
 
+void GEntity::operator delete (void * /*p*/, void * /*place*/)
+{
+}
+
 GEntity::GEntity()
 	: componentManager(nullptr)
 {
