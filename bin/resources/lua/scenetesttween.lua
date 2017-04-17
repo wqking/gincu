@@ -64,7 +64,9 @@ local function doTestFollow(me)
 	local sprite = addImage(me, imageName, port.createPoint(spriteBoardStart.x, spriteBoardStart.y));
 	local sprite2 = addImage(me, imageName, port.createPoint(spriteBoardEnd.x, spriteBoardStart.y));
 
-	cpgf.cast(target.getEntity().getComponentByTypeId(gincu.GComponentRender.getComponentType())).setColor(gincu.colorSetAlpha(gincu.colorWhite, 127));
+	cpgf.cast(
+		target.getEntity().getComponentByTypeId(gincu.GComponentRender.getComponentType())
+	).setColor(gincu.colorSetAlpha(gincu.colorWhite, 127));
 
 	me.tweenList.tween()
 		.duration(duration)
@@ -87,6 +89,38 @@ local function doTestFollow(me)
 			spriteBoardEnd
 		)
 
+end
+
+local function doTestTimeline1(me)
+	local duration = 2000;
+
+	local target = addImage(me, imageName, port.createPoint(spriteBoardEnd.x, spriteBoardEnd.y));
+	local sprite = addImage(me, imageName, port.createPoint(spriteBoardStart.x, spriteBoardStart.y));
+
+	cpgf.cast(
+		target.getEntity().getComponentByTypeId(gincu.GComponentRender.getComponentType())
+	).setColor(gincu.colorSetAlpha(gincu.colorWhite, 127));
+	
+	local timeline = me.tweenList.timeline()
+
+	timeline.append(
+		timeline.tween()
+			.duration(duration)
+			.relativePoint(
+				gincu.createPointAccessor(sprite, 'getPosition', 'setPosition'),
+				port.createPoint(spriteBoardSize.width, 0)
+			)
+	)
+	
+	timeline.append(
+		timeline.tween()
+			.duration(duration)
+			.relativePoint(
+				gincu.createPointAccessor(sprite, 'getPosition', 'setPosition'),
+				port.createPoint(0, spriteBoardSize.height)
+			)
+	)
+	
 end
 
 SceneTestTween.doOnEnter = function(me)
@@ -120,6 +154,14 @@ SceneTestTween.doOnEnter = function(me)
 		port.createPoint(buttonX, buttonY),
 		buttonSize,
 		function(e) doExecute(me, doTestFollow) end
+	));
+	buttonY = buttonY + yDelta;
+
+	me.addEntity(createButton(
+		"Timeline 1",
+		port.createPoint(buttonX, buttonY),
+		buttonSize,
+		function(e) doExecute(me, doTestTimeline1) end
 	));
 	buttonY = buttonY + yDelta;
 

@@ -140,6 +140,7 @@ include_directories(
 	${TESTS_PATH}/application
 	${CPGF_PATH}/include
 	${ROOT_PATH}/thirdparty
+	${PYTHON_INC}
 )
 
 add_definitions(
@@ -149,5 +150,5 @@ add_definitions(
 	-DENABLE_SPIDERMONKEY=${HAS_SPIDERMONKEY}
 )
 
-target_link_libraries(${TARGET} ${CPGF_LIB} ${LIBS} ${LUA_LIB} )
+target_link_libraries(${TARGET} ${CPGF_LIB} ${LIBS} ${LUA_LIB} ${PYTHON_LIB} )
 

@@ -82,26 +82,3 @@ Uncomment to change it.
 #add_definitions(-DGINCU_ENTITY_STORAGE_POLICY_INITIAL_SIZE=componentTypeId_PrimaryCount)
 
 
-#[[
-The alignment used in memory pool.
-If this macro is not defined, default is 64.
-Uncomment to change it.
-]]
-#add_definitions(-DGINCU_MEMORY_POOL_ALIGNMENT=64)
-
-
-#[[
-The block count in each chunk used in memory pool.
-If this macro is not defined, default is 256.
-Uncomment to change it.
-]]
-#add_definitions(-DGINCU_MEMORY_POOL_BLOCK_COUNT_PER_TRUNK=256)
-
-
-#[[
-The purge strategy used in memory pool.
-If this macro is not defined, default is onSceneSwitched.
-See GHeapPoolPurgeStrategy in gheappool.h for all possible values.
-Uncomment to change it.
-]]
-#add_definitions(-DGINCU_MEMORY_POOL_PURGE_STRATEGY=onSceneSwitched)

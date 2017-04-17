@@ -27,8 +27,8 @@ SceneMain.doOnEnter = function(me)
 		end
 		)
 	)
-
 	y = y + yDelta
+	
 	me.addEntity(
 		createButton("Tween", port.createPoint(x, y), buttonSize, function(e)
 			require("scenetesttween")
@@ -36,6 +36,16 @@ SceneMain.doOnEnter = function(me)
 		end
 		)
 	)
+	y = y + yDelta
+
+	me.addEntity(
+		createButton("Benchmark", port.createPoint(x, y), buttonSize, function(e)
+			require("scenebenchmark")
+			doSwitchScene(SceneBenchmark())
+		end
+		)
+	)
+	y = y + yDelta
 
 	me.addEntity(createBackButton(function(e) exitScriptDemo() end))
 end
