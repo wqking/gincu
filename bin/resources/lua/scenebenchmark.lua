@@ -21,18 +21,11 @@ end
 
 local function doBenchmarkBatchedAnimation(me)
 	local iterateCount = 10000
-	local animationCount = 2;
+	local animationCount = #animationNames;
 
-	for a = 1, animationCount do
-		local name
-		if a == 1 then
-			name = "testbed/animation_yellow_boy"
-		else
-			name = "testbed/animation_running_man"
-		end
+	for key, value in pairs(animationNames) do
 		for i = 1, iterateCount / animationCount do
-			--createAnimationEntity(me, getRandomPosition(me), animationNames[a]);
-			createAnimationEntity(me, getRandomPosition(me), name);
+			createAnimationEntity(me, getRandomPosition(me), value);
 		end
 	end
 end
