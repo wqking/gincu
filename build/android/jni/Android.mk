@@ -1,8 +1,13 @@
+LOCAL_PATH := $(call my-dir)
+
 CPGF_PATH := /projects/cpgf
 SFML_PATH := /source/SFML-2.4.1
 
+include $(CLEAR_VARS)
+LOCAL_MODULE := cpgf
+LOCAL_SRC_FILES := libcpgf.so
+include $(PREBUILT_SHARED_LIBRARY)
 
-LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
@@ -12,14 +17,12 @@ ROOT_PATH := E:\projects\gincu
 #ROOT_PATH := $(LOCAL_PATH)\..\..\..\..
 SRC_PATH := $(ROOT_PATH)\src
 TESTS_PATH := $(ROOT_PATH)\tests
+METADATA_PATH := $(ROOT_PATH)\metagen
 
-LOCAL_CFLAGS += -O3 -fexceptions -std=c++11 \
-#	-DGINCU_LOG_LEVEL=G_LOG_LEVEL_DEBUG \
-#	-DGINCU_ENTITY_STORAGE_POLICY=mixedArray \
-#	-DGINCU_ENTITY_STORAGE_POLICY_INITIAL_SIZE=componentTypeId_PrimaryCount \
-#	-DGINCU_MEMORY_POOL_ALIGNMENT=64 \
-#	-DGINCU_MEMORY_POOL_BLOCK_COUNT_PER_TRUNK=256 \
-#	-DGINCU_MEMORY_POOL_PURGE_STRATEGY=onSceneSwitched \
+LOCAL_CFLAGS += -O3 -frtti -fexceptions -std=c++11 -DENABLE_LUA=1
+
+LIB_PATH := e:/projects/cpgf/build/android/libs/armeabi-v7a/
+LOCAL_LDLIBS += -l${LIB_PATH}/libcpgf.so
 
 LOCAL_C_INCLUDES += \
 	$(ROOT_PATH)/include \
@@ -29,13 +32,7 @@ LOCAL_C_INCLUDES += \
 	$(ROOT_PATH)/thirdparty \
 
 LOCAL_SRC_FILES := \
-	$(CPGF_PATH)/src/gexception.cpp \
-	$(CPGF_PATH)/src/glifecycle.cpp \
-	$(CPGF_PATH)/src/gmemorypool.cpp \
-	$(CPGF_PATH)/src/tween/gtimeline.cpp \
-	$(CPGF_PATH)/src/tween/gtween.cpp \
-	$(CPGF_PATH)/src/tween/gtweencommon.cpp \
-	$(CPGF_PATH)/src/tween/gtweenlist.cpp \
+	$(ROOT_PATH)/thirdparty/zf_log.cpp \
 	$(TESTS_PATH)/application/main.cpp \
 	$(TESTS_PATH)/application/uiutil.cpp \
 	$(TESTS_PATH)/application/mainapplication.cpp \
@@ -94,7 +91,6 @@ LOCAL_SRC_FILES := \
 	$(SRC_PATH)/geventqueue.cpp \
 	$(SRC_PATH)/gfont.cpp \
 	$(SRC_PATH)/gfileinputstream.cpp \
-	$(SRC_PATH)/gheappool.cpp \
 	$(SRC_PATH)/gmatrix.cpp \
 	$(SRC_PATH)/gobjectfactory.cpp \
 	$(SRC_PATH)/gresourcemanager.cpp \
@@ -108,9 +104,13 @@ LOCAL_SRC_FILES := \
 	$(SRC_PATH)/gvertexarray.cpp \
 	$(SRC_PATH)/gvertexarrayrender.cpp \
 	$(SRC_PATH)/gworker.cpp \
-	$(ROOT_PATH)/thirdparty/zf_log.cpp \
+	$(SRC_PATH)/scripting/gscriptingmain.cpp \
+	$(SRC_PATH)/scripting/gscriptingmetadata.cpp \
+	$(SRC_PATH)/scripting/gscriptingutil.cpp \
 
-LOCAL_SHARED_LIBRARIES := sfml-system
+LOCAL_SHARE_LIBRARIES := cpgf
+
+LOCAL_SHARED_LIBRARIES += sfml-system
 LOCAL_SHARED_LIBRARIES += sfml-window
 LOCAL_SHARED_LIBRARIES += sfml-graphics
 LOCAL_SHARED_LIBRARIES += sfml-audio
