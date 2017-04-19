@@ -3,9 +3,16 @@ LOCAL_PATH := $(call my-dir)
 CPGF_PATH := /projects/cpgf
 SFML_PATH := /source/SFML-2.4.1
 
+
 include $(CLEAR_VARS)
 LOCAL_MODULE := cpgf
 LOCAL_SRC_FILES := libcpgf.so
+include $(PREBUILT_SHARED_LIBRARY)
+
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := lua
+LOCAL_SRC_FILES := liblua.so
 include $(PREBUILT_SHARED_LIBRARY)
 
 
@@ -21,8 +28,8 @@ METADATA_PATH := $(ROOT_PATH)\metagen
 
 LOCAL_CFLAGS += -O3 -frtti -fexceptions -std=c++11 -DENABLE_LUA=1
 
-LIB_PATH := e:/projects/cpgf/build/android/libs/armeabi-v7a/
-LOCAL_LDLIBS += -l${LIB_PATH}/libcpgf.so
+#LIB_PATH := e:/projects/cpgf/build/android/libs/armeabi-v7a/
+#LOCAL_LDLIBS += -llibcpgf.so
 
 LOCAL_C_INCLUDES += \
 	$(ROOT_PATH)/include \
@@ -108,8 +115,8 @@ LOCAL_SRC_FILES := \
 	$(SRC_PATH)/scripting/gscriptingmetadata.cpp \
 	$(SRC_PATH)/scripting/gscriptingutil.cpp \
 
-LOCAL_SHARE_LIBRARIES := cpgf
-
+LOCAL_SHARED_LIBRARIES := cpgf
+LOCAL_SHARED_LIBRARIES += lua
 LOCAL_SHARED_LIBRARIES += sfml-system
 LOCAL_SHARED_LIBRARIES += sfml-window
 LOCAL_SHARED_LIBRARIES += sfml-graphics

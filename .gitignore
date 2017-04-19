@@ -14,3 +14,4 @@ allegro.log
 *.pdb
 *.dll
 *.a
+*.so
