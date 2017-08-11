@@ -67,7 +67,6 @@ There are several ways to contribute to the project
  * Add new game beside the match-three. Such as adding a Super Mario Bros like game will demonstrate the basic 2D physics engine works perfectly, or adding a Box2D based game.
  * Add new test cast in the test bed.
  * Add or enhance the features. There are several features missed:
-   * Frame based animation system. Solution: very easy to add to ECS system as a kind of component.
    * Physics system. Not used in matchtThree type games but is very useful. Solution: easy to add to ECS system as a kind of component.
  * Make some better art work. Current the art resource is very ugly.
 
