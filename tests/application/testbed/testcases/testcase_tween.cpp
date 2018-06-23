@@ -156,7 +156,7 @@ void TestCase_Tween::doInitialize()
 	));
 	buttonY += yDelta;
 
-	GApplication::getInstance()->getEventQueue()->addListener(GEventType::update, cpgf::makeCallback(this, &TestCase_Tween::onUpdate));
+	GApplication::getInstance()->getEventQueue()->appendListener(GEventType::update, cpgf::makeCallback(this, &TestCase_Tween::onUpdate));
 }
 
 void TestCase_Tween::doFinalize()

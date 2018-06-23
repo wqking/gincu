@@ -11,12 +11,12 @@ set(CPGF_LIB ${CPGF_PATH}/lib/libcpgf.a)
 endif()
 
 set(ENABLE_SFML 1)
-set(SFML_PATH /source/SFML-2.4.1)
+set(SFML_PATH /source/multimedia/SFML-2.4.1)
 set(SFML_INCLUDE_PATH ${SFML_PATH}/include)
 set(SFML_LIB_PATH ${SFML_PATH}/lib)
 
 set(ENABLE_ALLEGRO 0)
-set(ALLEGRO_PATH E:/source/allegro)
+set(ALLEGRO_PATH /source/multimedia/allegro)
 set(ALLEGRO_INCLUDE_PATH
 	${ALLEGRO_PATH}/include
 	${ALLEGRO_PATH}/addons/image/

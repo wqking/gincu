@@ -33,7 +33,7 @@ void GSceneManager::switchScene(GScene * scene, GTransition * transition)
 
 	this->sceneToSwitchTo.reset(scene);
 
-	GApplication::getInstance()->getEventQueue()->addListener(GEventType::update, cpgf::makeCallback(this, &GSceneManager::deferSwitchScene));
+	GApplication::getInstance()->getEventQueue()->appendListener(GEventType::update, cpgf::makeCallback(this, &GSceneManager::deferSwitchScene));
 }
 
 void GSceneManager::switchScene(const std::string & sceneName, const SceneCreator & creator, GTransition * transition)
@@ -47,7 +47,7 @@ void GSceneManager::switchScene(const std::string & sceneName, const SceneCreato
 		this->sceneNameToSwitchTo = sceneName;
 		this->sceneCreatorToSwitchTo = creator;
 
-		GApplication::getInstance()->getEventQueue()->addListener(GEventType::update, cpgf::makeCallback(this, &GSceneManager::deferSwitchScene));
+		GApplication::getInstance()->getEventQueue()->appendListener(GEventType::update, cpgf::makeCallback(this, &GSceneManager::deferSwitchScene));
 	}
 }
 

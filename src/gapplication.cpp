@@ -140,7 +140,7 @@ void GApplication::processMainLoop()
 
 		cpgf::GTweenList::getInstance()->tick((cpgf::GTweenNumber)this->frameMilliseconds);
 
-		this->eventQueue->send(updateEvent);
+		this->eventQueue->dispatch(updateEvent);
 
 		if(this->configInfo.renderFramesPerSecond <= 0
 			|| getMilliseconds() - lastRenderTime >= millisecondsPerRenderFrame) {
@@ -180,7 +180,7 @@ void GApplication::processEvents()
 {
 	GEvent event;
 	while(this->deviceContext->getEvent(&event)) {
-		this->eventQueue->post(event);
+		this->eventQueue->enqueue(event);
 	}
 
 	GEventQueue::dispatchAll();
@@ -221,7 +221,7 @@ void GApplication::onEvent(const GEvent & event)
 
 void GApplication::doRender(GRenderContext * renderContext)
 {
-	this->eventQueue->send(GEvent(GEventType::render, renderContext));
+	this->eventQueue->dispatch(GEvent(GEventType::render, renderContext));
 }
 
 void GApplication::doInitialize()

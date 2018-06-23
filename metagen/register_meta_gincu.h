@@ -48,6 +48,7 @@ GDefineMetaInfo createMetaClass_GDeviceContextRegister();
 GDefineMetaInfo createMetaClass_GEntity();
 GDefineMetaInfo createMetaClass_GEvent();
 GDefineMetaInfo createMetaClass_GEventQueue();
+GDefineMetaInfo createMetaClass_GEventQueuePolicies();
 GDefineMetaInfo createMetaClass_GFileInputStream();
 GDefineMetaInfo createMetaClass_GFileInputStreamData();
 GDefineMetaInfo createMetaClass_GFont();
@@ -161,6 +162,7 @@ void registerMain_gincu(Meta _d)
     _d._class(createMetaClass_GEntity());
     _d._class(createMetaClass_GEvent());
     _d._class(createMetaClass_GEventQueue());
+    _d._class(createMetaClass_GEventQueuePolicies());
     _d._class(createMetaClass_GFileInputStream());
     _d._class(createMetaClass_GFileInputStreamData());
     _d._class(createMetaClass_GFont());

@@ -32,7 +32,7 @@ void testWorker()
 		G_LOG_INFO("Start worker %d", i);
 		GApplication::getInstance()->executeWorkerTask(
 			[=]() {
-				GApplication::getInstance()->getEventQueue()->post(GEvent((GEventType)0xbeadfeed));
+				GApplication::getInstance()->getEventQueue()->enqueue(GEvent((GEventType)0xbeadfeed));
 				sleepMilliseconds(i * 10);
 				G_LOG_INFO("Finished worker %d", i);
 		});

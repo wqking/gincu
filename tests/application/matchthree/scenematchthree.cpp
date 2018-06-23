@@ -64,7 +64,7 @@ void SceneMatchThree::doOnEnter()
 
 	this->roundStartMilliseconds = getMilliseconds();
 
-	GApplication::getInstance()->getEventQueue()->addListener(GEventType::update, cpgf::makeCallback(this, &SceneMatchThree::onUpdate));
+	GApplication::getInstance()->getEventQueue()->appendListener(GEventType::update, cpgf::makeCallback(this, &SceneMatchThree::onUpdate));
 
 	this->infoView->setRemainingSeconds(secondsPerRound);
 

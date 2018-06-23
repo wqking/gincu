@@ -1,0 +1,3 @@
+[submodule "thirdparty/eventpp"]
+	path = thirdparty/eventpp
+	url = https://github.com/wqking/eventpp.git

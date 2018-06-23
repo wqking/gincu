@@ -140,6 +140,7 @@ include_directories(
 	${TESTS_PATH}/application
 	${CPGF_PATH}/include
 	${ROOT_PATH}/thirdparty
+	${ROOT_PATH}/thirdparty/eventpp/include
 	${PYTHON_INC}
 )
 

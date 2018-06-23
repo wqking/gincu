@@ -79,7 +79,7 @@ GImage GResourceManager::asyncGetImage(const std::string & resourceName, const L
 					data->load(fileName);
 				}
 				if(! callback.empty()) {
-					GApplication::getInstance()->getEventQueue()->post(GEvent(GEventType::execute, callback));
+					GApplication::getInstance()->getEventQueue()->enqueue(GEvent(GEventType::execute, callback));
 				}
 			}
 		);
@@ -145,7 +145,7 @@ GFont GResourceManager::asyncGetFont(const std::string & resourceName, const Loa
 					data->load(fileName);
 				}
 				if(! callback.empty()) {
-					GApplication::getInstance()->getEventQueue()->post(GEvent(GEventType::execute, callback));
+					GApplication::getInstance()->getEventQueue()->enqueue(GEvent(GEventType::execute, callback));
 				}
 		}
 		);

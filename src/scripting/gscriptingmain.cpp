@@ -24,7 +24,7 @@ GScriptingMain * GScriptingMain::getInstance()
 {
 	if(! instance) {
 		instance.reset(new GScriptingMain());
-		GApplication::getInstance()->getEventQueue()->addListener(GEventType::windowClosed,
+		GApplication::getInstance()->getEventQueue()->appendListener(GEventType::windowClosed,
 			[](const GEvent &) {
 				// Exit any scene, otherwise, any script scene will crash after instance.reset()
 				GApplication::getInstance()->getSceneManager()->switchScene(nullptr);

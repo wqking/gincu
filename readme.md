@@ -29,7 +29,8 @@ Now there is a match-three game in the project. In the future we may add more ga
  * [SFML 2.4.1](http://www.sfml-dev.org/) or later.
  * [Allegro 5.2](http://www.liballeg.org/) or later. Note, Gincu only need one render engine, SFML or Allegro, it doesn't need both.
  * My [cpgf library](https://github.com/cpgf/cpgf)
- * CMake 3.6 or later
+ * CMake 3.6 or later.
+ * Need to `clone --recursive`.
 
 ## License
 

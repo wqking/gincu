@@ -4,35 +4,27 @@
 #include "gincu/gevent.h"
 
 #include "cpgf/gcallback.h"
-#include "cpgf/gcallbacklist.h"
 
-#include <deque>
-#include <map>
-#include <mutex>
+#include "eventpp/eventqueue.h"
 
 namespace gincu {
 
-class GEventQueue
+struct GEventQueuePolicies
 {
-public:
-	typedef cpgf::GCallback<void (const GEvent &)> EventListener;
-	typedef cpgf::GCallbackList<void (const GEvent &)> EventListenerList;
+	static GEventType getEvent(const GEvent & e) {
+		return e.getType();
+	}
 
-	typedef std::recursive_mutex MutexType;
-	typedef std::lock_guard<MutexType> LockType;
+	using Callback = cpgf::GCallback<void (const GEvent &)>;
+};
 
+class GEventQueue : public eventpp::EventQueue<GEventType, void (const GEvent &), GEventQueuePolicies>
+{
 private:
-	struct TaggedListener
-	{
-		EventListener listener;
-		GEvent::TagType tag;
-	};
+	using super = eventpp::EventQueue<GEventType, void (const GEvent &), GEventQueuePolicies>;
 
-	struct ListenerItem
-	{
-		EventListenerList nonTagListenerList;
-		std::deque<TaggedListener> taggedListenerList;
-	};
+public:
+	using EventListener = Callback;
 
 public:
 	static void dispatchAll();
@@ -41,54 +33,31 @@ public:
 	GEventQueue();
 	~GEventQueue();
 
-	void addListener(const GEventType type, const EventListener & listener, const GEvent::TagType tag = nullptr);
-	
-	// add a "catch all" listener, be careful to use it, it may hit performance.
-	void addListener(const EventListener & listener, const GEvent::TagType tag = nullptr);
-
 	template <typename Iterator>
-	void addListeners(Iterator begin, const Iterator end, const EventListener & listener, const GEvent::TagType tag = nullptr) {
+	void addListeners(Iterator begin, const Iterator end, const EventListener & listener) {
 		while(begin != end) {
-			this->addListener(*begin, listener, tag);
+			this->appendListener(*begin, listener);
 			++begin;
 		}
 	}
 
-	void removeListener(const GEventType type, const EventListener & listener, const GEvent::TagType tag = nullptr);
+	using super::removeListener;
 
-	// remove a "catch all" listener
-	void removeListener(const EventListener & listener, const GEvent::TagType tag = nullptr);
+	void removeListener(const GEventType type, const EventListener & listener) {
+		forEach(type, [this, type, &listener](const Handle & handle, const EventListener & foundListener) {
+			if(foundListener == listener) {
+				super::removeListener(type, handle);
+			}
+		});
+	}
 
 	template <typename Iterator>
-	void removeListeners(Iterator begin, const Iterator end, const EventListener & listener, const GEvent::TagType tag = nullptr) {
+	void removeListeners(Iterator begin, const Iterator end, const EventListener & listener) {
 		while(begin != end) {
-			this->removeListener(*begin, listener, tag);
+			this->removeListener(*begin, listener);
 			++begin;
 		}
 	}
-
-	void send(const GEvent & event);
-	void post(const GEvent & event);
-
-	void dispatch();
-
-private:
-	void doDispatch();
-	void doDispatchEvent(const GEvent & event);
-	void doDispatchEventByType(const GEvent & event, const GEventType type);
-
-	void doRemoveFromTaggedList(std::deque<TaggedListener> * taggedList, const EventListener & listener, const GEvent::TagType tag);
-	void doRemoveFromTaggedList(std::deque<TaggedListener> * taggedList, const EventListener & listener);
-
-private:
-	MutexType eventMutex;
-	std::deque<GEvent> eventQueue;
-	MutexType listenerMutex;
-	std::map<GEventType, ListenerItem> listenerMap;
-
-private:
-	static std::deque<GEventQueue *> eventQueueList;
-	static MutexType eventQueueListMutex;
 };
 
 

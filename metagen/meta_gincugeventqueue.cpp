@@ -19,7 +19,21 @@ GDefineMetaInfo createMetaClass_GEventQueue()
 {
     GDefineMetaGlobalDangle _d = GDefineMetaGlobalDangle::dangle();
     {
-        GDefineMetaClass<gincu::GEventQueue> _nd = GDefineMetaClass<gincu::GEventQueue>::lazyDeclare("GEventQueue", &buildMetaClass_GEventQueue);
+        GDefineMetaClass<gincu::GEventQueue, eventpp::EventQueue< GEventType, void(const GEvent &), GEventQueuePolicies >> _nd = GDefineMetaClass<gincu::GEventQueue, eventpp::EventQueue< GEventType, void(const GEvent &), GEventQueuePolicies >>::lazyDeclare("GEventQueue", &buildMetaClass_GEventQueue);
+        _d._class(_nd);
+    }
+    return _d.getMetaInfo();
+}
+
+
+#ifdef CPGF_METAGEN_LINKAGE_SPEC
+CPGF_METAGEN_LINKAGE_SPEC
+#endif
+GDefineMetaInfo createMetaClass_GEventQueuePolicies()
+{
+    GDefineMetaGlobalDangle _d = GDefineMetaGlobalDangle::dangle();
+    {
+        GDefineMetaClass<gincu::GEventQueuePolicies> _nd = GDefineMetaClass<gincu::GEventQueuePolicies>::lazyDeclare("GEventQueuePolicies", &buildMetaClass_GEventQueuePolicies);
         _d._class(_nd);
     }
     return _d.getMetaInfo();
