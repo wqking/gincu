@@ -13,7 +13,7 @@ namespace gincu {
 class GTransform
 {
 private:
-	enum class Flags {
+	enum Flags {
 		flagDirty = 1 << 0,
 		flagProjection = 1 << 1
 	};

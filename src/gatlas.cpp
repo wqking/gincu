@@ -25,7 +25,7 @@ int GAtlasData::getIndex(const std::string & name) const
 {
 	auto it = this->indexMap.find(const_cast<std::string &>(name));
 	if(it != this->indexMap.end()) {
-		return it->second;
+		return (int)it->second;
 	}
 	else {
 		return -1;

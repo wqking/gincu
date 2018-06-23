@@ -111,7 +111,7 @@ void buildFrameAnimationDataFromAtlas(GFrameAnimationSetData * data, const GAtla
 		for(std::size_t i = 0; i < indexList.size(); ++i) {
 			indexList[i] = itemPair.second[i].frameIndex;
 		}
-		const int duration = indexList.size() * millsecondsBetweenFrame;
+		const int duration = (int)(indexList.size() * millsecondsBetweenFrame);
 		data->append(itemPair.first, GFrameAnimationData(std::move(indexList), duration));
 	}
 }

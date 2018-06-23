@@ -18,7 +18,7 @@ int getRand()
 {
 	if(needInitializeRandSeed) {
 		needInitializeRandSeed = false;
-		srand((size_t)time(NULL));
+		srand((unsigned int)time(NULL));
 	}
 
 	return rand();
