@@ -129,7 +129,7 @@ SceneTestTween.doOnEnter = function(me)
 	end))
 	
 	me.onUpdateCallback = gincu.createEventCallback(function(e) onUpdate(me) end)
-	gincu.GApplication.getInstance().getEventQueue().addListener(gincu.GEventType.update, me.onUpdateCallback)
+	gincu.GApplication.getInstance().getEventQueue().appendListener(gincu.GEventType.update, me.onUpdateCallback)
 	
 	me.tweenList = gincu.GTweenList()
 	

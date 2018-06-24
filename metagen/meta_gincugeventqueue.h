@@ -25,6 +25,7 @@ void buildMetaClass_GEventQueue(D _d)
     _d.CPGF_MD_TEMPLATE _constructor<void * ()>();
     _d.CPGF_MD_TEMPLATE _method("dispatchAll", &D::ClassType::dispatchAll);
     _d.CPGF_MD_TEMPLATE _method("removeListener", &D::ClassType::removeListener);
+    _d.CPGF_MD_TEMPLATE _method("appendListener", &D::ClassType::appendListener);
 }
 
 

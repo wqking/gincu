@@ -36,7 +36,7 @@ public:
 	template <typename Iterator>
 	void addListeners(Iterator begin, const Iterator end, const EventListener & listener) {
 		while(begin != end) {
-			this->appendListener(*begin, listener);
+			super::appendListener(*begin, listener);
 			++begin;
 		}
 	}
@@ -57,6 +57,11 @@ public:
 			this->removeListener(*begin, listener);
 			++begin;
 		}
+	}
+
+	// This override function here is for script binding.
+	Handle appendListener(const GEventType type, const EventListener & callback) {
+		return super::appendListener(type, callback);
 	}
 };
 
