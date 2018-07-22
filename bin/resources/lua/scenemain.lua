@@ -48,6 +48,8 @@ SceneMain.doOnEnter = function(me)
 	y = y + yDelta
 
 	me.addEntity(createBackButton(function(e) exitScriptDemo() end))
+
+	forceGC()
 end
 
 SceneMain.doOnExit = function(me)
