@@ -2,6 +2,8 @@
 #include "gincu/ecs/gcomponent.h"
 #include "gincu/ecs/gcomponentmanager.h"
 
+#include "eventpp/utilities/eventutil.h"
+
 #include "cpgf/gmemorypool.h"
 
 namespace gincu {
@@ -55,12 +57,12 @@ void GEntity::removeComponent(GComponent * component)
 
 void GEntity::addEventCallback(const EventCallback & callback)
 {
-	this->eventCallbackList.add(callback);
+	this->eventCallbackList.append(callback);
 }
 
 void GEntity::removeEventCallback(const EventCallback & callback)
 {
-	this->eventCallbackList.remove(callback);
+	eventpp::removeListener(this->eventCallbackList, callback);
 }
 
 void GEntity::setComponentManager(GComponentManager * componentManager)

@@ -3,7 +3,8 @@
 
 #include "gincu/ecs/gentitypolicy.h"
 
-#include "cpgf/gcallbacklist.h"
+#include "eventpp/callbacklist.h"
+#include "cpgf/gcallback.h"
 
 #include <memory>
 #include <vector>
@@ -54,7 +55,12 @@ public:
 	
 private:
 	GComponentManager * componentManager;
-	cpgf::GCallbackList<void (GComponent *, GEntityEventType)> eventCallbackList;
+
+	struct CallbackListPolicies
+	{
+		using Callback = EventCallback;
+	};
+	eventpp::CallbackList<void (GComponent *, GEntityEventType), CallbackListPolicies> eventCallbackList;
 };
 
 
